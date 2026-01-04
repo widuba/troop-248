@@ -25,16 +25,15 @@
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
         sans-serif;
       margin: 0;
-      background: #d2cab6; /* troop background */
+      background: #d2cab6;
       color: var(--text-main);
       min-height: 100vh;
     }
 
-    /* ========= FULLSCREEN LOGIN OVERLAY ========= */
     #auth-overlay {
       position: fixed;
       inset: 0;
-      display: none; /* start hidden; JS shows if NOT logged in */
+      display: none;
       align-items: center;
       justify-content: center;
       background: radial-gradient(circle at top, #ffffff 0, var(--tan) 70%);
@@ -142,9 +141,8 @@
       text-align: center;
     }
 
-    /* ========= APP SHELL ========= */
     #app-shell {
-      display: none; /* shown only when logged in via JS */
+      display: none;
       min-height: 100vh;
     }
 
@@ -438,12 +436,11 @@
   </style>
 </head>
 <body>
-  <!-- FULLSCREEN LOGIN -->
   <div id="auth-overlay">
     <div class="auth-card">
       <div class="auth-card-header">
         <h1>Troop Portal</h1>
-        <p>Sign in to access Troop 248 documents.</p>
+        <p>Sign in to access troop documents.</p>
       </div>
       <div class="auth-fields">
         <div>
@@ -465,7 +462,6 @@
     </div>
   </div>
 
-  <!-- APP SHELL -->
   <div id="app-shell">
     <header>
       <div>
@@ -473,10 +469,10 @@
       </div>
 
       <nav>
-        <a href="/calendar/">Calendar</a>
-        <a href="/scoutmaster/">Scoutmaster Blog</a>
-        <a href="/spl/">SPL Blog</a>
-        <a href="/documents/">Troop Documents</a>
+        <a href="/calendar">Calendar</a>
+        <a href="/documents">Documents</a>
+        <a href="/scoutmaster">Scoutmaster Blog</a>
+        <a href="/spl-blog">SPL Blog</a>
       </nav>
 
       <div id="auth-bar">
@@ -542,7 +538,6 @@
       deleteDoc
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    // ✅ REAL CONFIG FOR TROOP 248
     const firebaseConfig = {
       apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
       authDomain: "troop-248.firebaseapp.com",
@@ -574,20 +569,14 @@
     const docUrlInput = document.getElementById("doc-url");
     const docDescInput = document.getElementById("doc-description");
 
-    let currentUser = null;
-    let currentIsAdmin = false;
-
     const ADMIN_UIDS = [
       "l1TlAvSdW0hpZUPU5eA0XBWD2OA3"
     ];
 
-    async function checkAdmin(user) {
-      if (!user) return false;
-      return ADMIN_UIDS.includes(user.uid);
-    }
+    let currentUser = null;
+    let currentIsAdmin = false;
 
     function updateAdminUI() {
-      // show/hide admin-only bits
       for (let i = 0; i < adminOnlyEls.length; i++) {
         adminOnlyEls[i].style.display = currentIsAdmin ? "block" : "none";
       }
@@ -606,9 +595,9 @@
       }
     }
 
-    onAuthStateChanged(auth, async (user) => {
+    onAuthStateChanged(auth, (user) => {
       currentUser = user;
-      currentIsAdmin = await checkAdmin(user);
+      currentIsAdmin = !!(user && ADMIN_UIDS.includes(user.uid));
       updateAdminUI();
     });
 
@@ -643,7 +632,6 @@
       await signOut(auth);
     });
 
-    // ======== Documents Logic ========
     docsForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       if (!currentIsAdmin) return alert("Only admins can add documents.");
