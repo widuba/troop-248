@@ -25,16 +25,15 @@
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
         sans-serif;
       margin: 0;
-      background: #d2cab6; /* your hex background */
+      background: #d2cab6;
       color: var(--text-main);
       min-height: 100vh;
     }
 
-    /* ========= FULLSCREEN LOGIN OVERLAY ========= */
     #auth-overlay {
       position: fixed;
       inset: 0;
-      display: flex;
+      display: none;
       align-items: center;
       justify-content: center;
       background: radial-gradient(circle at top, #ffffff 0, var(--tan) 70%);
@@ -142,9 +141,8 @@
       text-align: center;
     }
 
-    /* ========= APP SHELL ========= */
     #app-shell {
-      display: none; /* shown only when logged in via JS */
+      display: none;
       min-height: 100vh;
     }
 
@@ -407,14 +405,6 @@
       display: none;
     }
 
-    a {
-      color: var(--blue);
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
     @media (max-width: 640px) {
       header {
         flex-direction: column;
@@ -437,7 +427,6 @@
   </style>
 </head>
 <body>
-  <!-- FULLSCREEN LOGIN -->
   <div id="auth-overlay">
     <div class="auth-card">
       <div class="auth-card-header">
@@ -464,7 +453,6 @@
     </div>
   </div>
 
-  <!-- APP SHELL -->
   <div id="app-shell">
     <header>
       <div>
@@ -472,10 +460,10 @@
       </div>
 
       <nav>
-        <a href="/calendar/">Calendar</a>
-        <a href="/scoutmaster/">Scoutmaster Blog</a>
-        <a href="/spl/">SPL Blog</a>
-        <a href="/documents/">Troop Documents</a>
+        <a href="/calendar">Calendar</a>
+        <a href="/documents">Documents</a>
+        <a href="/scoutmaster">Scoutmaster Blog</a>
+        <a href="/spl-blog">SPL Blog</a>
       </nav>
 
       <div id="auth-bar">
@@ -537,20 +525,19 @@
       deleteDoc
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
-  authDomain: "troop-248.firebaseapp.com",
-  projectId: "troop-248",
-  storageBucket: "troop-248.firebasestorage.app",
-  messagingSenderId: "925363875752",
-  appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
-  measurementId: "G-NY75GX5TBH"
-};
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+      authDomain: "troop-248.firebaseapp.com",
+      projectId: "troop-248",
+      storageBucket: "troop-248.firebasestorage.app",
+      messagingSenderId: "925363875752",
+      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+      measurementId: "G-NY75GX5TBH"
+    };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
     const authOverlay = document.getElementById("auth-overlay");
     const appShell = document.getElementById("app-shell");
@@ -568,17 +555,12 @@ const db = getFirestore(app);
     const smTitleInput = document.getElementById("sm-title");
     const smBodyInput = document.getElementById("sm-body");
 
-    let currentUser = null;
-    let currentIsAdmin = false;
-
     const ADMIN_UIDS = [
       "l1TlAvSdW0hpZUPU5eA0XBWD2OA3"
     ];
 
-    async function checkAdmin(user) {
-      if (!user) return false;
-      return ADMIN_UIDS.includes(user.uid);
-    }
+    let currentUser = null;
+    let currentIsAdmin = false;
 
     function updateAdminUI() {
       for (let i = 0; i < adminOnlyEls.length; i++) {
@@ -599,9 +581,9 @@ const db = getFirestore(app);
       }
     }
 
-    onAuthStateChanged(auth, async (user) => {
+    onAuthStateChanged(auth, (user) => {
       currentUser = user;
-      currentIsAdmin = await checkAdmin(user);
+      currentIsAdmin = !!(user && ADMIN_UIDS.includes(user.uid));
       updateAdminUI();
     });
 
@@ -636,7 +618,6 @@ const db = getFirestore(app);
       await signOut(auth);
     });
 
-    // Scoutmaster Blog logic
     smForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       if (!currentIsAdmin) return alert("Only admins can post.");
@@ -660,10 +641,10 @@ const db = getFirestore(app);
       smList.innerHTML = "";
       posts.forEach((docSnap) => {
         const data = docSnap.data();
-        const li = document.createElement("li");
         const created = data.createdAt?.toDate
           ? data.createdAt.toDate().toLocaleString()
           : "";
+        const li = document.createElement("li");
         li.innerHTML = `
           <strong>${data.title || "Untitled"}</strong>
           <div class="meta">${created}</div>
@@ -694,4 +675,3 @@ const db = getFirestore(app);
   </script>
 </body>
 </html>
-
