@@ -4,14 +4,429 @@
   <meta charset="UTF-8" />
   <title>SPL Blog — Troop 248</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Use the exact same CSS as the Scoutmaster page above -->
-  <!-- For brevity, CSS is identical; you can copy the whole <style> block from the Scoutmaster page -->
   <style>
-    /* copy the exact same CSS from the Scoutmaster page here */
+    :root {
+      --red: #b22222;
+      --blue: #1f4e79;
+      --tan: #f4eee3;
+      --white: #ffffff;
+      --text-main: #1f2933;
+      --text-muted: #6b7280;
+      --radius-lg: 16px;
+      --radius-sm: 999px;
+      --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      margin: 0;
+      background: #d2cab6;
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    #auth-overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top, #ffffff 0, var(--tan) 70%);
+      z-index: 50;
+    }
+
+    .auth-card {
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 20px;
+      padding: 24px 22px 18px;
+      width: 100%;
+      max-width: 360px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .auth-card-header {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .auth-card-header h1 {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--blue);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .auth-card-header h1::before {
+      content: "★";
+      font-size: 18px;
+      color: var(--red);
+    }
+
+    .auth-card-header p {
+      margin: 6px 0 0;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .auth-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .auth-fields label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 3px;
+    }
+
+    .auth-fields input {
+      width: 100%;
+      padding: 7px 10px;
+      font-size: 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid #d1d5db;
+      background: #f9fafb;
+    }
+
+    .auth-fields input:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 2px rgba(31, 78, 121, 0.18);
+    }
+
+    .auth-buttons {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .auth-buttons button {
+      flex: 1;
+      padding: 7px 0;
+      font-size: 14px;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--white);
+    }
+
+    #login-btn {
+      background: var(--blue);
+    }
+
+    #signup-btn {
+      background: var(--red);
+    }
+
+    .auth-note {
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    #app-shell {
+      display: none;
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
+      color: var(--white);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    header h2 {
+      margin: 0;
+      font-size: 19px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    header h2::before {
+      content: "★";
+      font-size: 18px;
+    }
+
+    nav {
+      display: flex;
+      gap: 12px;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    nav a {
+      color: var(--white);
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(4px);
+      opacity: 0.9;
+    }
+
+    nav a:hover {
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    #auth-bar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    #auth-info {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    #logout-btn {
+      padding: 5px 12px;
+      font-size: 13px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--white);
+      cursor: pointer;
+    }
+
+    #logout-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    main {
+      padding: 24px 16px 40px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .welcome-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 6px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    .welcome-card h3 {
+      margin: 0 0 4px;
+      font-size: 18px;
+    }
+
+    .welcome-card p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .badge {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+      background: rgba(148, 163, 184, 0.2);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    .badge.admin {
+      background: rgba(240, 180, 41, 0.16);
+      color: #92400e;
+      border: 1px solid rgba(245, 158, 11, 0.6);
+    }
+
+    section {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 10px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    section h2 {
+      margin-top: 0;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    section h2::before {
+      content: "▸";
+      font-size: 14px;
+      color: var(--blue);
+    }
+
+    form {
+      margin-bottom: 14px;
+      padding: 10px 10px 6px;
+      background: #f9fafb;
+      border-radius: 12px;
+      border: 1px dashed rgba(148, 163, 184, 0.8);
+    }
+
+    form h3 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--blue);
+    }
+
+    .field {
+      margin-bottom: 8px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 3px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .field input[type="text"],
+    .field textarea {
+      width: 100%;
+      padding: 6px 8px;
+      font-size: 14px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      background: #ffffff;
+    }
+
+    .field textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .field input:focus,
+    .field textarea:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 2px rgba(31, 78, 121, 0.1);
+    }
+
+    form button {
+      padding: 6px 14px;
+      font-size: 13px;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      background: var(--blue);
+      color: var(--white);
+      margin-top: 4px;
+    }
+
+    form button:hover {
+      opacity: 0.96;
+    }
+
+    .item-list {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+      font-size: 14px;
+    }
+
+    .item-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(229, 231, 235, 0.9);
+    }
+
+    .item-list li:last-child {
+      border-bottom: none;
+    }
+
+    .item-list strong {
+      font-weight: 600;
+    }
+
+    .meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+      margin-bottom: 2px;
+    }
+
+    .small-btn {
+      font-size: 11px;
+      padding: 2px 8px;
+      margin-top: 4px;
+      margin-left: 0;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      background: var(--red);
+      color: var(--white);
+    }
+
+    .small-btn:hover {
+      opacity: 0.95;
+    }
+
+    .admin-only {
+      display: none;
+    }
+
+    @media (max-width: 640px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      nav {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+      .welcome-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .auth-card {
+        margin: 0 16px;
+      }
+    }
   </style>
 </head>
 <body>
-  <!-- FULLSCREEN LOGIN -->
   <div id="auth-overlay">
     <div class="auth-card">
       <div class="auth-card-header">
@@ -38,7 +453,6 @@
     </div>
   </div>
 
-  <!-- APP SHELL -->
   <div id="app-shell">
     <header>
       <div>
@@ -46,10 +460,10 @@
       </div>
 
       <nav>
-        <a href="/calendar/">Calendar</a>
-        <a href="/scoutmaster/">Scoutmaster Blog</a>
-        <a href="/spl/">SPL Blog</a>
-        <a href="/documents/">Troop Documents</a>
+        <a href="/calendar">Calendar</a>
+        <a href="/documents">Documents</a>
+        <a href="/scoutmaster">Scoutmaster Blog</a>
+        <a href="/spl-blog">SPL Blog</a>
       </nav>
 
       <div id="auth-bar">
@@ -62,7 +476,7 @@
       <div class="welcome-card">
         <div>
           <h3>SPL Blog</h3>
-          <p>News and updates from the Senior Patrol Leader.</p>
+          <p>News and announcements from the Senior Patrol Leader.</p>
         </div>
         <div id="role-badge-container">
           <span class="badge">Viewer</span>
@@ -111,19 +525,19 @@
       deleteDoc
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
-  authDomain: "troop-248.firebaseapp.com",
-  projectId: "troop-248",
-  storageBucket: "troop-248.firebasestorage.app",
-  messagingSenderId: "925363875752",
-  appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
-  measurementId: "G-NY75GX5TBH"
-};
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+      authDomain: "troop-248.firebaseapp.com",
+      projectId: "troop-248",
+      storageBucket: "troop-248.firebasestorage.app",
+      messagingSenderId: "925363875752",
+      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+      measurementId: "G-NY75GX5TBH"
+    };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
     const authOverlay = document.getElementById("auth-overlay");
     const appShell = document.getElementById("app-shell");
@@ -141,17 +555,12 @@ const db = getFirestore(app);
     const splTitleInput = document.getElementById("spl-title");
     const splBodyInput = document.getElementById("spl-body");
 
-    let currentUser = null;
-    let currentIsAdmin = false;
-
     const ADMIN_UIDS = [
       "l1TlAvSdW0hpZUPU5eA0XBWD2OA3"
     ];
 
-    async function checkAdmin(user) {
-      if (!user) return false;
-      return ADMIN_UIDS.includes(user.uid);
-    }
+    let currentUser = null;
+    let currentIsAdmin = false;
 
     function updateAdminUI() {
       for (let i = 0; i < adminOnlyEls.length; i++) {
@@ -172,9 +581,9 @@ const db = getFirestore(app);
       }
     }
 
-    onAuthStateChanged(auth, async (user) => {
+    onAuthStateChanged(auth, (user) => {
       currentUser = user;
-      currentIsAdmin = await checkAdmin(user);
+      currentIsAdmin = !!(user && ADMIN_UIDS.includes(user.uid));
       updateAdminUI();
     });
 
@@ -209,7 +618,6 @@ const db = getFirestore(app);
       await signOut(auth);
     });
 
-    // SPL Blog logic
     splForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       if (!currentIsAdmin) return alert("Only admins can post.");
@@ -267,4 +675,3 @@ const db = getFirestore(app);
   </script>
 </body>
 </html>
-
