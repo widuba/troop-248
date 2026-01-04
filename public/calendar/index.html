@@ -1,0 +1,85 @@
+<link rel="stylesheet" href="shared.css">
+<body>
+
+<!-- login overlay stays the same -->
+<div id="auth-overlay"> … </div>
+
+<div id="app-shell">
+
+  <header>
+    <h2>Troop Website</h2>
+
+    <nav>
+      <a href="calendar.html">Calendar</a>
+      <a href="scoutmaster.html">Scoutmaster Blog</a>
+      <a href="spl.html">SPL Blog</a>
+      <a href="documents.html">Troop Documents</a>
+    </nav>
+
+    <div id="auth-bar">
+      <div id="auth-info"></div>
+      <button id="logout-btn">Log Out</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="welcome-card">
+      <h3>Troop Calendar</h3>
+      <div id="role-badge-container">
+        <span class="badge">Viewer</span>
+      </div>
+    </div>
+
+    <section>
+      <form id="calendar-form" class="admin-only">
+        <h3>Add Event</h3>
+        <input id="event-title" placeholder="Title">
+        <input id="event-date" type="date">
+        <textarea id="event-description" placeholder="Description"></textarea>
+        <button type="submit">Add Event</button>
+      </form>
+
+      <ul id="calendar-list" class="item-list"></ul>
+    </section>
+  </main>
+</div>
+
+<script type="module">
+  import { gatePage, currentIsAdmin } from "./shared.js";
+  import {
+    getFirestore, collection, addDoc, onSnapshot,
+    orderBy, query, serverTimestamp, doc, deleteDoc
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  gatePage(); // 🔐 enforce login
+
+  const db = getFirestore();
+
+  const form = document.getElementById("calendar-form");
+  const list = document.getElementById("calendar-list");
+
+  form?.addEventListener("submit", async e => {
+    e.preventDefault();
+    if (!currentIsAdmin) return alert("Admins only");
+    await addDoc(collection(db, "calendarEvents"), {
+      title: event-title.value,
+      date: event-date.value,
+      description: event-description.value,
+      createdAt: serverTimestamp()
+    });
+    form.reset();
+  });
+
+  const q = query(collection(db, "calendarEvents"), orderBy("date","asc"));
+
+  onSnapshot(q, snapshot => {
+    list.innerHTML = "";
+    snapshot.forEach(d => {
+      const item = d.data();
+      const li = document.createElement("li");
+      li.innerHTML = `<strong>${item.title}</strong><div>${item.date}</div>`;
+      list.appendChild(li);
+    });
+  });
+</script>
+</body>
