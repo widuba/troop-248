@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Troop Website</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f5f5f5;
+    }
+    header {
+      background: #124734; /* BSA-ish green */
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 20px;
+    }
+    nav a {
+      color: white;
+      margin-left: 10px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    #auth-section {
+      background: #eee;
+      padding: 10px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      font-size: 14px;
+    }
+    #auth-section input {
+      padding: 4px 6px;
+      font-size: 14px;
+    }
+    #auth-section button {
+      padding: 4px 10px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    main {
+      padding: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    section {
+      background: white;
+      border-radius: 4px;
+      padding: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    section h2 {
+      margin-top: 0;
+    }
+    form {
+      margin-bottom: 15px;
+      padding: 10px;
+      background: #fafafa;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    form .field {
+      margin-bottom: 8px;
+    }
+    form label {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 3px;
+    }
+    form input[type="text"],
+    form input[type="date"],
+    form input[type="url"],
+    form textarea {
+      width: 100%;
+      padding: 5px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    form textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+    form button {
+      padding: 5px 10px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .item-list {
+      list-style: none;
+      padding-left: 0;
+    }
+    .item-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .meta {
+      font-size: 12px;
+      color: #555;
+    }
+    .admin-only {
+      display: none; /* shown via JS if user is admin */
+    }
+    .badge {
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 3px;
+      background: #ccc;
+      margin-left: 5px;
+    }
+    .badge.admin {
+      background: #f0b429;
+    }
+    .small-btn {
+      font-size: 11px;
+      padding: 2px 6px;
+      margin-left: 5px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Troop Website</h1>
+    <nav>
+      <a href="#calendar">Calendar</a>
+      <a href="#scoutmaster-blog">Scoutmaster Blog</a>
+      <a href="#spl-blog">SPL Blog</a>
+      <a href="#documents">Documents</a>
+    </nav>
+  </header>
+
+  <div id="auth-section">
+    <div id="auth-info">
+      Not signed in
+    </div>
+    <div id="auth-forms">
+      <input type="email" id="email-input" placeholder="Email" />
+      <input type="password" id="password-input" placeholder="Password" />
+      <button id="login-btn">Log In</button>
+      <button id="signup-btn">Sign Up</button>
+    </div>
+    <button id="logout-btn" style="display:none;">Log Out</button>
+  </div>
+
+  <main>
+    <!-- Calendar -->
+    <section id="calendar">
+      <h2>Troop Calendar</h2>
+
+      <!-- Admin-only calendar form -->
+      <form id="calendar-form" class="admin-only">
+        <h3>Add Calendar Event</h3>
+        <div class="field">
+          <label for="event-title">Title</label>
+          <input type="text" id="event-title" required />
+        </div>
+        <div class="field">
+          <label for="event-date">Date</label>
+          <input type="date" id="event-date" required />
+        </div>
+        <div class="field">
+          <label for="event-description">Description</label>
+          <textarea id="event-description"></textarea>
+        </div>
+        <button type="submit">Add Event</button>
+      </form>
+
+      <ul id="calendar-list" class="item-list"></ul>
+    </section>
+
+    <!-- Scoutmaster Blog -->
+    <section id="scoutmaster-blog">
+      <h2>Scoutmaster Blog</h2>
+
+      <form id="scoutmaster-form" class="admin-only">
+        <h3>New Scoutmaster Post</h3>
+        <div class="field">
+          <label for="sm-title">Title</label>
+          <input type="text" id="sm-title" required />
+        </div>
+        <div class="field">
+          <label for="sm-body">Content</label>
+          <textarea id="sm-body" required></textarea>
+        </div>
+        <button type="submit">Publish Post</button>
+      </form>
+
+      <ul id="scoutmaster-list" class="item-list"></ul>
+    </section>
+
+    <!-- SPL Blog -->
+    <section id="spl-blog">
+      <h2>SPL Blog</h2>
+
+      <form id="spl-form" class="admin-only">
+        <h3>New SPL Post</h3>
+        <div class="field">
+          <label for="spl-title">Title</label>
+          <input type="text" id="spl-title" required />
+        </div>
+        <div class="field">
+          <label for="spl-body">Content</label>
+          <textarea id="spl-body" required></textarea>
+        </div>
+        <button type="submit">Publish Post</button>
+      </form>
+
+      <ul id="spl-list" class="item-list"></ul>
+    </section>
+
+    <!-- Documents -->
+    <section id="documents">
+      <h2>Troop Documents</h2>
+
+      <form id="documents-form" class="admin-only">
+        <h3>Add Document Link</h3>
+        <div class="field">
+          <label for="doc-title">Document Title</label>
+          <input type="text" id="doc-title" required />
+        </div>
+        <div class="field">
+          <label for="doc-url">Document URL (Google Drive / PDF / etc.)</label>
+          <input type="url" id="doc-url" required />
+        </div>
+        <div class="field">
+          <label for="doc-description">Description (optional)</label>
+          <textarea id="doc-description"></textarea>
+        </div>
+        <button type="submit">Add Document</button>
+      </form>
+
+      <ul id="documents-list" class="item-list"></ul>
+    </section>
+  </main>
+
+  <!-- Firebase (modular CDN) -->
+  <script type="module">
+    // 1) Import Firebase SDKs (version number may change; 10.x+ works similarly)
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      onSnapshot,
+      query,
+      orderBy,
+      serverTimestamp,
+      doc,
+      getDoc,
+      deleteDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    // 2) Your Firebase config (replace this!)
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    // 3) Init Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // ======== DOM Elements ========
+    const authInfoEl = document.getElementById("auth-info");
+    const emailInput = document.getElementById("email-input");
+    const passwordInput = document.getElementById("password-input");
+    const loginBtn = document.getElementById("login-btn");
+    const signupBtn = document.getElementById("signup-btn");
+    const logoutBtn = document.getElementById("logout-btn");
+    const authFormsContainer = document.getElementById("auth-forms");
+
+    const adminOnlyEls = document.getElementsByClassName("admin-only");
+
+    // Calendar
+    const calendarForm = document.getElementById("calendar-form");
+    const calendarList = document.getElementById("calendar-list");
+    const eventTitleInput = document.getElementById("event-title");
+    const eventDateInput = document.getElementById("event-date");
+    const eventDescInput = document.getElementById("event-description");
+
+    // Scoutmaster Blog
+    const smForm = document.getElementById("scoutmaster-form");
+    const smList = document.getElementById("scoutmaster-list");
+    const smTitleInput = document.getElementById("sm-title");
+    const smBodyInput = document.getElementById("sm-body");
+
+    // SPL Blog
+    const splForm = document.getElementById("spl-form");
+    const splList = document.getElementById("spl-list");
+    const splTitleInput = document.getElementById("spl-title");
+    const splBodyInput = document.getElementById("spl-body");
+
+    // Documents
+    const docsForm = document.getElementById("documents-form");
+    const docsList = document.getElementById("documents-list");
+    const docTitleInput = document.getElementById("doc-title");
+    const docUrlInput = document.getElementById("doc-url");
+    const docDescInput = document.getElementById("doc-description");
+
+    let currentUser = null;
+    let currentIsAdmin = false;
+
+    // Helper to show/hide admin-only sections
+    function updateAdminUI() {
+      for (let i = 0; i < adminOnlyEls.length; i++) {
+        adminOnlyEls[i].style.display = currentIsAdmin ? "block" : "none";
+      }
+      if (currentUser) {
+        authInfoEl.innerHTML = `
+          Signed in as ${currentUser.email}
+          <span class="badge ${currentIsAdmin ? "admin" : ""}">
+            ${currentIsAdmin ? "Admin" : "Viewer"}
+          </span>`;
+        authFormsContainer.style.display = "none";
+        logoutBtn.style.display = "inline-block";
+      } else {
+        authInfoEl.textContent = "Not signed in";
+        authFormsContainer.style.display = "flex";
+        logoutBtn.style.display = "none";
+      }
+    }
+
+    // Check if user is admin by looking for /admins/{uid}
+    async function checkAdmin(user) {
+      if (!user) return false;
+      try {
+        const adminRef = doc(db, "admins", user.uid);
+        const snap = await getDoc(adminRef);
+        return snap.exists();
+      } catch (e) {
+        console.error("Error checking admin:", e);
+        return false;
+      }
+    }
+
+    // Auth state listener
+    onAuthStateChanged(auth, async (user) => {
+      currentUser = user;
+      currentIsAdmin = await checkAdmin(user);
+      updateAdminUI();
+    });
+
+    // Login
+    loginBtn.addEventListener("click", async () => {
+      const email = emailInput.value.trim();
+      const pass = passwordInput.value.trim();
+      if (!email || !pass) return alert("Please enter email and password");
+      try {
+        await signInWithEmailAndPassword(auth, email, pass);
+        emailInput.value = "";
+        passwordInput.value = "";
+      } catch (e) {
+        console.error(e);
+        alert("Login failed: " + e.message);
+      }
+    });
+
+    // Signup
+    signupBtn.addEventListener("click", async () => {
+      const email = emailInput.value.trim();
+      const pass = passwordInput.value.trim();
+      if (!email || !pass) return alert("Please enter email and password");
+      try {
+        await createUserWithEmailAndPassword(auth, email, pass);
+        alert("Account created! Ask the site owner to grant admin if needed.");
+        emailInput.value = "";
+        passwordInput.value = "";
+      } catch (e) {
+        console.error(e);
+        alert("Signup failed: " + e.message);
+      }
+    });
+
+    // Logout
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+    });
+
+    // ======== Calendar Logic ========
+
+    calendarForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!currentIsAdmin) return alert("Only admins can add events.");
+      const title = eventTitleInput.value.trim();
+      const date = eventDateInput.value;
+      const description = eventDescInput.value.trim();
+      if (!title || !date) return alert("Title and date required.");
+      try {
+        await addDoc(collection(db, "calendarEvents"), {
+          title,
+          date,
+          description,
+          createdAt: serverTimestamp()
+        });
+        eventTitleInput.value = "";
+        eventDateInput.value = "";
+        eventDescInput.value = "";
+      } catch (e) {
+        console.error(e);
+        alert("Error adding event");
+      }
+    });
+
+    function renderCalendar(events) {
+      calendarList.innerHTML = "";
+      events.forEach((docSnap) => {
+        const data = docSnap.data();
+        const li = document.createElement("li");
+        const dateText = data.date || "";
+        li.innerHTML = `
+          <strong>${data.title || "Untitled"}</strong>
+          <div class="meta">${dateText}</div>
+          <div>${data.description || ""}</div>
+        `;
+        if (currentIsAdmin) {
+          const btn = document.createElement("button");
+          btn.textContent = "Delete";
+          btn.className = "small-btn";
+          btn.onclick = async () => {
+            if (confirm("Delete this event?")) {
+              await deleteDoc(doc(db, "calendarEvents", docSnap.id));
+            }
+          };
+          li.appendChild(btn);
+        }
+        calendarList.appendChild(li);
+      });
+    }
+
+    const calendarQuery = query(
+      collection(db, "calendarEvents"),
+      orderBy("date", "asc")
+    );
+    onSnapshot(calendarQuery, (snapshot) => {
+      renderCalendar(snapshot.docs);
+    });
+
+    // ======== Scoutmaster Blog Logic ========
+
+    smForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!currentIsAdmin) return alert("Only admins can post.");
+      const title = smTitleInput.value.trim();
+      const body = smBodyInput.value.trim();
+      if (!title || !body) return alert("Title and content required.");
+      try {
+        await addDoc(collection(db, "scoutmasterPosts"), {
+          title,
+          body,
+          createdAt: serverTimestamp()
+        });
+        smTitleInput.value = "";
+        smBodyInput.value = "";
+      } catch (e) {
+        console.error(e);
+        alert("Error adding post");
+      }
+    });
+
+    function renderSMPosts(posts) {
+      smList.innerHTML = "";
+      posts.forEach((docSnap) => {
+        const data = docSnap.data();
+        const li = document.createElement("li");
+        const created = data.createdAt?.toDate
+          ? data.createdAt.toDate().toLocaleString()
+          : "";
+        li.innerHTML = `
+          <strong>${data.title || "Untitled"}</strong>
+          <div class="meta">${created}</div>
+          <div>${data.body || ""}</div>
+        `;
+        if (currentIsAdmin) {
+          const btn = document.createElement("button");
+          btn.textContent = "Delete";
+          btn.className = "small-btn";
+          btn.onclick = async () => {
+            if (confirm("Delete this post?")) {
+              await deleteDoc(doc(db, "scoutmasterPosts", docSnap.id));
+            }
+          };
+          li.appendChild(btn);
+        }
+        smList.appendChild(li);
+      });
+    }
+
+    const smQuery = query(
+      collection(db, "scoutmasterPosts"),
+      orderBy("createdAt", "desc")
+    );
+    onSnapshot(smQuery, (snapshot) => {
+      renderSMPosts(snapshot.docs);
+    });
+
+    // ======== SPL Blog Logic ========
+
+    splForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!currentIsAdmin) return alert("Only admins can post.");
+      const title = splTitleInput.value.trim();
+      const body = splBodyInput.value.trim();
+      if (!title || !body) return alert("Title and content required.");
+      try {
+        await addDoc(collection(db, "splPosts"), {
+          title,
+          body,
+          createdAt: serverTimestamp()
+        });
+        splTitleInput.value = "";
+        splBodyInput.value = "";
+      } catch (e) {
+        console.error(e);
+        alert("Error adding post");
+      }
+    });
+
+    function renderSPLPosts(posts) {
+      splList.innerHTML = "";
+      posts.forEach((docSnap) => {
+        const data = docSnap.data();
+        const created = data.createdAt?.toDate
+          ? data.createdAt.toDate().toLocaleString()
+          : "";
+        li = document.createElement("li");
+        li.innerHTML = `
+          <strong>${data.title || "Untitled"}</strong>
+          <div class="meta">${created}</div>
+          <div>${data.body || ""}</div>
+        `;
+        if (currentIsAdmin) {
+          const btn = document.createElement("button");
+          btn.textContent = "Delete";
+          btn.className = "small-btn";
+          btn.onclick = async () => {
+            if (confirm("Delete this post?")) {
+              await deleteDoc(doc(db, "splPosts", docSnap.id));
+            }
+          };
+          li.appendChild(btn);
+        }
+        splList.appendChild(li);
+      });
+    }
+
+    const splQuery = query(
+      collection(db, "splPosts"),
+      orderBy("createdAt", "desc")
+    );
+    onSnapshot(splQuery, (snapshot) => {
+      renderSPLPosts(snapshot.docs);
+    });
+
+    // ======== Documents Logic ========
+
+    docsForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!currentIsAdmin) return alert("Only admins can add documents.");
+      const title = docTitleInput.value.trim();
+      const url = docUrlInput.value.trim();
+      const description = docDescInput.value.trim();
+      if (!title || !url) return alert("Title and URL required.");
+      try {
+        await addDoc(collection(db, "documents"), {
+          title,
+          url,
+          description,
+          createdAt: serverTimestamp()
+        });
+        docTitleInput.value = "";
+        docUrlInput.value = "";
+        docDescInput.value = "";
+      } catch (e) {
+        console.error(e);
+        alert("Error adding document");
+      }
+    });
+
+    function renderDocuments(docs) {
+      docsList.innerHTML = "";
+      docs.forEach((docSnap) => {
+        const data = docSnap.data();
+        const li = document.createElement("li");
+        const created = data.createdAt?.toDate
+          ? data.createdAt.toDate().toLocaleString()
+          : "";
+        li.innerHTML = `
+          <strong><a href="${data.url}" target="_blank" rel="noopener noreferrer">
+            ${data.title || "Untitled"}
+          </a></strong>
+          <div class="meta">${created}</div>
+          <div>${data.description || ""}</div>
+        `;
+        if (currentIsAdmin) {
+          const btn = document.createElement("button");
+          btn.textContent = "Delete";
+          btn.className = "small-btn";
+          btn.onclick = async () => {
+            if (confirm("Delete this document?")) {
+              await deleteDoc(doc(db, "documents", docSnap.id));
+            }
+          };
+          li.appendChild(btn);
+        }
+        docsList.appendChild(li);
+      });
+    }
+
+    const docsQuery = query(
+      collection(db, "documents"),
+      orderBy("createdAt", "desc")
+    );
+    onSnapshot(docsQuery, (snapshot) => {
+      renderDocuments(snapshot.docs);
+    });
+  </script>
+</body>
+</html>
