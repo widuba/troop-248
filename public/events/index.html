@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Events — Troop 248</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --red: #b22222;
+      --blue: #1f4e79;
+      --tan: #f4eee3;
+      --white: #ffffff;
+      --text-main: #1f2933;
+      --text-muted: #6b7280;
+      --radius-lg: 16px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: #d2cab6;
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
+      color: var(--white);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    header h2 {
+      margin: 0;
+      font-size: 19px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    header h2::before {
+      content: "★";
+      font-size: 18px;
+    }
+
+    .troop-home-link {
+      text-decoration: none;
+      color: inherit;
+      display: inline-flex;
+      align-items: center;
+    }
+    .troop-home-link:hover h2 {
+      opacity: 0.9;
+      text-decoration: underline;
+    }
+
+    nav {
+      display: flex;
+      gap: 12px;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    nav a {
+      color: var(--white);
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(4px);
+      opacity: 0.9;
+    }
+
+    nav a:hover {
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    #auth-bar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    #logout-btn {
+      padding: 5px 12px;
+      font-size: 13px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--white);
+      cursor: pointer;
+    }
+
+    #logout-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    main {
+      padding: 24px 16px 40px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .welcome-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 8px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    .welcome-card h3 {
+      margin: 0 0 4px;
+      font-size: 18px;
+    }
+
+    .welcome-card p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .badge {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(148, 163, 184, 0.2);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    .badge.admin {
+      background: rgba(240, 180, 41, 0.16);
+      color: #92400e;
+      border: 1px solid rgba(245, 158, 11, 0.6);
+    }
+
+    section {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 14px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    section h2 {
+      margin-top: 0;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    section h2::before {
+      content: "▸";
+      font-size: 14px;
+      color: var(--blue);
+    }
+
+    .admin-only { display: none; }
+
+    form {
+      margin-bottom: 10px;
+      padding: 10px 10px 8px;
+      background: #f9fafb;
+      border-radius: 12px;
+      border: 1px dashed rgba(148, 163, 184, 0.8);
+    }
+
+    form h3 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      color: var(--blue);
+    }
+
+    .field {
+      margin-bottom: 8px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 3px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    .field input,
+    .field textarea {
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      background: #ffffff;
+      font-size: 14px;
+    }
+
+    .field textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    .field input:focus,
+    .field textarea:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 2px rgba(31,78,121,.1);
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    @media (max-width: 640px) {
+      .field-row {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    form button {
+      padding: 6px 14px;
+      font-size: 13px;
+      border-radius: var(--radius-pill);
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      background: var(--blue);
+      color: var(--white);
+    }
+
+    form button:hover { opacity: .96; }
+
+    .small-help {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    /* Events list */
+
+    .events-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .event-card {
+      border-radius: 14px;
+      padding: 12px 12px 10px;
+      border: 1px solid rgba(209,213,219,.9);
+      background: #f9fafb;
+      box-shadow: 0 4px 12px rgba(0,0,0,.04);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 6px;
+    }
+
+    .event-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .event-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .event-date {
+      font-size: 13px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .event-meta {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .event-summary {
+      font-size: 13px;
+      color: var(--text-main);
+    }
+
+    .event-links-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .btn-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 10px;
+      font-size: 12px;
+      border-radius: var(--radius-pill);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .btn-view {
+      background: var(--blue);
+      color: var(--white);
+    }
+
+    .btn-map {
+      background: rgba(31,78,121,.08);
+      color: var(--blue);
+      border: 1px solid rgba(148,163,184,.7);
+    }
+
+    .btn-signup {
+      background: var(--red);
+      color: var(--white);
+    }
+
+    .btn-view:hover,
+    .btn-map:hover,
+    .btn-signup:hover {
+      opacity: .96;
+    }
+
+    .empty-text {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    @media (max-width: 640px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      nav {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+      .welcome-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <a href="/home" class="troop-home-link">
+        <h2>Troop 248</h2>
+      </a>
+    </div>
+
+    <nav>
+      <a href="/home">Home</a>
+      <a href="/calendar">Calendar</a>
+      <a href="/documents">Documents</a>
+      <a href="/scoutmaster">Scoutmaster Blog</a>
+      <a href="/spl-blog">SPL Blog</a>
+      <a href="/useful-links">Useful Links</a>
+      <a href="/events">Events</a>
+    </nav>
+
+    <div id="auth-bar">
+      <div id="auth-info">Signed in as …</div>
+      <button id="logout-btn">Log Out</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="welcome-card">
+      <div>
+        <h3>Troop Events</h3>
+        <p>View and manage troop campouts, trips, and special activities.</p>
+      </div>
+      <div id="role-badge-container">
+        <span class="badge">Viewer</span>
+      </div>
+    </div>
+
+    <!-- Admin: Create Event -->
+    <section>
+      <h2>Create Event</h2>
+      <form id="event-form" class="admin-only">
+        <h3>New Troop Event</h3>
+
+        <div class="field">
+          <label for="event-title">Title</label>
+          <input id="event-title" type="text" placeholder="Fall Camporee 2026" required />
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="event-start-date">Start Date</label>
+            <input id="event-start-date" type="date" required />
+          </div>
+          <div class="field">
+            <label for="event-start-time">Start Time</label>
+            <input id="event-start-time" type="time" required />
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="event-end-date">End Date</label>
+            <input id="event-end-date" type="date" required />
+          </div>
+          <div class="field">
+            <label for="event-end-time">End Time</label>
+            <input id="event-end-time" type="time" required />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="event-location">Location</label>
+          <input id="event-location" type="text" placeholder="Camp Rainey Mountain, Clayton, GA" required />
+        </div>
+
+        <div class="field">
+          <label for="event-signup-url">Signup Link (optional)</label>
+          <input id="event-signup-url" type="url" placeholder="https://..." />
+        </div>
+
+        <div class="field">
+          <label for="event-summary">Short Description</label>
+          <textarea id="event-summary" placeholder="Short summary of this outing, who it's for, and any quick notes." required></textarea>
+        </div>
+
+        <button type="submit">Create Event</button>
+        <div id="event-error" class="small-help" style="color:#b91c1c;"></div>
+        <div id="event-success" class="small-help" style="color:#166534;"></div>
+        <div class="small-help">
+          Each event gets its own unique link, like <code>/events/fall-camporee-2026</code>, with RSVP, maps, and event-specific info.
+        </div>
+      </form>
+
+      <div class="small-help admin-only">
+        Only admins can create or edit events. Viewers can see event details and RSVP from the event page.
+      </div>
+    </section>
+
+    <!-- Events list -->
+    <section>
+      <h2>Upcoming Events</h2>
+      <div id="events-container" class="events-list"></div>
+      <div id="events-empty" class="empty-text" style="display:none;">
+        No events have been added yet.
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      collection,
+      setDoc,
+      onSnapshot,
+      query,
+      orderBy,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+      authDomain: "troop-248.firebaseapp.com",
+      projectId: "troop-248",
+      storageBucket: "troop-248.firebasestorage.app",
+      messagingSenderId: "925363875752",
+      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+      measurementId: "G-NY75GX5TBH"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const authInfoEl = document.getElementById("auth-info");
+    const logoutBtn = document.getElementById("logout-btn");
+    const roleBadgeContainer = document.getElementById("role-badge-container");
+    const adminOnlyEls = document.getElementsByClassName("admin-only");
+
+    const eventForm = document.getElementById("event-form");
+    const eventTitleInput = document.getElementById("event-title");
+    const eventStartDateInput = document.getElementById("event-start-date");
+    const eventStartTimeInput = document.getElementById("event-start-time");
+    const eventEndDateInput = document.getElementById("event-end-date");
+    const eventEndTimeInput = document.getElementById("event-end-time");
+    const eventLocationInput = document.getElementById("event-location");
+    const eventSignupUrlInput = document.getElementById("event-signup-url");
+    const eventSummaryInput = document.getElementById("event-summary");
+    const eventErrorEl = document.getElementById("event-error");
+    const eventSuccessEl = document.getElementById("event-success");
+
+    const eventsContainer = document.getElementById("events-container");
+    const eventsEmptyEl = document.getElementById("events-empty");
+
+    let currentUser = null;
+    let currentIsAdmin = false;
+
+    function slugify(text) {
+      return text
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+    }
+
+    function updateAdminUI() {
+      for (let i = 0; i < adminOnlyEls.length; i++) {
+        adminOnlyEls[i].style.display = currentIsAdmin ? "block" : "none";
+      }
+      if (currentUser) {
+        authInfoEl.textContent = `Signed in as ${currentUser.email}`;
+        roleBadgeContainer.innerHTML = `
+          <span class="badge ${currentIsAdmin ? "admin" : ""}">
+            ${currentIsAdmin ? "Admin" : "Viewer"}
+          </span>`;
+      }
+    }
+
+    async function handleAuth(user) {
+      if (!user) {
+        window.location.href = "/";
+        return;
+      }
+
+      const infoRef = doc(db, "accountInfo", user.uid);
+      const infoSnap = await getDoc(infoRef);
+
+      if (!infoSnap.exists()) {
+        window.location.href = "/under-review/";
+        return;
+      }
+
+      const data = infoSnap.data();
+      const role = data.authRole;
+
+      if (role !== "admin" && role !== "viewer") {
+        window.location.href = "/under-review/";
+        return;
+      }
+
+      currentUser = user;
+      currentIsAdmin = role === "admin";
+      updateAdminUI();
+      pageSpecificInit();
+    }
+
+    onAuthStateChanged(auth, handleAuth);
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "/";
+    });
+
+    function formatDateRange(ev) {
+      const sd = ev.startDate || "";
+      const st = ev.startTime || "";
+      const ed = ev.endDate || "";
+      const et = ev.endTime || "";
+
+      if (!sd && !ed) return "";
+
+      if (sd === ed || !ed) {
+        return `${sd}${st ? " • " + st : ""}${et ? " – " + et : ""}`;
+      }
+
+      return `${sd}${st ? " • " + st : ""} → ${ed}${et ? " • " + et : ""}`;
+    }
+
+    function renderEvents(docs) {
+      eventsContainer.innerHTML = "";
+      if (docs.length === 0) {
+        eventsEmptyEl.style.display = "block";
+        return;
+      }
+      eventsEmptyEl.style.display = "none";
+
+      docs.forEach((docSnap) => {
+        const data = docSnap.data();
+        const slug = data.slug || docSnap.id;
+        const title = data.title || "Untitled Event";
+        const location = data.location || "";
+        const summary = data.summary || "";
+        const signupUrl = data.signupUrl || "";
+
+        const dateText = formatDateRange(data);
+
+        const card = document.createElement("div");
+        card.className = "event-card";
+
+        const titleRow = document.createElement("div");
+        titleRow.className = "event-title-row";
+
+        const titleEl = document.createElement("div");
+        titleEl.className = "event-title";
+        titleEl.textContent = title;
+
+        const dateEl = document.createElement("div");
+        dateEl.className = "event-date";
+        dateEl.textContent = dateText;
+
+        titleRow.appendChild(titleEl);
+        titleRow.appendChild(dateEl);
+        card.appendChild(titleRow);
+
+        if (location) {
+          const metaEl = document.createElement("div");
+          metaEl.className = "event-meta";
+          metaEl.textContent = `Location: ${location}`;
+          card.appendChild(metaEl);
+        }
+
+        if (summary) {
+          const summaryEl = document.createElement("div");
+          summaryEl.className = "event-summary";
+          summaryEl.textContent = summary;
+          card.appendChild(summaryEl);
+        }
+
+        const linksRow = document.createElement("div");
+        linksRow.className = "event-links-row";
+
+        const viewBtn = document.createElement("a");
+        viewBtn.href = `/events/${slug}`;
+        viewBtn.className = "btn-chip btn-view";
+        viewBtn.textContent = "View Event";
+        linksRow.appendChild(viewBtn);
+
+        if (location) {
+          const mapsUrl = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(location);
+          const mapBtn = document.createElement("a");
+          mapBtn.href = mapsUrl;
+          mapBtn.target = "_blank";
+          mapBtn.rel = "noopener noreferrer";
+          mapBtn.className = "btn-chip btn-map";
+          mapBtn.textContent = "Open in Google Maps";
+          linksRow.appendChild(mapBtn);
+        }
+
+        if (signupUrl) {
+          const signupBtn = document.createElement("a");
+          signupBtn.href = signupUrl;
+          signupBtn.target = "_blank";
+          signupBtn.rel = "noopener noreferrer";
+          signupBtn.className = "btn-chip btn-signup";
+          signupBtn.textContent = "Signup Link";
+          linksRow.appendChild(signupBtn);
+        }
+
+        card.appendChild(linksRow);
+
+        eventsContainer.appendChild(card);
+      });
+    }
+
+    async function createEvent(e) {
+      e.preventDefault();
+      eventErrorEl.textContent = "";
+      eventSuccessEl.textContent = "";
+
+      const title = eventTitleInput.value.trim();
+      const startDate = eventStartDateInput.value;
+      const startTime = eventStartTimeInput.value;
+      const endDate = eventEndDateInput.value;
+      const endTime = eventEndTimeInput.value;
+      const location = eventLocationInput.value.trim();
+      const signupUrl = eventSignupUrlInput.value.trim();
+      const summary = eventSummaryInput.value.trim();
+
+      if (!title || !startDate || !startTime || !endDate || !endTime || !location || !summary) {
+        eventErrorEl.textContent = "Please fill out all required fields.";
+        return;
+      }
+
+      try {
+        let baseSlug = slugify(title);
+        if (!baseSlug) baseSlug = "event";
+        let finalSlug = baseSlug;
+
+        const docRef = doc(db, "events", finalSlug);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          // If slug taken, add a short random suffix
+          const suffix = Math.random().toString(36).slice(2, 6);
+          finalSlug = `${baseSlug}-${suffix}`;
+        }
+
+        const isoStart = `${startDate}T${startTime}`;
+        const isoEnd = `${endDate}T${endTime}`;
+
+        await setDoc(doc(db, "events", finalSlug), {
+          title,
+          slug: finalSlug,
+          startDate,
+          startTime,
+          endDate,
+          endTime,
+          startDateTime: isoStart,
+          endDateTime: isoEnd,
+          location,
+          signupUrl: signupUrl || "",
+          summary,
+          createdAt: serverTimestamp(),
+          createdBy: currentUser ? currentUser.uid : null
+        });
+
+        eventSuccessEl.textContent = `Event created. Link: /events/${finalSlug}`;
+        eventErrorEl.textContent = "";
+
+        eventTitleInput.value = "";
+        eventStartDateInput.value = "";
+        eventStartTimeInput.value = "";
+        eventEndDateInput.value = "";
+        eventEndTimeInput.value = "";
+        eventLocationInput.value = "";
+        eventSignupUrlInput.value = "";
+        eventSummaryInput.value = "";
+      } catch (err) {
+        console.error(err);
+        eventErrorEl.textContent = err.message || "Error creating event.";
+        eventSuccessEl.textContent = "";
+      }
+    }
+
+    function pageSpecificInit() {
+      if (currentIsAdmin) {
+        eventForm.addEventListener("submit", createEvent);
+      }
+
+      const q = query(
+        collection(db, "events"),
+        orderBy("startDateTime", "asc")
+      );
+
+      onSnapshot(q, (snapshot) => {
+        renderEvents(snapshot.docs);
+      });
+    }
+  </script>
+</body>
+</html>
