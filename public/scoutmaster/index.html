@@ -5,6 +5,17 @@
   <title>Scoutmaster Blog — Troop 248</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
+    .troop-home-link {
+  text-decoration: none;
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+}
+
+.troop-home-link:hover h2 {
+  opacity: 0.9;
+  text-decoration: underline;
+}
     :root {
       --red: #b22222;
       --blue: #1f4e79;
@@ -455,9 +466,11 @@
 
   <div id="app-shell">
     <header>
-      <div>
-        <h2>Troop 248</h2>
-      </div>
+  <div>
+    <a href="/" class="troop-home-link">
+      <h2>Troop 248</h2>
+    </a>
+  </div>
 
       <nav>
         <a href="/calendar">Calendar</a>
