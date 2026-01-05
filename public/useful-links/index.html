@@ -4,19 +4,7 @@
   <meta charset="UTF-8" />
   <title>Useful Links — Troop 248</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href="/bsafavicon.ico" type="image/x-icon">
   <style>
-    .troop-home-link {
-  text-decoration: none;
-  color: inherit;
-  display: inline-flex;
-  align-items: center;
-}
-
-.troop-home-link:hover h2 {
-  opacity: 0.9;
-  text-decoration: underline;
-}
     :root {
       --red: #b22222;
       --blue: #1f4e79;
@@ -285,7 +273,7 @@
     section {
       background: rgba(255, 255, 255, 0.95);
       border-radius: var(--radius-lg);
-      padding: 18px 18px 10px;
+      padding: 18px 18px 12px;
       margin-bottom: 18px;
       box-shadow: var(--shadow-soft);
       border: 1px solid rgba(148, 163, 184, 0.4);
@@ -306,8 +294,8 @@
     }
 
     form {
-      margin-bottom: 14px;
-      padding: 10px 10px 6px;
+      margin-bottom: 10px;
+      padding: 10px 10px 8px;
       background: #f9fafb;
       border-radius: 12px;
       border: 1px dashed rgba(148, 163, 184, 0.8);
@@ -335,16 +323,16 @@
     }
 
     .field input[type="text"],
-.field input[type="url"],
-.field textarea,
-.field select {
-  width: 100%;
-  padding: 6px 8px;
-  font-size: 14px;
-  border-radius: 10px;
-  border: 1px solid #d1d5db;
-  background: #ffffff;
-}
+    .field input[type="url"],
+    .field textarea,
+    .field select {
+      width: 100%;
+      padding: 6px 8px;
+      font-size: 14px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      background: #ffffff;
+    }
 
     .field textarea {
       resize: vertical;
@@ -352,7 +340,8 @@
     }
 
     .field input:focus,
-    .field textarea:focus {
+    .field textarea:focus,
+    .field select:focus {
       outline: none;
       border-color: var(--blue);
       box-shadow: 0 0 0 2px rgba(31, 78, 121, 0.1);
@@ -476,6 +465,18 @@
       display: none;
     }
 
+    /* Troop home button */
+    .troop-home-link {
+      text-decoration: none;
+      color: inherit;
+      display: inline-flex;
+      align-items: center;
+    }
+    .troop-home-link:hover h2 {
+      opacity: 0.9;
+      text-decoration: underline;
+    }
+
     @media (max-width: 640px) {
       header {
         flex-direction: column;
@@ -528,11 +529,12 @@
   <!-- APP SHELL -->
   <div id="app-shell">
     <header>
-  <div>
-    <a href="/" class="troop-home-link">
-      <h2>Troop 248</h2>
-    </a>
-  </div>
+      <div>
+        <a href="/" class="troop-home-link">
+          <h2>Troop 248</h2>
+        </a>
+      </div>
+
       <nav>
         <a href="/calendar">Calendar</a>
         <a href="/documents">Documents</a>
@@ -572,18 +574,16 @@
             <input type="url" id="link-url" placeholder="https://..." required />
           </div>
           <div class="field">
-  <label for="link-topic-select">Topic / Category</label>
-  <select id="link-topic-select" required></select>
-</div>
-
-<div class="field" id="custom-topic-wrapper" style="display:none;">
-  <label for="custom-topic-input">Custom Topic</label>
-  <input
-    type="text"
-    id="custom-topic-input"
-    placeholder="Type your topic (e.g. High Adventure)"
-  />
-</div>
+            <label for="link-topic-select">Topic / Category</label>
+            <select id="link-topic-select" required></select>
+          </div>
+          <div class="field" id="custom-topic-wrapper" style="display:none;">
+            <label for="custom-topic-input">Custom Topic</label>
+            <input
+              type="text"
+              id="custom-topic-input"
+              placeholder="Type your topic (e.g. High Adventure)"
+            />
           </div>
           <div class="field">
             <label for="link-description">Description (optional)</label>
@@ -602,348 +602,340 @@
     </main>
   </div>
 
- <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import {
-    getAuth,
-    onAuthStateChanged,
-    signInWithEmailAndPassword,
-    createUserWithEmailAndPassword,
-    signOut
-  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import {
-    getFirestore,
-    collection,
-    addDoc,
-    onSnapshot,
-    query,
-    serverTimestamp,
-    doc,
-    deleteDoc
-  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      onSnapshot,
+      query,
+      serverTimestamp,
+      doc,
+      deleteDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-  // ✅ Troop 248 Firebase config
-  const firebaseConfig = {
-    apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
-    authDomain: "troop-248.firebaseapp.com",
-    projectId: "troop-248",
-    storageBucket: "troop-248.firebasestorage.app",
-    messagingSenderId: "925363875752",
-    appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
-    measurementId: "G-NY75GX5TBH"
-  };
+    // ✅ Troop 248 Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+      authDomain: "troop-248.firebaseapp.com",
+      projectId: "troop-248",
+      storageBucket: "troop-248.firebasestorage.app",
+      messagingSenderId: "925363875752",
+      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+      measurementId: "G-NY75GX5TBH"
+    };
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-  // Auth elements
-  const authOverlay = document.getElementById("auth-overlay");
-  const appShell = document.getElementById("app-shell");
-  const emailInput = document.getElementById("email-input");
-  const passwordInput = document.getElementById("password-input");
-  const loginBtn = document.getElementById("login-btn");
-  const signupBtn = document.getElementById("signup-btn");
-  const logoutBtn = document.getElementById("logout-btn");
-  const authInfoEl = document.getElementById("auth-info");
-  const roleBadgeContainer = document.getElementById("role-badge-container");
-  const adminOnlyEls = document.getElementsByClassName("admin-only");
+    // Auth elements
+    const authOverlay = document.getElementById("auth-overlay");
+    const appShell = document.getElementById("app-shell");
+    const emailInput = document.getElementById("email-input");
+    const passwordInput = document.getElementById("password-input");
+    const loginBtn = document.getElementById("login-btn");
+    const signupBtn = document.getElementById("signup-btn");
+    const logoutBtn = document.getElementById("logout-btn");
+    const authInfoEl = document.getElementById("auth-info");
+    const roleBadgeContainer = document.getElementById("role-badge-container");
+    const adminOnlyEls = document.getElementsByClassName("admin-only");
 
-  // Links elements
-  const linksForm = document.getElementById("links-form");
-  const linkTitleInput = document.getElementById("link-title");
-  const linkUrlInput = document.getElementById("link-url");
-  const linkDescInput = document.getElementById("link-description");
-  const topicsContainer = document.getElementById("topics-container");
-  const topicSelect = document.getElementById("link-topic-select");
-  const customTopicWrapper = document.getElementById("custom-topic-wrapper");
-  const customTopicInput = document.getElementById("custom-topic-input");
+    // Links elements
+    const linksForm = document.getElementById("links-form");
+    const linkTitleInput = document.getElementById("link-title");
+    const linkUrlInput = document.getElementById("link-url");
+    const linkDescInput = document.getElementById("link-description");
+    const topicsContainer = document.getElementById("topics-container");
 
-   // You can customize this list of suggested topics:
-const TOPIC_OPTIONS = [
-  "BSA Organizational Links",
-  "Advancement",
-  "Merit Badges",
-  "Other" // ⚠️ keep "Other" so custom-topic flow works
-];
+    const topicSelect = document.getElementById("link-topic-select");
+    const customTopicWrapper = document.getElementById("custom-topic-wrapper");
+    const customTopicInput = document.getElementById("custom-topic-input");
 
-function populateTopicOptions() {
-  // Default placeholder option
-  topicSelect.innerHTML =
-    '<option value="" disabled selected>Select a topic</option>' +
-    TOPIC_OPTIONS.map(
-      (t) => `<option value="${t}">${t}</option>`
-    ).join("");
-}
+    // Admin UIDs
+    const ADMIN_UIDS = [
+      "l1TlAvSdW0hpZUPU5eA0XBWD2OA3"
+    ];
 
-// Show / hide custom topic input based on selection
-topicSelect.addEventListener("change", () => {
-  if (topicSelect.value === "Other") {
-    customTopicWrapper.style.display = "block";
-    customTopicInput.focus();
-  } else {
-    customTopicWrapper.style.display = "none";
-    customTopicInput.value = "";
-  }
-});
+    let currentUser = null;
+    let currentIsAdmin = false;
 
-// Call this once after the DOM references are ready
-populateTopicOptions();
+    // You can customize this list of suggested topics:
+    const TOPIC_OPTIONS = [
+      "Rank Advancement",
+      "Camping",
+      "Merit Badges",
+      "Forms & Paperwork",
+      "Uniform & Gear",
+      "High Adventure",
+      "Leadership",
+      "Other" // keep "Other" so custom-topic flow works
+    ];
 
- // Admins
-  const ADMIN_UIDS = [
-    "l1TlAvSdW0hpZUPU5eA0XBWD2OA3"
-  ];
-
-  let currentUser = null;
-  let currentIsAdmin = false;
-
-  function updateAdminUI() {
-    for (let i = 0; i < adminOnlyEls.length; i++) {
-      adminOnlyEls[i].style.display = currentIsAdmin ? "block" : "none";
+    function populateTopicOptions() {
+      topicSelect.innerHTML =
+        '<option value="" disabled selected>Select a topic</option>' +
+        TOPIC_OPTIONS.map(
+          (t) => `<option value="${t}">${t}</option>`
+        ).join("");
     }
 
-    if (currentUser) {
-      authOverlay.style.display = "none";
-      appShell.style.display = "block";
-      authInfoEl.textContent = `Signed in as ${currentUser.email}`;
-      roleBadgeContainer.innerHTML = `
-        <span class="badge ${currentIsAdmin ? "admin" : ""}">
-          ${currentIsAdmin ? "Admin" : "Viewer"}
-        </span>`;
-    } else {
-      authOverlay.style.display = "flex";
-      appShell.style.display = "none";
-    }
-  }
-
-  onAuthStateChanged(auth, (user) => {
-    currentUser = user;
-    currentIsAdmin = !!(user && ADMIN_UIDS.includes(user.uid));
-    console.log("Auth state changed. UID:", user?.uid, "isAdmin:", currentIsAdmin);
-    updateAdminUI();
-  });
-
-  // Login / signup / logout handlers
-  loginBtn.addEventListener("click", async () => {
-    const email = emailInput.value.trim();
-    const pass = passwordInput.value.trim();
-    if (!email || !pass) return alert("Please enter email and password");
-    try {
-      await signInWithEmailAndPassword(auth, email, pass);
-      emailInput.value = "";
-      passwordInput.value = "";
-    } catch (e) {
-      console.error("Login error:", e);
-      alert("Login failed: " + e.message);
-    }
-  });
-
-  signupBtn.addEventListener("click", async () => {
-    const email = emailInput.value.trim();
-    const pass = passwordInput.value.trim();
-    if (!email || !pass) return alert("Please enter email and password");
-    try {
-      await createUserWithEmailAndPassword(auth, email, pass);
-      alert("Account created! You are a viewer by default.");
-      emailInput.value = "";
-      passwordInput.value = "";
-    } catch (e) {
-      console.error("Signup error:", e);
-      alert("Signup failed: " + e.message);
-    }
-  });
-
-  logoutBtn.addEventListener("click", async () => {
-    await signOut(auth);
-  });
-
-linksForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  if (!currentIsAdmin) return alert("Only admins can add links.");
-
-  const title = linkTitleInput.value.trim();
-  const url = linkUrlInput.value.trim();
-  const selectedTopic = topicSelect.value;
-  const description = linkDescInput.value.trim();
-
-  if (!title || !url || !selectedTopic) {
-    return alert("Title, URL, and Topic are required.");
-  }
-
-  let topic = selectedTopic;
-
-  // If "Other" is selected, require a custom topic
-  if (selectedTopic === "Other") {
-    const customTopic = customTopicInput.value.trim();
-    if (!customTopic) {
-      alert("Please enter a custom topic.");
-      customTopicInput.focus();
-      return;
-    }
-    topic = customTopic;
-  }
-
-  try {
-    await addDoc(collection(db, "usefulLinks"), {
-      title,
-      url,
-      topic,
-      description,
-      createdAt: serverTimestamp()
-    });
-    console.log("Link added:", { title, url, topic });
-    linkTitleInput.value = "";
-    linkUrlInput.value = "";
-    topicSelect.value = "";
-    customTopicWrapper.style.display = "none";
-    customTopicInput.value = "";
-    linkDescInput.value = "";
-  } catch (e) {
-    console.error("Error adding link:", e);
-    alert("Error adding link: " + e.message);
-  }
-});
-
-  // Render links grouped by topic, with dropdown and alphabetical sorting
-  function renderLinksGrouped(docs) {
-    topicsContainer.innerHTML = "";
-
-    if (!docs || docs.length === 0) {
-      topicsContainer.innerHTML = '<p class="meta">No links added yet.</p>';
-      topicDatalist.innerHTML = "";
-      return;
-    }
-
-    const groups = {};
-    docs.forEach((docSnap) => {
-      const data = docSnap.data();
-      const topic = (data.topic || "Other").trim() || "Other";
-      if (!groups[topic]) {
-        groups[topic] = [];
+    topicSelect.addEventListener("change", () => {
+      if (topicSelect.value === "Other") {
+        customTopicWrapper.style.display = "block";
+        customTopicInput.focus();
+      } else {
+        customTopicWrapper.style.display = "none";
+        customTopicInput.value = "";
       }
-      groups[topic].push({ id: docSnap.id, data });
     });
 
-    // Topics alphabetical
-    const topics = Object.keys(groups).sort((a, b) =>
-      a.toLowerCase().localeCompare(b.toLowerCase())
-    );
+    populateTopicOptions();
 
-    // Update datalist with current topics
-    topicDatalist.innerHTML = topics
-      .map((t) => `<option value="${t}"></option>`)
-      .join("");
-
-    topics.forEach((topic, index) => {
-      const links = groups[topic];
-
-      // sort links alphabetically by title
-      links.sort((a, b) => {
-        const t1 = (a.data.title || "").toLowerCase();
-        const t2 = (b.data.title || "").toLowerCase();
-        return t1.localeCompare(t2);
-      });
-
-      const groupEl = document.createElement("div");
-      groupEl.className = "topic-group";
-
-      const headerEl = document.createElement("div");
-      headerEl.className = "topic-header";
-
-      const titleEl = document.createElement("div");
-      titleEl.className = "topic-title";
-      titleEl.textContent = topic;
-
-      const countEl = document.createElement("span");
-      countEl.className = "topic-count";
-      countEl.textContent = `(${links.length} link${links.length === 1 ? "" : "s"})`;
-      titleEl.appendChild(countEl);
-
-      const toggleBtn = document.createElement("button");
-      toggleBtn.type = "button";
-      toggleBtn.className = "topic-toggle";
-      toggleBtn.textContent = index === 0 ? "▴" : "▾"; // first topic open by default
-
-      headerEl.appendChild(titleEl);
-      headerEl.appendChild(toggleBtn);
-
-      const linksWrapper = document.createElement("div");
-      linksWrapper.className = "topic-links";
-      if (index === 0) {
-        linksWrapper.classList.add("open");
+    function updateAdminUI() {
+      for (let i = 0; i < adminOnlyEls.length; i++) {
+        adminOnlyEls[i].style.display = currentIsAdmin ? "block" : "none";
       }
 
-      const ul = document.createElement("ul");
-      ul.className = "item-list";
+      if (currentUser) {
+        authOverlay.style.display = "none";
+        appShell.style.display = "block";
+        authInfoEl.textContent = `Signed in as ${currentUser.email}`;
+        roleBadgeContainer.innerHTML = `
+          <span class="badge ${currentIsAdmin ? "admin" : ""}">
+            ${currentIsAdmin ? "Admin" : "Viewer"}
+          </span>`;
+      } else {
+        authOverlay.style.display = "flex";
+        appShell.style.display = "none";
+      }
+    }
 
-      links.forEach((linkDoc) => {
-        const { id, data } = linkDoc;
-        const created = data.createdAt?.toDate
-          ? data.createdAt.toDate().toLocaleString()
-          : "";
+    onAuthStateChanged(auth, (user) => {
+      currentUser = user;
+      currentIsAdmin = !!(user && ADMIN_UIDS.includes(user.uid));
+      console.log("Auth state changed. UID:", user?.uid, "isAdmin:", currentIsAdmin);
+      updateAdminUI();
+    });
 
-        const li = document.createElement("li");
-        li.innerHTML = `
-          <strong>
-            <a class="link-anchor" href="${data.url}" target="_blank" rel="noopener noreferrer">
-              ${data.title || "Untitled"}
-            </a>
-          </strong>
-          <div class="meta">${created}</div>
-          <div>${data.description || ""}</div>
-        `;
+    // Login / signup / logout
+    loginBtn.addEventListener("click", async () => {
+      const email = emailInput.value.trim();
+      const pass = passwordInput.value.trim();
+      if (!email || !pass) return alert("Please enter email and password");
+      try {
+        await signInWithEmailAndPassword(auth, email, pass);
+        emailInput.value = "";
+        passwordInput.value = "";
+      } catch (e) {
+        console.error("Login error:", e);
+        alert("Login failed: " + e.message);
+      }
+    });
 
-        if (currentIsAdmin) {
-          const btn = document.createElement("button");
-          btn.textContent = "Delete";
-          btn.className = "small-btn";
-          btn.onclick = async () => {
-            if (confirm("Delete this link?")) {
-              await deleteDoc(doc(db, "usefulLinks", id));
-            }
-          };
-          li.appendChild(btn);
+    signupBtn.addEventListener("click", async () => {
+      const email = emailInput.value.trim();
+      const pass = passwordInput.value.trim();
+      if (!email || !pass) return alert("Please enter email and password");
+      try {
+        await createUserWithEmailAndPassword(auth, email, pass);
+        alert("Account created! You are a viewer by default.");
+        emailInput.value = "";
+        passwordInput.value = "";
+      } catch (e) {
+        console.error("Signup error:", e);
+        alert("Signup failed: " + e.message);
+      }
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+    });
+
+    // Add link (admin only)
+    linksForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!currentIsAdmin) return alert("Only admins can add links.");
+
+      const title = linkTitleInput.value.trim();
+      const url = linkUrlInput.value.trim();
+      const selectedTopic = topicSelect.value;
+      const description = linkDescInput.value.trim();
+
+      if (!title || !url || !selectedTopic) {
+        return alert("Title, URL, and Topic are required.");
+      }
+
+      let topic = selectedTopic;
+
+      if (selectedTopic === "Other") {
+        const customTopic = customTopicInput.value.trim();
+        if (!customTopic) {
+          alert("Please enter a custom topic.");
+          customTopicInput.focus();
+          return;
         }
+        topic = customTopic;
+      }
 
-        ul.appendChild(li);
+      try {
+        await addDoc(collection(db, "usefulLinks"), {
+          title,
+          url,
+          topic,
+          description,
+          createdAt: serverTimestamp()
+        });
+        console.log("Link added:", { title, url, topic });
+        linkTitleInput.value = "";
+        linkUrlInput.value = "";
+        linkDescInput.value = "";
+        topicSelect.selectedIndex = 0;
+        customTopicWrapper.style.display = "none";
+        customTopicInput.value = "";
+      } catch (e) {
+        console.error("Error adding link:", e);
+        alert("Error adding link: " + e.message);
+      }
+    });
+
+    // Render links grouped by topic
+    function renderLinksGrouped(docs) {
+      topicsContainer.innerHTML = "";
+
+      if (!docs || docs.length === 0) {
+        topicsContainer.innerHTML = '<p class="meta">No links added yet.</p>';
+        return;
+      }
+
+      const groups = {};
+      docs.forEach((docSnap) => {
+        const data = docSnap.data();
+        const topic = (data.topic || "Other").trim() || "Other";
+        if (!groups[topic]) {
+          groups[topic] = [];
+        }
+        groups[topic].push({ id: docSnap.id, data });
       });
 
-      linksWrapper.appendChild(ul);
+      const topics = Object.keys(groups).sort((a, b) =>
+        a.toLowerCase().localeCompare(b.toLowerCase())
+      );
 
-      // toggle logic
-      const toggleFn = () => {
-        const isOpen = linksWrapper.classList.contains("open");
-        if (isOpen) {
-          linksWrapper.classList.remove("open");
-          toggleBtn.textContent = "▾";
-        } else {
+      topics.forEach((topic, index) => {
+        const links = groups[topic];
+
+        // sort links alphabetically by title
+        links.sort((a, b) => {
+          const t1 = (a.data.title || "").toLowerCase();
+          const t2 = (b.data.title || "").toLowerCase();
+          return t1.localeCompare(t2);
+        });
+
+        const groupEl = document.createElement("div");
+        groupEl.className = "topic-group";
+
+        const headerEl = document.createElement("div");
+        headerEl.className = "topic-header";
+
+        const titleEl = document.createElement("div");
+        titleEl.className = "topic-title";
+        titleEl.textContent = topic;
+
+        const countEl = document.createElement("span");
+        countEl.className = "topic-count";
+        countEl.textContent = `(${links.length} link${links.length === 1 ? "" : "s"})`;
+        titleEl.appendChild(countEl);
+
+        const toggleBtn = document.createElement("button");
+        toggleBtn.type = "button";
+        toggleBtn.className = "topic-toggle";
+        toggleBtn.textContent = index === 0 ? "▴" : "▾";
+
+        headerEl.appendChild(titleEl);
+        headerEl.appendChild(toggleBtn);
+
+        const linksWrapper = document.createElement("div");
+        linksWrapper.className = "topic-links";
+        if (index === 0) {
           linksWrapper.classList.add("open");
-          toggleBtn.textContent = "▴";
         }
-      };
 
-      headerEl.addEventListener("click", toggleFn);
-      toggleBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        toggleFn();
+        const ul = document.createElement("ul");
+        ul.className = "item-list";
+
+        links.forEach((linkDoc) => {
+          const { id, data } = linkDoc;
+          const created = data.createdAt?.toDate
+            ? data.createdAt.toDate().toLocaleString()
+            : "";
+
+          const li = document.createElement("li");
+          li.innerHTML = `
+            <strong>
+              <a class="link-anchor" href="${data.url}" target="_blank" rel="noopener noreferrer">
+                ${data.title || "Untitled"}
+              </a>
+            </strong>
+            <div class="meta">${created}</div>
+            <div>${data.description || ""}</div>
+          `;
+
+          if (currentIsAdmin) {
+            const btn = document.createElement("button");
+            btn.textContent = "Delete";
+            btn.className = "small-btn";
+            btn.onclick = async () => {
+              if (confirm("Delete this link?")) {
+                await deleteDoc(doc(db, "usefulLinks", id));
+              }
+            };
+            li.appendChild(btn);
+          }
+
+          ul.appendChild(li);
+        });
+
+        linksWrapper.appendChild(ul);
+
+        const toggleFn = () => {
+          const isOpen = linksWrapper.classList.contains("open");
+          if (isOpen) {
+            linksWrapper.classList.remove("open");
+            toggleBtn.textContent = "▾";
+          } else {
+            linksWrapper.classList.add("open");
+            toggleBtn.textContent = "▴";
+          }
+        };
+
+        headerEl.addEventListener("click", toggleFn);
+        toggleBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          toggleFn();
+        });
+
+        groupEl.appendChild(headerEl);
+        groupEl.appendChild(linksWrapper);
+
+        topicsContainer.appendChild(groupEl);
       });
+    }
 
-      groupEl.appendChild(headerEl);
-      groupEl.appendChild(linksWrapper);
-
-      topicsContainer.appendChild(groupEl);
+    const linksQuery = query(collection(db, "usefulLinks"));
+    onSnapshot(linksQuery, (snapshot) => {
+      console.log("usefulLinks snapshot size:", snapshot.size);
+      renderLinksGrouped(snapshot.docs);
     });
-  }
-
-  // Live listener for all useful links (no orderBy; we sort in JS)
-  const linksQuery = query(collection(db, "usefulLinks"));
-
-  onSnapshot(linksQuery, (snapshot) => {
-    console.log("usefulLinks snapshot size:", snapshot.size);
-    renderLinksGrouped(snapshot.docs);
-  });
-</script>
+  </script>
 </body>
 </html>
 
