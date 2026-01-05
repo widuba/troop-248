@@ -11,6 +11,52 @@
     Sign in with Google
   </button>
 </div>
+
+    .google-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+/* Matched Troop 248 gradient + rounded aesthetic */
+.google-btn {
+  width: 314px;
+  height: 32px;
+
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,.28);
+  cursor: pointer;
+
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .04em;
+
+  color: #ffffff;
+
+  background: linear-gradient(
+    120deg,
+    #1f4e79 0%,
+    #ffffff 48%,
+    #b22222 100%
+  );
+
+  box-shadow: 0 8px 18px rgba(0,0,0,.08);
+  backdrop-filter: blur(3px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.google-btn:hover {
+  box-shadow: 0 10px 22px rgba(0,0,0,.12);
+  opacity: .96;
+}
+
+.google-text {
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
     
     .troop-home-link {
   text-decoration: none;
@@ -367,7 +413,7 @@
       </div>
       <div class="google-container">
   <button id="google-signin-btn" class="google-btn">
-    Log in/Sign up with Google
+    <span class="google-text">Sign in with Google</span>
   </button>
 </div>
       <div class="auth-note">
