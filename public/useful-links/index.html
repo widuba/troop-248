@@ -572,10 +572,18 @@
             <input type="url" id="link-url" placeholder="https://..." required />
           </div>
           <div class="field">
-            <label for="link-topic">Topic / Category</label>
-            <!-- text input with datalist of existing topics -->
-            <input type="text" id="link-topic" list="topic-list" placeholder="e.g. Rank Advancement, Camping, Forms" required />
-            <datalist id="topic-list"></datalist>
+  <label for="link-topic-select">Topic / Category</label>
+  <select id="link-topic-select" required></select>
+</div>
+
+<div class="field" id="custom-topic-wrapper" style="display:none;">
+  <label for="custom-topic-input">Custom Topic</label>
+  <input
+    type="text"
+    id="custom-topic-input"
+    placeholder="Type your topic (e.g. High Adventure)"
+  />
+</div>
           </div>
           <div class="field">
             <label for="link-description">Description (optional)</label>
