@@ -74,8 +74,7 @@
     }
 
     nav a {
-      color: #1f4e79;
-      font-weight: bold;
+      color: var(--white);
       text-decoration: none;
       padding: 6px 10px;
       border-radius: var(--radius-pill);
@@ -179,6 +178,25 @@
       color: var(--blue);
     }
 
+    .events-group {
+      margin-top: 8px;
+      margin-bottom: 12px;
+    }
+
+    .events-group-title {
+      margin: 4px 0 6px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .events-group-title span {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-muted);
+      margin-left: 6px;
+    }
+
     .admin-only { display: none; }
 
     form {
@@ -267,7 +285,7 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
-      margin-top: 6px;
+      margin-top: 4px;
     }
 
     .event-card {
@@ -372,6 +390,10 @@
         flex-direction: column;
         align-items: flex-start;
       }
+      .event-title-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
   </style>
 </head>
@@ -471,12 +493,35 @@
       </div>
     </section>
 
-    <!-- Events list -->
+    <!-- Events grouped by time -->
     <section>
-      <h2>Upcoming Events</h2>
-      <div id="events-container" class="events-list"></div>
-      <div id="events-empty" class="empty-text" style="display:none;">
-        No events have been added yet.
+      <h2>Events</h2>
+
+      <div class="events-group">
+        <h3 class="events-group-title">
+          Happening Now
+          <span>(currently in progress)</span>
+        </h3>
+        <div id="events-current" class="events-list"></div>
+        <div id="events-current-empty" class="empty-text">No events are currently happening.</div>
+      </div>
+
+      <div class="events-group">
+        <h3 class="events-group-title">
+          Upcoming Events
+          <span>(starts in the future)</span>
+        </h3>
+        <div id="events-upcoming" class="events-list"></div>
+        <div id="events-upcoming-empty" class="empty-text">No upcoming events.</div>
+      </div>
+
+      <div class="events-group">
+        <h3 class="events-group-title">
+          Past Events
+          <span>(already finished)</span>
+        </h3>
+        <div id="events-past" class="events-list"></div>
+        <div id="events-past-empty" class="empty-text">No past events yet.</div>
       </div>
     </section>
   </main>
@@ -531,8 +576,13 @@
     const eventErrorEl = document.getElementById("event-error");
     const eventSuccessEl = document.getElementById("event-success");
 
-    const eventsContainer = document.getElementById("events-container");
-    const eventsEmptyEl = document.getElementById("events-empty");
+    const eventsCurrent = document.getElementById("events-current");
+    const eventsUpcoming = document.getElementById("events-upcoming");
+    const eventsPast = document.getElementById("events-past");
+
+    const eventsCurrentEmpty = document.getElementById("events-current-empty");
+    const eventsUpcomingEmpty = document.getElementById("events-upcoming-empty");
+    const eventsPastEmpty = document.getElementById("events-past-empty");
 
     let currentUser = null;
     let currentIsAdmin = false;
@@ -593,114 +643,178 @@
       window.location.href = "/";
     });
 
+    // Date formatting helpers (Jan 5, 2026 style)
     function formatDateDisplay(dateStr, timeStr) {
-  if (!dateStr) return "";
+      if (!dateStr) return "";
+      const date = new Date(dateStr + (timeStr ? "T" + timeStr : "T00:00"));
+      const base = date.toLocaleString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric"
+      });
+      return timeStr ? `${base} • ${timeStr}` : base;
+    }
 
-  const date = new Date(dateStr + (timeStr ? "T" + timeStr : "T00:00"));
-  return date.toLocaleString("en-US", {
-    month: "short",   // Jan
-    day: "numeric",   // 5
-    year: "numeric"   // 2026
-  }) + (timeStr ? ` • ${timeStr}` : "");
-}
+    function formatDateRange(ev) {
+      const start = formatDateDisplay(ev.startDate, ev.startTime);
+      const end = formatDateDisplay(ev.endDate, ev.endTime);
 
-function formatDateRange(ev) {
-  const start = formatDateDisplay(ev.startDate, ev.startTime);
-  const end = formatDateDisplay(ev.endDate, ev.endTime);
+      if (ev.startDate === ev.endDate || !ev.endDate) {
+        return start;
+      }
 
-  // Same day
-  if (ev.startDate === ev.endDate || !ev.endDate) {
-    return start;
-  }
+      return `${start} → ${end}`;
+    }
 
-  // Multi-day
-  return `${start} → ${end}`;
-}
+    function createEventCard(docSnap) {
+      const data = docSnap.data();
+      const slug = data.slug || docSnap.id;
+      const title = data.title || "Untitled Event";
+      const location = data.location || "";
+      const summary = data.summary || "";
+      const signupUrl = data.signupUrl || "";
+
+      const dateText = formatDateRange(data);
+
+      const card = document.createElement("div");
+      card.className = "event-card";
+
+      const titleRow = document.createElement("div");
+      titleRow.className = "event-title-row";
+
+      const titleEl = document.createElement("div");
+      titleEl.className = "event-title";
+      titleEl.textContent = title;
+
+      const dateEl = document.createElement("div");
+      dateEl.className = "event-date";
+      dateEl.textContent = dateText;
+
+      titleRow.appendChild(titleEl);
+      titleRow.appendChild(dateEl);
+      card.appendChild(titleRow);
+
+      if (location) {
+        const metaEl = document.createElement("div");
+        metaEl.className = "event-meta";
+        metaEl.textContent = `Location: ${location}`;
+        card.appendChild(metaEl);
+      }
+
+      if (summary) {
+        const summaryEl = document.createElement("div");
+        summaryEl.className = "event-summary";
+        summaryEl.textContent = summary;
+        card.appendChild(summaryEl);
+      }
+
+      const linksRow = document.createElement("div");
+      linksRow.className = "event-links-row";
+
+      const viewBtn = document.createElement("a");
+      viewBtn.href = `/events/${slug}`;
+      viewBtn.className = "btn-chip btn-view";
+      viewBtn.textContent = "View Event";
+      linksRow.appendChild(viewBtn);
+
+      if (location) {
+        const mapsUrl = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(location);
+        const mapBtn = document.createElement("a");
+        mapBtn.href = mapsUrl;
+        mapBtn.target = "_blank";
+        mapBtn.rel = "noopener noreferrer";
+        mapBtn.className = "btn-chip btn-map";
+        mapBtn.textContent = "Open in Google Maps";
+        linksRow.appendChild(mapBtn);
+      }
+
+      if (signupUrl) {
+        const signupBtn = document.createElement("a");
+        signupBtn.href = signupUrl;
+        signupBtn.target = "_blank";
+        signupBtn.rel = "noopener noreferrer";
+        signupBtn.className = "btn-chip btn-signup";
+        signupBtn.textContent = "Signup Link";
+        linksRow.appendChild(signupBtn);
+      }
+
+      card.appendChild(linksRow);
+
+      return card;
+    }
 
     function renderEvents(docs) {
-      eventsContainer.innerHTML = "";
-      if (docs.length === 0) {
-        eventsEmptyEl.style.display = "block";
-        return;
-      }
-      eventsEmptyEl.style.display = "none";
+      // Clear all lists
+      eventsCurrent.innerHTML = "";
+      eventsUpcoming.innerHTML = "";
+      eventsPast.innerHTML = "";
+
+      const now = new Date();
+
+      const upcomingDocs = [];
+      const currentDocs = [];
+      const pastDocs = [];
 
       docs.forEach((docSnap) => {
         const data = docSnap.data();
-        const slug = data.slug || docSnap.id;
-        const title = data.title || "Untitled Event";
-        const location = data.location || "";
-        const summary = data.summary || "";
-        const signupUrl = data.signupUrl || "";
+        const startStr = data.startDateTime;
+        const endStr = data.endDateTime;
 
-        const dateText = formatDateRange(data);
+        let start = null;
+        let end = null;
 
-        const card = document.createElement("div");
-        card.className = "event-card";
+        if (startStr) start = new Date(startStr);
+        if (endStr) end = new Date(endStr);
 
-        const titleRow = document.createElement("div");
-        titleRow.className = "event-title-row";
-
-        const titleEl = document.createElement("div");
-        titleEl.className = "event-title";
-        titleEl.textContent = title;
-
-        const dateEl = document.createElement("div");
-        dateEl.className = "event-date";
-        dateEl.textContent = dateText;
-
-        titleRow.appendChild(titleEl);
-        titleRow.appendChild(dateEl);
-        card.appendChild(titleRow);
-
-        if (location) {
-          const metaEl = document.createElement("div");
-          metaEl.className = "event-meta";
-          metaEl.textContent = `Location: ${location}`;
-          card.appendChild(metaEl);
+        if (start && end) {
+          if (now < start) {
+            upcomingDocs.push(docSnap);
+          } else if (now > end) {
+            pastDocs.push(docSnap);
+          } else {
+            currentDocs.push(docSnap);
+          }
+        } else if (start && !end) {
+          if (now < start) {
+            upcomingDocs.push(docSnap);
+          } else {
+            currentDocs.push(docSnap);
+          }
+        } else {
+          // If missing dates, treat as upcoming by default
+          upcomingDocs.push(docSnap);
         }
-
-        if (summary) {
-          const summaryEl = document.createElement("div");
-          summaryEl.className = "event-summary";
-          summaryEl.textContent = summary;
-          card.appendChild(summaryEl);
-        }
-
-        const linksRow = document.createElement("div");
-        linksRow.className = "event-links-row";
-
-        const viewBtn = document.createElement("a");
-        viewBtn.href = `/events/${slug}`;
-        viewBtn.className = "btn-chip btn-view";
-        viewBtn.textContent = "View Event";
-        linksRow.appendChild(viewBtn);
-
-        if (location) {
-          const mapsUrl = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(location);
-          const mapBtn = document.createElement("a");
-          mapBtn.href = mapsUrl;
-          mapBtn.target = "_blank";
-          mapBtn.rel = "noopener noreferrer";
-          mapBtn.className = "btn-chip btn-map";
-          mapBtn.textContent = "Open in Google Maps";
-          linksRow.appendChild(mapBtn);
-        }
-
-        if (signupUrl) {
-          const signupBtn = document.createElement("a");
-          signupBtn.href = signupUrl;
-          signupBtn.target = "_blank";
-          signupBtn.rel = "noopener noreferrer";
-          signupBtn.className = "btn-chip btn-signup";
-          signupBtn.textContent = "Signup Link";
-          linksRow.appendChild(signupBtn);
-        }
-
-        card.appendChild(linksRow);
-
-        eventsContainer.appendChild(card);
       });
+
+      // Render "Happening Now"
+      if (currentDocs.length === 0) {
+        eventsCurrentEmpty.style.display = "block";
+      } else {
+        eventsCurrentEmpty.style.display = "none";
+        currentDocs.forEach((docSnap) => {
+          eventsCurrent.appendChild(createEventCard(docSnap));
+        });
+      }
+
+      // Render Upcoming
+      if (upcomingDocs.length === 0) {
+        eventsUpcomingEmpty.style.display = "block";
+      } else {
+        eventsUpcomingEmpty.style.display = "none";
+        upcomingDocs.forEach((docSnap) => {
+          eventsUpcoming.appendChild(createEventCard(docSnap));
+        });
+      }
+
+      // Render Past
+      if (pastDocs.length === 0) {
+        eventsPastEmpty.style.display = "block";
+      } else {
+        eventsPastEmpty.style.display = "none";
+        pastDocs.forEach((docSnap) => {
+          eventsPast.appendChild(createEventCard(docSnap));
+        });
+      }
     }
 
     async function createEvent(e) {
