@@ -593,20 +593,29 @@
       window.location.href = "/";
     });
 
-    function formatDateRange(ev) {
-      const sd = ev.startDate || "";
-      const st = ev.startTime || "";
-      const ed = ev.endDate || "";
-      const et = ev.endTime || "";
+    function formatDateDisplay(dateStr, timeStr) {
+  if (!dateStr) return "";
 
-      if (!sd && !ed) return "";
+  const date = new Date(dateStr + (timeStr ? "T" + timeStr : "T00:00"));
+  return date.toLocaleString("en-US", {
+    month: "short",   // Jan
+    day: "numeric",   // 5
+    year: "numeric"   // 2026
+  }) + (timeStr ? ` • ${timeStr}` : "");
+}
 
-      if (sd === ed || !ed) {
-        return `${sd}${st ? " • " + st : ""}${et ? " – " + et : ""}`;
-      }
+function formatDateRange(ev) {
+  const start = formatDateDisplay(ev.startDate, ev.startTime);
+  const end = formatDateDisplay(ev.endDate, ev.endTime);
 
-      return `${sd}${st ? " • " + st : ""} → ${ed}${et ? " • " + et : ""}`;
-    }
+  // Same day
+  if (ev.startDate === ev.endDate || !ev.endDate) {
+    return start;
+  }
+
+  // Multi-day
+  return `${start} → ${end}`;
+}
 
     function renderEvents(docs) {
       eventsContainer.innerHTML = "";
