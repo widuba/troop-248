@@ -718,11 +718,14 @@
     }
 
     onAuthStateChanged(auth, (user) => {
-      currentUser = user;
-      currentIsAdmin = !!(user && ADMIN_UIDS.includes(user.uid));
-      console.log("Auth state changed. UID:", user?.uid, "isAdmin:", currentIsAdmin);
-      updateAdminUI();
-    });
+  if (!user) {
+    // Not logged in → send to login page
+    window.location.href = "/login/";
+    return;
+  }
+
+  // Logged in → continue normal page setup
+  currentUser = user;
 
     // Login / signup / logout
     loginBtn.addEventListener("click", async () => {
