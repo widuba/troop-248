@@ -335,16 +335,16 @@
     }
 
     .field input[type="text"],
-    .field input[type="url"],
-    .field input[list],
-    .field textarea {
-      width: 100%;
-      padding: 6px 8px;
-      font-size: 14px;
-      border-radius: 10px;
-      border: 1px solid #d1d5db;
-      background: #ffffff;
-    }
+.field input[type="url"],
+.field textarea,
+.field select {
+  width: 100%;
+  padding: 6px 8px;
+  font-size: 14px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+}
 
     .field textarea {
       resize: vertical;
@@ -653,12 +653,44 @@
   const linksForm = document.getElementById("links-form");
   const linkTitleInput = document.getElementById("link-title");
   const linkUrlInput = document.getElementById("link-url");
-  const linkTopicInput = document.getElementById("link-topic");
   const linkDescInput = document.getElementById("link-description");
   const topicsContainer = document.getElementById("topics-container");
-  const topicDatalist = document.getElementById("topic-list");
+  const topicSelect = document.getElementById("link-topic-select");
+  const customTopicWrapper = document.getElementById("custom-topic-wrapper");
+  const customTopicInput = document.getElementById("custom-topic-input");
 
-  // Admins
+   // You can customize this list of suggested topics:
+const TOPIC_OPTIONS = [
+  "BSA Organizational Links",
+  "Advancement",
+  "Merit Badges",
+  "Other" // ⚠️ keep "Other" so custom-topic flow works
+];
+
+function populateTopicOptions() {
+  // Default placeholder option
+  topicSelect.innerHTML =
+    '<option value="" disabled selected>Select a topic</option>' +
+    TOPIC_OPTIONS.map(
+      (t) => `<option value="${t}">${t}</option>`
+    ).join("");
+}
+
+// Show / hide custom topic input based on selection
+topicSelect.addEventListener("change", () => {
+  if (topicSelect.value === "Other") {
+    customTopicWrapper.style.display = "block";
+    customTopicInput.focus();
+  } else {
+    customTopicWrapper.style.display = "none";
+    customTopicInput.value = "";
+  }
+});
+
+// Call this once after the DOM references are ready
+populateTopicOptions();
+
+ // Admins
   const ADMIN_UIDS = [
     "l1TlAvSdW0hpZUPU5eA0XBWD2OA3"
   ];
@@ -726,35 +758,52 @@
     await signOut(auth);
   });
 
-  // Add link
-  linksForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    if (!currentIsAdmin) return alert("Only admins can add links.");
-    const title = linkTitleInput.value.trim();
-    const url = linkUrlInput.value.trim();
-    const topic = linkTopicInput.value.trim();
-    const description = linkDescInput.value.trim();
-    if (!title || !url || !topic) {
-      return alert("Title, URL, and Topic are required.");
+linksForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  if (!currentIsAdmin) return alert("Only admins can add links.");
+
+  const title = linkTitleInput.value.trim();
+  const url = linkUrlInput.value.trim();
+  const selectedTopic = topicSelect.value;
+  const description = linkDescInput.value.trim();
+
+  if (!title || !url || !selectedTopic) {
+    return alert("Title, URL, and Topic are required.");
+  }
+
+  let topic = selectedTopic;
+
+  // If "Other" is selected, require a custom topic
+  if (selectedTopic === "Other") {
+    const customTopic = customTopicInput.value.trim();
+    if (!customTopic) {
+      alert("Please enter a custom topic.");
+      customTopicInput.focus();
+      return;
     }
-    try {
-      await addDoc(collection(db, "usefulLinks"), {
-        title,
-        url,
-        topic,
-        description,
-        createdAt: serverTimestamp()
-      });
-      console.log("Link added:", { title, url, topic });
-      linkTitleInput.value = "";
-      linkUrlInput.value = "";
-      linkTopicInput.value = "";
-      linkDescInput.value = "";
-    } catch (e) {
-      console.error("Error adding link:", e);
-      alert("Error adding link: " + e.message);
-    }
-  });
+    topic = customTopic;
+  }
+
+  try {
+    await addDoc(collection(db, "usefulLinks"), {
+      title,
+      url,
+      topic,
+      description,
+      createdAt: serverTimestamp()
+    });
+    console.log("Link added:", { title, url, topic });
+    linkTitleInput.value = "";
+    linkUrlInput.value = "";
+    topicSelect.value = "";
+    customTopicWrapper.style.display = "none";
+    customTopicInput.value = "";
+    linkDescInput.value = "";
+  } catch (e) {
+    console.error("Error adding link:", e);
+    alert("Error adding link: " + e.message);
+  }
+});
 
   // Render links grouped by topic, with dropdown and alphabetical sorting
   function renderLinksGrouped(docs) {
