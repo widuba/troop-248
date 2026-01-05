@@ -4,19 +4,7 @@
   <meta charset="UTF-8" />
   <title>Scoutmaster Blog — Troop 248</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href="/bsafavicon.ico" type="image/x-icon">
   <style>
-    .troop-home-link {
-  text-decoration: none;
-  color: inherit;
-  display: inline-flex;
-  align-items: center;
-}
-
-.troop-home-link:hover h2 {
-  opacity: 0.9;
-  text-decoration: underline;
-}
     :root {
       --red: #b22222;
       --blue: #1f4e79;
@@ -25,136 +13,18 @@
       --text-main: #1f2933;
       --text-muted: #6b7280;
       --radius-lg: 16px;
-      --radius-sm: 999px;
+      --radius-pill: 999px;
       --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
+      margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
         sans-serif;
-      margin: 0;
       background: #d2cab6;
       color: var(--text-main);
-      min-height: 100vh;
-    }
-
-    #auth-overlay {
-      position: fixed;
-      inset: 0;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      background: radial-gradient(circle at top, #ffffff 0, var(--tan) 70%);
-      z-index: 50;
-    }
-
-    .auth-card {
-      background: rgba(255, 255, 255, 0.96);
-      border-radius: 20px;
-      padding: 24px 22px 18px;
-      width: 100%;
-      max-width: 360px;
-      box-shadow: var(--shadow-soft);
-      border: 1px solid rgba(148, 163, 184, 0.5);
-    }
-
-    .auth-card-header {
-      text-align: center;
-      margin-bottom: 16px;
-    }
-
-    .auth-card-header h1 {
-      margin: 0;
-      font-size: 20px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--blue);
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .auth-card-header h1::before {
-      content: "★";
-      font-size: 18px;
-      color: var(--red);
-    }
-
-    .auth-card-header p {
-      margin: 6px 0 0;
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    .auth-fields {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .auth-fields label {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 3px;
-    }
-
-    .auth-fields input {
-      width: 100%;
-      padding: 7px 10px;
-      font-size: 14px;
-      border-radius: var(--radius-sm);
-      border: 1px solid #d1d5db;
-      background: #f9fafb;
-    }
-
-    .auth-fields input:focus {
-      outline: none;
-      border-color: var(--blue);
-      box-shadow: 0 0 0 2px rgba(31, 78, 121, 0.18);
-    }
-
-    .auth-buttons {
-      display: flex;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .auth-buttons button {
-      flex: 1;
-      padding: 7px 0;
-      font-size: 14px;
-      border-radius: var(--radius-sm);
-      border: none;
-      cursor: pointer;
-      font-weight: 500;
-      color: var(--white);
-    }
-
-    #login-btn {
-      background: var(--blue);
-    }
-
-    #signup-btn {
-      background: var(--red);
-    }
-
-    .auth-note {
-      margin-top: 10px;
-      font-size: 12px;
-      color: var(--text-muted);
-      text-align: center;
-    }
-
-    #app-shell {
-      display: none;
       min-height: 100vh;
     }
 
@@ -185,6 +55,17 @@
       font-size: 18px;
     }
 
+    .troop-home-link {
+      text-decoration: none;
+      color: inherit;
+      display: inline-flex;
+      align-items: center;
+    }
+    .troop-home-link:hover h2 {
+      opacity: 0.9;
+      text-decoration: underline;
+    }
+
     nav {
       display: flex;
       gap: 12px;
@@ -193,14 +74,13 @@
     }
 
     nav a {
-      color: #1f4e79;
+      color: var(--white);
       text-decoration: none;
       padding: 6px 10px;
-      border-radius: var(--radius-sm);
+      border-radius: var(--radius-pill);
       border: 1px solid rgba(255, 255, 255, 0.25);
       backdrop-filter: blur(4px);
       opacity: 0.9;
-      font-weight: bold;
     }
 
     nav a:hover {
@@ -215,16 +95,10 @@
       font-size: 13px;
     }
 
-    #auth-info {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
     #logout-btn {
       padding: 5px 12px;
       font-size: 13px;
-      border-radius: var(--radius-sm);
+      border-radius: var(--radius-pill);
       border: 1px solid rgba(255, 255, 255, 0.7);
       background: rgba(255, 255, 255, 0.1);
       color: var(--white);
@@ -268,7 +142,7 @@
     .badge {
       font-size: 11px;
       padding: 4px 8px;
-      border-radius: var(--radius-sm);
+      border-radius: var(--radius-pill);
       background: rgba(148, 163, 184, 0.2);
       color: var(--text-muted);
       text-transform: uppercase;
@@ -284,7 +158,7 @@
     section {
       background: rgba(255, 255, 255, 0.95);
       border-radius: var(--radius-lg);
-      padding: 18px 18px 10px;
+      padding: 18px 18px 12px;
       margin-bottom: 18px;
       box-shadow: var(--shadow-soft);
       border: 1px solid rgba(148, 163, 184, 0.4);
@@ -304,9 +178,11 @@
       color: var(--blue);
     }
 
+    .admin-only { display: none; }
+
     form {
-      margin-bottom: 14px;
-      padding: 10px 10px 6px;
+      margin-bottom: 10px;
+      padding: 10px 10px 8px;
       background: #f9fafb;
       border-radius: 12px;
       border: 1px dashed rgba(148, 163, 184, 0.8);
@@ -315,7 +191,6 @@
     form h3 {
       margin: 0 0 8px;
       font-size: 15px;
-      font-weight: 600;
       color: var(--blue);
     }
 
@@ -326,21 +201,20 @@
     .field label {
       display: block;
       font-size: 12px;
-      font-weight: 500;
       margin-bottom: 3px;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: .05em;
     }
 
-    .field input[type="text"],
+    .field input,
     .field textarea {
       width: 100%;
       padding: 6px 8px;
-      font-size: 14px;
       border-radius: 10px;
       border: 1px solid #d1d5db;
       background: #ffffff;
+      font-size: 14px;
     }
 
     .field textarea {
@@ -352,71 +226,62 @@
     .field textarea:focus {
       outline: none;
       border-color: var(--blue);
-      box-shadow: 0 0 0 2px rgba(31, 78, 121, 0.1);
+      box-shadow: 0 0 0 2px rgba(31,78,121,.1);
     }
 
     form button {
       padding: 6px 14px;
       font-size: 13px;
-      border-radius: var(--radius-sm);
+      border-radius: var(--radius-pill);
       border: none;
       cursor: pointer;
       font-weight: 500;
       background: var(--blue);
       color: var(--white);
-      margin-top: 4px;
     }
 
-    form button:hover {
-      opacity: 0.96;
-    }
+    form button:hover { opacity: .96; }
 
-    .item-list {
+    .post-list {
       list-style: none;
       padding-left: 0;
       margin: 0;
       font-size: 14px;
     }
 
-    .item-list li {
-      padding: 8px 0;
+    .post-item {
+      padding: 10px 0;
       border-bottom: 1px solid rgba(229, 231, 235, 0.9);
     }
 
-    .item-list li:last-child {
+    .post-item:last-child {
       border-bottom: none;
     }
 
-    .item-list strong {
+    .post-title {
       font-weight: 600;
+      font-size: 15px;
     }
 
-    .meta {
+    .post-meta {
       font-size: 12px;
       color: var(--text-muted);
       margin-top: 2px;
-      margin-bottom: 2px;
+      margin-bottom: 6px;
     }
 
     .small-btn {
       font-size: 11px;
       padding: 2px 8px;
       margin-top: 4px;
-      margin-left: 0;
-      border-radius: var(--radius-sm);
+      border-radius: var(--radius-pill);
       border: none;
       cursor: pointer;
       background: var(--red);
       color: var(--white);
     }
 
-    .small-btn:hover {
-      opacity: 0.95;
-    }
-
-    .admin-only {
-      display: none;
-    }
+    .small-btn:hover { opacity: .95; }
 
     @media (max-width: 640px) {
       header {
@@ -433,112 +298,82 @@
         flex-direction: column;
         align-items: flex-start;
       }
-      .auth-card {
-        margin: 0 16px;
-      }
     }
   </style>
 </head>
 <body>
-  <div id="auth-overlay">
-    <div class="auth-card">
-      <div class="auth-card-header">
-        <h1>Troop Portal</h1>
-        <p>Sign in to view the Scoutmaster Blog.</p>
+  <header>
+    <div>
+      <a href="/" class="troop-home-link">
+        <h2>Troop 248</h2>
+      </a>
+    </div>
+
+    <nav>
+      <a href="/calendar">Calendar</a>
+      <a href="/documents">Documents</a>
+      <a href="/scoutmaster">Scoutmaster Blog</a>
+      <a href="/spl-blog">SPL Blog</a>
+      <a href="/useful-links">Useful Links</a>
+    </nav>
+
+    <div id="auth-bar">
+      <div id="auth-info">Signed in as …</div>
+      <button id="logout-btn">Log Out</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="welcome-card">
+      <div>
+        <h3>Scoutmaster Blog</h3>
+        <p>Messages and reflections from the Scoutmaster to Troop 248.</p>
       </div>
-      <div class="auth-fields">
-        <div>
-          <label for="email-input">Email</label>
-          <input type="email" id="email-input" placeholder="you@example.com" />
-        </div>
-        <div>
-          <label for="password-input">Password</label>
-          <input type="password" id="password-input" placeholder="Password" />
-        </div>
-      </div>
-      <div class="auth-buttons">
-        <button id="login-btn">Log In</button>
-        <button id="signup-btn">Sign Up</button>
-      </div>
-      <div class="auth-note">
-        New accounts are viewers. An adult leader can mark your account as admin.
+      <div id="role-badge-container">
+        <span class="badge">Viewer</span>
       </div>
     </div>
-  </div>
 
-  <div id="app-shell">
-    <header>
-  <div>
-    <a href="/" class="troop-home-link">
-      <h2>Troop 248</h2>
-    </a>
-  </div>
-
-      <nav>
-        <a href="/calendar">Calendar</a>
-        <a href="/documents">Documents</a>
-        <a href="/scoutmaster">Scoutmaster Blog</a>
-        <a href="/spl-blog">SPL Blog</a>
-        <a href="/useful-links">Useful Links</a>
-      </nav>
-
-      <div id="auth-bar">
-        <div id="auth-info">Signed in as …</div>
-        <button id="logout-btn">Log Out</button>
-      </div>
-    </header>
-
-    <main>
-      <div class="welcome-card">
-        <div>
-          <h3>Scoutmaster Blog</h3>
-          <p>Updates and messages from the Scoutmaster for Troop 248.</p>
+    <section>
+      <h2>New Post</h2>
+      <form id="post-form" class="admin-only">
+        <h3>Add Scoutmaster Post</h3>
+        <div class="field">
+          <label for="post-title">Title</label>
+          <input id="post-title" type="text" required />
         </div>
-        <div id="role-badge-container">
-          <span class="badge">Viewer</span>
+        <div class="field">
+          <label for="post-body">Message</label>
+          <textarea id="post-body" required></textarea>
         </div>
-      </div>
+        <button type="submit">Publish Post</button>
+      </form>
+    </section>
 
-      <section>
-        <h2>Recent Posts</h2>
-
-        <form id="scoutmaster-form" class="admin-only">
-          <h3>New Scoutmaster Post</h3>
-          <div class="field">
-            <label for="sm-title">Title</label>
-            <input type="text" id="sm-title" required />
-          </div>
-          <div class="field">
-            <label for="sm-body">Content</label>
-            <textarea id="sm-body" required></textarea>
-          </div>
-          <button type="submit">Publish Post</button>
-        </form>
-
-        <ul id="scoutmaster-list" class="item-list"></ul>
-      </section>
-    </main>
-  </div>
+    <section>
+      <h2>Recent Posts</h2>
+      <ul id="post-list" class="post-list"></ul>
+    </section>
+  </main>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import {
       getAuth,
       onAuthStateChanged,
-      signInWithEmailAndPassword,
-      createUserWithEmailAndPassword,
       signOut
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
     import {
       getFirestore,
+      doc,
+      getDoc,
       collection,
       addDoc,
+      deleteDoc,
       onSnapshot,
       query,
       orderBy,
-      serverTimestamp,
-      doc,
-      deleteDoc
+      serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -555,25 +390,15 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    const authOverlay = document.getElementById("auth-overlay");
-    const appShell = document.getElementById("app-shell");
-    const emailInput = document.getElementById("email-input");
-    const passwordInput = document.getElementById("password-input");
-    const loginBtn = document.getElementById("login-btn");
-    const signupBtn = document.getElementById("signup-btn");
-    const logoutBtn = document.getElementById("logout-btn");
     const authInfoEl = document.getElementById("auth-info");
+    const logoutBtn = document.getElementById("logout-btn");
     const roleBadgeContainer = document.getElementById("role-badge-container");
     const adminOnlyEls = document.getElementsByClassName("admin-only");
 
-    const smForm = document.getElementById("scoutmaster-form");
-    const smList = document.getElementById("scoutmaster-list");
-    const smTitleInput = document.getElementById("sm-title");
-    const smBodyInput = document.getElementById("sm-body");
-
-    const ADMIN_UIDS = [
-      "l1TlAvSdW0hpZUPU5eA0XBWD2OA3"
-    ];
+    const postForm = document.getElementById("post-form");
+    const postList = document.getElementById("post-list");
+    const postTitleInput = document.getElementById("post-title");
+    const postBodyInput = document.getElementById("post-body");
 
     let currentUser = null;
     let currentIsAdmin = false;
@@ -582,127 +407,82 @@
       for (let i = 0; i < adminOnlyEls.length; i++) {
         adminOnlyEls[i].style.display = currentIsAdmin ? "block" : "none";
       }
-
       if (currentUser) {
-        authOverlay.style.display = "none";
-        appShell.style.display = "block";
         authInfoEl.textContent = `Signed in as ${currentUser.email}`;
         roleBadgeContainer.innerHTML = `
           <span class="badge ${currentIsAdmin ? "admin" : ""}">
             ${currentIsAdmin ? "Admin" : "Viewer"}
           </span>`;
-      } else {
-        authOverlay.style.display = "flex";
-        appShell.style.display = "none";
       }
     }
 
-    onAuthStateChanged(auth, (user) => {
-  let currentUser = null;
-let currentIsAdmin = false;
-
-async function handleAuth(user) {
-  if (!user) {
-    // Not logged in → go to login/index
-    window.location.href = "/";
-    return;
-  }
-
-  // Check accountInfo in Firestore
-  const infoRef = doc(db, "accountInfo", user.uid);
-  const infoSnap = await getDoc(infoRef);
-
-  if (!infoSnap.exists()) {
-    // No profile → treat as pending
-    window.location.href = "/under-review/";
-    return;
-  }
-
-  const data = infoSnap.data();
-  const role = data.authRole;
-
-  if (role !== "admin" && role !== "viewer") {
-    // Pending / unknown → under review page
-    window.location.href = "/under-review/";
-    return;
-  }
-
-  // Approved:
-  currentUser = user;
-  currentIsAdmin = role === "admin";
-
-  // Your existing UI setup:
-  updateAdminUI(); // or whatever function you already had
-}
-
-onAuthStateChanged(auth, (user) => {
-  handleAuth(user);
-});
-
-
-    loginBtn.addEventListener("click", async () => {
-      const email = emailInput.value.trim();
-      const pass = passwordInput.value.trim();
-      if (!email || !pass) return alert("Please enter email and password");
-      try {
-        await signInWithEmailAndPassword(auth, email, pass);
-        emailInput.value = "";
-        passwordInput.value = "";
-      } catch (e) {
-        alert("Login failed: " + e.message);
+    async function handleAuth(user) {
+      if (!user) {
+        window.location.href = "/";
+        return;
       }
-    });
 
-    signupBtn.addEventListener("click", async () => {
-      const email = emailInput.value.trim();
-      const pass = passwordInput.value.trim();
-      if (!email || !pass) return alert("Please enter email and password");
-      try {
-        await createUserWithEmailAndPassword(auth, email, pass);
-        alert("Account created! You are a viewer by default.");
-        emailInput.value = "";
-        passwordInput.value = "";
-      } catch (e) {
-        alert("Signup failed: " + e.message);
+      const infoRef = doc(db, "accountInfo", user.uid);
+      const infoSnap = await getDoc(infoRef);
+
+      if (!infoSnap.exists()) {
+        window.location.href = "/under-review/";
+        return;
       }
-    });
+
+      const data = infoSnap.data();
+      const role = data.authRole;
+
+      if (role !== "admin" && role !== "viewer") {
+        window.location.href = "/under-review/";
+        return;
+      }
+
+      currentUser = user;
+      currentIsAdmin = role === "admin";
+      updateAdminUI();
+      pageSpecificInit();
+    }
+
+    onAuthStateChanged(auth, handleAuth);
 
     logoutBtn.addEventListener("click", async () => {
       await signOut(auth);
+      window.location.href = "/";
     });
 
-    smForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      if (!currentIsAdmin) return alert("Only admins can post.");
-      const title = smTitleInput.value.trim();
-      const body = smBodyInput.value.trim();
-      if (!title || !body) return alert("Title and content required.");
-      try {
-        await addDoc(collection(db, "scoutmasterPosts"), {
-          title,
-          body,
-          createdAt: serverTimestamp()
-        });
-        smTitleInput.value = "";
-        smBodyInput.value = "";
-      } catch (e) {
-        alert("Error adding post: " + e.message);
+    function formatDate(ts) {
+      if (!ts) return "";
+      const d = ts.toDate();
+      return d.toLocaleDateString(undefined, {
+        year: "numeric",
+        month: "short",
+        day: "numeric"
+      });
+    }
+
+    function renderPosts(docs) {
+      postList.innerHTML = "";
+      if (docs.length === 0) {
+        postList.innerHTML = '<li class="post-item">No posts yet.</li>';
+        return;
       }
-    });
 
-    function renderSMPosts(posts) {
-      smList.innerHTML = "";
-      posts.forEach((docSnap) => {
+      docs.forEach((docSnap) => {
         const data = docSnap.data();
-        const created = data.createdAt?.toDate
-          ? data.createdAt.toDate().toLocaleString()
-          : "";
         const li = document.createElement("li");
+        li.className = "post-item";
+
+        const title = data.title || "Untitled Post";
+        const body = data.body || "";
+        const createdAt = data.createdAt;
+
         li.innerHTML = `
-          <strong>${data.title || "Untitled"}</strong>
-          <div class="meta">${created}</div>
-          <div>${data.body || ""}</div>
+          <div class="post-title">${title}</div>
+          <div class="post-meta">${formatDate(createdAt)}</div>
+          <div>${body.replace(/\n/g, "<br>")}</div>
         `;
+
         if (currentIsAdmin) {
           const btn = document.createElement("button");
           btn.textContent = "Delete";
@@ -714,17 +494,43 @@ onAuthStateChanged(auth, (user) => {
           };
           li.appendChild(btn);
         }
-        smList.appendChild(li);
+
+        postList.appendChild(li);
       });
     }
 
-    const smQuery = query(
-      collection(db, "scoutmasterPosts"),
-      orderBy("createdAt", "desc")
-    );
-    onSnapshot(smQuery, (snapshot) => {
-      renderSMPosts(snapshot.docs);
-    });
+    function pageSpecificInit() {
+      if (currentIsAdmin) {
+        postForm.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const title = postTitleInput.value.trim();
+          const body = postBodyInput.value.trim();
+
+          if (!title || !body) {
+            alert("Please fill out title and message.");
+            return;
+          }
+
+          await addDoc(collection(db, "scoutmasterPosts"), {
+            title,
+            body,
+            createdAt: serverTimestamp()
+          });
+
+          postTitleInput.value = "";
+          postBodyInput.value = "";
+        });
+      }
+
+      const q = query(
+        collection(db, "scoutmasterPosts"),
+        orderBy("createdAt", "desc")
+      );
+
+      onSnapshot(q, (snapshot) => {
+        renderPosts(snapshot.docs);
+      });
+    }
   </script>
 </body>
 </html>
