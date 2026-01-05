@@ -126,33 +126,31 @@
 </head>
 
 <body>
-  <div class="login-card">
-    <div class="login-header">
-      <h1>Troop 248 Login</h1>
-      <p>Sign in to access the troop website.</p>
+  <div id="auth-overlay">
+    <div class="auth-card">
+      <div class="auth-card-header">
+        <h1>Troop 248 Portal</h1>
+        <p>Sign in to access the troop website.</p>
+      </div>
+      <div class="auth-fields">
+        <div>
+          <label for="email-input">Email</label>
+          <input type="email" id="email-input" placeholder="you@example.com" />
+        </div>
+        <div>
+          <label for="password-input">Password</label>
+          <input type="password" id="password-input" placeholder="Password" />
+        </div>
+      </div>
+      <div class="auth-buttons">
+        <button id="login-btn">Log In</button>
+        <button id="signup-btn">Sign Up</button>
+      </div>
+      <div class="auth-note">
+        New accounts are viewers. An adult leader/Dukes can mark your account as admin.
+      </div>
     </div>
-
-    <div class="field">
-      <label>Email</label>
-      <input id="email-input" type="email" placeholder="you@example.com" />
-    </div>
-
-    <div class="field">
-      <label>Password</label>
-      <input id="password-input" type="password" placeholder="Password" />
-    </div>
-
-    <div class="buttons">
-      <button id="login-btn">Log In</button>
-      <button id="signup-btn">Sign Up</button>
-    </div>
-
-    <div id="error-text" class="error"></div>
-
-    <div class="note">
-      New accounts are viewers. Admin access is assigned by troop leadership.
-    </div>
-
+  </div>
     <a href="/" class="back-home">← Return to Troop Homepage</a>
   </div>
 
