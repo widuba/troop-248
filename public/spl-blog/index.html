@@ -598,10 +598,14 @@
     }
 
     onAuthStateChanged(auth, (user) => {
-      currentUser = user;
-      currentIsAdmin = !!(user && ADMIN_UIDS.includes(user.uid));
-      updateAdminUI();
-    });
+  if (!user) {
+    // Not logged in → send to login page
+    window.location.href = "/login/";
+    return;
+  }
+
+  // Logged in → continue normal page setup
+  currentUser = user;
 
     loginBtn.addEventListener("click", async () => {
       const email = emailInput.value.trim();
