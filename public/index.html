@@ -6,6 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="/bsafavicon.ico" type="image/x-icon">
   <style>
+    <div class="google-container">
+  <button id="google-signin-btn" class="google-btn">
+    Sign in with Google
+  </button>
+</div>
+    
     .troop-home-link {
   text-decoration: none;
   color: inherit;
@@ -358,6 +364,11 @@
       <div class="auth-buttons">
         <button id="login-btn">Log In</button>
         <button id="signup-btn">Sign Up</button>
+        <div class="google-container">
+  <button id="google-signin-btn" class="google-btn">
+    Log in/Sign up with Google
+  </button>
+</div>
       </div>
       <div class="auth-note">
         New accounts are viewers. An adult leader can mark your account as admin.
@@ -433,6 +444,29 @@
       createUserWithEmailAndPassword,
       signOut
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    import {
+  GoogleAuthProvider,
+  signInWithPopup
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    const googleBtn = document.getElementById("google-signin-btn");
+const googleProvider = new GoogleAuthProvider();
+
+googleProvider.setCustomParameters({
+  prompt: "select_account"
+});
+
+googleBtn.addEventListener("click", async () => {
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    console.log("Google sign-in:", result.user.uid);
+    window.location.href = "/";
+  } catch (e) {
+    alert("Google sign-in failed: " + e.message);
+    console.error(e);
+  }
+});
 
     // ✅ Troop 248 Firebase config
     const firebaseConfig = {
