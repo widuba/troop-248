@@ -610,8 +610,11 @@
     return;
   }
 
-  // Logged in → continue normal page setup
+  // Logged in → continue with your normal setup
   currentUser = user;
+  currentIsAdmin = ADMIN_UIDS.includes(user.uid);
+  updateAdminUI(); // or whatever function you already had
+});
 
     loginBtn.addEventListener("click", async () => {
       const email = emailInput.value.trim();
