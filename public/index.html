@@ -199,20 +199,11 @@
       font-size: 12px;
       color: var(--text-muted);
     }
-
-    a.simple-link {
-      color: var(--blue);
-      text-decoration: none;
-    }
-
-    a.simple-link:hover {
-      text-decoration: underline;
-    }
   </style>
 </head>
 <body>
   <div class="shell">
-    <!-- LEFT: LOGIN EXISTING ACCOUNT -->
+    <!-- LEFT: LOGIN -->
     <div class="left-card">
       <div class="left-card-header">
         <h1>Troop 248 Portal</h1>
@@ -245,7 +236,7 @@
       </div>
     </div>
 
-    <!-- RIGHT: SIGN UP / REQUEST ACCESS -->
+    <!-- RIGHT: SIGN UP -->
     <div class="right-card">
       <div class="section-title">Request Access (Sign Up)</div>
 
@@ -332,7 +323,6 @@
       serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    // ✅ Troop 248 Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
       authDomain: "troop-248.firebaseapp.com",
@@ -347,7 +337,6 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Forms / elements
     const loginForm = document.getElementById("login-form");
     const signupForm = document.getElementById("signup-form");
 
@@ -380,7 +369,7 @@
       signupError.textContent = "";
     }
 
-    // If already logged in, check their accountInfo:
+    // If already logged in, route based on role
     onAuthStateChanged(auth, async (user) => {
       if (!user) return;
 
@@ -389,7 +378,6 @@
         const infoSnap = await getDoc(infoRef);
 
         if (!infoSnap.exists()) {
-          // No profile yet: sign them out and let them log in / sign up cleanly
           await signOut(auth);
           return;
         }
@@ -398,10 +386,8 @@
         const role = data.authRole;
 
         if (role === "admin" || role === "viewer") {
-          // Approved → send to a protected page (calendar or home of your choice)
           window.location.href = "/calendar";
         } else {
-          // Pending or anything else → send to under-review page
           window.location.href = "/under-review/";
         }
       } catch (e) {
@@ -409,7 +395,7 @@
       }
     });
 
-    // LOGIN SUBMIT
+    // LOGIN
     loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       loginError.textContent = "";
@@ -425,12 +411,10 @@
         const cred = await signInWithEmailAndPassword(auth, email, pass);
         const user = cred.user;
 
-        // After login, check accountInfo to decide where to go
         const infoRef = doc(db, "accountInfo", user.uid);
         const infoSnap = await getDoc(infoRef);
 
         if (!infoSnap.exists()) {
-          // No profile yet → treat as pending
           window.location.href = "/under-review/";
           return;
         }
@@ -446,7 +430,7 @@
       }
     });
 
-    // SIGNUP / REQUEST ACCESS SUBMIT
+    // SIGNUP
     signupForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       signupError.textContent = "";
@@ -465,19 +449,17 @@
       }
 
       try {
-        // Create Firebase auth user
         const cred = await createUserWithEmailAndPassword(auth, email, pass);
         const user = cred.user;
 
-        // Create Firestore profile with authRole = "pending"
         const infoRef = doc(db, "accountInfo", user.uid);
         await setDoc(infoRef, {
           firstName: first,
           lastName: last,
           phone: phone,
-          memberType: roleType, // "Scout" / "Parent" / "Adult Leader"
+          memberType: roleType,
           email: email,
-          authRole: "pending",  // will later be changed to "viewer" or "admin"
+          authRole: "pending",
           createdAt: serverTimestamp()
         });
 
@@ -485,9 +467,7 @@
           "Your account request has been submitted. Please allow up to 48 hours for review."
         );
 
-        // Optionally send them straight to under-review page:
         window.location.href = "/under-review/";
-
       } catch (e) {
         showSignupError(e.message);
       }
