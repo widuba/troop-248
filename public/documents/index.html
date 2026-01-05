@@ -612,16 +612,45 @@
     }
 
     onAuthStateChanged(auth, (user) => {
+ let currentUser = null;
+let currentIsAdmin = false;
+
+async function handleAuth(user) {
   if (!user) {
-    // Not logged in → send to login page
+    // Not logged in → go to login/index
     window.location.href = "/";
     return;
   }
 
-  // Logged in → continue with your normal setup
+  // Check accountInfo in Firestore
+  const infoRef = doc(db, "accountInfo", user.uid);
+  const infoSnap = await getDoc(infoRef);
+
+  if (!infoSnap.exists()) {
+    // No profile → treat as pending
+    window.location.href = "/under-review/";
+    return;
+  }
+
+  const data = infoSnap.data();
+  const role = data.authRole;
+
+  if (role !== "admin" && role !== "viewer") {
+    // Pending / unknown → under review page
+    window.location.href = "/under-review/";
+    return;
+  }
+
+  // Approved:
   currentUser = user;
-  currentIsAdmin = ADMIN_UIDS.includes(user.uid);
+  currentIsAdmin = role === "admin";
+
+  // Your existing UI setup:
   updateAdminUI(); // or whatever function you already had
+}
+
+onAuthStateChanged(auth, (user) => {
+  handleAuth(user);
 });
 
     loginBtn.addEventListener("click", async () => {
