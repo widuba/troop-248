@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <title>Troop Documents — Troop 248</title>
-  <link rel="stylesheet" href="style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
@@ -17,9 +16,7 @@
       --radius-pill: 999px;
       --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
     }
-
     * { box-sizing: border-box; }
-
     body {
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -28,7 +25,6 @@
       color: var(--text-main);
       min-height: 100vh;
     }
-
     header {
       background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
       color: var(--white);
@@ -40,7 +36,6 @@
       top: 0;
       z-index: 10;
     }
-
     header h2 {
       margin: 0;
       font-size: 19px;
@@ -50,12 +45,10 @@
       align-items: center;
       gap: 8px;
     }
-
     header h2::before {
       content: "★";
       font-size: 18px;
     }
-
     .troop-home-link {
       text-decoration: none;
       color: inherit;
@@ -66,17 +59,14 @@
       opacity: 0.9;
       text-decoration: underline;
     }
-
     nav {
       display: flex;
       gap: 12px;
       font-size: 13px;
       text-transform: uppercase;
     }
-
     nav a {
-      color: #1f4e79;
-      font-weight: bold;
+      color: var(--white);
       text-decoration: none;
       padding: 6px 10px;
       border-radius: var(--radius-pill);
@@ -84,19 +74,16 @@
       backdrop-filter: blur(4px);
       opacity: 0.9;
     }
-
     nav a:hover {
       opacity: 1;
       background: rgba(255, 255, 255, 0.12);
     }
-
     #auth-bar {
       display: flex;
       gap: 10px;
       align-items: center;
       font-size: 13px;
     }
-
     #logout-btn {
       padding: 5px 12px;
       font-size: 13px;
@@ -106,22 +93,19 @@
       color: var(--white);
       cursor: pointer;
     }
-
     #logout-btn:hover {
       background: rgba(255, 255, 255, 0.2);
     }
-
     main {
       padding: 24px 16px 40px;
       max-width: 960px;
       margin: 0 auto;
     }
-
     .welcome-card {
       background: rgba(255, 255, 255, 0.95);
       border-radius: var(--radius-lg);
-      padding: 18px 18px 6px;
-      margin-bottom: 18px;
+      padding: 18px 18px 8px;
+      margin-bottom: 20px;
       box-shadow: var(--shadow-soft);
       display: flex;
       align-items: center;
@@ -129,18 +113,15 @@
       gap: 16px;
       border: 1px solid rgba(148, 163, 184, 0.4);
     }
-
     .welcome-card h3 {
       margin: 0 0 4px;
       font-size: 18px;
     }
-
     .welcome-card p {
       margin: 0;
       font-size: 14px;
       color: var(--text-muted);
     }
-
     .badge {
       font-size: 11px;
       padding: 4px 8px;
@@ -150,22 +131,19 @@
       text-transform: uppercase;
       letter-spacing: 0.07em;
     }
-
     .badge.admin {
       background: rgba(240, 180, 41, 0.16);
       color: #92400e;
       border: 1px solid rgba(245, 158, 11, 0.6);
     }
-
     section {
       background: rgba(255, 255, 255, 0.95);
       border-radius: var(--radius-lg);
-      padding: 18px 18px 12px;
+      padding: 18px 18px 14px;
       margin-bottom: 18px;
       box-shadow: var(--shadow-soft);
       border: 1px solid rgba(148, 163, 184, 0.4);
     }
-
     section h2 {
       margin-top: 0;
       font-size: 18px;
@@ -173,15 +151,17 @@
       align-items: center;
       gap: 8px;
     }
-
     section h2::before {
       content: "▸";
       font-size: 14px;
       color: var(--blue);
     }
-
     .admin-only { display: none; }
-
+    .small-help {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
     form {
       margin-bottom: 10px;
       padding: 10px 10px 8px;
@@ -189,124 +169,96 @@
       border-radius: 12px;
       border: 1px dashed rgba(148, 163, 184, 0.8);
     }
-
     form h3 {
       margin: 0 0 8px;
       font-size: 15px;
       color: var(--blue);
     }
-
     .field {
       margin-bottom: 8px;
     }
-
     .field label {
       display: block;
       font-size: 12px;
       margin-bottom: 3px;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: .05em;
+      letter-spacing: 0.06em;
     }
-
     .field input,
     .field textarea {
       width: 100%;
-      padding: 6px 8px;
+      padding: 7px 8px;
       border-radius: 10px;
       border: 1px solid #d1d5db;
-      background: #ffffff;
       font-size: 14px;
+      background: #ffffff;
     }
-
     .field textarea {
       resize: vertical;
       min-height: 60px;
     }
-
     .field input:focus,
     .field textarea:focus {
       outline: none;
       border-color: var(--blue);
-      box-shadow: 0 0 0 2px rgba(31,78,121,.1);
+      box-shadow: 0 0 0 2px rgba(31,78,121,.12);
     }
-
     form button {
-      padding: 6px 14px;
-      font-size: 13px;
+      padding: 7px 14px;
       border-radius: var(--radius-pill);
       border: none;
-      cursor: pointer;
-      font-weight: 500;
       background: var(--blue);
-      color: var(--white);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
     }
-
-    form button:hover { opacity: .96; }
-
+    form button:hover { opacity: 0.96; }
     .doc-list {
       list-style: none;
       padding-left: 0;
-      margin: 0;
-      font-size: 14px;
+      margin: 6px 0 0;
     }
-
     .doc-item {
       padding: 8px 0;
-      border-bottom: 1px solid rgba(229, 231, 235, 0.9);
+      border-bottom: 1px solid rgba(229,231,235,.9);
     }
-
     .doc-item:last-child {
       border-bottom: none;
     }
-
     .doc-title {
       font-weight: 600;
+      font-size: 14px;
     }
-
+    .doc-link {
+      color: var(--blue);
+      text-decoration: none;
+      font-size: 13px;
+    }
+    .doc-link:hover {
+      text-decoration: underline;
+    }
     .doc-meta {
       font-size: 12px;
       color: var(--text-muted);
       margin-top: 2px;
     }
-
-    .doc-link {
-      color: var(--blue);
-      text-decoration: none;
-    }
-
-    .doc-link:hover {
-      text-decoration: underline;
-    }
-
     .small-btn {
       font-size: 11px;
-      padding: 2px 8px;
+      padding: 3px 8px;
       margin-top: 4px;
       border-radius: var(--radius-pill);
       border: none;
       cursor: pointer;
-      background: var(--red);
-      color: var(--white);
+      background: #b22222;
+      color: #ffffff;
     }
-
-    .small-btn:hover { opacity: .95; }
-
-    @media (max-width: 640px) {
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-      }
-      nav {
-        width: 100%;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-      }
-      .welcome-card {
-        flex-direction: column;
-        align-items: flex-start;
-      }
+    .small-btn:hover { opacity: 0.95; }
+    .empty-text {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 4px;
     }
   </style>
 </head>
@@ -317,8 +269,8 @@
         <h2>Troop 248</h2>
       </a>
     </div>
-
     <nav>
+      <a href="/home">Home</a>
       <a href="/calendar">Calendar</a>
       <a href="/documents">Documents</a>
       <a href="/scoutmaster">Scoutmaster Blog</a>
@@ -326,7 +278,6 @@
       <a href="/useful-links">Useful Links</a>
       <a href="/events">Events</a>
     </nav>
-
     <div id="auth-bar">
       <div id="auth-info">Signed in as …</div>
       <button id="logout-btn">Log Out</button>
@@ -337,7 +288,7 @@
     <div class="welcome-card">
       <div>
         <h3>Troop Documents</h3>
-        <p>Permission slips, packing lists, forms, and other important files.</p>
+        <p>Permission slips, packing lists, forms, and other troop files.</p>
       </div>
       <div id="role-badge-container">
         <span class="badge">Viewer</span>
@@ -345,50 +296,52 @@
     </div>
 
     <section>
-      <h2>Manage Documents</h2>
-      <form id="doc-form" class="admin-only">
-        <!-- Drag & Drop Upload (Admins only) -->
-<div class="admin-only" style="margin-bottom: 14px;">
-  <h3>Upload a File</h3>
-  <div id="upload-dropzone" 
-       style="
-        border: 2px dashed rgba(148,163,184,0.9);
-        border-radius: 12px;
-        padding: 18px;
-        background: #f9fafb;
-        text-align: center;
-        cursor: pointer;
-       ">
-    <p style="margin: 0 0 4px; font-size: 14px;">
-      Drag & drop PDFs, images, or other files here
-    </p>
-    <p style="margin: 0; font-size: 12px; color: #6b7280;">
-      or click to choose a file from your device
-    </p>
-    <p id="upload-status" style="margin-top: 6px; font-size: 12px; color: #6b7280;"></p>
-  </div>
-  <input type="file" id="upload-file-input" style="display:none;" />
-</div>
-        <h3>Add Document</h3>
+      <h2>Manage & View Documents</h2>
+
+      <!-- Drag & drop upload -->
+      <div class="admin-only" style="margin-bottom: 14px;">
+        <h3>Upload a File</h3>
+        <div id="upload-dropzone"
+             style="border: 2px dashed rgba(148,163,184,0.9);
+                    border-radius: 12px;
+                    padding: 18px;
+                    background: #f9fafb;
+                    text-align: center;
+                    cursor: pointer;">
+          <p style="margin: 0 0 4px; font-size: 14px;">
+            Drag & drop PDFs, images, or other files here
+          </p>
+          <p style="margin: 0; font-size: 12px; color: #6b7280;">
+            or click to choose a file from your device
+          </p>
+          <p id="upload-status" style="margin-top: 6px; font-size: 12px; color: #6b7280;"></p>
+        </div>
+        <input type="file" id="upload-file-input" style="display:none;" />
+      </div>
+
+      <!-- Add by URL -->
+      <form id="add-doc-form" class="admin-only">
+        <h3>Add Document by Link</h3>
         <div class="field">
           <label for="doc-title">Title</label>
           <input id="doc-title" type="text" required />
         </div>
         <div class="field">
-          <label for="doc-url">Link URL</label>
+          <label for="doc-url">Document URL</label>
           <input id="doc-url" type="url" placeholder="https://..." required />
         </div>
         <div class="field">
-          <label for="doc-description">Description</label>
-          <textarea id="doc-description" placeholder="Short description of this document"></textarea>
+          <label for="doc-desc">Description (optional)</label>
+          <textarea id="doc-desc" placeholder="Short description of this document"></textarea>
         </div>
         <button type="submit">Add Document</button>
+        <div class="small-help">
+          Use this for existing files (e.g., Google Drive links).
+        </div>
       </form>
-    </section>
 
-    <section>
-      <h2>Available Documents</h2>
-      <ul id="doc-list" class="doc-list"></ul>
+      <ul id="docs-list" class="doc-list"></ul>
+      <div id="docs-empty" class="empty-text">No documents added yet.</div>
     </section>
   </main>
 
@@ -407,23 +360,21 @@
       addDoc,
       deleteDoc,
       onSnapshot,
-      query,
       orderBy,
       serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
     import {
-    getStorage,
-    ref,
-    uploadBytesResumable,
-    getDownloadURL
-  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+      getStorage,
+      ref,
+      uploadBytesResumable,
+      getDownloadURL
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
       authDomain: "troop-248.firebaseapp.com",
       projectId: "troop-248",
-      storageBucket: "troop-248.firebasestorage.app",
+      storageBucket: "troop-248.firebasestorage.app", // check this against Firebase
       messagingSenderId: "925363875752",
       appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
       measurementId: "G-NY75GX5TBH"
@@ -434,18 +385,18 @@
     const db = getFirestore(app);
     const storage = getStorage(app);
 
-
     const authInfoEl = document.getElementById("auth-info");
     const logoutBtn = document.getElementById("logout-btn");
     const roleBadgeContainer = document.getElementById("role-badge-container");
     const adminOnlyEls = document.getElementsByClassName("admin-only");
 
-    const docForm = document.getElementById("doc-form");
-    const docList = document.getElementById("doc-list");
+    const docsList = document.getElementById("docs-list");
+    const docsEmptyEl = document.getElementById("docs-empty");
 
+    const addDocForm = document.getElementById("add-doc-form");
     const docTitleInput = document.getElementById("doc-title");
     const docUrlInput = document.getElementById("doc-url");
-    const docDescInput = document.getElementById("doc-description");
+    const docDescInput = document.getElementById("doc-desc");
 
     const uploadDropzone = document.getElementById("upload-dropzone");
     const uploadFileInput = document.getElementById("upload-file-input");
@@ -464,45 +415,6 @@
           <span class="badge ${currentIsAdmin ? "admin" : ""}">
             ${currentIsAdmin ? "Admin" : "Viewer"}
           </span>`;
-
-if (uploadDropzone && uploadFileInput) {
-  // Click to open file picker
-  uploadDropzone.addEventListener("click", () => {
-    uploadFileInput.click();
-  });
-
-  uploadFileInput.addEventListener("change", (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      uploadFileToStorage(file);
-    }
-  });
-
-  // Drag & drop behavior
-  ["dragenter", "dragover"].forEach((eventName) => {
-    uploadDropzone.addEventListener(eventName, (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      uploadDropzone.style.background = "#eef2ff";
-    });
-  });
-
-  ["dragleave", "drop"].forEach((eventName) => {
-    uploadDropzone.addEventListener(eventName, (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      uploadDropzone.style.background = "#f9fafb";
-    });
-  });
-
-  uploadDropzone.addEventListener("drop", (e) => {
-    const files = e.dataTransfer.files;
-    if (files && files.length > 0) {
-      const file = files[0];
-      uploadFileToStorage(file);
-    }
-  });
-}        
       }
     }
 
@@ -534,64 +446,6 @@ if (uploadDropzone && uploadFileInput) {
       pageSpecificInit();
     }
 
-      function setUploadStatus(text, color = "#6b7280") {
-    if (!uploadStatusEl) return;
-    uploadStatusEl.textContent = text;
-    uploadStatusEl.style.color = color;
-  }
-
-  async function uploadFileToStorage(file) {
-    if (!file) return;
-
-    // Simple size check (20 MB max, you can change this)
-    const maxSizeBytes = 20 * 1024 * 1024;
-    if (file.size > maxSizeBytes) {
-      setUploadStatus("File too large (max 20 MB).", "#b91c1c");
-      return;
-    }
-
-    try {
-      setUploadStatus(`Uploading "${file.name}"...`);
-
-      // Path in Storage, e.g. documents/1699999999_filename.pdf
-      const timestamp = Date.now();
-      const cleanName = file.name.replace(/[^\w.\-]+/g, "_");
-      const storageRef = ref(storage, `documents/${timestamp}_${cleanName}`);
-
-      const uploadTask = uploadBytesResumable(storageRef, file);
-
-      uploadTask.on("state_changed",
-        (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setUploadStatus(`Uploading... ${progress.toFixed(0)}%`);
-        },
-        (error) => {
-          console.error(error);
-          setUploadStatus("Upload failed: " + error.message, "#b91c1c");
-        },
-        async () => {
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          setUploadStatus("Upload complete. Saving document record...", "#166534");
-
-          // Save to Firestore so it appears in your list:
-          // adjust collection name to match what you're using (e.g. "troopDocuments")
-          await addDoc(collection(db, "troopDocuments"), {
-            title: file.name,
-            url: downloadURL,
-            description: "",
-            createdAt: serverTimestamp ? serverTimestamp() : new Date(),
-            uploadedBy: currentUser ? currentUser.uid : null
-          });
-
-          setUploadStatus("Document saved and added to list.", "#166534");
-        }
-      );
-    } catch (err) {
-      console.error(err);
-      setUploadStatus("Upload error: " + err.message, "#b91c1c");
-    }
-  }
-
     onAuthStateChanged(auth, handleAuth);
 
     logoutBtn.addEventListener("click", async () => {
@@ -599,27 +453,104 @@ if (uploadDropzone && uploadFileInput) {
       window.location.href = "/";
     });
 
-    function renderDocs(docs) {
-      docList.innerHTML = "";
-      if (docs.length === 0) {
-        docList.innerHTML = '<li class="doc-item">No documents yet.</li>';
+    function setUploadStatus(text, color = "#6b7280") {
+      if (!uploadStatusEl) return;
+      uploadStatusEl.textContent = text;
+      uploadStatusEl.style.color = color;
+      console.log("UPLOAD STATUS:", text);
+    }
+
+    async function uploadFileToStorage(file) {
+      if (!file) return;
+
+      const maxSizeBytes = 20 * 1024 * 1024;
+      if (file.size > maxSizeBytes) {
+        setUploadStatus("File too large (max 20 MB).", "#b91c1c");
         return;
       }
 
-      docs.forEach((docSnap) => {
-        const data = docSnap.data();
+      try {
+        setUploadStatus(`Uploading "${file.name}"...`);
+
+        const timestamp = Date.now();
+        const cleanName = file.name.replace(/[^\w.\-]+/g, "_");
+        const storageRef = ref(storage, `documents/${timestamp}_${cleanName}`);
+
+        const uploadTask = uploadBytesResumable(storageRef, file);
+
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            setUploadStatus(`Uploading... ${progress.toFixed(0)}%`);
+          },
+          (error) => {
+            console.error("UPLOAD ERROR:", error);
+            setUploadStatus("Upload failed: " + error.message, "#b91c1c");
+          },
+          async () => {
+            try {
+              const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+              setUploadStatus(
+                "Upload complete. Saving document record...",
+                "#166534"
+              );
+
+              // Change "troopDocuments" here if your collection has a different name
+              await addDoc(collection(db, "troopDocuments"), {
+                title: file.name,
+                url: downloadURL,
+                description: "",
+                createdAt: serverTimestamp(),
+                uploadedBy: currentUser ? currentUser.uid : null
+              });
+
+              setUploadStatus(
+                "Document saved and added to list.",
+                "#166534"
+              );
+            } catch (err) {
+              console.error("FIRESTORE SAVE ERROR:", err);
+              setUploadStatus(
+                "Saved to Storage but Firestore failed: " + err.message,
+                "#b91c1c"
+              );
+            }
+          }
+        );
+      } catch (err) {
+        console.error("UPLOAD OUTER ERROR:", err);
+        setUploadStatus("Upload error: " + err.message, "#b91c1c");
+      }
+    }
+
+    function renderDocs(docs) {
+      docsList.innerHTML = "";
+      if (docs.length === 0) {
+        docsEmptyEl.style.display = "block";
+        return;
+      }
+      docsEmptyEl.style.display = "none";
+
+      docs.forEach((snap) => {
+        const data = snap.data();
         const li = document.createElement("li");
         li.className = "doc-item";
 
         const title = data.title || "Untitled Document";
         const url = data.url || "#";
         const desc = data.description || "";
+        const createdAt = data.createdAt
+          ? data.createdAt.toDate().toLocaleString()
+          : "";
 
         li.innerHTML = `
-          <div class="doc-title">
-            <a href="${url}" target="_blank" rel="noopener noreferrer" class="doc-link">${title}</a>
+          <div class="doc-title">${title}</div>
+          <div><a href="${url}" target="_blank" rel="noopener noreferrer" class="doc-link">${url}</a></div>
+          <div class="doc-meta">
+            ${desc ? desc + " • " : ""}${createdAt ? "Added " + createdAt : ""}
           </div>
-          <div class="doc-meta">${desc}</div>
         `;
 
         if (currentIsAdmin) {
@@ -628,19 +559,29 @@ if (uploadDropzone && uploadFileInput) {
           btn.className = "small-btn";
           btn.onclick = async () => {
             if (confirm("Delete this document?")) {
-              await deleteDoc(doc(db, "troopDocuments", docSnap.id));
+              await deleteDoc(doc(db, "troopDocuments", snap.id));
             }
           };
           li.appendChild(btn);
         }
 
-        docList.appendChild(li);
+        docsList.appendChild(li);
       });
     }
 
     function pageSpecificInit() {
-      if (currentIsAdmin) {
-        docForm.addEventListener("submit", async (e) => {
+      // Listen to docs
+      const q = query(
+        collection(db, "troopDocuments"),
+        orderBy("createdAt", "desc")
+      );
+      onSnapshot(q, (snapshot) => {
+        renderDocs(snapshot.docs);
+      });
+
+      // Add-doc form
+      if (currentIsAdmin && addDocForm) {
+        addDocForm.addEventListener("submit", async (e) => {
           e.preventDefault();
           const title = docTitleInput.value.trim();
           const url = docUrlInput.value.trim();
@@ -655,7 +596,8 @@ if (uploadDropzone && uploadFileInput) {
             title,
             url,
             description: desc,
-            createdAt: serverTimestamp()
+            createdAt: serverTimestamp(),
+            uploadedBy: currentUser ? currentUser.uid : null
           });
 
           docTitleInput.value = "";
@@ -664,14 +606,41 @@ if (uploadDropzone && uploadFileInput) {
         });
       }
 
-      const q = query(
-        collection(db, "troopDocuments"),
-        orderBy("title", "asc")
-      );
+      // Drag & drop upload
+      if (currentIsAdmin && uploadDropzone && uploadFileInput) {
+        uploadDropzone.addEventListener("click", () => {
+          uploadFileInput.click();
+        });
 
-      onSnapshot(q, (snapshot) => {
-        renderDocs(snapshot.docs);
-      });
+        uploadFileInput.addEventListener("change", (e) => {
+          const file = e.target.files[0];
+          if (file) uploadFileToStorage(file);
+        });
+
+        ["dragenter", "dragover"].forEach((eventName) => {
+          uploadDropzone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadDropzone.style.background = "#eef2ff";
+          });
+        });
+
+        ["dragleave", "drop"].forEach((eventName) => {
+          uploadDropzone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadDropzone.style.background = "#f9fafb";
+          });
+        });
+
+        uploadDropzone.addEventListener("drop", (e) => {
+          const files = e.dataTransfer.files;
+          if (files && files.length > 0) {
+            const file = files[0];
+            uploadFileToStorage(file);
+          }
+        });
+      }
     }
   </script>
 </body>
