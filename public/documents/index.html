@@ -464,6 +464,45 @@
           <span class="badge ${currentIsAdmin ? "admin" : ""}">
             ${currentIsAdmin ? "Admin" : "Viewer"}
           </span>`;
+
+if (uploadDropzone && uploadFileInput) {
+  // Click to open file picker
+  uploadDropzone.addEventListener("click", () => {
+    uploadFileInput.click();
+  });
+
+  uploadFileInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      uploadFileToStorage(file);
+    }
+  });
+
+  // Drag & drop behavior
+  ["dragenter", "dragover"].forEach((eventName) => {
+    uploadDropzone.addEventListener(eventName, (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      uploadDropzone.style.background = "#eef2ff";
+    });
+  });
+
+  ["dragleave", "drop"].forEach((eventName) => {
+    uploadDropzone.addEventListener(eventName, (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      uploadDropzone.style.background = "#f9fafb";
+    });
+  });
+
+  uploadDropzone.addEventListener("drop", (e) => {
+    const files = e.dataTransfer.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      uploadFileToStorage(file);
+    }
+  });
+}        
       }
     }
 
@@ -552,45 +591,6 @@
       setUploadStatus("Upload error: " + err.message, "#b91c1c");
     }
   }
-
-      if (uploadDropzone && uploadFileInput) {
-    // Click to open file picker
-    uploadDropzone.addEventListener("click", () => {
-      uploadFileInput.click();
-    });
-
-    uploadFileInput.addEventListener("change", (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        uploadFileToStorage(file);
-      }
-    });
-
-    // Drag & drop behavior
-    ["dragenter", "dragover"].forEach((eventName) => {
-      uploadDropzone.addEventListener(eventName, (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        uploadDropzone.style.background = "#eef2ff";
-      });
-    });
-
-    ["dragleave", "drop"].forEach((eventName) => {
-      uploadDropzone.addEventListener(eventName, (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        uploadDropzone.style.background = "#f9fafb";
-      });
-    });
-
-    uploadDropzone.addEventListener("drop", (e) => {
-      const files = e.dataTransfer.files;
-      if (files && files.length > 0) {
-        const file = files[0];
-        uploadFileToStorage(file);
-      }
-    });
-      }
 
     onAuthStateChanged(auth, handleAuth);
 
