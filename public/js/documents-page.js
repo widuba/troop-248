@@ -12,7 +12,8 @@ import {
   deleteDoc,
   onSnapshot,
   orderBy,
-  serverTimestamp
+  serverTimestamp,
+  query        // ✅ THIS was missing before and would break everything
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import {
   ref,
@@ -134,7 +135,7 @@ async function uploadFileToStorage(file) {
             "#166534"
           );
 
-          // Change "troopDocuments" here if you want a different collection name
+          // Change "troopDocuments" if you want a different collection name
           await addDoc(collection(db, "troopDocuments"), {
             title: file.name,
             url: downloadURL,
