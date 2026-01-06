@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Upload Test — Troop 248</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --red: #b22222;
+      --blue: #1f4e79;
+      --tan: #f4eee3;
+      --white: #ffffff;
+      --text-main: #1f2933;
+      --text-muted: #6b7280;
+      --radius-lg: 18px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 14px 40px rgba(0, 0, 0, 0.18);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top, #ffffff, #d2cab6);
+    }
+    .card {
+      width: 100%;
+      max-width: 520px;
+      background: #fdfdfd;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      padding: 20px 20px 16px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+    h1 {
+      margin: 0 0 6px;
+      font-size: 22px;
+    }
+    p {
+      margin: 4px 0;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .badge {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(148,163,184,.2);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-main);
+    }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    #user-email {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    #logout-btn {
+      padding: 5px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: #ffffff;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    #logout-btn:hover {
+      background: #f3f4f6;
+    }
+    .dropzone {
+      border: 2px dashed rgba(148,163,184,0.9);
+      border-radius: 14px;
+      padding: 20px;
+      background: #f9fafb;
+      text-align: center;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+    .dropzone.highlight {
+      background: #eef2ff;
+    }
+    .dropzone p {
+      margin: 4px 0;
+      font-size: 13px;
+    }
+    #file-input {
+      display: none;
+    }
+    #upload-btn {
+      margin-top: 14px;
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      border: none;
+      background: linear-gradient(90deg, #1f4e79, #b22222);
+      color: #ffffff;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    #upload-btn:hover {
+      opacity: 0.96;
+    }
+    #status {
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--text-muted);
+      word-break: break-all;
+    }
+    #download-link {
+      display: none;
+      margin-top: 8px;
+      font-size: 13px;
+    }
+    #download-link a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+    #download-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="row">
+      <div>
+        <h1>File Upload (Test)</h1>
+        <span class="badge">Internal</span>
+      </div>
+      <div>
+        <div id="user-email">Signed in as …</div>
+        <button id="logout-btn">Log Out</button>
+      </div>
+    </div>
+    <p>
+      This page is only to confirm that uploads to Firebase Storage work.
+      After this works, we can hook it into Documents.
+    </p>
+
+    <div id="dropzone" class="dropzone">
+      <p><strong>Drag & drop</strong> a file here</p>
+      <p>or click to choose from your device.</p>
+      <p id="chosen-file" style="font-size:12px; color:#6b7280; margin-top:6px;"></p>
+    </div>
+    <input type="file" id="file-input" />
+
+    <button id="upload-btn">Upload File</button>
+
+    <div id="status"></div>
+    <div id="download-link"></div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import {
+      getStorage,
+      ref,
+      uploadBytesResumable,
+      getDownloadURL
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+    // 🔴 VERY IMPORTANT:
+    // Make sure this config matches EXACTLY what Firebase console gives you
+    // under Project Settings → General → Web app config.
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+      authDomain: "troop-248.firebaseapp.com",
+      projectId: "troop-248",
+      storageBucket: "troop-248.firebasestorage.app", // if Firebase says ...appspot.com, paste that instead
+      messagingSenderId: "925363875752",
+      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+      measurementId: "G-NY75GX5TBH"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const storage = getStorage(app);
+
+    const userEmailEl = document.getElementById("user-email");
+    const logoutBtn = document.getElementById("logout-btn");
+    const dropzone = document.getElementById("dropzone");
+    const fileInput = document.getElementById("file-input");
+    const uploadBtn = document.getElementById("upload-btn");
+    const statusEl = document.getElementById("status");
+    const chosenFileEl = document.getElementById("chosen-file");
+    const downloadLinkEl = document.getElementById("download-link");
+
+    let currentFile = null;
+
+    function setStatus(text, color = "#4b5563") {
+      statusEl.textContent = text;
+      statusEl.style.color = color;
+      console.log("STATUS:", text);
+    }
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        // Not logged in → go back to main login page
+        window.location.href = "/";
+        return;
+      }
+      userEmailEl.textContent = "Signed in as " + user.email;
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "/";
+    });
+
+    // Click to pick file
+    dropzone.addEventListener("click", () => {
+      fileInput.click();
+    });
+
+    fileInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        currentFile = file;
+        chosenFileEl.textContent = "Selected: " + file.name + " (" + Math.round(file.size / 1024) + " kB)";
+        setStatus("Ready to upload.");
+      }
+    });
+
+    // Drag & drop handling
+    ["dragenter", "dragover"].forEach((eventName) => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.add("highlight");
+      });
+    });
+
+    ["dragleave", "drop"].forEach((eventName) => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.remove("highlight");
+      });
+    });
+
+    dropzone.addEventListener("drop", (e) => {
+      const files = e.dataTransfer.files;
+      if (files && files.length > 0) {
+        currentFile = files[0];
+        chosenFileEl.textContent = "Selected: " + currentFile.name + " (" + Math.round(currentFile.size / 1024) + " kB)";
+        setStatus("Ready to upload.");
+      }
+    });
+
+    uploadBtn.addEventListener("click", () => {
+      const user = auth.currentUser;
+      if (!user) {
+        setStatus("You are not signed in.", "#b91c1c");
+        return;
+      }
+      if (!currentFile) {
+        setStatus("Please choose a file first.", "#b91c1c");
+        return;
+      }
+
+      const maxSizeBytes = 20 * 1024 * 1024; // 20 MB
+      if (currentFile.size > maxSizeBytes) {
+        setStatus("File too large (max 20 MB).", "#b91c1c");
+        return;
+      }
+
+      // Build a path: uploads/<uid>/<timestamp>_filename
+      const cleanName = currentFile.name.replace(/[^\w.\-]+/g, "_");
+      const path = `uploads/${user.uid}/${Date.now()}_${cleanName}`;
+      const storageRef = ref(storage, path);
+
+      setStatus("Starting upload to: " + path);
+
+      const uploadTask = uploadBytesResumable(storageRef, currentFile);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setStatus("Uploading... " + progress.toFixed(0) + "%");
+        },
+        (error) => {
+          console.error("UPLOAD ERROR:", error);
+          setStatus("Upload failed: " + error.message, "#b91c1c");
+          downloadLinkEl.style.display = "none";
+        },
+        async () => {
+          try {
+            const url = await getDownloadURL(uploadTask.snapshot.ref);
+            setStatus("Upload complete.", "#166534");
+            downloadLinkEl.innerHTML = `Uploaded file URL: <a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+            downloadLinkEl.style.display = "block";
+          } catch (err) {
+            console.error("URL ERROR:", err);
+            setStatus("Upload succeeded, but could not get URL: " + err.message, "#b91c1c");
+            downloadLinkEl.style.display = "none";
+          }
+        }
+      );
+    });
+  </script>
+</body>
+</html>
