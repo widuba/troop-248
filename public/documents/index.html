@@ -314,28 +314,6 @@
       </div>
     </div>
 
-    <section>
-      <h2>Manage & View Documents</h2>
-
-      <!-- Drag & drop upload -->
-      <div class="admin-only" style="margin-bottom: 14px;">
-        <h3>Upload a File</h3>
-        <div id="upload-dropzone"
-             style="border: 2px dashed rgba(148,163,184,0.9);
-                    border-radius: 12px;
-                    padding: 18px;
-                    background: #f9fafb;
-                    text-align: center;
-                    cursor: pointer;">
-          <p style="margin: 0 0 4px; font-size: 14px;">
-            Drag & drop PDFs, images, or other files here
-          </p>
-          <p style="margin: 0; font-size: 12px; color: #6b7280;">
-            or click to choose a file from your device
-          </p>
-          <p id="upload-status" style="margin-top: 6px; font-size: 12px; color: #6b7280;"></p>
-        </div>
-        <input type="file" id="upload-file-input" style="display:none;" />
     <!-- Admin-only upload section -->
     <section class="admin-only">
       <h2>Upload New Document (Admins Only)</h2>
@@ -368,32 +346,22 @@
         <div id="upload-status"></div>
       </form>
 
-      <!-- Add by URL -->
-      <form id="add-doc-form" class="admin-only">
       <form id="add-link-form" style="margin-top:10px;">
         <h3>Add Document by Link</h3>
         <div class="field">
-          <label for="doc-title">Title</label>
-          <input id="doc-title" type="text" required />
           <label for="link-title">Title</label>
           <input id="link-title" type="text" required />
         </div>
         <div class="field">
-          <label for="doc-url">Document URL</label>
-          <input id="doc-url" type="url" placeholder="https://..." required />
           <label for="link-url">Document URL</label>
           <input id="link-url" type="url" placeholder="https://..." required />
         </div>
         <div class="field">
-          <label for="doc-desc">Description (optional)</label>
-          <textarea id="doc-desc" placeholder="Short description of this document"></textarea>
           <label for="link-desc">Description (optional)</label>
           <textarea id="link-desc" placeholder="Short description of this document"></textarea>
         </div>
-        <button type="submit">Add Document</button>
         <button type="submit">Add Linked Document</button>
         <div class="small-help">
-          Use this for existing files (e.g., Google Drive links).
           Use this if the file is hosted elsewhere (e.g., Google Drive, BSA national).
         </div>
       </form>
@@ -407,8 +375,6 @@
     </section>
   </main>
 
-  <!-- JS logic for this page -->
-  <script type="module" src="/js/documents-page.js"></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import {
@@ -752,5 +718,5 @@
       }
     }
   </script>
-      </body>
-        
+</body>
+</html>
