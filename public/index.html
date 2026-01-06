@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Troop 248 — Member Access</title>
+  <title>Troop 248 — Login</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
@@ -14,293 +14,234 @@
       --text-muted: #6b7280;
       --radius-lg: 18px;
       --radius-pill: 999px;
-      --shadow-soft: 0 12px 30px rgba(0, 0, 0, 0.10);
+      --shadow-soft: 0 14px 40px rgba(0, 0, 0, 0.18);
     }
-
     * { box-sizing: border-box; }
-
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #d2cab6;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
+      background: radial-gradient(circle at top, #ffffff, #d2cab6);
+    }
+    .shell {
+      width: 100%;
+      max-width: 960px;
       padding: 16px;
     }
-
-    .shell {
-      max-width: 900px;
-      width: 100%;
+    .card {
+      background: #fdfdfd;
+      border-radius: 24px;
+      box-shadow: var(--shadow-soft);
       display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.2fr);
+      grid-template-columns: 1.1fr 1.1fr;
+      overflow: hidden;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+    @media (max-width: 800px) {
+      .card { grid-template-columns: 1fr; }
+    }
+    .left {
+      padding: 24px 24px 20px;
+      background: linear-gradient(135deg, #b22222, #ffffff, #1f4e79);
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .left h1 {
+      margin: 0 0 8px;
+      font-size: 26px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .left h1 span {
+      display: block;
+      font-size: 18px;
+      letter-spacing: 0.08em;
+    }
+    .left p {
+      margin: 0;
+      font-size: 14px;
+      max-width: 320px;
+    }
+    .left-footer {
+      font-size: 11px;
+      opacity: 0.9;
+      margin-top: 18px;
+    }
+    .right {
+      padding: 24px 24px 20px;
+      background: #f9fafb;
+      display: grid;
+      grid-template-columns: 1fr;
       gap: 18px;
     }
-
-    @media (max-width: 768px) {
-      .shell {
-        grid-template-columns: minmax(0, 1fr);
-      }
+    .form-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 14px 14px 10px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
     }
-
-    .left-card,
-    .right-card {
-      background: rgba(255,255,255,.96);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-soft);
-      border: 1px solid rgba(148,163,184,.45);
-      padding: 20px 18px 16px;
-    }
-
-    .left-card-header {
-      margin-bottom: 12px;
-    }
-
-    .left-card-header h1 {
-      margin: 0;
-      font-size: 20px;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      color: var(--blue);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .left-card-header h1::before {
-      content: "★";
+    .form-card h2 {
+      margin: 0 0 4px;
       font-size: 18px;
-      color: var(--red);
     }
-
-    .left-card-header p {
-      margin: 6px 0 0;
+    .form-card p {
+      margin: 0 0 10px;
       font-size: 13px;
       color: var(--text-muted);
     }
-
-    .section-title {
-      font-size: 15px;
-      font-weight: 600;
-      margin-bottom: 6px;
-      color: var(--text-main);
-    }
-
     .field {
-      margin-top: 8px;
+      margin-bottom: 8px;
     }
-
     .field label {
       display: block;
       font-size: 12px;
       margin-bottom: 3px;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: .05em;
+      letter-spacing: 0.06em;
     }
-
     .field input,
     .field select {
       width: 100%;
-      padding: 6px 9px;
+      padding: 7px 8px;
       border-radius: 10px;
       border: 1px solid #d1d5db;
-      background: #f9fafb;
       font-size: 14px;
+      background: #ffffff;
     }
-
     .field input:focus,
     .field select:focus {
       outline: none;
       border-color: var(--blue);
-      box-shadow: 0 0 0 2px rgba(31,78,121,.16);
+      box-shadow: 0 0 0 2px rgba(31, 78, 121, 0.12);
     }
-
-    .buttons-row {
-      display: flex;
+    .field-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
-      margin-top: 12px;
     }
-
-    .buttons-row button {
-      flex: 1;
-      padding: 7px 0;
+    @media (max-width: 500px) {
+      .field-row { grid-template-columns: 1fr; }
+    }
+    button {
+      padding: 7px 14px;
       border-radius: var(--radius-pill);
       border: none;
-      cursor: pointer;
+      background: var(--blue);
+      color: #ffffff;
       font-size: 14px;
       font-weight: 500;
-      color: var(--white);
+      cursor: pointer;
     }
-
-    #login-btn {
-      background: var(--blue);
-    }
-
-    #signup-btn {
-      background: var(--red);
-    }
-
-    .note {
-      margin-top: 10px;
-      font-size: 12px;
+    button:hover { opacity: 0.96; }
+    .subtext {
+      font-size: 11px;
       color: var(--text-muted);
+      margin-top: 4px;
     }
-
-    .emphasis {
-      font-weight: 600;
-      color: var(--text-main);
-    }
-
     .error {
-      margin-top: 6px;
       font-size: 12px;
       color: #b91c1c;
-      min-height: 16px;
+      margin-top: 4px;
     }
-
     .success {
-      margin-top: 6px;
       font-size: 12px;
       color: #166534;
-      min-height: 16px;
-    }
-
-    ul {
-      margin: 8px 0 0;
-      padding-left: 18px;
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 3px 8px;
-      border-radius: var(--radius-pill);
-      background: rgba(148,163,184,.18);
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      color: var(--text-muted);
-    }
-
-    .role-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 6px;
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .footer-note {
-      margin-top: 12px;
-      font-size: 12px;
-      color: var(--text-muted);
+      margin-top: 4px;
     }
   </style>
 </head>
 <body>
   <div class="shell">
-    <!-- LEFT: LOGIN -->
-    <div class="left-card">
-      <div class="left-card-header">
-        <h1>Troop 248 Portal</h1>
-        <p>Existing members sign in here to access troop information.</p>
+    <div class="card">
+      <div class="left">
+        <div>
+          <h1>Troop 248<span>Scouting Portal</span></h1>
+          <p>
+            Secure access for scouts, parents, and adult leaders.
+            An account is required and will be approved by troop leadership.
+          </p>
+        </div>
+        <div class="left-footer">
+          BSA Troop 248 • Private information for troop families only.
+        </div>
       </div>
-
-      <div class="section-title">Log In</div>
-
-      <form id="login-form">
-        <div class="field">
-          <label for="login-email">Email</label>
-          <input id="login-email" type="email" placeholder="you@example.com" required />
+      <div class="right">
+        <!-- Login -->
+        <div class="form-card">
+          <h2>Log In</h2>
+          <p>Use your approved troop account to sign in.</p>
+          <form id="login-form">
+            <div class="field">
+              <label for="login-email">Email</label>
+              <input id="login-email" type="email" required />
+            </div>
+            <div class="field">
+              <label for="login-password">Password</label>
+              <input id="login-password" type="password" required />
+            </div>
+            <button type="submit">Log In</button>
+            <div id="login-error" class="error"></div>
+          </form>
+          <div class="subtext">
+            If your account is still under review, you will see a review message after logging in.
+          </div>
         </div>
 
-        <div class="field">
-          <label for="login-password">Password</label>
-          <input id="login-password" type="password" placeholder="Password" required />
-        </div>
+        <!-- Signup -->
+        <div class="form-card">
+          <h2>Sign Up</h2>
+          <p>New to Troop 248? Request an account here.</p>
+          <form id="signup-form">
+            <div class="field-row">
+              <div class="field">
+                <label for="signup-first">First Name</label>
+                <input id="signup-first" type="text" required />
+              </div>
+              <div class="field">
+                <label for="signup-last">Last Name</label>
+                <input id="signup-last" type="text" required />
+              </div>
+            </div>
 
-        <div class="buttons-row">
-          <button type="submit" id="login-btn">Log In</button>
-        </div>
+            <div class="field">
+              <label for="signup-phone">Phone Number</label>
+              <input id="signup-phone" type="tel" required />
+            </div>
 
-        <div id="login-error" class="error"></div>
-      </form>
+            <div class="field">
+              <label for="signup-type">Account Type</label>
+              <select id="signup-type" required>
+                <option value="">Select one…</option>
+                <option value="Scout">Scout</option>
+                <option value="Parent">Parent</option>
+                <option value="Adult Leader">Adult Leader</option>
+              </select>
+            </div>
 
-      <div class="note">
-        <span class="emphasis">Note:</span> Accounts must be approved by troop
-        leadership before they can view any troop content.
-      </div>
-    </div>
+            <div class="field">
+              <label for="signup-email">Email</label>
+              <input id="signup-email" type="email" required />
+            </div>
+            <div class="field">
+              <label for="signup-password">Password</label>
+              <input id="signup-password" type="password" required />
+            </div>
 
-    <!-- RIGHT: SIGN UP -->
-    <div class="right-card">
-      <div class="section-title">Request Access (Sign Up)</div>
-
-      <form id="signup-form">
-        <div class="field">
-          <label for="signup-first">First Name</label>
-          <input id="signup-first" type="text" required />
-        </div>
-
-        <div class="field">
-          <label for="signup-last">Last Name</label>
-          <input id="signup-last" type="text" required />
-        </div>
-
-        <div class="field">
-          <label for="signup-phone">Phone Number</label>
-          <input id="signup-phone" type="tel" placeholder="555-555-5555" required />
-        </div>
-
-        <div class="field">
-          <label for="signup-role">I am a...</label>
-          <select id="signup-role" required>
-            <option value="">Select one</option>
-            <option value="Scout">Scout</option>
-            <option value="Parent">Parent</option>
-            <option value="Adult Leader">Adult Leader</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label for="signup-email">Email</label>
-          <input id="signup-email" type="email" placeholder="you@example.com" required />
-        </div>
-
-        <div class="field">
-          <label for="signup-password">Password</label>
-          <input id="signup-password" type="password" placeholder="Password" required />
-        </div>
-
-        <div class="buttons-row">
-          <button type="submit" id="signup-btn">Submit Request</button>
-        </div>
-
-        <div id="signup-error" class="error"></div>
-        <div id="signup-success" class="success"></div>
-      </form>
-
-      <div class="note">
-        When you sign up:
-        <ul>
-          <li>Your account is marked as <span class="emphasis">under review</span>.</li>
-          <li>You <span class="emphasis">cannot view troop pages</span> until approved.</li>
-          <li>A troop leader will set you as <span class="emphasis">Viewer</span> or <span class="emphasis">Admin</span>.</li>
-        </ul>
-      </div>
-
-      <div class="footer-note">
-        Troop roles:
-        <div class="role-chips">
-          <span class="badge">Scout</span>
-          <span class="badge">Parent</span>
-          <span class="badge">Adult Leader</span>
-          <span class="badge">Viewer</span>
-          <span class="badge">Admin</span>
+            <button type="submit">Submit Signup</button>
+            <div id="signup-error" class="error"></div>
+            <div id="signup-success" class="success"></div>
+            <div class="subtext">
+              Your account will be reviewed by troop leadership. You will not see troop pages
+              until your account is approved.
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -310,24 +251,26 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import {
       getAuth,
+      onAuthStateChanged,
       signInWithEmailAndPassword,
       createUserWithEmailAndPassword,
-      onAuthStateChanged,
       signOut
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
     import {
       getFirestore,
       doc,
-      setDoc,
       getDoc,
+      setDoc,
       serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
+    // IMPORTANT: if uploads keep failing, double-check this storageBucket
+    // matches your Firebase console config exactly.
     const firebaseConfig = {
       apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
       authDomain: "troop-248.firebaseapp.com",
       projectId: "troop-248",
-      storageBucket: "troop-248.firebasestorage.app",
+      storageBucket: "troop-248.firebasestorage.app", // <- verify in Firebase settings
       messagingSenderId: "925363875752",
       appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
       measurementId: "G-NY75GX5TBH"
@@ -338,99 +281,64 @@
     const db = getFirestore(app);
 
     const loginForm = document.getElementById("login-form");
-    const signupForm = document.getElementById("signup-form");
-
     const loginEmail = document.getElementById("login-email");
     const loginPassword = document.getElementById("login-password");
     const loginError = document.getElementById("login-error");
 
+    const signupForm = document.getElementById("signup-form");
     const signupFirst = document.getElementById("signup-first");
     const signupLast = document.getElementById("signup-last");
     const signupPhone = document.getElementById("signup-phone");
-    const signupRole = document.getElementById("signup-role");
+    const signupType = document.getElementById("signup-type");
     const signupEmail = document.getElementById("signup-email");
     const signupPassword = document.getElementById("signup-password");
     const signupError = document.getElementById("signup-error");
     const signupSuccess = document.getElementById("signup-success");
 
-    function showLoginError(msg) {
-      console.error(msg);
-      loginError.textContent = msg;
-    }
+    // When user is logged in, route based on approval status
+    async function handleUser(user) {
+      if (!user) return; // stay on login
 
-    function showSignupError(msg) {
-      console.error(msg);
-      signupError.textContent = msg;
-      signupSuccess.textContent = "";
-    }
+      const infoRef = doc(db, "accountInfo", user.uid);
+      const infoSnap = await getDoc(infoRef);
 
-    function showSignupSuccess(msg) {
-      signupSuccess.textContent = msg;
-      signupError.textContent = "";
-    }
-
-    // If already logged in, route based on role
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) return;
-
-      try {
-        const infoRef = doc(db, "accountInfo", user.uid);
-        const infoSnap = await getDoc(infoRef);
-
-        if (!infoSnap.exists()) {
-          await signOut(auth);
-          return;
-        }
-
-        const data = infoSnap.data();
-        const role = data.authRole;
-
-        if (role === "admin" || role === "viewer") {
-          window.location.href = "/home";
-        } else {
-          window.location.href = "/under-review/";
-        }
-      } catch (e) {
-        console.error("Error checking accountInfo:", e);
-      }
-    });
-
-    // LOGIN
-    loginForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      loginError.textContent = "";
-
-      const email = loginEmail.value.trim();
-      const pass = loginPassword.value.trim();
-      if (!email || !pass) {
-        showLoginError("Please enter email and password.");
+      if (!infoSnap.exists()) {
+        // No accountInfo yet -> treat as under review
+        window.location.href = "/under-review/";
         return;
       }
 
-      try {
-        const cred = await signInWithEmailAndPassword(auth, email, pass);
-        const user = cred.user;
+      const data = infoSnap.data();
+      const role = data.authRole;
 
-        const infoRef = doc(db, "accountInfo", user.uid);
-        const infoSnap = await getDoc(infoRef);
+      if (role === "admin" || role === "viewer") {
+        window.location.href = "/home";
+      } else {
+        // pending / anything else
+        window.location.href = "/under-review/";
+      }
+    }
 
-        if (!infoSnap.exists()) {
-          window.location.href = "/under-review/";
-          return;
-        }
-
-        const data = infoSnap.data();
-        if (data.authRole === "admin" || data.authRole === "viewer") {
-          window.location.href = "/calendar";
-        } else {
-          window.location.href = "/under-review/";
-        }
-      } catch (e) {
-        showLoginError(e.message);
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        handleUser(user);
       }
     });
 
-    // SIGNUP
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      loginError.textContent = "";
+      try {
+        const email = loginEmail.value.trim();
+        const password = loginPassword.value;
+        await signInWithEmailAndPassword(auth, email, password);
+        // onAuthStateChanged will redirect
+      } catch (err) {
+        console.error(err);
+        loginError.textContent = err.message || "Login failed.";
+      }
+    });
+
     signupForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       signupError.textContent = "";
@@ -439,37 +347,35 @@
       const first = signupFirst.value.trim();
       const last = signupLast.value.trim();
       const phone = signupPhone.value.trim();
-      const roleType = signupRole.value;
+      const type = signupType.value;
       const email = signupEmail.value.trim();
-      const pass = signupPassword.value.trim();
+      const password = signupPassword.value;
 
-      if (!first || !last || !phone || !roleType || !email || !pass) {
-        showSignupError("Please fill out all required fields.");
+      if (!first || !last || !phone || !type || !email || !password) {
+        signupError.textContent = "Please fill out all fields.";
         return;
       }
 
       try {
-        const cred = await createUserWithEmailAndPassword(auth, email, pass);
-        const user = cred.user;
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+        const uid = cred.user.uid;
 
-        const infoRef = doc(db, "accountInfo", user.uid);
-        await setDoc(infoRef, {
+        await setDoc(doc(db, "accountInfo", uid), {
+          email,
           firstName: first,
           lastName: last,
-          phone: phone,
-          memberType: roleType,
-          email: email,
-          authRole: "pending",
+          phone,
+          memberType: type,
+          authRole: "pending", // must be changed to "viewer" or "admin" by you
           createdAt: serverTimestamp()
         });
 
-        showSignupSuccess(
-          "Your account request has been submitted. Please allow up to 48 hours for review."
-        );
-
-        window.location.href = "/under-review/";
-      } catch (e) {
-        showSignupError(e.message);
+        signupSuccess.textContent =
+          "Signup submitted. Your account is under review. You may now log in, but troop pages will be blocked until approval.";
+        signupError.textContent = "";
+      } catch (err) {
+        console.error(err);
+        signupError.textContent = err.message || "Signup failed.";
       }
     });
   </script>
