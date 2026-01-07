@@ -660,9 +660,17 @@
   </main>
 
   <script type="module">
-    // /events/camporee-2025 → ["events","camporee-2025"] → eventId = "camporee-2025"
-const pathSegments = window.location.pathname.split("/").filter(Boolean);
-const eventId = pathSegments[pathSegments.length - 1];
+    const adminEditLink = document.getElementById("admin-edit-link");
+const adminEditContainer = document.getElementById("admin-edit-container");
+
+const segments = window.location.pathname.split("/").filter(Boolean);
+// /events/event/<eventId>  → last item = eventId
+const eventId = segments[segments.length - 1];
+
+if (adminEditLink && eventId) {
+  adminEditLink.href = `/events-edit?id=${encodeURIComponent(eventId)}`;
+  adminEditContainer.style.display = "block"; // show button for admins
+}
 
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import {
