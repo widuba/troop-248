@@ -16,9 +16,7 @@
       --radius-pill: 999px;
       --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
     }
-
     * { box-sizing: border-box; }
-
     body {
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -27,7 +25,6 @@
       color: var(--text-main);
       min-height: 100vh;
     }
-
     header {
       background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
       color: var(--white);
@@ -39,7 +36,6 @@
       top: 0;
       z-index: 10;
     }
-
     header h2 {
       margin: 0;
       font-size: 19px;
@@ -49,12 +45,10 @@
       align-items: center;
       gap: 8px;
     }
-
     header h2::before {
       content: "★";
       font-size: 18px;
     }
-
     .troop-home-link {
       text-decoration: none;
       color: inherit;
@@ -65,17 +59,14 @@
       opacity: 0.9;
       text-decoration: underline;
     }
-
     nav {
       display: flex;
       gap: 12px;
       font-size: 13px;
       text-transform: uppercase;
     }
-
     nav a {
-      color: #1f4e79;
-      font-weight: bold;
+      color: var(--white);
       text-decoration: none;
       padding: 6px 10px;
       border-radius: var(--radius-pill);
@@ -83,19 +74,16 @@
       backdrop-filter: blur(4px);
       opacity: 0.9;
     }
-
     nav a:hover {
       opacity: 1;
       background: rgba(255, 255, 255, 0.12);
     }
-
     #auth-bar {
       display: flex;
       gap: 10px;
       align-items: center;
       font-size: 13px;
     }
-
     #logout-btn {
       padding: 5px 12px;
       font-size: 13px;
@@ -105,22 +93,19 @@
       color: var(--white);
       cursor: pointer;
     }
-
     #logout-btn:hover {
       background: rgba(255, 255, 255, 0.2);
     }
-
     main {
       padding: 24px 16px 40px;
-      max-width: 960px;
+      max-width: 900px;
       margin: 0 auto;
     }
-
     .welcome-card {
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(255, 255, 255, 0.97);
       border-radius: var(--radius-lg);
-      padding: 18px 18px 6px;
-      margin-bottom: 18px;
+      padding: 18px 18px 10px;
+      margin-bottom: 20px;
       box-shadow: var(--shadow-soft);
       display: flex;
       align-items: center;
@@ -128,18 +113,15 @@
       gap: 16px;
       border: 1px solid rgba(148, 163, 184, 0.4);
     }
-
     .welcome-card h3 {
       margin: 0 0 4px;
       font-size: 18px;
     }
-
     .welcome-card p {
       margin: 0;
       font-size: 14px;
       color: var(--text-muted);
     }
-
     .badge {
       font-size: 11px;
       padding: 4px 8px;
@@ -149,22 +131,19 @@
       text-transform: uppercase;
       letter-spacing: 0.07em;
     }
-
     .badge.admin {
       background: rgba(240, 180, 41, 0.16);
       color: #92400e;
       border: 1px solid rgba(245, 158, 11, 0.6);
     }
-
     section {
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(255, 255, 255, 0.97);
       border-radius: var(--radius-lg);
-      padding: 18px 18px 12px;
+      padding: 18px 18px 14px;
       margin-bottom: 18px;
       box-shadow: var(--shadow-soft);
       border: 1px solid rgba(148, 163, 184, 0.4);
     }
-
     section h2 {
       margin-top: 0;
       font-size: 18px;
@@ -172,15 +151,17 @@
       align-items: center;
       gap: 8px;
     }
-
     section h2::before {
       content: "▸";
       font-size: 14px;
       color: var(--blue);
     }
-
     .admin-only { display: none; }
-
+    .small-help {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
     form {
       margin-bottom: 10px;
       padding: 10px 10px 8px;
@@ -188,155 +169,92 @@
       border-radius: 12px;
       border: 1px dashed rgba(148, 163, 184, 0.8);
     }
-
     form h3 {
       margin: 0 0 8px;
       font-size: 15px;
       color: var(--blue);
     }
-
     .field {
       margin-bottom: 8px;
     }
-
     .field label {
       display: block;
       font-size: 12px;
       margin-bottom: 3px;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: .05em;
+      letter-spacing: 0.06em;
     }
-
     .field input,
     .field textarea {
       width: 100%;
-      padding: 6px 8px;
+      padding: 7px 8px;
       border-radius: 10px;
       border: 1px solid #d1d5db;
-      background: #ffffff;
       font-size: 14px;
+      background: #ffffff;
     }
-
     .field textarea {
       resize: vertical;
-      min-height: 80px;
+      min-height: 120px;
     }
-
     .field input:focus,
     .field textarea:focus {
       outline: none;
       border-color: var(--blue);
-      box-shadow: 0 0 0 2px rgba(31,78,121,.1);
+      box-shadow: 0 0 0 2px rgba(31,78,121,.12);
     }
-
     form button {
-      padding: 6px 14px;
-      font-size: 13px;
+      padding: 7px 14px;
       border-radius: var(--radius-pill);
       border: none;
-      cursor: pointer;
-      font-weight: 500;
       background: var(--blue);
-      color: var(--white);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
     }
-
-    form button:hover { opacity: .96; }
+    form button:hover { opacity: 0.96; }
 
     .post-list {
       list-style: none;
       padding-left: 0;
       margin: 0;
-      font-size: 14px;
     }
-
     .post-item {
+      border-bottom: 1px solid rgba(229,231,235,.9);
       padding: 10px 0;
-      border-bottom: 1px solid rgba(229, 231, 235, 0.9);
     }
-
-    .post-list {
-  list-style: none;
-  padding-left: 0;
-  margin: 0;
-}
-
-.post-item {
-  border-bottom: 1px solid rgba(229,231,235,.9);
-  padding: 10px 0;
-}
-
-.post-item:last-child {
-  border-bottom: none;
-}
-
-.post-link {
-  text-decoration: none;
-  color: inherit;
-  display: block;
-}
-
-.post-title {
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.post-meta {
-  font-size: 12px;
-  color: #6b7280;
-  margin-top: 2px;
-}
-
-.post-excerpt {
-  font-size: 14px;
-  margin-top: 4px;
-}
-
     .post-item:last-child {
       border-bottom: none;
     }
-
-    .post-title {
-      font-weight: 600;
-      font-size: 15px;
+    .post-link {
+      text-decoration: none;
+      color: inherit;
+      display: block;
     }
-
+    .post-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
     .post-meta {
       font-size: 12px;
       color: var(--text-muted);
       margin-top: 2px;
-      margin-bottom: 6px;
     }
-
-    .small-btn {
-      font-size: 11px;
-      padding: 2px 8px;
+    .post-excerpt {
+      font-size: 14px;
       margin-top: 4px;
-      border-radius: var(--radius-pill);
-      border: none;
-      cursor: pointer;
-      background: var(--red);
-      color: var(--white);
     }
-
-    .small-btn:hover { opacity: .95; }
-
-    @media (max-width: 640px) {
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-      }
-      nav {
-        width: 100%;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-      }
-      .welcome-card {
-        flex-direction: column;
-        align-items: flex-start;
-        
-      }
+    .empty-text {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    #status {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
     }
   </style>
 </head>
@@ -347,17 +265,15 @@
         <h2>Troop 248</h2>
       </a>
     </div>
-
     <nav>
       <a href="/home">Home</a>
+      <a href="/events">Events</a>
       <a href="/calendar">Calendar</a>
       <a href="/documents">Documents</a>
       <a href="/scoutmaster">Scoutmaster Blog</a>
       <a href="/spl-blog">SPL Blog</a>
       <a href="/useful-links">Useful Links</a>
-      <a href="/events">Events</a>
     </nav>
-
     <div id="auth-bar">
       <div id="auth-info">Signed in as …</div>
       <button id="logout-btn">Log Out</button>
@@ -368,32 +284,38 @@
     <div class="welcome-card">
       <div>
         <h3>Scoutmaster Blog</h3>
-        <p>Messages and reflections from the Scoutmaster to Troop 248.</p>
+        <p>Updates, reflections, and announcements from the Scoutmaster.</p>
       </div>
       <div id="role-badge-container">
         <span class="badge">Viewer</span>
       </div>
     </div>
 
-    <section>
-      <h2>New Post</h2>
-      <form id="post-form" class="admin-only">
-        <h3>Add Scoutmaster Post</h3>
+    <!-- Admin-only create post -->
+    <section class="admin-only">
+      <h2>New Post (Admin)</h2>
+      <form id="new-post-form">
         <div class="field">
-          <label for="post-title">Title</label>
-          <input id="post-title" type="text" required />
+          <label for="post-title-input">Title</label>
+          <input id="post-title-input" type="text" required />
         </div>
         <div class="field">
-          <label for="post-body">Message</label>
-          <textarea id="post-body" required></textarea>
+          <label for="post-body-input">Post Body</label>
+          <textarea id="post-body-input" required></textarea>
         </div>
         <button type="submit">Publish Post</button>
+        <div class="small-help">
+          Posts will appear below in newest-first order and can be opened on their own page.
+        </div>
       </form>
     </section>
 
+    <!-- Posts list -->
     <section>
       <h2>Recent Posts</h2>
-      <ul id="post-list" class="post-list"></ul>
+      <ul id="posts-list" class="post-list"></ul>
+      <div id="posts-empty" class="empty-text">No posts yet.</div>
+      <div id="status"></div>
     </section>
   </main>
 
@@ -410,10 +332,9 @@
       getDoc,
       collection,
       addDoc,
-      deleteDoc,
       onSnapshot,
-      query,
       orderBy,
+      query,
       serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
@@ -434,22 +355,33 @@
     const authInfoEl = document.getElementById("auth-info");
     const logoutBtn = document.getElementById("logout-btn");
     const roleBadgeContainer = document.getElementById("role-badge-container");
+
     const adminOnlyEls = document.getElementsByClassName("admin-only");
 
-    const postForm = document.getElementById("post-form");
-    const postList = document.getElementById("post-list");
-    const postTitleInput = document.getElementById("post-title");
-    const postBodyInput = document.getElementById("post-body");
+    const newPostForm = document.getElementById("new-post-form");
+    const postTitleInput = document.getElementById("post-title-input");
+    const postBodyInput = document.getElementById("post-body-input");
+
+    const postsListEl = document.getElementById("posts-list");
+    const postsEmptyEl = document.getElementById("posts-empty");
+    const statusEl = document.getElementById("status");
 
     let currentUser = null;
     let currentIsAdmin = false;
+    let unsubscribePosts = null;
 
-    function updateAdminUI() {
+    function setStatus(text, color = "#6b7280") {
+      statusEl.textContent = text;
+      statusEl.style.color = color;
+      console.log("SCOUTMASTER STATUS:", text);
+    }
+
+    function showAdminUI() {
       for (let i = 0; i < adminOnlyEls.length; i++) {
         adminOnlyEls[i].style.display = currentIsAdmin ? "block" : "none";
       }
       if (currentUser) {
-        authInfoEl.textContent = `Signed in as ${currentUser.email}`;
+        authInfoEl.textContent = "Signed in as " + (currentUser.email || currentUser.uid);
         roleBadgeContainer.innerHTML = `
           <span class="badge ${currentIsAdmin ? "admin" : ""}">
             ${currentIsAdmin ? "Admin" : "Viewer"}
@@ -462,6 +394,8 @@
         window.location.href = "/";
         return;
       }
+      currentUser = user;
+      authInfoEl.textContent = "Signed in as " + (user.email || user.uid);
 
       const infoRef = doc(db, "accountInfo", user.uid);
       const infoSnap = await getDoc(infoRef);
@@ -471,18 +405,17 @@
         return;
       }
 
-      const data = infoSnap.data();
-      const role = data.authRole;
+      const info = infoSnap.data();
+      const role = info.authRole;
 
       if (role !== "admin" && role !== "viewer") {
         window.location.href = "/under-review/";
         return;
       }
 
-      currentUser = user;
       currentIsAdmin = role === "admin";
-      updateAdminUI();
-      pageSpecificInit();
+      showAdminUI();
+      initPostsListener();
     }
 
     onAuthStateChanged(auth, handleAuth);
@@ -492,88 +425,110 @@
       window.location.href = "/";
     });
 
-    function formatDate(ts) {
-      if (!ts) return "";
-      const d = ts.toDate();
-      return d.toLocaleDateString(undefined, {
-        year: "numeric",
-        month: "short",
-        day: "numeric"
+    function renderPosts(docs) {
+      postsListEl.innerHTML = "";
+      if (docs.length === 0) {
+        postsEmptyEl.style.display = "block";
+        return;
+      }
+      postsEmptyEl.style.display = "none";
+
+      docs.forEach((snap) => {
+        const data = snap.data();
+        const li = document.createElement("li");
+        li.className = "post-item";
+
+        const id = snap.id;
+        const title = data.title || "Untitled Post";
+        const body = data.body || "";
+        const author = data.authorName || "Unknown author";
+        const createdAt = data.createdAt
+          ? data.createdAt.toDate().toLocaleString()
+          : "";
+
+        const preview = body.length > 150 ? body.slice(0, 150) + "..." : body;
+
+        li.innerHTML = `
+          <a href="/scoutmaster/post/${encodeURIComponent(id)}" class="post-link">
+            <div class="post-title">${title}</div>
+            <div class="post-meta">
+              By ${author}${createdAt ? " • " + createdAt : ""}
+            </div>
+            <div class="post-excerpt">${preview}</div>
+          </a>
+        `;
+
+        postsListEl.appendChild(li);
       });
     }
 
-    function renderPosts(docs) {
-      postList.innerHTML = "";
-      if (docs.length === 0) {
-        postList.innerHTML = '<li class="post-item">No posts yet.</li>';
-        return;
+    function initPostsListener() {
+      if (unsubscribePosts) {
+        unsubscribePosts();
       }
+      const qPosts = query(
+        collection(db, "scoutmasterPosts"),  // CHANGE NAME HERE IF NEEDED
+        orderBy("createdAt", "desc")
+      );
+      unsubscribePosts = onSnapshot(
+        qPosts,
+        (snapshot) => {
+          renderPosts(snapshot.docs);
+          setStatus("Posts loaded.");
+        },
+        (error) => {
+          console.error("Error listening to posts:", error);
+          setStatus("Error loading posts: " + error.message, "#b91c1c");
+        }
+      );
+    }
 
-      docs.forEach((docSnap) => {
-        const data = docSnap.data();
-        const listEl = document.getElementById("scoutmaster-posts"); // <ul> or <div> where you list posts
-listEl.innerHTML = "";
+    if (newPostForm) {
+      newPostForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (!currentIsAdmin) {
+          alert("Only admins can create posts.");
+          return;
+        }
+        const title = postTitleInput.value.trim();
+        const body = postBodyInput.value.trim();
+        if (!title || !body) {
+          alert("Please fill in both title and body.");
+          return;
+        }
 
-snapshot.forEach((docSnap) => {
-  const data = docSnap.data();
-  const li = document.createElement("li");
-  li.className = "post-item";
-
-  const id = docSnap.id;
-  const title = data.title || "Untitled Post";
-  const body = data.body || "";
-  const author = data.authorName || "Unknown author";
-  const createdAt = data.createdAt
-    ? data.createdAt.toDate().toLocaleString()
-    : "";
-
-  // First 150 chars + ...
-  const preview =
-    body.length > 150 ? body.slice(0, 150) + "..." : body;
-
-  li.innerHTML = `
-    <a href="/scoutmaster/post/${encodeURIComponent(id)}" class="post-link">
-      <div class="post-title">${title}</div>
-      <div class="post-meta">
-        By ${author}${createdAt ? " • " + createdAt : ""}
-      </div>
-      <div class="post-excerpt">${preview}</div>
-    </a>
-  `;
-
-  listEl.appendChild(li);
-});
-        
-    function pageSpecificInit() {
-      if (currentIsAdmin) {
-        postForm.addEventListener("submit", async (e) => {
-          e.preventDefault();
-          const title = postTitleInput.value.trim();
-          const body = postBodyInput.value.trim();
-
-          if (!title || !body) {
-            alert("Please fill out title and message.");
-            return;
+        try {
+          setStatus("Publishing post...");
+          // Try to grab author name from accountInfo (fallback to email)
+          let authorName = currentUser.email || currentUser.uid;
+          try {
+            const infoRef = doc(db, "accountInfo", currentUser.uid);
+            const infoSnap = await getDoc(infoRef);
+            if (infoSnap.exists()) {
+              const info = infoSnap.data();
+              if (info.firstName || info.lastName) {
+                authorName = `${info.firstName || ""} ${info.lastName || ""}`.trim() || authorName;
+              }
+            }
+          } catch (e2) {
+            console.warn("Could not resolve authorName from accountInfo:", e2);
           }
 
           await addDoc(collection(db, "scoutmasterPosts"), {
             title,
             body,
+            authorName,
+            authorUid: currentUser.uid,
             createdAt: serverTimestamp()
           });
 
           postTitleInput.value = "";
           postBodyInput.value = "";
-        });
-      }
-
-      const q = query(
-        collection(db, "scoutmasterPosts"),
-        orderBy("createdAt", "desc")
-      );
-
-      onSnapshot(q, (snapshot) => {
-        renderPosts(snapshot.docs);
+          setStatus("Post published.", "#166534");
+        } catch (err) {
+          console.error("Error publishing post:", err);
+          setStatus("Error publishing post: " + err.message, "#b91c1c");
+        }
       });
     }
   </script>
