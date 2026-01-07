@@ -449,7 +449,7 @@
           ? data.createdAt.toDate().toLocaleString()
           : "";
 
-        const preview = body.length > 150 ? body.slice(0, 150) + "..." : body;
+        const preview = body.length > 115 ? body.slice(0, 115) + "..." : body;
 
         li.innerHTML = `
   <a href="/scoutmaster/post?id=${encodeURIComponent(id)}" class="post-link">
