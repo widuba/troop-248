@@ -470,20 +470,6 @@
       .event-title-row {
         flex-direction: column;
         align-items: flex-start;
-
-        .event-map-container {
-  margin-top: 8px;
-  overflow: hidden;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-}
-
-#event-map {
-  width: 100%;
-  height: 250px;
-  border: 0;
-  border-radius: 12px;
-}
       }
     }
   </style>
@@ -555,17 +541,6 @@
         No signup link has been added for this event yet.
       </div>
     </section>
-
-    <section id="map-section">
-  <h2>Location Map</h2>
-  <div class="event-map-container">
-    <iframe
-      id="event-map"
-      loading="lazy"
-      referrerpolicy="no-referrer-when-downgrade">
-    </iframe>
-  </div>
-</section>
 
     <!-- RSVP Section -->
     <section id="rsvp-section">
@@ -769,10 +744,6 @@
     const rsvpAdminBodyEl = document.getElementById("rsvp-admin-body");
     const rsvpAdminEmptyEl = document.getElementById("rsvp-admin-empty");
 
-    // Map
-    const mapSectionEl = document.getElementById("map-section");
-    const mapFrame = document.getElementById("event-map");
-
     let currentUser = null;
     let currentIsAdmin = false;
     let eventSlug = null;
@@ -873,22 +844,6 @@ function formatDateRange(ev) {
       }
 
       eventSummaryEl.textContent = data.summary || "";
-
-      // Assuming you already did:
-const location = data.location || "";
-
-// existing display:
-eventLocationEl.textContent = location ? "Location: " + location : "";
-
-// NEW: map behavior
-if (location && mapFrame) {
-  const q = encodeURIComponent(location);
-  mapFrame.src = `https://www.google.com/maps?q=${q}&output=embed`;
-  if (mapSectionEl) mapSectionEl.style.display = "block";
-} else {
-  // no location → hide map section
-  if (mapSectionEl) mapSectionEl.style.display = "none";
-}
     }
 
     async function handleAuth(user) {
