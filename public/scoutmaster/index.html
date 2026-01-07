@@ -198,13 +198,6 @@
       resize: vertical;
       min-height: 120px;
     }
-    .post-body {
-  font-size: 15px;
-  line-height: 1.6;
-  white-space: pre-wrap;      /* keep your manual line breaks */
-  word-wrap: break-word;      /* older name, still useful */
-  overflow-wrap: break-word;  /* modern name */
-}
     .field input:focus,
     .field textarea:focus {
       outline: none;
@@ -250,9 +243,12 @@
       margin-top: 2px;
     }
     .post-excerpt {
-      font-size: 14px;
-      margin-top: 4px;
-    }
+  font-size: 14px;
+  margin-top: 4px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
     .empty-text {
       font-size: 14px;
       color: var(--text-muted);
