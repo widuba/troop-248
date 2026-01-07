@@ -16,7 +16,9 @@
       --radius-pill: 999px;
       --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
     }
+
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -25,6 +27,7 @@
       color: var(--text-main);
       min-height: 100vh;
     }
+
     header {
       background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
       color: var(--white);
@@ -36,6 +39,7 @@
       top: 0;
       z-index: 10;
     }
+
     header h2 {
       margin: 0;
       font-size: 19px;
@@ -45,10 +49,12 @@
       align-items: center;
       gap: 8px;
     }
+
     header h2::before {
       content: "★";
       font-size: 18px;
     }
+
     .troop-home-link {
       text-decoration: none;
       color: inherit;
@@ -59,14 +65,17 @@
       opacity: 0.9;
       text-decoration: underline;
     }
+
     nav {
       display: flex;
       gap: 12px;
       font-size: 13px;
       text-transform: uppercase;
     }
+
     nav a {
-      color: var(--white);
+      color: #1f4e79;
+      font-weight: bold;
       text-decoration: none;
       padding: 6px 10px;
       border-radius: var(--radius-pill);
@@ -74,16 +83,19 @@
       backdrop-filter: blur(4px);
       opacity: 0.9;
     }
+
     nav a:hover {
       opacity: 1;
       background: rgba(255, 255, 255, 0.12);
     }
+
     #auth-bar {
       display: flex;
       gap: 10px;
       align-items: center;
       font-size: 13px;
     }
+
     #logout-btn {
       padding: 5px 12px;
       font-size: 13px;
@@ -93,28 +105,76 @@
       color: var(--white);
       cursor: pointer;
     }
+
     #logout-btn:hover {
       background: rgba(255, 255, 255, 0.2);
     }
+
     main {
       padding: 24px 16px 40px;
       max-width: 960px;
       margin: 0 auto;
     }
-    .card {
-      background: rgba(255, 255, 255, 0.97);
+
+    .breadcrumb {
+      font-size: 13px;
+      margin-bottom: 8px;
+      color: var(--text-muted);
+    }
+
+    .breadcrumb a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+
+    .event-header-card {
+      background: rgba(255, 255, 255, 0.95);
       border-radius: var(--radius-lg);
-      padding: 18px 18px 14px;
+      padding: 18px 18px 12px;
       margin-bottom: 20px;
       box-shadow: var(--shadow-soft);
-      border: 1px solid rgba(148, 163, 184, 0.5);
+      border: 1px solid rgba(148, 163, 184, 0.4);
     }
-    .card-header-row {
+
+    .event-title-row {
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: baseline;
       gap: 10px;
+      margin-bottom: 6px;
     }
+
+    #event-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    #event-date-range {
+      font-size: 13px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    #event-location {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    #event-summary {
+      font-size: 14px;
+      color: var(--text-main);
+      margin: 0;
+    }
+
+    #role-badge-container {
+      margin-top: 8px;
+    }
+
     .badge {
       font-size: 11px;
       padding: 4px 8px;
@@ -124,28 +184,22 @@
       text-transform: uppercase;
       letter-spacing: 0.07em;
     }
+
     .badge.admin {
       background: rgba(240, 180, 41, 0.16);
       color: #92400e;
       border: 1px solid rgba(245, 158, 11, 0.6);
     }
-    h1 {
-      margin: 0 0 4px;
-      font-size: 22px;
-    }
-    .subtitle {
-      margin: 0;
-      font-size: 14px;
-      color: var(--text-muted);
-    }
+
     section {
-      background: rgba(255, 255, 255, 0.97);
+      background: rgba(255, 255, 255, 0.95);
       border-radius: var(--radius-lg);
       padding: 18px 18px 14px;
       margin-bottom: 18px;
       box-shadow: var(--shadow-soft);
       border: 1px solid rgba(148, 163, 184, 0.4);
     }
+
     section h2 {
       margin-top: 0;
       font-size: 18px;
@@ -153,62 +207,270 @@
       align-items: center;
       gap: 8px;
     }
+
     section h2::before {
       content: "▸";
       font-size: 14px;
       color: var(--blue);
     }
-    .event-meta {
-      font-size: 14px;
+
+    .small-help {
+      font-size: 12px;
       color: var(--text-muted);
-      margin-top: 4px;
+      margin-top: 6px;
     }
-    .event-meta span {
-      display: inline-block;
-      margin-right: 12px;
-    }
-    .event-description {
-      margin-top: 8px;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-    .event-map-container {
-      margin-top: 8px;
-      overflow: hidden;
-      border-radius: 12px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-    }
-    iframe#event-map {
-      width: 100%;
-      height: 250px;
-      border: 0;
-      border-radius: 12px;
-    }
-    .small-btn {
-      font-size: 13px;
+
+    .btn-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       padding: 6px 12px;
+      font-size: 13px;
       border-radius: var(--radius-pill);
       border: none;
       cursor: pointer;
-      background: #b22222;
-      color: #ffffff;
       text-decoration: none;
-      display: inline-block;
+      font-weight: 500;
     }
-    .small-btn:hover { opacity: 0.96; }
-    .admin-only {
-      display: none;
+
+    .btn-primary {
+      background: var(--blue);
+      color: var(--white);
     }
-    .top-actions {
-      margin-top: 8px;
+
+    .btn-danger {
+      background: var(--red);
+      color: var(--white);
+    }
+
+    .btn-outlined {
+      background: rgba(31,78,121,.08);
+      color: var(--blue);
+      border: 1px solid rgba(148,163,184,.7);
+    }
+
+    .btn-chip:hover {
+      opacity: .96;
+    }
+
+    .btn-row {
       display: flex;
-      gap: 8px;
       flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 6px;
     }
-    #status {
+
+    .admin-only { display: none; }
+
+    form {
+      margin-bottom: 10px;
+      padding: 10px 10px 8px;
+      background: #f9fafb;
+      border-radius: 12px;
+      border: 1px dashed rgba(148, 163, 184, 0.8);
+    }
+
+    form h3 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      color: var(--blue);
+    }
+
+    .field {
+      margin-bottom: 8px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 3px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      background: #ffffff;
+      font-size: 14px;
+    }
+
+    .field textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 2px rgba(31,78,121,.1);
+    }
+
+    form button {
+      padding: 6px 14px;
+      font-size: 13px;
+      border-radius: var(--radius-pill);
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      background: var(--blue);
+      color: var(--white);
+    }
+
+    form button:hover { opacity: .96; }
+
+    /* Lists */
+
+    .item-list {
+      list-style: none;
+      padding-left: 0;
+      margin: 4px 0 0;
+      font-size: 14px;
+    }
+
+    .item {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(229,231,235,.9);
+    }
+
+    .item:last-child {
+      border-bottom: none;
+    }
+
+    .item-title {
+      font-weight: 600;
+    }
+
+    .item-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .item-link {
+      color: var(--blue);
+      text-decoration: none;
+    }
+    .item-link:hover {
+      text-decoration: underline;
+    }
+
+    .small-btn {
+      font-size: 11px;
+      padding: 2px 8px;
+      margin-top: 4px;
+      border-radius: var(--radius-pill);
+      border: none;
+      cursor: pointer;
+      background: var(--red);
+      color: var(--white);
+    }
+
+    .small-btn:hover { opacity: .95; }
+
+    .empty-text {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* RSVP Section */
+
+    .rsvp-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .rsvp-pill {
+      padding: 5px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148,163,184,.8);
+      font-size: 13px;
+      cursor: pointer;
+      background: #fff;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .rsvp-pill input[type="radio"] {
+      margin: 0;
+    }
+
+    .rsvp-pill.selected {
+      background: rgba(31,78,121,.08);
+      border-color: var(--blue);
+    }
+
+    .rsvp-status-text {
       font-size: 13px;
       color: var(--text-muted);
       margin-top: 4px;
+    }
+
+    /* Admin RSVP table */
+
+    .rsvp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .rsvp-table th,
+    .rsvp-table td {
+      padding: 6px 6px;
+      border-bottom: 1px solid rgba(229,231,235,.9);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .rsvp-table th {
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--text-muted);
+    }
+
+    .rsvp-badges {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+
+    .rsvp-count-badge {
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(148,163,184,.15);
+      color: var(--text-main);
+    }
+
+    @media (max-width: 640px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      nav {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+      .event-title-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
   </style>
 </head>
@@ -219,15 +481,17 @@
         <h2>Troop 248</h2>
       </a>
     </div>
+
     <nav>
       <a href="/home">Home</a>
-      <a href="/events">Events</a>
       <a href="/calendar">Calendar</a>
       <a href="/documents">Documents</a>
       <a href="/scoutmaster">Scoutmaster Blog</a>
       <a href="/spl-blog">SPL Blog</a>
       <a href="/useful-links">Useful Links</a>
+      <a href="/events">Events</a>
     </nav>
+
     <div id="auth-bar">
       <div id="auth-info">Signed in as …</div>
       <button id="logout-btn">Log Out</button>
@@ -235,45 +499,163 @@
   </header>
 
   <main>
-    <div class="card">
-      <div class="card-header-row">
-        <div>
-          <h1 id="event-title">Event</h1>
-          <p id="event-subtitle" class="subtitle"></p>
-        </div>
-        <div id="role-badge-container">
-          <span class="badge">Viewer</span>
-        </div>
-      </div>
-      <div class="top-actions">
-        <button id="back-to-events" class="small-btn">Back to Events</button>
-
-        <!-- Admin-only edit button -->
-        <div id="admin-edit-container" class="admin-only">
-          <a id="admin-edit-link" href="#" class="small-btn">Edit This Event</a>
-        </div>
-      </div>
-      <p id="status"></p>
+    <div class="breadcrumb">
+      <a href="/events">← Back to Events</a>
     </div>
 
-    <section>
-      <h2>Details</h2>
-      <div class="event-meta">
-        <span id="event-dates"></span>
-        <span id="event-location"></span>
+    <div class="event-header-card">
+      <div class="event-title-row">
+        <h1 id="event-title">Loading event…</h1>
+        <div id="event-date-range"></div>
       </div>
-      <div id="event-description" class="event-description"></div>
+      <div id="event-location"></div>
+      <p id="event-summary"></p>
+      <div id="role-badge-container">
+        <span class="badge">Viewer</span>
+      </div>
+      <div id="event-not-found" class="small-help" style="color:#b91c1c; display:none;">
+        Event not found. Please check the link with your troop leadership.
+      </div>
+    </div>
+
+    <!-- Details + Maps + Signup -->
+    <!-- Admin-only edit button, hidden by default -->
+<div id="admin-edit-container" class="admin-only" style="display:none; margin-top:12px;">
+  <a id="admin-edit-link" class="small-btn" href="#">Edit This Event</a>
+</div>
+    <section id="details-section">
+      <h2>Event Details</h2>
+      <p class="small-help">
+        Location and quick access tools for this outing.
+      </p>
+      <div class="btn-row">
+        <a id="maps-btn" href="#" target="_blank" rel="noopener noreferrer"
+           class="btn-chip btn-outlined" style="display:none;">
+          Open in Google Maps
+        </a>
+        <a id="signup-btn" href="#" target="_blank" rel="noopener noreferrer"
+           class="btn-chip btn-primary" style="display:none;">
+          Event Signup
+        </a>
+      </div>
+      <div id="signup-missing" class="small-help" style="display:none;">
+        No signup link has been added for this event yet.
+      </div>
     </section>
 
-    <section id="map-section">
-      <h2>Location Map</h2>
-      <div class="event-map-container">
-        <iframe
-          id="event-map"
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
-      </div>
+    <!-- RSVP Section -->
+    <section id="rsvp-section">
+      <h2>RSVP</h2>
+      <form id="rsvp-form">
+        <h3>Your Response</h3>
+        <div class="rsvp-options">
+          <label class="rsvp-pill" data-status="going">
+            <input type="radio" name="rsvp-status" value="going" />
+            Going
+          </label>
+          <label class="rsvp-pill" data-status="maybe">
+            <input type="radio" name="rsvp-status" value="maybe" />
+            Maybe
+          </label>
+          <label class="rsvp-pill" data-status="not_going">
+            <input type="radio" name="rsvp-status" value="not_going" />
+            Not Going
+          </label>
+        </div>
+        <div class="field">
+          <label for="rsvp-notes">Notes (optional)</label>
+          <textarea id="rsvp-notes"
+            placeholder="Example: We are unable to ride with the group, we will meet you guys there."></textarea>
+        </div>
+        <button type="submit">Save RSVP</button>
+        <div id="rsvp-error" class="small-help" style="color:#b91c1c;"></div>
+        <div id="rsvp-success" class="small-help" style="color:#166534;"></div>
+        <div id="rsvp-status-text" class="rsvp-status-text"></div>
+      </form>
+    </section>
+
+    <!-- Event Links -->
+    <section>
+      <h2>Event Links</h2>
+      <form id="link-form" class="admin-only">
+        <h3>Add Link</h3>
+        <div class="field">
+          <label for="link-title">Title</label>
+          <input id="link-title" type="text" required />
+        </div>
+        <div class="field">
+          <label for="link-url">URL</label>
+          <input id="link-url" type="url" placeholder="https://..." required />
+        </div>
+        <div class="field">
+          <label for="link-desc">Description</label>
+          <textarea id="link-desc" placeholder="Short description of this link"></textarea>
+        </div>
+        <button type="submit">Add Link</button>
+      </form>
+      <ul id="links-list" class="item-list"></ul>
+      <div id="links-empty" class="empty-text">No event-specific links yet.</div>
+    </section>
+
+    <!-- Event Documents -->
+    <section>
+      <h2>Event Documents</h2>
+      <form id="doc-form" class="admin-only">
+        <h3>Add Document</h3>
+        <div class="field">
+          <label for="doc-title">Title</label>
+          <input id="doc-title" type="text" required />
+        </div>
+        <div class="field">
+          <label for="doc-url">Document URL</label>
+          <input id="doc-url" type="url" placeholder="https://..." required />
+        </div>
+        <div class="field">
+          <label for="doc-desc">Description</label>
+          <textarea id="doc-desc" placeholder="Short description of this document"></textarea>
+        </div>
+        <button type="submit">Add Document</button>
+      </form>
+      <ul id="docs-list" class="item-list"></ul>
+      <div id="docs-empty" class="empty-text">No event-specific documents yet.</div>
+    </section>
+
+    <!-- Event Updates / Blog -->
+    <section>
+      <h2>Event Updates</h2>
+      <form id="update-form" class="admin-only">
+        <h3>Post Update</h3>
+        <div class="field">
+          <label for="update-title">Title (optional)</label>
+          <input id="update-title" type="text" placeholder="Schedule change, packing reminder, etc." />
+        </div>
+        <div class="field">
+          <label for="update-body">Message</label>
+          <textarea id="update-body" required></textarea>
+        </div>
+        <button type="submit">Post Update</button>
+      </form>
+      <ul id="updates-list" class="item-list"></ul>
+      <div id="updates-empty" class="empty-text">No updates posted yet.</div>
+    </section>
+
+    <!-- Admin RSVP summary -->
+    <section class="admin-only">
+      <h2>RSVP Summary</h2>
+      <div id="rsvp-admin-summary" class="rsvp-badges"></div>
+      <table class="rsvp-table" id="rsvp-admin-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Notes</th>
+            <th>Updated</th>
+          </tr>
+        </thead>
+        <tbody id="rsvp-admin-body"></tbody>
+      </table>
+      <div id="rsvp-admin-empty" class="empty-text">No RSVPs recorded yet.</div>
     </section>
   </main>
 
@@ -287,7 +669,15 @@
     import {
       getFirestore,
       doc,
-      getDoc
+      getDoc,
+      collection,
+      addDoc,
+      deleteDoc,
+      onSnapshot,
+      query,
+      orderBy,
+      setDoc,
+      serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -304,52 +694,178 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // DOM elements
     const authInfoEl = document.getElementById("auth-info");
     const logoutBtn = document.getElementById("logout-btn");
     const roleBadgeContainer = document.getElementById("role-badge-container");
-
-    const backToEventsBtn = document.getElementById("back-to-events");
-    const statusEl = document.getElementById("status");
+    const adminOnlyEls = document.getElementsByClassName("admin-only");
 
     const eventTitleEl = document.getElementById("event-title");
-    const eventSubtitleEl = document.getElementById("event-subtitle");
-    const eventDatesEl = document.getElementById("event-dates");
+    const eventDateRangeEl = document.getElementById("event-date-range");
     const eventLocationEl = document.getElementById("event-location");
-    const eventDescriptionEl = document.getElementById("event-description");
-    const mapSectionEl = document.getElementById("map-section");
-    const mapFrame = document.getElementById("event-map");
+    const eventSummaryEl = document.getElementById("event-summary");
+    const eventNotFoundEl = document.getElementById("event-not-found");
 
-    const adminEditContainer = document.getElementById("admin-edit-container");
-    const adminEditLink = document.getElementById("admin-edit-link");
+    const mapsBtn = document.getElementById("maps-btn");
+    const signupBtn = document.getElementById("signup-btn");
+    const signupMissingEl = document.getElementById("signup-missing");
 
-    function setStatus(text, color = "#6b7280") {
-      statusEl.textContent = text;
-      statusEl.style.color = color;
-      console.log("EVENT STATUS:", text);
-    }
+    // Links
+    const linkForm = document.getElementById("link-form");
+    const linkTitleInput = document.getElementById("link-title");
+    const linkUrlInput = document.getElementById("link-url");
+    const linkDescInput = document.getElementById("link-desc");
+    const linksList = document.getElementById("links-list");
+    const linksEmptyEl = document.getElementById("links-empty");
 
-    // Get eventId from URL path, e.g. /events/test-event-1
-    const pathSegments = window.location.pathname.split("/").filter(Boolean);
-    // Expecting ["events", "<eventId>"]
-    const eventId = pathSegments[pathSegments.length - 1] || null;
+    // Docs
+    const docForm = document.getElementById("doc-form");
+    const docTitleInput = document.getElementById("doc-title");
+    const docUrlInput = document.getElementById("doc-url");
+    const docDescInput = document.getElementById("doc-desc");
+    const docsList = document.getElementById("docs-list");
+    const docsEmptyEl = document.getElementById("docs-empty");
 
-    if (!eventId) {
-      setStatus("No event ID in URL.", "#b91c1c");
-    }
+    // Updates
+    const updateForm = document.getElementById("update-form");
+    const updateTitleInput = document.getElementById("update-title");
+    const updateBodyInput = document.getElementById("update-body");
+    const updatesList = document.getElementById("updates-list");
+    const updatesEmptyEl = document.getElementById("updates-empty");
+
+    // RSVP (user)
+    const rsvpForm = document.getElementById("rsvp-form");
+    const rsvpNotesInput = document.getElementById("rsvp-notes");
+    const rsvpErrorEl = document.getElementById("rsvp-error");
+    const rsvpSuccessEl = document.getElementById("rsvp-success");
+    const rsvpStatusTextEl = document.getElementById("rsvp-status-text");
+    const rsvpPills = Array.from(document.querySelectorAll(".rsvp-pill"));
+
+    // RSVP (admin)
+    const rsvpAdminSummaryEl = document.getElementById("rsvp-admin-summary");
+    const rsvpAdminBodyEl = document.getElementById("rsvp-admin-body");
+    const rsvpAdminEmptyEl = document.getElementById("rsvp-admin-empty");
 
     let currentUser = null;
     let currentIsAdmin = false;
+    let eventSlug = null;
+    let eventLocation = "";
+    let eventSignupUrl = "";
 
-    onAuthStateChanged(auth, async (user) => {
+    function parseSlugFromPath() {
+      const parts = window.location.pathname.split("/").filter(Boolean);
+      // Expect something like ["events", "fall-camporee-2026"]
+      if (parts.length >= 2 && parts[0] === "events") {
+        return parts[1];
+      }
+      return null;
+    }
+
+    function updateAdminUI() {
+      for (let i = 0; i < adminOnlyEls.length; i++) {
+        adminOnlyEls[i].style.display = currentIsAdmin ? "block" : "none";
+      }
+      if (currentUser) {
+        authInfoEl.textContent = `Signed in as ${currentUser.email}`;
+        roleBadgeContainer.innerHTML = `
+          <span class="badge ${currentIsAdmin ? "admin" : ""}">
+            ${currentIsAdmin ? "Admin" : "Viewer"}
+          </span>`;
+      }
+    }
+
+    const adminEditContainer = document.getElementById("admin-edit-container");
+const adminEditLink = document.getElementById("admin-edit-link");
+
+// eventId: however you're already getting it; for example:
+const params = new URLSearchParams(window.location.search);
+const eventId = params.get("id"); // keep this consistent across pages
+
+// After you set currentIsAdmin = (data.authRole === "admin")
+if (currentIsAdmin && adminEditContainer && adminEditLink && eventId) {
+  adminEditContainer.style.display = "block";
+  adminEditLink.href = `/events/edit?id=${encodeURIComponent(eventId)}`;
+}
+
+    function formatDateDisplay(dateStr, timeStr) {
+  if (!dateStr) return "";
+
+  const date = new Date(dateStr + (timeStr ? "T" + timeStr : "T00:00"));
+  return date.toLocaleString("en-US", {
+    month: "short",   // Jan
+    day: "numeric",   // 5
+    year: "numeric"   // 2026
+  }) + (timeStr ? ` • ${timeStr}` : "");
+}
+
+function formatDateRange(ev) {
+  const start = formatDateDisplay(ev.startDate, ev.startTime);
+  const end = formatDateDisplay(ev.endDate, ev.endTime);
+
+  // Same day
+  if (ev.startDate === ev.endDate || !ev.endDate) {
+    return start;
+  }
+
+  // Multi-day
+  return `${start} → ${end}`;
+}
+
+    async function loadEvent() {
+      eventSlug = parseSlugFromPath();
+
+      if (!eventSlug) {
+        eventTitleEl.textContent = "Event";
+        eventNotFoundEl.style.display = "block";
+        return;
+      }
+
+      const eventRef = doc(db, "events", eventSlug);
+      const snap = await getDoc(eventRef);
+
+      if (!snap.exists()) {
+        eventTitleEl.textContent = "Event not found";
+        eventDateRangeEl.textContent = "";
+        eventLocationEl.textContent = "";
+        eventSummaryEl.textContent = "";
+        eventNotFoundEl.style.display = "block";
+        return;
+      }
+
+      const data = snap.data();
+      eventTitleEl.textContent = data.title || "Event";
+      eventDateRangeEl.textContent = formatDateRange(data);
+      eventLocation = data.location || "";
+      eventSignupUrl = data.signupUrl || "";
+
+      if (eventLocation) {
+        eventLocationEl.textContent = "Location: " + eventLocation;
+        const mapsUrl = "https://www.google.com/maps/search/?api=1&query=" +
+          encodeURIComponent(eventLocation);
+        mapsBtn.href = mapsUrl;
+        mapsBtn.style.display = "inline-flex";
+      } else {
+        eventLocationEl.textContent = "";
+        mapsBtn.style.display = "none";
+      }
+
+      if (eventSignupUrl) {
+        signupBtn.href = eventSignupUrl;
+        signupBtn.style.display = "inline-flex";
+        signupMissingEl.style.display = "none";
+      } else {
+        signupBtn.style.display = "none";
+        signupMissingEl.style.display = "block";
+      }
+
+      eventSummaryEl.textContent = data.summary || "";
+    }
+
+    async function handleAuth(user) {
       if (!user) {
         window.location.href = "/";
         return;
       }
-      currentUser = user;
-      authInfoEl.textContent = "Signed in as " + (user.email || user.uid);
 
-      // Load role from accountInfo
       const infoRef = doc(db, "accountInfo", user.uid);
       const infoSnap = await getDoc(infoRef);
 
@@ -358,102 +874,403 @@
         return;
       }
 
-      const data = infoSnap.data();
-      const role = data.authRole;
+      const info = infoSnap.data();
+      const role = info.authRole;
 
-      if (role === "admin" || role === "viewer") {
-        currentIsAdmin = role === "admin";
-        roleBadgeContainer.innerHTML = `
-          <span class="badge ${currentIsAdmin ? "admin" : ""}">
-            ${currentIsAdmin ? "Admin" : "Viewer"}
-          </span>`;
-        // Only after auth+role, load the event
-        loadEvent();
-      } else {
+      if (role !== "admin" && role !== "viewer") {
         window.location.href = "/under-review/";
         return;
       }
-    });
+
+      currentUser = user;
+      currentIsAdmin = role === "admin";
+      updateAdminUI();
+
+      await loadEvent();
+      if (!eventSlug) return; // event not found or bad URL
+
+      initSubcollections();
+      initRSVP(info);
+    }
+
+    onAuthStateChanged(auth, handleAuth);
 
     logoutBtn.addEventListener("click", async () => {
       await signOut(auth);
       window.location.href = "/";
     });
 
-    backToEventsBtn.addEventListener("click", () => {
-      window.location.href = "/events";
-    });
+    /* RSVP Helpers */
 
-    async function loadEvent() {
-      if (!eventId) return;
-      try {
-        setStatus("Loading event...");
-        const ref = doc(db, "events", eventId);
-        const snap = await getDoc(ref);
+    function setSelectedRSVPPill(status) {
+      rsvpPills.forEach((pill) => {
+        const pillStatus = pill.getAttribute("data-status");
+        if (pillStatus === status) {
+          pill.classList.add("selected");
+          pill.querySelector("input[type=radio]").checked = true;
+        } else {
+          pill.classList.remove("selected");
+          pill.querySelector("input[type=radio]").checked = false;
+        }
+      });
+    }
 
-        if (!snap.exists()) {
-          setStatus("Event not found.", "#b91c1c");
-          eventTitleEl.textContent = "Event Not Found";
-          if (mapSectionEl) mapSectionEl.style.display = "none";
+    function displayRSVPStatus(status) {
+      let text = "";
+      if (status === "going") text = "You are marked as: Going";
+      else if (status === "maybe") text = "You are marked as: Maybe";
+      else if (status === "not_going") text = "You are marked as: Not Going";
+      else text = "";
+      rsvpStatusTextEl.textContent = text;
+    }
+
+    function initRSVP(accountInfo) {
+      // Click handling for pills
+      rsvpPills.forEach((pill) => {
+        pill.addEventListener("click", () => {
+          const status = pill.getAttribute("data-status");
+          setSelectedRSVPPill(status);
+        });
+      });
+
+      // Load existing RSVP
+      const rsvpRef = doc(db, "events", eventSlug, "rsvps", currentUser.uid);
+      getDoc(rsvpRef).then((snap) => {
+        if (snap.exists()) {
+          const data = snap.data();
+          if (data.status) {
+            setSelectedRSVPPill(data.status);
+            displayRSVPStatus(data.status);
+          }
+          if (data.notes) {
+            rsvpNotesInput.value = data.notes;
+          }
+        }
+      });
+
+      rsvpForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        rsvpErrorEl.textContent = "";
+        rsvpSuccessEl.textContent = "";
+
+        const selected = rsvpPills.find((pill) =>
+          pill.querySelector("input[type=radio]").checked
+        );
+        if (!selected) {
+          rsvpErrorEl.textContent = "Please choose Going, Maybe, or Not Going.";
           return;
         }
 
+        const status = selected.getAttribute("data-status");
+        const notes = rsvpNotesInput.value.trim();
+        const displayName = `${accountInfo.firstName || ""} ${accountInfo.lastName || ""}`.trim();
+        const memberType = accountInfo.memberType || "";
+
+        try {
+          await setDoc(rsvpRef, {
+            status,
+            notes,
+            uid: currentUser.uid,
+            displayName,
+            memberType,
+            updatedAt: serverTimestamp()
+          }, { merge: true });
+
+          displayRSVPStatus(status);
+          rsvpSuccessEl.textContent = "RSVP saved.";
+        } catch (err) {
+          console.error(err);
+          rsvpErrorEl.textContent = err.message || "Error saving RSVP.";
+        }
+      });
+    }
+
+    /* Event subcollections: links, docs, updates, RSVPs */
+
+    function renderLinks(docs) {
+      linksList.innerHTML = "";
+      if (docs.length === 0) {
+        linksEmptyEl.style.display = "block";
+        return;
+      }
+      linksEmptyEl.style.display = "none";
+
+      docs.forEach((snap) => {
         const data = snap.data();
+        const li = document.createElement("li");
+        li.className = "item";
 
-        const title = data.title || "Untitled Event";
-        const location = data.location || "";
-        const description = data.description || "";
-        const startDate = data.startDate ? data.startDate.toDate?.() || null : null;
-        const endDate = data.endDate ? data.endDate.toDate?.() || null : null;
+        const title = data.title || "Untitled Link";
+        const url = data.url || "#";
+        const desc = data.description || "";
 
-        eventTitleEl.textContent = title;
-        eventSubtitleEl.textContent = location || "";
+        li.innerHTML = `
+          <div class="item-title">${title}</div>
+          <div><a href="${url}" target="_blank" rel="noopener noreferrer" class="item-link">${url}</a></div>
+          <div class="item-meta">${desc}</div>
+        `;
 
-        // Dates text (if you use Firestore Timestamp fields)
-        if (startDate || endDate) {
-          let text = "";
-          const fmt = (d) =>
-            d.toLocaleDateString(undefined, {
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-            });
-          if (startDate && endDate) {
-            text = fmt(startDate) + " – " + fmt(endDate);
-          } else if (startDate) {
-            text = fmt(startDate);
-          } else if (endDate) {
-            text = fmt(endDate);
+        if (currentIsAdmin) {
+          const btn = document.createElement("button");
+          btn.textContent = "Delete";
+          btn.className = "small-btn";
+          btn.onclick = async () => {
+            if (confirm("Delete this link?")) {
+              await deleteDoc(doc(db, "events", eventSlug, "links", snap.id));
+            }
+          };
+          li.appendChild(btn);
+        }
+
+        linksList.appendChild(li);
+      });
+    }
+
+    function renderDocs(docs) {
+      docsList.innerHTML = "";
+      if (docs.length === 0) {
+        docsEmptyEl.style.display = "block";
+        return;
+      }
+      docsEmptyEl.style.display = "none";
+
+      docs.forEach((snap) => {
+        const data = snap.data();
+        const li = document.createElement("li");
+        li.className = "item";
+
+        const title = data.title || "Untitled Document";
+        const url = data.url || "#";
+        const desc = data.description || "";
+
+        li.innerHTML = `
+          <div class="item-title"><a href="${url}" target="_blank" rel="noopener noreferrer" class="item-link">${title}</a></div>
+          <div class="item-meta">${desc}</div>
+        `;
+
+        if (currentIsAdmin) {
+          const btn = document.createElement("button");
+          btn.textContent = "Delete";
+          btn.className = "small-btn";
+          btn.onclick = async () => {
+            if (confirm("Delete this document?")) {
+              await deleteDoc(doc(db, "events", eventSlug, "documents", snap.id));
+            }
+          };
+          li.appendChild(btn);
+        }
+
+        docsList.appendChild(li);
+      });
+    }
+
+    function formatUpdateDate(ts) {
+      if (!ts) return "";
+      const d = ts.toDate();
+      return d.toLocaleString(undefined, {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
+    function renderUpdates(docs) {
+      updatesList.innerHTML = "";
+      if (docs.length === 0) {
+        updatesEmptyEl.style.display = "block";
+        return;
+      }
+      updatesEmptyEl.style.display = "none";
+
+      docs.forEach((snap) => {
+        const data = snap.data();
+        const li = document.createElement("li");
+        li.className = "item";
+
+        const title = data.title || "";
+        const body = data.body || "";
+        const createdAt = data.createdAt;
+
+        let titleHtml = "";
+        if (title) {
+          titleHtml = `<div class="item-title">${title}</div>`;
+        }
+
+        li.innerHTML = `
+          ${titleHtml}
+          <div class="item-meta">${formatUpdateDate(createdAt)}</div>
+          <div>${body.replace(/\n/g, "<br>")}</div>
+        `;
+
+        if (currentIsAdmin) {
+          const btn = document.createElement("button");
+          btn.textContent = "Delete";
+          btn.className = "small-btn";
+          btn.onclick = async () => {
+            if (confirm("Delete this update?")) {
+              await deleteDoc(doc(db, "events", eventSlug, "updates", snap.id));
+            }
+          };
+          li.appendChild(btn);
+        }
+
+        updatesList.appendChild(li);
+      });
+    }
+
+    function renderRSVPAdmin(docs) {
+      rsvpAdminBodyEl.innerHTML = "";
+      if (docs.length === 0) {
+        rsvpAdminEmptyEl.style.display = "block";
+        rsvpAdminSummaryEl.innerHTML = "";
+        return;
+      }
+      rsvpAdminEmptyEl.style.display = "none";
+
+      let going = 0;
+      let maybe = 0;
+      let notGoing = 0;
+
+      docs.forEach((snap) => {
+        const data = snap.data();
+        const status = data.status || "";
+        if (status === "going") going++;
+        else if (status === "maybe") maybe++;
+        else if (status === "not_going") notGoing++;
+
+        const tr = document.createElement("tr");
+
+        const displayName = data.displayName || "(no name)";
+        const memberType = data.memberType || "";
+        const notes = data.notes || "";
+        const updatedAt = data.updatedAt
+          ? data.updatedAt.toDate().toLocaleString()
+          : "";
+
+        let statusLabel = status;
+        if (status === "going") statusLabel = "Going";
+        else if (status === "maybe") statusLabel = "Maybe";
+        else if (status === "not_going") statusLabel = "Not Going";
+
+        tr.innerHTML = `
+          <td>${displayName}</td>
+          <td>${memberType}</td>
+          <td>${statusLabel}</td>
+          <td>${notes}</td>
+          <td>${updatedAt}</td>
+        `;
+
+        rsvpAdminBodyEl.appendChild(tr);
+      });
+
+      rsvpAdminSummaryEl.innerHTML = `
+        <span class="rsvp-count-badge">Going: ${going}</span>
+        <span class="rsvp-count-badge">Maybe: ${maybe}</span>
+        <span class="rsvp-count-badge">Not Going: ${notGoing}</span>
+        <span class="rsvp-count-badge">Total: ${docs.length}</span>
+      `;
+    }
+
+    function initSubcollections() {
+      // Links
+      if (currentIsAdmin) {
+        linkForm.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const title = linkTitleInput.value.trim();
+          const url = linkUrlInput.value.trim();
+          const desc = linkDescInput.value.trim();
+
+          if (!title || !url) {
+            alert("Please fill out title and URL.");
+            return;
           }
-          eventDatesEl.textContent = text;
-        } else {
-          eventDatesEl.textContent = "";
-        }
 
-        eventLocationEl.textContent = location ? "Location: " + location : "";
-        eventDescriptionEl.textContent = description;
+          await addDoc(collection(db, "events", eventSlug, "links"), {
+            title,
+            url,
+            description: desc,
+            createdAt: serverTimestamp()
+          });
 
-        // Map
-        if (location && mapFrame) {
-          const q = encodeURIComponent(location);
-          mapFrame.src = `https://www.google.com/maps?q=${q}&output=embed`;
-          mapSectionEl.style.display = "block";
-        } else if (mapSectionEl) {
-          mapSectionEl.style.display = "none";
-        }
+          linkTitleInput.value = "";
+          linkUrlInput.value = "";
+          linkDescInput.value = "";
+        });
+      }
 
-        // Admin edit button
-        if (currentIsAdmin && adminEditContainer && adminEditLink) {
-          adminEditContainer.style.display = "inline-block";
-          // This points to your separate edit page, using ?id=EVENT_ID
-          adminEditLink.href = `/events-edit?id=${encodeURIComponent(eventId)}`;
-        }
+      onSnapshot(collection(db, "events", eventSlug, "links"), (snapshot) => {
+        renderLinks(snapshot.docs);
+      });
 
-        setStatus("Loaded.");
-      } catch (err) {
-        console.error(err);
-        setStatus("Error loading event: " + err.message, "#b91c1c");
-        if (mapSectionEl) mapSectionEl.style.display = "none";
+      // Documents
+      if (currentIsAdmin) {
+        docForm.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const title = docTitleInput.value.trim();
+          const url = docUrlInput.value.trim();
+          const desc = docDescInput.value.trim();
+
+          if (!title || !url) {
+            alert("Please fill out title and URL.");
+            return;
+          }
+
+          await addDoc(collection(db, "events", eventSlug, "documents"), {
+            title,
+            url,
+            description: desc,
+            createdAt: serverTimestamp()
+          });
+
+          docTitleInput.value = "";
+          docUrlInput.value = "";
+          docDescInput.value = "";
+        });
+      }
+
+      onSnapshot(collection(db, "events", eventSlug, "documents"), (snapshot) => {
+        renderDocs(snapshot.docs);
+      });
+
+      // Updates (ordered newest first)
+      if (currentIsAdmin) {
+        updateForm.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const title = updateTitleInput.value.trim();
+          const body = updateBodyInput.value.trim();
+
+          if (!body) {
+            alert("Please enter a message.");
+            return;
+          }
+
+          await addDoc(collection(db, "events", eventSlug, "updates"), {
+            title,
+            body,
+            createdAt: serverTimestamp(),
+            createdBy: currentUser ? currentUser.uid : null
+          });
+
+          updateTitleInput.value = "";
+          updateBodyInput.value = "";
+        });
+      }
+
+      const updatesQuery = query(
+        collection(db, "events", eventSlug, "updates"),
+        orderBy("createdAt", "desc")
+      );
+      onSnapshot(updatesQuery, (snapshot) => {
+        renderUpdates(snapshot.docs);
+      });
+
+      // Admin RSVP (list + summary)
+      if (currentIsAdmin) {
+        onSnapshot(collection(db, "events", eventSlug, "rsvps"), (snapshot) => {
+          renderRSVPAdmin(snapshot.docs);
+        });
       }
     }
   </script>
