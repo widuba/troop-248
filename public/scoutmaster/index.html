@@ -449,14 +449,14 @@
         const preview = body.length > 150 ? body.slice(0, 150) + "..." : body;
 
         li.innerHTML = `
-          <a href="/scoutmaster/post/${encodeURIComponent(id)}" class="post-link">
-            <div class="post-title">${title}</div>
-            <div class="post-meta">
-              By ${author}${createdAt ? " • " + createdAt : ""}
-            </div>
-            <div class="post-excerpt">${preview}</div>
-          </a>
-        `;
+  <a href="/scoutmaster/post?id=${encodeURIComponent(id)}" class="post-link">
+    <div class="post-title">${title}</div>
+    <div class="post-meta">
+      By ${author}${createdAt ? " • " + createdAt : ""}
+    </div>
+    <div class="post-excerpt">${preview}</div>
+  </a>
+`;
 
         postsListEl.appendChild(li);
       });
