@@ -66,8 +66,7 @@
       text-transform: uppercase;
     }
     nav a {
-      color: #1f4e79;
-      font-weight: bold;
+      color: var(--white);
       text-decoration: none;
       padding: 6px 10px;
       border-radius: var(--radius-pill);
@@ -232,13 +231,12 @@
       font-weight: 600;
       font-size: 14px;
     }
-    .doc-link {
-      color: var(--blue);
-      text-decoration: none;
-      font-size: 13px;
-    }
-    .doc-link:hover {
+    .doc-title a {
+      color: inherit;
       text-decoration: underline;
+    }
+    .doc-title a:hover {
+      opacity: 0.9;
     }
     .doc-meta {
       font-size: 12px;
@@ -266,7 +264,6 @@
       margin-top: 6px;
       color: var(--text-muted);
     }
-    /* Drag & drop box */
     #upload-dropzone {
       border: 2px dashed rgba(148,163,184,0.9);
       border-radius: 12px;
@@ -290,12 +287,12 @@
     </div>
     <nav>
       <a href="/home">Home</a>
+      <a href="/events">Events</a>
       <a href="/calendar">Calendar</a>
       <a href="/documents">Documents</a>
       <a href="/scoutmaster">Scoutmaster Blog</a>
       <a href="/spl-blog">SPL Blog</a>
       <a href="/useful-links">Useful Links</a>
-      <a href="/events">Events</a>
     </nav>
     <div id="auth-bar">
       <div id="auth-info">Signed in as …</div>
@@ -318,7 +315,6 @@
     <section class="admin-only">
       <h2>Upload New Document (Admins Only)</h2>
 
-      <!-- Drag & drop or click -->
       <div id="upload-dropzone">
         <p style="margin:0 0 4px;font-size:14px;">
           <strong>Drag & drop</strong> a file here
@@ -367,7 +363,6 @@
       </form>
     </section>
 
-    <!-- All users see this -->
     <section>
       <h2>Available Documents</h2>
       <ul id="docs-list" class="doc-list"></ul>
@@ -401,7 +396,6 @@
       getDownloadURL
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
-    // Your Firebase config (with Storage)
     const firebaseConfig = {
       apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
       authDomain: "troop-248.firebaseapp.com",
@@ -417,7 +411,6 @@
     const db = getFirestore(app);
     const storage = getStorage(app);
 
-    // DOM elements
     const authInfoEl = document.getElementById("auth-info");
     const logoutBtn = document.getElementById("logout-btn");
     const roleBadgeContainer = document.getElementById("role-badge-container");
@@ -511,27 +504,37 @@
         const li = document.createElement("li");
         li.className = "doc-item";
 
-        const title = data.title || "Untitled Document";
         const url = data.url || "#";
         const desc = data.description || "";
         const createdAt = data.createdAt
           ? data.createdAt.toDate().toLocaleString()
           : "";
 
-        const fileName =
-  data.title ||
-  decodeURIComponent(url.split('/').pop().split('?')[0]);
+        // Use title if present; otherwise derive from URL filename
+        let displayName = data.title || "";
+        if (!displayName && url && url !== "#") {
+          try {
+            displayName = decodeURIComponent(
+              url.split("/").pop().split("?")[0]
+            );
+          } catch (e) {
+            displayName = "Untitled Document";
+          }
+        }
+        if (!displayName) {
+          displayName = "Untitled Document";
+        }
 
-li.innerHTML = `
-  <div class="doc-title">
-    <a href="${url}" target="_blank" rel="noopener noreferrer" class="doc-link">
-      ${fileName}
-    </a>
-  </div>
-  <div class="doc-meta">
-    ${desc ? desc + " • " : ""}${createdAt ? "Added " + createdAt : ""}
-  </div>
-`;
+        li.innerHTML = `
+          <div class="doc-title">
+            <a href="${url}" target="_blank" rel="noopener noreferrer">
+              ${displayName}
+            </a>
+          </div>
+          <div class="doc-meta">
+            ${desc ? desc + " • " : ""}${createdAt ? "Added " + createdAt : ""}
+          </div>
+        `;
 
         if (currentIsAdmin) {
           const btn = document.createElement("button");
@@ -550,7 +553,6 @@ li.innerHTML = `
     }
 
     function initDocumentsPage() {
-      // Live docs list
       const qDocs = query(
         collection(db, "troopDocuments"),
         orderBy("createdAt", "desc")
@@ -559,9 +561,7 @@ li.innerHTML = `
         renderDocs(snapshot.docs);
       });
 
-      // Admin-only upload features
       if (currentIsAdmin) {
-        // Click dropzone to open file picker
         uploadDropzone.addEventListener("click", () => {
           uploadFileInput.click();
         });
@@ -580,7 +580,6 @@ li.innerHTML = `
           }
         });
 
-        // Drag & drop
         ["dragenter", "dragover"].forEach((eventName) => {
           uploadDropzone.addEventListener(eventName, (e) => {
             e.preventDefault();
@@ -611,7 +610,6 @@ li.innerHTML = `
           }
         });
 
-        // Upload form submit
         uploadForm.addEventListener("submit", async (e) => {
           e.preventDefault();
 
@@ -624,7 +622,7 @@ li.innerHTML = `
           const title = customTitle || currentFile.name;
           const description = descInput.value.trim();
 
-          const maxSizeBytes = 20 * 1024 * 1024; // 20 MB
+          const maxSizeBytes = 20 * 1024 * 1024;
           if (currentFile.size > maxSizeBytes) {
             setUploadStatus("File too large (max 20 MB).", "#b91c1c");
             return;
@@ -677,7 +675,6 @@ li.innerHTML = `
                     "Document saved and added to list.",
                     "#166534"
                   );
-                  // Reset form
                   currentFile = null;
                   uploadFileInput.value = "";
                   chosenFileEl.textContent = "";
@@ -698,7 +695,6 @@ li.innerHTML = `
           }
         });
 
-        // Add document by URL (no upload)
         addLinkForm.addEventListener("submit", async (e) => {
           e.preventDefault();
           const title = linkTitleInput.value.trim();
