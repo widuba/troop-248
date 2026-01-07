@@ -189,6 +189,14 @@
       border-color: var(--blue);
       box-shadow: 0 0 0 2px rgba(31,78,121,.12);
     }
+    .field-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .field-row .field {
+      flex: 1 1 140px;
+    }
     button {
       padding: 8px 16px;
       border-radius: var(--radius-pill);
@@ -274,13 +282,55 @@
         </div>
 
         <div class="field">
+          <label for="edit-signup-url">Signup URL</label>
+          <input id="edit-signup-url" type="url" placeholder="https://example.com/signup" />
+        </div>
+
+        <div class="field">
           <label for="edit-description">Description</label>
           <textarea id="edit-description" placeholder="Details about this event"></textarea>
         </div>
 
+        <h3 style="font-size:15px; margin-top:14px;">Start Date & Time</h3>
+        <div class="field-row">
+          <div class="field">
+            <label for="start-date">Start Date</label>
+            <input id="start-date" type="date" />
+          </div>
+          <div class="field">
+            <label for="start-time">Start Time</label>
+            <input id="start-time" type="time" />
+          </div>
+        </div>
+
+        <h3 style="font-size:15px; margin-top:14px;">End Date & Time</h3>
+        <div class="field-row">
+          <div class="field">
+            <label for="end-date">End Date</label>
+            <input id="end-date" type="date" />
+          </div>
+          <div class="field">
+            <label for="end-time">End Time</label>
+            <input id="end-time" type="time" />
+          </div>
+        </div>
+
+        <h3 style="font-size:15px; margin-top:14px;">Created At (override)</h3>
+        <div class="field-row">
+          <div class="field">
+            <label for="created-date">Created Date</label>
+            <input id="created-date" type="date" />
+          </div>
+          <div class="field">
+            <label for="created-time">Created Time</label>
+            <input id="created-time" type="time" />
+          </div>
+        </div>
+
         <button type="submit">Save Changes</button>
         <p class="small-help">
-          These changes will update the event page for everyone. Only admins can access this page.
+          All of these fields update the existing event document in Firestore.  
+          Start/End/Created will be stored as Firestore Timestamps.
         </p>
         <p id="status"></p>
       </form>
@@ -298,10 +348,10 @@
       getFirestore,
       doc,
       getDoc,
-      updateDoc
+      updateDoc,
+      Timestamp
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    // Your Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
       authDomain: "troop-248.firebaseapp.com",
@@ -316,7 +366,6 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // DOM elements
     const authInfoEl = document.getElementById("auth-info");
     const logoutBtn = document.getElementById("logout-btn");
     const roleBadgeContainer = document.getElementById("role-badge-container");
@@ -329,7 +378,16 @@
     const editForm = document.getElementById("edit-form");
     const editTitleInput = document.getElementById("edit-title");
     const editLocationInput = document.getElementById("edit-location");
+    const editSignupUrlInput = document.getElementById("edit-signup-url");
     const editDescriptionInput = document.getElementById("edit-description");
+
+    const startDateInput = document.getElementById("start-date");
+    const startTimeInput = document.getElementById("start-time");
+    const endDateInput = document.getElementById("end-date");
+    const endTimeInput = document.getElementById("end-time");
+    const createdDateInput = document.getElementById("created-date");
+    const createdTimeInput = document.getElementById("created-time");
+
     const statusEl = document.getElementById("status");
 
     // Get event ID from URL (?id=...)
@@ -354,7 +412,6 @@
       console.log("EDIT STATUS:", text);
     }
 
-    // Auth + role check
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
         window.location.href = "/";
@@ -365,7 +422,6 @@
 
       if (!eventDocRef) return;
 
-      // Load role from accountInfo
       const infoRef = doc(db, "accountInfo", user.uid);
       const infoSnap = await getDoc(infoRef);
 
@@ -380,14 +436,11 @@
       if (role === "admin") {
         currentIsAdmin = true;
         roleBadgeContainer.innerHTML = '<span class="badge admin">Admin</span>';
-        // Now that we know they're admin, load the event
         loadEvent();
       } else if (role === "viewer") {
-        // Viewers are not allowed to edit → redirect to event page
-        window.location.href = "/events/event?id=" + encodeURIComponent(eventId);
+        window.location.href = "/events/" + encodeURIComponent(eventId);
         return;
       } else {
-        // Not yet approved
         window.location.href = "/under-review/";
         return;
       }
@@ -400,7 +453,7 @@
 
     backToEventBtn.addEventListener("click", () => {
       if (eventId) {
-        window.location.href = "/events/event?id=" + encodeURIComponent(eventId);
+        window.location.href = "/events/" + encodeURIComponent(eventId);
       } else {
         window.location.href = "/events";
       }
@@ -409,6 +462,23 @@
     backToEventsBtn.addEventListener("click", () => {
       window.location.href = "/events";
     });
+
+    function dateToInputParts(date) {
+      if (!date) return { d: "", t: "" };
+      const iso = date.toISOString(); // YYYY-MM-DDTHH:mm:ss.sssZ
+      const d = iso.slice(0, 10);
+      const t = iso.slice(11, 16); // HH:mm
+      return { d, t };
+    }
+
+    function combineDateTime(dateStr, timeStr) {
+      if (!dateStr || !timeStr) return null;
+      // Construct local date/time, then convert to Date
+      const iso = `${dateStr}T${timeStr}:00`;
+      const d = new Date(iso);
+      if (isNaN(d.getTime())) return null;
+      return d;
+    }
 
     async function loadEvent() {
       if (!eventDocRef) return;
@@ -422,12 +492,42 @@
         }
         const data = snap.data();
 
-        // Fill form
-        editTitleInput.value = data.title || "";
-        editLocationInput.value = data.location || "";
-        editDescriptionInput.value = data.description || "";
+        const title = data.title || "";
+        const location = data.location || "";
+        const description = data.description || "";
+        const signupUrl = data.signupUrl || "";
 
-        pageTitleEl.textContent = "Edit Event: " + (data.title || "Untitled Event");
+        editTitleInput.value = title;
+        editLocationInput.value = location;
+        editDescriptionInput.value = description;
+        editSignupUrlInput.value = signupUrl;
+
+        pageTitleEl.textContent = "Edit Event: " + (title || "Untitled Event");
+
+        // Start date/time (stored as Firestore Timestamp in startDate)
+        if (data.startDate && data.startDate.toDate) {
+          const s = data.startDate.toDate();
+          const { d, t } = dateToInputParts(s);
+          startDateInput.value = d;
+          startTimeInput.value = t;
+        }
+
+        // End date/time (stored as Firestore Timestamp in endDate)
+        if (data.endDate && data.endDate.toDate) {
+          const e = data.endDate.toDate();
+          const { d, t } = dateToInputParts(e);
+          endDateInput.value = d;
+          endTimeInput.value = t;
+        }
+
+        // Created at (stored as Firestore Timestamp in createdAt)
+        if (data.createdAt && data.createdAt.toDate) {
+          const c = data.createdAt.toDate();
+          const { d, t } = dateToInputParts(c);
+          createdDateInput.value = d;
+          createdTimeInput.value = t;
+        }
+
         setStatus("Ready.");
       } catch (err) {
         console.error(err);
@@ -449,19 +549,47 @@
       const newTitle = editTitleInput.value.trim();
       const newLocation = editLocationInput.value.trim();
       const newDescription = editDescriptionInput.value.trim();
+      const newSignupUrl = editSignupUrlInput.value.trim();
 
       if (!newTitle) {
         setStatus("Title is required.", "#b91c1c");
         return;
       }
 
+      const updates = {
+        title: newTitle,
+        location: newLocation,
+        description: newDescription,
+        signupUrl: newSignupUrl
+      };
+
+      // Start date/time → startDate (Timestamp)
+      const sDate = startDateInput.value;
+      const sTime = startTimeInput.value;
+      const sCombined = combineDateTime(sDate, sTime);
+      if (sCombined) {
+        updates.startDate = Timestamp.fromDate(sCombined);
+      }
+
+      // End date/time → endDate (Timestamp)
+      const eDate = endDateInput.value;
+      const eTime = endTimeInput.value;
+      const eCombined = combineDateTime(eDate, eTime);
+      if (eCombined) {
+        updates.endDate = Timestamp.fromDate(eCombined);
+      }
+
+      // Created at override → createdAt (Timestamp)
+      const cDate = createdDateInput.value;
+      const cTime = createdTimeInput.value;
+      const cCombined = combineDateTime(cDate, cTime);
+      if (cCombined) {
+        updates.createdAt = Timestamp.fromDate(cCombined);
+      }
+
       try {
         setStatus("Saving changes...");
-        await updateDoc(eventDocRef, {
-          title: newTitle,
-          location: newLocation,
-          description: newDescription
-        });
+        await updateDoc(eventDocRef, updates);
         setStatus("Changes saved.", "#166534");
         pageTitleEl.textContent = "Edit Event: " + newTitle;
       } catch (err) {
