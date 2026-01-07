@@ -1,1 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Edit Event — Troop 248</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --red: #b22222;
+      --blue: #1f4e79;
+      --tan: #f4eee3;
+      --white: #ffffff;
+      --text-main: #1f2933;
+      --text-muted: #6b7280;
+      --radius-lg: 16px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: #d2cab6;
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+    header {
+      background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
+      color: var(--white);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    header h2 {
+      margin: 0;
+      font-size: 19px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    header h2::before {
+      content: "★";
+      font-size: 18px;
+    }
+    .troop-home-link {
+      text-decoration: none;
+      color: inherit;
+      display: inline-flex;
+      align-items: center;
+    }
+    .troop-home-link:hover h2 {
+      opacity: 0.9;
+      text-decoration: underline;
+    }
+    nav {
+      display: flex;
+      gap: 12px;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+    nav a {
+      color: var(--white);
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(4px);
+      opacity: 0.9;
+    }
+    nav a:hover {
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.12);
+    }
+    #auth-bar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      font-size: 13px;
+    }
+    #logout-btn {
+      padding: 5px 12px;
+      font-size: 13px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--white);
+      cursor: pointer;
+    }
+    #logout-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    main {
+      padding: 24px 16px 40px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.97);
+      border-radius: var(--radius-lg);
+      padding: 20px 20px 16px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+    .card-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .badge {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(148, 163, 184, 0.2);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+    .badge.admin {
+      background: rgba(240, 180, 41, 0.16);
+      color: #92400e;
+      border: 1px solid rgba(245, 158, 11, 0.6);
+    }
+    h1 {
+      margin: 0;
+      font-size: 22px;
+    }
+    p {
+      margin: 4px 0;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    section {
+      background: rgba(255, 255, 255, 0.97);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 14px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+    section h2 {
+      margin-top: 0;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    section h2::before {
+      content: "▸";
+      font-size: 14px;
+      color: var(--blue);
+    }
+    .field {
+      margin-bottom: 10px;
+    }
+    .field label {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 3px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .field input,
+    .field textarea {
+      width: 100%;
+      padding: 7px 8px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      font-size: 14px;
+      background: #ffffff;
+    }
+    .field textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .field input:focus,
+    .field textarea:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 2px rgba(31,78,121,.12);
+    }
+    button {
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      border: none;
+      background: var(--blue);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    button:hover { opacity: 0.96; }
+    .btn-secondary {
+      background: #b22222;
+    }
+    .small-help {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+    #status {
+      font-size: 13px;
+      margin-top: 8px;
+      color: var(--text-muted);
+    }
+    .top-buttons {
+      margin-top: 8px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <a href="/home" class="troop-home-link">
+        <h2>Troop 248</h2>
+      </a>
+    </div>
+    <nav>
+      <a href="/home">Home</a>
+      <a href="/events">Events</a>
+      <a href="/calendar">Calendar</a>
+      <a href="/documents">Documents</a>
+      <a href="/scoutmaster">Scoutmaster Blog</a>
+      <a href="/spl-blog">SPL Blog</a>
+      <a href="/useful-links">Useful Links</a>
+    </nav>
+    <div id="auth-bar">
+      <div id="auth-info">Signed in as …</div>
+      <button id="logout-btn">Log Out</button>
+    </div>
+  </header>
 
+  <main>
+    <div class="card">
+      <div class="card-header-row">
+        <div>
+          <h1 id="page-title">Edit Event</h1>
+          <p id="event-id-text" style="font-size:12px;"></p>
+        </div>
+        <div id="role-badge-container">
+          <span class="badge">Viewer</span>
+        </div>
+      </div>
+      <div class="top-buttons">
+        <button id="back-to-event-btn" class="btn-secondary">Back to Event Page</button>
+        <button id="back-to-events-btn">Back to Events List</button>
+      </div>
+    </div>
+
+    <section>
+      <h2>Event Details</h2>
+      <form id="edit-form">
+        <div class="field">
+          <label for="edit-title">Title</label>
+          <input id="edit-title" type="text" required />
+        </div>
+
+        <div class="field">
+          <label for="edit-location">Location</label>
+          <input id="edit-location" type="text" placeholder="Camp Rainey Mountain, Clayton GA" />
+        </div>
+
+        <div class="field">
+          <label for="edit-description">Description</label>
+          <textarea id="edit-description" placeholder="Details about this event"></textarea>
+        </div>
+
+        <button type="submit">Save Changes</button>
+        <p class="small-help">
+          These changes will update the event page for everyone. Only admins can access this page.
+        </p>
+        <p id="status"></p>
+      </form>
+    </section>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      updateDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    // Your Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+      authDomain: "troop-248.firebaseapp.com",
+      projectId: "troop-248",
+      storageBucket: "troop-248.firebasestorage.app",
+      messagingSenderId: "925363875752",
+      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+      measurementId: "G-NY75GX5TBH"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // DOM elements
+    const authInfoEl = document.getElementById("auth-info");
+    const logoutBtn = document.getElementById("logout-btn");
+    const roleBadgeContainer = document.getElementById("role-badge-container");
+
+    const pageTitleEl = document.getElementById("page-title");
+    const eventIdTextEl = document.getElementById("event-id-text");
+    const backToEventBtn = document.getElementById("back-to-event-btn");
+    const backToEventsBtn = document.getElementById("back-to-events-btn");
+
+    const editForm = document.getElementById("edit-form");
+    const editTitleInput = document.getElementById("edit-title");
+    const editLocationInput = document.getElementById("edit-location");
+    const editDescriptionInput = document.getElementById("edit-description");
+    const statusEl = document.getElementById("status");
+
+    // Get event ID from URL (?id=...)
+    const params = new URLSearchParams(window.location.search);
+    const eventId = params.get("id");
+
+    if (!eventId) {
+      pageTitleEl.textContent = "Event Not Found";
+      statusEl.textContent = "No event id was provided in the URL.";
+      statusEl.style.color = "#b91c1c";
+    } else {
+      eventIdTextEl.textContent = "Event ID: " + eventId;
+    }
+
+    let currentUser = null;
+    let currentIsAdmin = false;
+    let eventDocRef = eventId ? doc(db, "events", eventId) : null;
+
+    function setStatus(text, color = "#6b7280") {
+      statusEl.textContent = text;
+      statusEl.style.color = color;
+      console.log("EDIT STATUS:", text);
+    }
+
+    // Auth + role check
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "/";
+        return;
+      }
+      currentUser = user;
+      authInfoEl.textContent = "Signed in as " + (user.email || user.uid);
+
+      if (!eventDocRef) return;
+
+      // Load role from accountInfo
+      const infoRef = doc(db, "accountInfo", user.uid);
+      const infoSnap = await getDoc(infoRef);
+
+      if (!infoSnap.exists()) {
+        window.location.href = "/under-review/";
+        return;
+      }
+
+      const data = infoSnap.data();
+      const role = data.authRole;
+
+      if (role === "admin") {
+        currentIsAdmin = true;
+        roleBadgeContainer.innerHTML = '<span class="badge admin">Admin</span>';
+        // Now that we know they're admin, load the event
+        loadEvent();
+      } else if (role === "viewer") {
+        // Viewers are not allowed to edit → redirect to event page
+        window.location.href = "/events/event?id=" + encodeURIComponent(eventId);
+        return;
+      } else {
+        // Not yet approved
+        window.location.href = "/under-review/";
+        return;
+      }
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "/";
+    });
+
+    backToEventBtn.addEventListener("click", () => {
+      if (eventId) {
+        window.location.href = "/events/event?id=" + encodeURIComponent(eventId);
+      } else {
+        window.location.href = "/events";
+      }
+    });
+
+    backToEventsBtn.addEventListener("click", () => {
+      window.location.href = "/events";
+    });
+
+    async function loadEvent() {
+      if (!eventDocRef) return;
+      try {
+        setStatus("Loading event...");
+        const snap = await getDoc(eventDocRef);
+        if (!snap.exists()) {
+          setStatus("Event not found.", "#b91c1c");
+          pageTitleEl.textContent = "Event Not Found";
+          return;
+        }
+        const data = snap.data();
+
+        // Fill form
+        editTitleInput.value = data.title || "";
+        editLocationInput.value = data.location || "";
+        editDescriptionInput.value = data.description || "";
+
+        pageTitleEl.textContent = "Edit Event: " + (data.title || "Untitled Event");
+        setStatus("Ready.");
+      } catch (err) {
+        console.error(err);
+        setStatus("Error loading event: " + err.message, "#b91c1c");
+      }
+    }
+
+    editForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!currentIsAdmin) {
+        setStatus("You are not allowed to edit this event.", "#b91c1c");
+        return;
+      }
+      if (!eventDocRef) {
+        setStatus("No event reference to update.", "#b91c1c");
+        return;
+      }
+
+      const newTitle = editTitleInput.value.trim();
+      const newLocation = editLocationInput.value.trim();
+      const newDescription = editDescriptionInput.value.trim();
+
+      if (!newTitle) {
+        setStatus("Title is required.", "#b91c1c");
+        return;
+      }
+
+      try {
+        setStatus("Saving changes...");
+        await updateDoc(eventDocRef, {
+          title: newTitle,
+          location: newLocation,
+          description: newDescription
+        });
+        setStatus("Changes saved.", "#166534");
+        pageTitleEl.textContent = "Edit Event: " + newTitle;
+      } catch (err) {
+        console.error(err);
+        setStatus("Error saving changes: " + err.message, "#b91c1c");
+      }
+    });
+  </script>
+</body>
+</html>
