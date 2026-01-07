@@ -519,6 +519,10 @@
     </div>
 
     <!-- Details + Maps + Signup -->
+    <!-- Admin-only edit button, hidden by default -->
+<div id="admin-edit-container" class="admin-only" style="display:none; margin-top:12px;">
+  <a id="admin-edit-link" class="small-btn" href="#">Edit This Event</a>
+</div>
     <section id="details-section">
       <h2>Event Details</h2>
       <p class="small-help">
@@ -768,6 +772,19 @@
           </span>`;
       }
     }
+
+    const adminEditContainer = document.getElementById("admin-edit-container");
+const adminEditLink = document.getElementById("admin-edit-link");
+
+// eventId: however you're already getting it; for example:
+const params = new URLSearchParams(window.location.search);
+const eventId = params.get("id"); // keep this consistent across pages
+
+// After you set currentIsAdmin = (data.authRole === "admin")
+if (currentIsAdmin && adminEditContainer && adminEditLink && eventId) {
+  adminEditContainer.style.display = "block";
+  adminEditLink.href = `/events/edit?id=${encodeURIComponent(eventId)}`;
+}
 
     function formatDateDisplay(dateStr, timeStr) {
   if (!dateStr) return "";
