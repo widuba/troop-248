@@ -518,13 +518,20 @@
           ? data.createdAt.toDate().toLocaleString()
           : "";
 
-        li.innerHTML = `
-          <div class="doc-title">${title}</div>
-          <div><a href="${url}" target="_blank" rel="noopener noreferrer" class="doc-link">${url}</a></div>
-          <div class="doc-meta">
-            ${desc ? desc + " • " : ""}${createdAt ? "Added " + createdAt : ""}
-          </div>
-        `;
+        const fileName =
+  data.title ||
+  decodeURIComponent(url.split('/').pop().split('?')[0]);
+
+li.innerHTML = `
+  <div class="doc-title">
+    <a href="${url}" target="_blank" rel="noopener noreferrer" class="doc-link">
+      ${fileName}
+    </a>
+  </div>
+  <div class="doc-meta">
+    ${desc ? desc + " • " : ""}${createdAt ? "Added " + createdAt : ""}
+  </div>
+`;
 
         if (currentIsAdmin) {
           const btn = document.createElement("button");
