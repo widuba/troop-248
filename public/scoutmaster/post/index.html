@@ -217,9 +217,9 @@
       console.log("SM POST STATUS:", text);
     }
 
-    // URL: /scoutmaster/post/<postId>
-    const segments = window.location.pathname.split("/").filter(Boolean);
-    const postId = segments[segments.length - 1];
+    // URL: /scoutmaster/post?id=<postId>
+const params = new URLSearchParams(window.location.search);
+const postId = params.get("id");
 
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
