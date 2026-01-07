@@ -246,7 +246,7 @@ const postId = params.get("id");
       try {
         setStatus("Loading post...");
         // Use your actual collection name here (change if different)
-        const ref = doc(db, "scoutmasterBlog", postId);
+        const ref = doc(db, "scoutmasterPosts", postId);
         const snap = await getDoc(ref);
 
         if (!snap.exists()) {
