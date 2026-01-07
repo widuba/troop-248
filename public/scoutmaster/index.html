@@ -255,6 +255,43 @@
       border-bottom: 1px solid rgba(229, 231, 235, 0.9);
     }
 
+    .post-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.post-item {
+  border-bottom: 1px solid rgba(229,231,235,.9);
+  padding: 10px 0;
+}
+
+.post-item:last-child {
+  border-bottom: none;
+}
+
+.post-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.post-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.post-meta {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 2px;
+}
+
+.post-excerpt {
+  font-size: 14px;
+  margin-top: 4px;
+}
+
     .post-item:last-child {
       border-bottom: none;
     }
@@ -298,6 +335,7 @@
       .welcome-card {
         flex-direction: column;
         align-items: flex-start;
+        
       }
     }
   </style>
@@ -473,35 +511,39 @@
 
       docs.forEach((docSnap) => {
         const data = docSnap.data();
-        const li = document.createElement("li");
-        li.className = "post-item";
+        const listEl = document.getElementById("scoutmaster-posts"); // <ul> or <div> where you list posts
+listEl.innerHTML = "";
 
-        const title = data.title || "Untitled Post";
-        const body = data.body || "";
-        const createdAt = data.createdAt;
+snapshot.forEach((docSnap) => {
+  const data = docSnap.data();
+  const li = document.createElement("li");
+  li.className = "post-item";
 
-        li.innerHTML = `
-          <div class="post-title">${title}</div>
-          <div class="post-meta">${formatDate(createdAt)}</div>
-          <div>${body.replace(/\n/g, "<br>")}</div>
-        `;
+  const id = docSnap.id;
+  const title = data.title || "Untitled Post";
+  const body = data.body || "";
+  const author = data.authorName || "Unknown author";
+  const createdAt = data.createdAt
+    ? data.createdAt.toDate().toLocaleString()
+    : "";
 
-        if (currentIsAdmin) {
-          const btn = document.createElement("button");
-          btn.textContent = "Delete";
-          btn.className = "small-btn";
-          btn.onclick = async () => {
-            if (confirm("Delete this post?")) {
-              await deleteDoc(doc(db, "scoutmasterPosts", docSnap.id));
-            }
-          };
-          li.appendChild(btn);
-        }
+  // First 150 chars + ...
+  const preview =
+    body.length > 150 ? body.slice(0, 150) + "..." : body;
 
-        postList.appendChild(li);
-      });
-    }
+  li.innerHTML = `
+    <a href="/scoutmaster/post/${encodeURIComponent(id)}" class="post-link">
+      <div class="post-title">${title}</div>
+      <div class="post-meta">
+        By ${author}${createdAt ? " • " + createdAt : ""}
+      </div>
+      <div class="post-excerpt">${preview}</div>
+    </a>
+  `;
 
+  listEl.appendChild(li);
+});
+        
     function pageSpecificInit() {
       if (currentIsAdmin) {
         postForm.addEventListener("submit", async (e) => {
