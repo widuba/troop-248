@@ -516,12 +516,13 @@
       <div id="event-not-found" class="small-help" style="color:#b91c1c; display:none;">
         Event not found. Please check the link with your troop leadership.
       </div>
-      <div id="admin-edit-container" style="display:none;">
-  <a id="admin-edit-link" class="small-btn" href="#">Edit This Event</a>
-</div>
     </div>
 
     <!-- Details + Maps + Signup -->
+    <!-- Admin-only edit button, hidden by default -->
+<div id="admin-edit-container" class="admin-only" style="display:none; margin-top:12px;">
+  <a id="admin-edit-link" class="small-btn" href="#">Edit This Event</a>
+</div>
     <section id="details-section">
       <h2>Event Details</h2>
       <p class="small-help">
@@ -659,6 +660,18 @@
   </main>
 
   <script type="module">
+    const adminEditLink = document.getElementById("admin-edit-link");
+const adminEditContainer = document.getElementById("admin-edit-container");
+
+const segments = window.location.pathname.split("/").filter(Boolean);
+// /events/event/<eventId>  → last item = eventId
+const eventId = segments[segments.length - 1];
+
+if (adminEditLink && eventId) {
+  adminEditLink.href = `/events-edit?id=${encodeURIComponent(eventId)}`;
+  adminEditContainer.style.display = "block"; // show button for admins
+}
+
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import {
       getAuth,
@@ -771,6 +784,19 @@
           </span>`;
       }
     }
+
+    const adminEditContainer = document.getElementById("admin-edit-container");
+const adminEditLink = document.getElementById("admin-edit-link");
+
+// eventId: however you're already getting it; for example:
+const params = new URLSearchParams(window.location.search);
+const eventId = params.get("id"); // keep this consistent across pages
+
+// After you set currentIsAdmin = (data.authRole === "admin")
+if (currentIsAdmin && adminEditContainer && adminEditLink && eventId) {
+  adminEditContainer.style.display = "block";
+  adminEditLink.href = `/events/edit?id=${encodeURIComponent(eventId)}`;
+}
 
     function formatDateDisplay(dateStr, timeStr) {
   if (!dateStr) return "";
@@ -885,18 +911,6 @@ function formatDateRange(ev) {
       await signOut(auth);
       window.location.href = "/";
     });
-
-    const adminEditLink = document.getElementById("admin-edit-link");
-const adminEditContainer = document.getElementById("admin-edit-container");
-
-const segments = window.location.pathname.split("/").filter(Boolean);
-// /events/event/<eventId>  → last item = eventId
-const eventId = segments[segments.length - 1];
-
-if (adminEditLink && eventId) {
-  adminEditLink.href = `/events-edit?id=${encodeURIComponent(eventId)}`;
-  adminEditContainer.style.display = "block"; // show button for admins
-}
 
     /* RSVP Helpers */
 
