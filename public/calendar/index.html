@@ -19,6 +19,36 @@
 
     * { box-sizing: border-box; }
 
+    /* Dark theme body */
+body.dark-theme {
+  background: #111827;
+  color: #e5e7eb;
+}
+
+/* Main cards / sections */
+body.dark-theme .welcome-card,
+body.dark-theme section {
+  background: #1f2937;
+  border-color: rgba(55,65,81,.9);
+}
+
+/* Feature cards */
+body.dark-theme .feature-card {
+  background: #111827;
+  border-color: rgba(75,85,99,.9);
+}
+
+/* Text + small labels */
+body.dark-theme .feature-text,
+body.dark-theme .quick-note {
+  color: #d1d5db;
+}
+
+body.dark-theme .badge {
+  background: rgba(55,65,81,.8);
+  color: #e5e7eb;
+}
+
     body {
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -319,6 +349,7 @@
     </nav>
 
     <div id="auth-bar">
+      <button id="theme-toggle" type="button">🌞 Light mode</button>
       <div id="auth-info">Signed in as …</div>
       <button id="logout-btn">Log Out</button>
     </div>
@@ -551,5 +582,34 @@
       });
     }
   </script>
+  <script>
+  (function () {
+    const STORAGE_KEY = "troop248-theme";
+    const body = document.body;
+    const toggleBtn = document.getElementById("theme-toggle");
+
+    if (!toggleBtn) return;
+
+    function applyTheme(theme) {
+      const isDark = theme === "dark";
+      body.classList.toggle("dark-theme", isDark);
+      toggleBtn.textContent = isDark ? "🌙 Dark mode" : "🌞 Light mode";
+    }
+
+    const saved = localStorage.getItem(STORAGE_KEY);
+    const prefersDark = window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const initial = saved || (prefersDark ? "dark" : "light");
+
+    applyTheme(initial);
+    localStorage.setItem(STORAGE_KEY, initial);
+
+    toggleBtn.addEventListener("click", function () {
+      const newTheme = body.classList.contains("dark-theme") ? "light" : "dark";
+      applyTheme(newTheme);
+      localStorage.setItem(STORAGE_KEY, newTheme);
+    });
+  })();
+</script>
 </body>
 </html>
