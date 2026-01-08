@@ -27,35 +27,6 @@
       color: var(--text-main);
       min-height: 100vh;
     }
-    /* Dark theme body */
-body.dark-theme {
-  background: #111827;
-  color: #e5e7eb;
-}
-
-/* Main cards / sections */
-body.dark-theme .welcome-card,
-body.dark-theme section {
-  background: #1f2937;
-  border-color: rgba(55,65,81,.9);
-}
-
-/* Feature cards */
-body.dark-theme .feature-card {
-  background: #111827;
-  border-color: rgba(75,85,99,.9);
-}
-
-/* Text + small labels */
-body.dark-theme .feature-text,
-body.dark-theme .quick-note {
-  color: #d1d5db;
-}
-
-body.dark-theme .badge {
-  background: rgba(55,65,81,.8);
-  color: #e5e7eb;
-}
 
     header {
       background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
@@ -516,13 +487,12 @@ body.dark-theme .badge {
       <a href="/calendar">Calendar</a>
       <a href="/documents">Documents</a>
       <a href="/scoutmaster">Scoutmaster Blog</a>
-      <a href="/spl">SPL Blog</a>
+      <a href="/spl-blog">SPL Blog</a>
       <a href="/useful-links">Useful Links</a>
       <a href="/events">Events</a>
     </nav>
 
     <div id="auth-bar">
-      <button id="theme-toggle" type="button">🌞 Light mode</button>
       <div id="auth-info">Signed in as …</div>
       <button id="logout-btn">Log Out</button>
     </div>
@@ -546,13 +516,12 @@ body.dark-theme .badge {
       <div id="event-not-found" class="small-help" style="color:#b91c1c; display:none;">
         Event not found. Please check the link with your troop leadership.
       </div>
+      <div id="admin-edit-container" style="display:none;">
+  <a id="admin-edit-link" class="small-btn" href="#">Edit This Event</a>
+</div>
     </div>
 
     <!-- Details + Maps + Signup -->
-    <!-- Admin-only edit button, hidden by default -->
-<div id="admin-edit-container" class="admin-only" style="display:none; margin-top:12px;">
-  <a id="admin-edit-link" class="small-btn" href="#">Edit This Event</a>
-</div>
     <section id="details-section">
       <h2>Event Details</h2>
       <p class="small-help">
@@ -690,18 +659,6 @@ body.dark-theme .badge {
   </main>
 
   <script type="module">
-    const adminEditLink = document.getElementById("admin-edit-link");
-const adminEditContainer = document.getElementById("admin-edit-container");
-
-const segments = window.location.pathname.split("/").filter(Boolean);
-// /events/event/<eventId>  → last item = eventId
-const eventId = segments[segments.length - 1];
-
-if (adminEditLink && eventId) {
-  adminEditLink.href = `/events-edit?id=${encodeURIComponent(eventId)}`;
-  adminEditContainer.style.display = "block"; // show button for admins
-}
-
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import {
       getAuth,
@@ -814,19 +771,6 @@ if (adminEditLink && eventId) {
           </span>`;
       }
     }
-
-    const adminEditContainer = document.getElementById("admin-edit-container");
-const adminEditLink = document.getElementById("admin-edit-link");
-
-// eventId: however you're already getting it; for example:
-const params = new URLSearchParams(window.location.search);
-const eventId = params.get("id"); // keep this consistent across pages
-
-// After you set currentIsAdmin = (data.authRole === "admin")
-if (currentIsAdmin && adminEditContainer && adminEditLink && eventId) {
-  adminEditContainer.style.display = "block";
-  adminEditLink.href = `/events/edit?id=${encodeURIComponent(eventId)}`;
-}
 
     function formatDateDisplay(dateStr, timeStr) {
   if (!dateStr) return "";
@@ -941,6 +885,18 @@ function formatDateRange(ev) {
       await signOut(auth);
       window.location.href = "/";
     });
+
+    const adminEditLink = document.getElementById("admin-edit-link");
+const adminEditContainer = document.getElementById("admin-edit-container");
+
+const segments = window.location.pathname.split("/").filter(Boolean);
+// /events/event/<eventId>  → last item = eventId
+const eventId = segments[segments.length - 1];
+
+if (adminEditLink && eventId) {
+  adminEditLink.href = `/events-edit?id=${encodeURIComponent(eventId)}`;
+  adminEditContainer.style.display = "block"; // show button for admins
+}
 
     /* RSVP Helpers */
 
@@ -1316,34 +1272,5 @@ function formatDateRange(ev) {
       }
     }
   </script>
-  <script>
-  (function () {
-    const STORAGE_KEY = "troop248-theme";
-    const body = document.body;
-    const toggleBtn = document.getElementById("theme-toggle");
-
-    if (!toggleBtn) return;
-
-    function applyTheme(theme) {
-      const isDark = theme === "dark";
-      body.classList.toggle("dark-theme", isDark);
-      toggleBtn.textContent = isDark ? "🌙 Dark mode" : "🌞 Light mode";
-    }
-
-    const saved = localStorage.getItem(STORAGE_KEY);
-    const prefersDark = window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const initial = saved || (prefersDark ? "dark" : "light");
-
-    applyTheme(initial);
-    localStorage.setItem(STORAGE_KEY, initial);
-
-    toggleBtn.addEventListener("click", function () {
-      const newTheme = body.classList.contains("dark-theme") ? "light" : "dark";
-      applyTheme(newTheme);
-      localStorage.setItem(STORAGE_KEY, newTheme);
-    });
-  })();
-</script>
 </body>
 </html>
