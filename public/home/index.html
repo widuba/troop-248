@@ -17,17 +17,6 @@
       --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
     }
 
-    body.dark-theme {
-  --page-bg: #1a1a1a;
-  --text-color: #f2f2f2;
-}
-    main {
-  background: var(--page-bg);
-  color: var(--text-color);
-  min-height: 70vh;   /* just keeps it tall enough */
-  padding: 1rem;
-}
-
     * { box-sizing: border-box; }
 
     body {
@@ -38,35 +27,6 @@
       color: var(--text-main);
       min-height: 100vh;
     }
-    /* Dark theme body */
-body.dark-theme {
-  background: #111827;
-  color: #e5e7eb;
-}
-
-/* Main cards / sections */
-body.dark-theme .welcome-card,
-body.dark-theme section {
-  background: #1f2937;
-  border-color: rgba(55,65,81,.9);
-}
-
-/* Feature cards */
-body.dark-theme .feature-card {
-  background: #111827;
-  border-color: rgba(75,85,99,.9);
-}
-
-/* Text + small labels */
-body.dark-theme .feature-text,
-body.dark-theme .quick-note {
-  color: #d1d5db;
-}
-
-body.dark-theme .badge {
-  background: rgba(55,65,81,.8);
-  color: #e5e7eb;
-}
 
     header {
       background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
@@ -312,13 +272,12 @@ body.dark-theme .badge {
       <a href="/calendar">Calendar</a>
       <a href="/documents">Documents</a>
       <a href="/scoutmaster">Scoutmaster Blog</a>
-      <a href="/spl">SPL Blog</a>
+      <a href="/spl-blog">SPL Blog</a>
       <a href="/useful-links">Useful Links</a>
       <a href="/events">Events</a>
     </nav>
 
     <div id="auth-bar">
-      <button id="theme-toggle" type="button">🌞 Light mode</button>
       <div id="auth-info">Signed in as …</div>
       <button id="logout-btn">Log Out</button>
     </div>
@@ -371,7 +330,7 @@ body.dark-theme .badge {
           </div>
         </a>
 
-        <a href="/spl" class="feature-card-link">
+        <a href="/spl-blog" class="feature-card-link">
           <div class="feature-card">
             <div class="feature-badge">Youth Led</div>
             <h3 class="feature-title">SPL Blog</h3>
@@ -487,28 +446,5 @@ body.dark-theme .badge {
       window.location.href = "/";
     });
   </script>
-
-  <script>
-  const btn = document.getElementById("theme-toggle");
-  const STORAGE_KEY = "site-theme";
-
-  function applyTheme(theme) {
-    const isDark = theme === "dark";
-    document.body.classList.toggle("dark-theme", isDark);
-    btn.textContent = isDark ? "🌙 Dark mode" : "🌞 Light mode";
-  }
-
-  // On load — restore saved choice (or default to light)
-  const saved = localStorage.getItem(STORAGE_KEY) || "light";
-  applyTheme(saved);
-
-  // When clicked — switch & remember
-  btn.addEventListener("click", () => {
-    const newTheme =
-      document.body.classList.contains("dark-theme") ? "light" : "dark";
-    applyTheme(newTheme);
-    localStorage.setItem(STORAGE_KEY, newTheme);
-  });
-</script>
 </body>
 </html>
