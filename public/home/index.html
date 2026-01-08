@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <title>Troop 248 — Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <header>
+  <button id="theme-toggle" type="button">🌞 Light mode</button>
+</header>
   <style>
     :root {
       --red: #b22222;
@@ -16,6 +19,17 @@
       --radius-pill: 999px;
       --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
     }
+
+    body.dark-theme {
+  --page-bg: #1a1a1a;
+  --text-color: #f2f2f2;
+}
+    main {
+  background: var(--page-bg);
+  color: var(--text-color);
+  min-height: 70vh;   /* just keeps it tall enough */
+  padding: 1rem;
+}
 
     * { box-sizing: border-box; }
 
@@ -446,5 +460,28 @@
       window.location.href = "/";
     });
   </script>
+
+  <script>
+  const btn = document.getElementById("theme-toggle");
+  const STORAGE_KEY = "site-theme";
+
+  function applyTheme(theme) {
+    const isDark = theme === "dark";
+    document.body.classList.toggle("dark-theme", isDark);
+    btn.textContent = isDark ? "🌙 Dark mode" : "🌞 Light mode";
+  }
+
+  // On load — restore saved choice (or default to light)
+  const saved = localStorage.getItem(STORAGE_KEY) || "light";
+  applyTheme(saved);
+
+  // When clicked — switch & remember
+  btn.addEventListener("click", () => {
+    const newTheme =
+      document.body.classList.contains("dark-theme") ? "light" : "dark";
+    applyTheme(newTheme);
+    localStorage.setItem(STORAGE_KEY, newTheme);
+  });
+</script>
 </body>
 </html>
