@@ -492,9 +492,13 @@
     onAuthStateChanged(auth, handleAuth);
 
     logoutBtn.addEventListener("click", async () => {
-      await signOut(auth);
-      window.location.href = "/";
-    });
+  try {
+    await signOut(auth);
+  } finally {
+    // replace prevents back-button ping-pong
+    window.location.replace("/");
+  }
+});
   </script>
 
   <!-- Dark mode script -->
