@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Troop 248 — Login</title>
+
+  <link rel="stylesheet" href="/styles.css" />
+
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; }
+    .wrap { padding: 24px; max-width: 700px; margin: 0 auto; }
+    .card { border: 1px solid #ddd; border-radius: 10px; padding: 18px; }
+    input { width: 100%; padding: 10px; font-size: 16px; margin: 8px 0; box-sizing: border-box; }
+    button { padding: 10px 14px; font-size: 16px; cursor: pointer; width: 100%; }
+    .row { display:flex; gap:12px; }
+    .row > * { flex: 1; }
+    .muted { opacity: .7; font-size: 14px; }
+    .hidden { display:none; }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <h1>Troop 248 Login</h1>
+    <p class="muted">Log in to access member pages.</p>
+
+    <p id="status">Loading…</p>
+
+    <div id="loginCard" class="card hidden">
+      <label>Email</label>
+      <input id="email" type="email" autocomplete="email" placeholder="you@example.com" />
+
+      <label>Password</label>
+      <input id="password" type="password" autocomplete="current-password" placeholder="••••••••" />
+
+      <div style="height: 10px;"></div>
+
+      <button id="loginBtn">Log in</button>
+
+      <div style="height: 10px;"></div>
+      <div class="row">
+        <button id="homeBtn" type="button">Back to Home</button>
+        <button id="resetBtn" type="button">Forgot Password</button>
+      </div>
+
+      <p id="msg" class="muted"></p>
+    </div>
+  </div>
+
+  <script type="module">
+    /*************************************************************
+     * ✅ Safe login page: no refresh loops
+     * - Redirect logged-in users to /home/
+     * - Redirect after login to /home/
+     * - No reload() used anywhere
+     * - Debug bypass: ?noredirect=1
+     *************************************************************/
+
+    // ---- Redirect bypass for debugging ----
+    const params = new URLSearchParams(window.location.search);
+    const NO_REDIRECT = params.has("noredirect");
+
+    // ---- Safe redirect helper ----
+    const redirectOnce = (url) => {
+      if (NO_REDIRECT) return;
+
+      const current = (window.location.pathname.replace(/\/+$/, "") || "/");
+      const targetPath = (new URL(url, window.location.origin).pathname.replace(/\/+$/, "") || "/");
+      if (current === targetPath) return;
+
+      const KEY = "__redirected_to__";
+      const last = sessionStorage.getItem(KEY);
+      if (last === targetPath) return;
+
+      sessionStorage.setItem(KEY, targetPath);
+      window.location.replace(url);
+    };
+
+    // ---- Firebase imports ----
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signInWithEmailAndPassword,
+      sendPasswordResetEmail
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+    // ---- Firebase config ----
+    // ✅ Paste your real config here (same values as /home and /index)
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+  authDomain: "troop-248.firebaseapp.com",
+  projectId: "troop-248",
+  storageBucket: "troop-248.firebasestorage.app",
+  messagingSenderId: "925363875752",
+  appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+  measurementId: "G-NY75GX5TBH"
+    };
+
+    // ---- Init ----
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // ---- Elements ----
+    const statusEl = document.getElementById("status");
+    const loginCard = document.getElementById("loginCard");
+    const msg = document.getElementById("msg");
+
+    const email = document.getElementById("email");
+    const password = document.getElementById("password");
+
+    const loginBtn = document.getElementById("loginBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const homeBtn = document.getElementById("homeBtn");
+
+    const setMsg = (text) => { msg.textContent = text || ""; };
+
+    homeBtn.addEventListener("click", () => {
+      sessionStorage.removeItem("__redirected_to__");
+      redirectOnce("/");
+    });
+
+    loginBtn.addEventListener("click", async () => {
+      setMsg("");
+      loginBtn.disabled = true;
+
+      try {
+        sessionStorage.removeItem("__redirected_to__"); // allow clean redirect after login
+        await signInWithEmailAndPassword(auth, email.value.trim(), password.value);
+        redirectOnce("/home/");
+      } catch (e) {
+        console.error(e);
+        setMsg("Login failed. Check your email/password and try again.");
+      } finally {
+        loginBtn.disabled = false;
+      }
+    });
+
+    resetBtn.addEventListener("click", async () => {
+      setMsg("");
+      const addr = email.value.trim();
+      if (!addr) return setMsg("Enter your email first, then click Forgot Password.");
+
+      try {
+        await sendPasswordResetEmail(auth, addr);
+        setMsg("Password reset email sent.");
+      } catch (e) {
+        console.error(e);
+        setMsg("Could not send reset email. Try again.");
+      }
+    });
+
+    // ---- Auth state ----
+    onAuthStateChanged(auth, (user) => {
+      statusEl.textContent = "";
+      loginCard.classList.remove("hidden");
+
+      if (user) {
+        // Already logged in → go home
+        sessionStorage.removeItem("__redirected_to__");
+        redirectOnce("/home/");
+      }
+      // Logged out → stay here and show login form
+    });
+  </script>
+</body>
+</html>
