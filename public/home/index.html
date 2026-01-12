@@ -130,13 +130,15 @@
       }
 
       // If NOT logged in
-      if (!user) {
-        if (logoutBtn) logoutBtn.style.display = "none";
+if (!user) {
+  if (logoutBtn) logoutBtn.style.display = "none";
 
-        // If home requires login, send to login safely:
-        // Change "/login/" if your login page path is different
-        redirectOnce("/login/");
-      }
+  // ✅ Clear redirect lock so it can redirect again
+  sessionStorage.removeItem("__redirected_to__");
+
+  // Send to your public welcome/login page
+  redirectOnce("/");
+}
     });
   </script>
 </body>
