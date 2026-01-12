@@ -1253,6 +1253,8 @@ function formatDateRange(ev) {
       if (currentIsAdmin) {
         onSnapshot(collection(db, "events", eventSlug, "rsvps"), (snapshot) => {
           renderRSVPAdmin(snapshot.docs);
+
+       const slug = new URLSearchParams(location.search).get("slug");   
         });
       }
     }
