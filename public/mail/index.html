@@ -449,7 +449,7 @@
     let activeRecipientTab = "scouts"; // scouts | adults | parents
     let activeMailFilter = "inbox";    // inbox | sent | all
 
-    const directory = new Map(); // uid -> userDirectory doc data
+    const directory = new Map(); // uid -> accountInfo doc data
     const selectedUids = new Set();
     const mailMap = new Map();
 
@@ -667,7 +667,7 @@
 
     function startDirectoryListener() {
       onSnapshot(
-        collection(db, "userDirectory"),
+        collection(db, "accountInfo"),
         (snapshot) => {
           directory.clear();
           snapshot.forEach((docSnap) => directory.set(docSnap.id, docSnap.data() || {}));
@@ -675,7 +675,7 @@
           renderMail();
         },
         (error) => {
-          console.error("userDirectory listener error:", error);
+          console.error("accountInfo listener error:", error);
           recipientsListEl.innerHTML = "";
           recipientsEmptyEl.style.display = "block";
           recipientsEmptyEl.textContent = "Directory not available (check rules).";
