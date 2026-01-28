@@ -281,11 +281,11 @@
     }
 
     .event-map-container {
-  margin-top: 12px;
-  overflow: hidden;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-}
+      margin-top: 12px;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    }
 
     /* Events list */
 
@@ -648,7 +648,33 @@
       window.location.href = "/";
     });
 
-    // Date formatting helpers (Jan 5, 2026 style)
+    // --- Date helpers ---
+    function parseEventDateTime(ev, which) {
+      // which: "start" | "end"
+      // Prefer Firestore-style: startDate (YYYY-MM-DD) + startTime (HH:MM)
+      const dateKey = which === "start" ? "startDate" : "endDate";
+      const timeKey = which === "start" ? "startTime" : "endTime";
+
+      const d = (ev[dateKey] || "").trim();
+      const t = (ev[timeKey] || "").trim();
+
+      if (d) {
+        // If time missing, assume 00:00 to keep it parseable
+        const iso = `${d}T${t || "00:00"}`;
+        const dt = new Date(iso);
+        if (!isNaN(dt.getTime())) return dt;
+      }
+
+      // Fallback to older fields startDateTime/endDateTime if present
+      const dtStr = which === "start" ? ev.startDateTime : ev.endDateTime;
+      if (dtStr) {
+        const dt = new Date(dtStr);
+        if (!isNaN(dt.getTime())) return dt;
+      }
+
+      return null;
+    }
+
     function formatDateDisplay(dateStr, timeStr) {
       if (!dateStr) return "";
       const date = new Date(dateStr + (timeStr ? "T" + timeStr : "T00:00"));
@@ -661,23 +687,36 @@
     }
 
     function formatDateRange(ev) {
-      const start = formatDateDisplay(ev.startDate, ev.startTime);
-      const end = formatDateDisplay(ev.endDate, ev.endTime);
+      // If stored as separate date/time strings, use those for display
+      if (ev.startDate) {
+        const start = formatDateDisplay(ev.startDate, ev.startTime);
+        const end = ev.endDate ? formatDateDisplay(ev.endDate, ev.endTime) : "";
 
-      if (ev.startDate === ev.endDate || !ev.endDate) {
-        return start;
+        if (!ev.endDate || ev.startDate === ev.endDate) return start;
+        return `${start} → ${end}`;
       }
 
-      return `${start} → ${end}`;
+      // Fallback display from startDateTime/endDateTime
+      const startDt = parseEventDateTime(ev, "start");
+      const endDt = parseEventDateTime(ev, "end");
+
+      if (!startDt && !endDt) return "";
+      const fmt = (d) =>
+        d.toLocaleString("en-US", { month: "short", day: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit" });
+
+      if (startDt && !endDt) return fmt(startDt);
+      if (!startDt && endDt) return fmt(endDt);
+      return `${fmt(startDt)} → ${fmt(endDt)}`;
     }
 
     function createEventCard(docSnap) {
       const data = docSnap.data();
-      const slug = data.slug || docSnap.id;
+      const eventId = docSnap.id; // doc id is the eventId
+
       const title = data.title || "Untitled Event";
       const location = data.location || "";
-      const summary = data.summary || "";
-      const signupUrl = data.signupUrl || "";
+      const summary = (data.description || data.summary || "").trim();
+      const signupUrl = (data.signupUrl || "").trim();
 
       const dateText = formatDateRange(data);
 
@@ -716,8 +755,9 @@
       const linksRow = document.createElement("div");
       linksRow.className = "event-links-row";
 
+      // ✅ FIX: Use the static event detail page with query param (no 404)
       const viewBtn = document.createElement("a");
-      viewBtn.href = `/events/${slug}`;
+      viewBtn.href = `/events/event?id=${encodeURIComponent(eventId)}`;
       viewBtn.className = "btn-chip btn-view";
       viewBtn.textContent = "View Event";
       linksRow.appendChild(viewBtn);
@@ -749,7 +789,6 @@
     }
 
     function renderEvents(docs) {
-      // Clear all lists
       eventsCurrent.innerHTML = "";
       eventsUpcoming.innerHTML = "";
       eventsPast.innerHTML = "";
@@ -762,36 +801,21 @@
 
       docs.forEach((docSnap) => {
         const data = docSnap.data();
-        const startStr = data.startDateTime;
-        const endStr = data.endDateTime;
-
-        let start = null;
-        let end = null;
-
-        if (startStr) start = new Date(startStr);
-        if (endStr) end = new Date(endStr);
+        const start = parseEventDateTime(data, "start");
+        const end = parseEventDateTime(data, "end");
 
         if (start && end) {
-          if (now < start) {
-            upcomingDocs.push(docSnap);
-          } else if (now > end) {
-            pastDocs.push(docSnap);
-          } else {
-            currentDocs.push(docSnap);
-          }
+          if (now < start) upcomingDocs.push(docSnap);
+          else if (now > end) pastDocs.push(docSnap);
+          else currentDocs.push(docSnap);
         } else if (start && !end) {
-          if (now < start) {
-            upcomingDocs.push(docSnap);
-          } else {
-            currentDocs.push(docSnap);
-          }
+          if (now < start) upcomingDocs.push(docSnap);
+          else currentDocs.push(docSnap);
         } else {
-          // If missing dates, treat as upcoming by default
           upcomingDocs.push(docSnap);
         }
       });
 
-      // Render "Happening Now"
       if (currentDocs.length === 0) {
         eventsCurrentEmpty.style.display = "block";
       } else {
@@ -801,7 +825,6 @@
         });
       }
 
-      // Render Upcoming
       if (upcomingDocs.length === 0) {
         eventsUpcomingEmpty.style.display = "block";
       } else {
@@ -811,7 +834,6 @@
         });
       }
 
-      // Render Past
       if (pastDocs.length === 0) {
         eventsPastEmpty.style.display = "block";
       } else {
@@ -850,7 +872,6 @@
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          // If slug taken, add a short random suffix
           const suffix = Math.random().toString(36).slice(2, 6);
           finalSlug = `${baseSlug}-${suffix}`;
         }
@@ -861,20 +882,29 @@
         await setDoc(doc(db, "events", finalSlug), {
           title,
           slug: finalSlug,
+
           startDate,
           startTime,
           endDate,
           endTime,
+
+          // keep legacy fields for sorting/compatibility
           startDateTime: isoStart,
           endDateTime: isoEnd,
+
           location,
           signupUrl: signupUrl || "",
+
+          // Keep both so nothing breaks on either page
           summary,
+          description: summary,
+
           createdAt: serverTimestamp(),
           createdBy: currentUser ? currentUser.uid : null
         });
 
-        eventSuccessEl.textContent = `Event created. Link: /events/${finalSlug}`;
+        // ✅ Update message to the correct, working static URL
+        eventSuccessEl.textContent = `Event created. Link: /events/event?id=${finalSlug}`;
         eventErrorEl.textContent = "";
 
         eventTitleInput.value = "";
