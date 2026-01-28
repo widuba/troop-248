@@ -8,27 +8,6 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="/favicon.png">
 
-  <!-- Firebase SDKs -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-    window.firebaseConfig = {
-      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
-      authDomain: "troop-248.firebaseapp.com",
-      projectId: "troop-248",
-      storageBucket: "troop-248.firebasestorage.app",
-      messagingSenderId: "925363875752",
-      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
-      measurementId: "G-NY75GX5TBH"
-    };
-
-    window.firebaseApp = initializeApp(window.firebaseConfig);
-    window.auth = getAuth(window.firebaseApp);
-    window.db = getFirestore(window.firebaseApp);
-  </script>
-
   <!-- Styles -->
   <style>
     :root {
