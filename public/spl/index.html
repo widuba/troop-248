@@ -534,19 +534,28 @@ body.dark-theme .badge {
         try {
           setStatus("Publishing post...");
           // Try to grab author name from accountInfo (fallback to email)
-          let authorName = currentUser.email || currentUser.uid;
-          try {
-            const infoRef = doc(db, "accountInfo", currentUser.uid);
-            const infoSnap = await getDoc(infoRef);
-            if (infoSnap.exists()) {
-              const info = infoSnap.data();
-              if (info.firstName || info.lastName) {
-                authorName = `${info.firstName || ""} ${info.lastName || ""}`.trim() || authorName;
-              }
-            }
-          } catch (e2) {
-            console.warn("Could not resolve authorName from accountInfo:", e2);
-          }
+let authorName = currentUser.email || currentUser.uid;
+
+try {
+  const infoRef = doc(db, "accountInfo", currentUser.uid);
+  const infoSnap = await getDoc(infoRef);
+
+  if (infoSnap.exists()) {
+    const info = infoSnap.data();
+
+    // ✅ Prefer new fullName field
+    if (info.fullName && String(info.fullName).trim()) {
+      authorName = String(info.fullName).trim();
+
+    // 🔁 Fallback for older accounts
+    } else if (info.firstName || info.lastName) {
+      authorName =
+        `${info.firstName || ""} ${info.lastName || ""}`.trim() || authorName;
+    }
+  }
+} catch (err) {
+  console.warn("Could not resolve authorName from accountInfo:", err);
+}
 
           await addDoc(collection(db, "splPosts"), {
             title,
