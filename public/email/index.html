@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Email Members — Troop 248</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Favicon (keep consistent with your site) -->
+  <link rel="icon" href="/favicon.png" />
+
+  <style>
+    :root {
+      --red: #b22222;
+      --blue: #1f4e79;
+      --tan: #f4eee3;
+      --white: #ffffff;
+      --text-main: #1f2933;
+      --text-muted: #6b7280;
+      --radius-lg: 16px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #d2cab6;
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
+      color: var(--white);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    header h2 {
+      margin: 0;
+      font-size: 19px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    header h2::before { content: "★"; font-size: 18px; }
+
+    .troop-home-link {
+      text-decoration: none;
+      color: inherit;
+      display: inline-flex;
+      align-items: center;
+    }
+    .troop-home-link:hover h2 { opacity: 0.9; text-decoration: underline; }
+
+    nav {
+      display: flex;
+      gap: 12px;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    nav a {
+      color: #1f4e79;
+      font-weight: bold;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(4px);
+      opacity: 0.9;
+    }
+    nav a:hover { opacity: 1; background: rgba(255, 255, 255, 0.12); }
+
+    #auth-bar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    #logout-btn {
+      padding: 5px 12px;
+      font-size: 13px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--white);
+      cursor: pointer;
+    }
+    #logout-btn:hover { background: rgba(255, 255, 255, 0.2); }
+
+    main {
+      padding: 24px 16px 40px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .welcome-card, section {
+      background: rgba(255, 255, 255, 0.97);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 14px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    .welcome-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .welcome-card h3 { margin: 0 0 4px; font-size: 18px; }
+    .welcome-card p { margin: 0; font-size: 14px; color: var(--text-muted); }
+
+    section h2 {
+      margin-top: 0;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    section h2::before { content: "▸"; font-size: 14px; color: var(--blue); }
+
+    .badge {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(148, 163, 184, 0.2);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .badge.admin {
+      background: rgba(240, 180, 41, 0.16);
+      color: #92400e;
+      border: 1px solid rgba(245, 158, 11, 0.6);
+    }
+
+    .small-help {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      line-height: 1.35;
+    }
+
+    .danger-text { color: #b91c1c; }
+    .success-text { color: #166534; }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    @media (max-width: 800px) {
+      .grid-2 { grid-template-columns: minmax(0, 1fr); }
+    }
+
+    .field { margin-bottom: 10px; }
+    .field label {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 3px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .field input, .field textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      font-size: 14px;
+      background: #ffffff;
+    }
+    .field textarea { min-height: 140px; resize: vertical; }
+    .field input:focus, .field textarea:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 2px rgba(31,78,121,.12);
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+      align-items: center;
+    }
+
+    .btn-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 7px 14px;
+      font-size: 13px;
+      border-radius: var(--radius-pill);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .btn-primary { background: var(--blue); color: var(--white); }
+    .btn-outlined {
+      background: rgba(31,78,121,.08);
+      color: var(--blue);
+      border: 1px solid rgba(148,163,184,.7);
+    }
+    .btn-danger { background: var(--red); color: var(--white); }
+    .btn-chip:hover { opacity: .96; }
+    .btn-chip:disabled { opacity: .5; cursor: not-allowed; }
+
+    .user-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .search-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .search-row input {
+      flex: 1;
+      min-width: 220px;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .user-list {
+      border: 1px solid rgba(209,213,219,.9);
+      border-radius: 12px;
+      background: #f9fafb;
+      padding: 10px;
+      max-height: 360px;
+      overflow: auto;
+    }
+
+    .user-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px;
+      border-radius: 10px;
+    }
+    .user-item:hover { background: rgba(31,78,121,.06); }
+    .user-item + .user-item { border-top: 1px solid rgba(229,231,235,.9); }
+
+    .user-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+    .user-name {
+      font-weight: 700;
+      font-size: 14px;
+      overflow-wrap: anywhere;
+    }
+    .user-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      overflow-wrap: anywhere;
+    }
+
+    .selected-box {
+      border: 1px dashed rgba(148, 163, 184, 0.8);
+      border-radius: 12px;
+      padding: 10px;
+      background: #ffffff;
+    }
+
+    @media (max-width: 640px) {
+      header { flex-direction: column; align-items: flex-start; gap: 8px; }
+      nav { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
+      .welcome-card { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <a href="/home" class="troop-home-link"><h2>Troop 248</h2></a>
+    </div>
+
+    <nav>
+      <a href="/home">Home</a>
+      <a href="/events">Events</a>
+      <a href="/calendar">Calendar</a>
+      <a href="/documents">Documents</a>
+      <a href="/scoutmaster">Scoutmaster Blog</a>
+      <a href="/spl-blog">SPL Blog</a>
+      <a href="/useful-links">Useful Links</a>
+    </nav>
+
+    <div id="auth-bar">
+      <div id="auth-info">Signed in as …</div>
+      <button id="logout-btn">Log Out</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="welcome-card">
+      <div>
+        <h3>Email Members</h3>
+        <p>Send an email to troop members with built-in safety rules.</p>
+        <div class="small-help">
+          <b>Scout rule:</b> you may include <b>0 adults</b> (scout-to-scout) or <b>2+ adults</b>.<br />
+          <b>Adult rule:</b> you must include <b>at least 1 adult</b>.
+        </div>
+      </div>
+      <div id="role-badge-container">
+        <span class="badge">Viewer</span>
+      </div>
+    </div>
+
+    <section>
+      <h2>Compose</h2>
+
+      <div class="grid-2">
+        <div class="user-panel">
+          <div class="field">
+            <label for="search">Search members</label>
+            <input id="search" type="text" placeholder="Type a name, role, or email..." />
+            <div class="small-help" id="loading-users">Loading members…</div>
+          </div>
+
+          <div class="selected-box">
+            <div class="pill-row" id="selected-pills"></div>
+            <div class="small-help" id="selected-help">No recipients selected.</div>
+          </div>
+
+          <div class="user-list" id="user-list"></div>
+          <div class="small-help danger-text" id="rule-error"></div>
+        </div>
+
+        <div>
+          <div class="field">
+            <label for="subject">Subject</label>
+            <input id="subject" type="text" maxlength="160" placeholder="Example: PLC Meeting Reminder" />
+          </div>
+
+          <div class="field">
+            <label for="body">Message</label>
+            <textarea id="body" maxlength="5000" placeholder="Write your message here..."></textarea>
+            <div class="small-help">Max 5,000 characters. Please keep messages troop-appropriate.</div>
+          </div>
+
+          <div class="btn-row">
+            <button id="send-btn" class="btn-chip btn-primary" type="button" disabled>Send Email</button>
+            <button id="clear-btn" class="btn-chip btn-outlined" type="button">Clear</button>
+          </div>
+
+          <div class="small-help" id="send-status"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      collection,
+      query,
+      where,
+      getDocs,
+      addDoc,
+      serverTimestamp,
+      onSnapshot
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+      authDomain: "troop-248.firebaseapp.com",
+      projectId: "troop-248",
+      storageBucket: "troop-248.firebasestorage.app",
+      messagingSenderId: "925363875752",
+      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+      measurementId: "G-NY75GX5TBH"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const authInfoEl = document.getElementById("auth-info");
+    const logoutBtn = document.getElementById("logout-btn");
+    const roleBadgeContainer = document.getElementById("role-badge-container");
+
+    const searchEl = document.getElementById("search");
+    const userListEl = document.getElementById("user-list");
+    const selectedPillsEl = document.getElementById("selected-pills");
+    const selectedHelpEl = document.getElementById("selected-help");
+    const ruleErrorEl = document.getElementById("rule-error");
+    const loadingUsersEl = document.getElementById("loading-users");
+
+    const subjectEl = document.getElementById("subject");
+    const bodyEl = document.getElementById("body");
+    const sendBtn = document.getElementById("send-btn");
+    const clearBtn = document.getElementById("clear-btn");
+    const sendStatusEl = document.getElementById("send-status");
+
+    let currentUser = null;
+    let accountInfo = null; // current user's accountInfo
+    let isAdmin = false;
+
+    // directory of approved users: { uid, fullName, email, roleType, authRole }
+    let users = [];
+    const selected = new Map(); // uid -> userObj
+
+    function setStatus(text, color = "#6b7280") {
+      sendStatusEl.textContent = text || "";
+      sendStatusEl.style.color = color;
+    }
+
+    function isAdultRole(roleType) {
+      return roleType === "Parent" || roleType === "Adult Leader";
+    }
+
+    function safeDisplayName(u) {
+      const name = (u.fullName || "").trim();
+      if (name) return name;
+      return u.email || u.uid || "Member";
+    }
+
+    function renderRoleBadge() {
+      const label = isAdmin ? "Admin" : "Viewer";
+      roleBadgeContainer.innerHTML = `
+        <span class="badge ${isAdmin ? "admin" : ""}">${label}</span>
+      `;
+    }
+
+    function updateRecipientUI() {
+      // pills
+      selectedPillsEl.innerHTML = "";
+      const arr = Array.from(selected.values());
+
+      if (arr.length === 0) {
+        selectedHelpEl.textContent = "No recipients selected.";
+      } else {
+        selectedHelpEl.textContent = `${arr.length} recipient${arr.length === 1 ? "" : "s"} selected.`;
+      }
+
+      arr.forEach((u) => {
+        const pill = document.createElement("span");
+        pill.className = "badge";
+        pill.textContent = safeDisplayName(u);
+
+        const x = document.createElement("button");
+        x.type = "button";
+        x.textContent = "×";
+        x.className = "btn-chip btn-danger";
+        x.style.padding = "0 8px";
+        x.style.fontSize = "12px";
+        x.style.lineHeight = "18px";
+        x.style.marginLeft = "6px";
+        x.onclick = () => {
+          selected.delete(u.uid);
+          renderUserList();
+          validateRules();
+        };
+
+        const wrap = document.createElement("span");
+        wrap.className = "badge";
+        wrap.style.gap = "6px";
+        wrap.style.padding = "4px 6px";
+        wrap.appendChild(document.createTextNode(safeDisplayName(u)));
+        wrap.appendChild(x);
+
+        selectedPillsEl.appendChild(wrap);
+      });
+
+      validateRules();
+    }
+
+    function validateRules() {
+      ruleErrorEl.textContent = "";
+      sendBtn.disabled = true;
+
+      const subject = subjectEl.value.trim();
+      const body = bodyEl.value.trim();
+      const recipients = Array.from(selected.values());
+
+      if (!accountInfo) return;
+
+      if (recipients.length === 0) {
+        ruleErrorEl.textContent = "Select at least one recipient.";
+        return;
+      }
+
+      if (!subject) {
+        ruleErrorEl.textContent = "Subject is required.";
+        return;
+      }
+
+      if (!body) {
+        ruleErrorEl.textContent = "Message body is required.";
+        return;
+      }
+
+      const senderRoleType = accountInfo.roleType || "Scout";
+      const senderIsAdult = isAdultRole(senderRoleType);
+
+      const adultCount = recipients.filter(r => isAdultRole(r.roleType)).length;
+
+      if (!senderIsAdult) {
+        // Scout rule: adults must be 0 OR 2+
+        if (!(adultCount === 0 || adultCount >= 2)) {
+          ruleErrorEl.textContent =
+            "Safety rule: Scouts must include either 0 adults or 2+ adults. Add one more adult, or remove the single adult recipient.";
+          return;
+        }
+      } else {
+        // Adult rule: must include at least 1 adult recipient
+        if (adultCount < 1) {
+          ruleErrorEl.textContent =
+            "Safety rule: Adults must include at least 1 adult recipient.";
+          return;
+        }
+      }
+
+      // basic cap (mirrors server)
+      if (recipients.length > 20) {
+        ruleErrorEl.textContent = "Please limit to 20 recipients per email.";
+        return;
+      }
+
+      sendBtn.disabled = false;
+    }
+
+    function renderUserList() {
+      const q = (searchEl.value || "").trim().toLowerCase();
+
+      userListEl.innerHTML = "";
+      const filtered = users.filter((u) => {
+        const hay = `${u.fullName || ""} ${u.email || ""} ${u.roleType || ""}`.toLowerCase();
+        return !q || hay.includes(q);
+      });
+
+      if (filtered.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "small-help";
+        empty.textContent = "No members match your search.";
+        userListEl.appendChild(empty);
+        return;
+      }
+
+      filtered.forEach((u) => {
+        // do not list self as recipient (optional; safer default)
+        if (currentUser && u.uid === currentUser.uid) return;
+
+        const row = document.createElement("div");
+        row.className = "user-item";
+
+        const cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.checked = selected.has(u.uid);
+        cb.onchange = () => {
+          if (cb.checked) selected.set(u.uid, u);
+          else selected.delete(u.uid);
+          updateRecipientUI();
+          renderUserList();
+        };
+
+        const meta = document.createElement("div");
+        meta.className = "user-meta";
+
+        const name = document.createElement("div");
+        name.className = "user-name";
+        name.textContent = safeDisplayName(u);
+
+        const sub = document.createElement("div");
+        sub.className = "user-sub";
+        sub.textContent = `${u.roleType || "Member"} • ${u.email || ""}`;
+
+        meta.appendChild(name);
+        meta.appendChild(sub);
+
+        row.appendChild(cb);
+        row.appendChild(meta);
+
+        userListEl.appendChild(row);
+      });
+    }
+
+    async function loadApprovedUsersDirectory() {
+      loadingUsersEl.style.display = "block";
+      loadingUsersEl.textContent = "Loading members…";
+
+      // Only approved users should be in directory
+      // (We store them by checking authRole in query)
+      const q1 = query(collection(db, "accountInfo"), where("authRole", "in", ["admin", "viewer"]));
+      const snap = await getDocs(q1);
+
+      users = snap.docs.map(d => {
+        const data = d.data();
+        return {
+          uid: d.id,
+          fullName: (data.fullName || "").trim(),
+          email: data.email || "",
+          roleType: data.roleType || "",
+          authRole: data.authRole || ""
+        };
+      });
+
+      // Sort alphabetically by display name
+      users.sort((a, b) => safeDisplayName(a).localeCompare(safeDisplayName(b)));
+
+      loadingUsersEl.style.display = "none";
+      renderUserList();
+    }
+
+    async function sendEmailRequest() {
+      setStatus("");
+      ruleErrorEl.textContent = "";
+
+      validateRules();
+      if (sendBtn.disabled) return;
+
+      const toUids = Array.from(selected.keys());
+      const subject = subjectEl.value.trim();
+      const body = bodyEl.value.trim();
+
+      try {
+        setStatus("Submitting email for delivery…");
+
+        // Create outbox request
+        const ref = await addDoc(collection(db, "mailOutbox"), {
+          fromUid: currentUser.uid,
+          toUids,
+          subject,
+          body,
+          createdAt: serverTimestamp(),
+          status: "queued"
+        });
+
+        // Listen for status updates on this request
+        const unsub = onSnapshot(ref, (docSnap) => {
+          const data = docSnap.data() || {};
+          const st = data.status || "queued";
+
+          if (st === "queued" || st === "processing") {
+            setStatus("Sending…");
+            return;
+          }
+
+          if (st === "sent") {
+            setStatus("Email sent successfully.", "#166534");
+            unsub();
+
+            // Clear composer
+            selected.clear();
+            subjectEl.value = "";
+            bodyEl.value = "";
+            updateRecipientUI();
+            renderUserList();
+            return;
+          }
+
+          if (st === "rejected") {
+            setStatus(`Rejected: ${data.error || "Not allowed."}`, "#b91c1c");
+            unsub();
+            return;
+          }
+
+          if (st === "error") {
+            setStatus(`Error: ${data.error || "Send failed."}`, "#b91c1c");
+            unsub();
+            return;
+          }
+        });
+
+      } catch (err) {
+        console.error(err);
+        setStatus(err.message || "Error submitting email.", "#b91c1c");
+      }
+    }
+
+    function clearAll() {
+      selected.clear();
+      subjectEl.value = "";
+      bodyEl.value = "";
+      setStatus("");
+      ruleErrorEl.textContent = "";
+      updateRecipientUI();
+      renderUserList();
+    }
+
+    async function handleAuth(user) {
+      if (!user) {
+        window.location.href = "/";
+        return;
+      }
+      currentUser = user;
+      authInfoEl.textContent = `Signed in as ${user.email || user.uid}`;
+
+      // Check account approval + role
+      const infoRef = doc(db, "accountInfo", user.uid);
+      const infoSnap = await getDoc(infoRef);
+      if (!infoSnap.exists()) {
+        window.location.href = "/under-review/";
+        return;
+      }
+
+      accountInfo = infoSnap.data() || {};
+      const role = accountInfo.authRole;
+
+      if (role !== "admin" && role !== "viewer") {
+        window.location.href = "/under-review/";
+        return;
+      }
+
+      isAdmin = role === "admin";
+      renderRoleBadge();
+
+      await loadApprovedUsersDirectory();
+      updateRecipientUI();
+      validateRules();
+      setStatus("Ready.");
+    }
+
+    onAuthStateChanged(auth, (user) => {
+      // important: only redirect after auth resolves
+      handleAuth(user).catch((e) => {
+        console.error(e);
+        setStatus("Error loading page.", "#b91c1c");
+      });
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "/";
+    });
+
+    searchEl.addEventListener("input", () => renderUserList());
+    subjectEl.addEventListener("input", () => validateRules());
+    bodyEl.addEventListener("input", () => validateRules());
+
+    sendBtn.addEventListener("click", sendEmailRequest);
+    clearBtn.addEventListener("click", clearAll);
+  </script>
+</body>
+</html>
