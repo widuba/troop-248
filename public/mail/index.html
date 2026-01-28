@@ -343,27 +343,33 @@
 
   <!-- Logic -->
   <script type="module">
-    import {
-      getAuth,
-      onAuthStateChanged,
-      signOut
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+/* ================================
+   Firebase Imports
+================================ */
 
-    import {
-      doc,
-      getDoc,
-      collection,
-      query,
-      orderBy,
-      where,
-      onSnapshot,
-      addDoc,
-      serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { 
+  getAuth,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import {
+  getFirestore,
+  collection,
+  doc,
+  getDoc,
+  addDoc,
+  onSnapshot,
+  query,
+  where,
+  orderBy,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+/* ================================
+   Firebase Init
+================================ */
 
 const firebaseConfig = {
   apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
@@ -379,992 +385,255 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-
-    // Header
-    const authInfoEl = document.getElementById("auth-info");
-    const logoutBtn = document.getElementById("logout-btn");
-    const roleBadgeEl = document.getElementById("role-badge");
-    const safetyNoteEl = document.getElementById("safety-note");
-
-    // Compose
-    const composeForm = document.getElementById("compose-form");
-    const subjectEl = document.getElementById("subject");
-    const bodyEl = document.getElementById("body");
-    const sendBtn = document.getElementById("send-btn");
-    const clearSelectedBtn = document.getElementById("clear-selected");
-    const clearDraftBtn = document.getElementById("clear-draft");
-    const composeErrorEl = document.getElementById("compose-error");
-    const composeSuccessEl = document.getElementById("compose-success");
-    const selectedCountEl = document.getElementById("selected-count");
-    const adultCountEl = document.getElementById("adult-count");
-
-    // Recipients
-    const recipientsListEl = document.getElementById("recipients-list");
-    const recipientsEmptyEl = document.getElementById("recipients-empty");
-    const tabScouts = document.getElementById("tab-scouts");
-    const tabAdults = document.getElementById("tab-adults");
-    const tabParents = document.getElementById("tab-parents");
-
-    // Mail list
-    const mailListEl = document.getElementById("mail-list");
-    const mailEmptyEl = document.getElementById("mail-empty");
-    const inboxTab = document.getElementById("inbox-tab");
-    const sentTab = document.getElementById("sent-tab");
-    const allTab = document.getElementById("all-tab");
-
-    // State
-    let currentUser = null;
-    let currentInfo = null;
-    let currentRole = "viewer"; // viewer|admin
-    let activeRecipientTab = "scouts"; // scouts|adults|parents
-    let activeMailFilter = "inbox"; // inbox|sent|all
-
-    // Directory: expects collection `userDirectory` readable by approved users
-    // Each doc id = uid, with fields: fullName?, firstName?, lastName?, email?, accountType?
-    const directory = new Map(); // uid -> data
-    const selectedUids = new Set();
-    const mailMap = new Map(); // id -> message
-
-    let unsubDir = null;
-    let unsubInbox = null;
-    let unsubSent = null;
-
-    function setStatus(error = "", success = "") {
-      composeErrorEl.textContent = error;
-      composeSuccessEl.textContent = success;
-    }
-
-    function isAdultRole(accountType) {
-      const r = (accountType || "").toString().trim().toLowerCase();
-      if (!r) return false;
-      if (r === "parent") return true;
-      if (r === "adult leader") return true;
-      if (r.includes("adult")) return true;
-      if (r.includes("parent")) return true;
-      if (r.includes("leader")) return true;
-      return false;
-    }
-
-    function senderIsAdult() {
-      return isAdultRole(currentInfo?.accountType);
-    }
-
-    function displayNameFor(u) {
-      const full = (u.fullName || "").toString().trim();
-      if (full) return full;
-
-      const first = (u.firstName || "").toString().trim();
-      const last = (u.lastName || "").toString().trim();
-      const combined = (first + " " + last).trim();
-      if (combined) return combined;
-
-      const email = (u.email || "").toString().trim();
-      if (email) return email;
-
-      return "(No name)";
-    }
-
-    function setActiveRecipientTab(tab) {
-      activeRecipientTab = tab;
-      tabScouts.classList.toggle("active", tab === "scouts");
-      tabAdults.classList.toggle("active", tab === "adults");
-      tabParents.classList.toggle("active", tab === "parents");
-      renderRecipients();
-    }
-
-    function setActiveMailFilter(filter) {
-      activeMailFilter = filter;
-
-      // Simple visual: make active one blue, others outlined-ish
-      function styleActive(btn, active) {
-        if (active) {
-          btn.style.background = "var(--blue)";
-          btn.style.color = "#fff";
-          btn.style.border = "none";
-        } else {
-          btn.style.background = "rgba(31,78,121,.08)";
-          btn.style.color = "var(--blue)";
-          btn.style.border = "1px solid rgba(148,163,184,.7)";
-        }
-      }
-      styleActive(inboxTab, filter === "inbox");
-      styleActive(sentTab, filter === "sent");
-      styleActive(allTab, filter === "all");
-
-      renderMail();
-    }
-
-    function updateCountsAndSafety() {
-      const sel = Array.from(selectedUids);
-      let adultCount = 0;
-
-      sel.forEach((uid) => {
-        const u = directory.get(uid);
-        if (u && isAdultRole(u.accountType)) adultCount++;
-      });
-
-      selectedCountEl.textContent = String(sel.length);
-      adultCountEl.textContent = String(adultCount);
-
-      if (!senderIsAdult()) {
-        safetyNoteEl.textContent = "Scout rule: include 0 adults OR 2+ adults (no 1-adult messages).";
-      } else {
-        safetyNoteEl.textContent = "Adult rule: include at least 1 adult recipient.";
-      }
-
-      const ok = validateRecipients(true);
-      sendBtn.disabled = !ok;
-    }
-
-    function validateRecipients(quiet) {
-      const toUids = Array.from(selectedUids).filter(uid => uid !== currentUser?.uid);
-      if (toUids.length < 1) {
-        if (!quiet) setStatus("Select at least one recipient.", "");
-        return false;
-      }
-      if (toUids.length > 20) {
-        if (!quiet) setStatus("Max 20 recipients.", "");
-        return false;
-      }
-
-      let adultCount = 0;
-      toUids.forEach((uid) => {
-        const u = directory.get(uid);
-        if (u && isAdultRole(u.accountType)) adultCount++;
-      });
-
-      if (!senderIsAdult()) {
-        if (!(adultCount === 0 || adultCount >= 2)) {
-          if (!quiet) setStatus("Scout safety rule: 0 adults OR 2+ adults required.", "");
-          return false;
-        }
-      } else {
-        if (adultCount < 1) {
-          if (!quiet) setStatus("Adult safety rule: must include at least 1 adult recipient.", "");
-          return false;
-        }
-      }
-
-      return true;
-    }
-
-    function renderRecipients() {
-      recipientsListEl.innerHTML = "";
-
-      const meUid = currentUser?.uid;
-
-      const users = Array.from(directory.entries())
-        .map(([uid, data]) => ({ uid, ...data }))
-        .filter(u => u.uid !== meUid);
-
-      function isScout(u) {
-        return !isAdultRole(u.accountType) && (u.accountType || "").toLowerCase().includes("scout");
-      }
-      function isParent(u) {
-        return (u.accountType || "").toLowerCase().includes("parent");
-      }
-      function isAdultLeader(u) {
-        return (u.accountType || "").toLowerCase().includes("leader");
-      }
-
-      let filtered = [];
-      if (activeRecipientTab === "scouts") filtered = users.filter(isScout);
-      if (activeRecipientTab === "parents") filtered = users.filter(isParent);
-      if (activeRecipientTab === "adults") filtered = users.filter(isAdultLeader);
-
-      filtered.sort((a, b) => displayNameFor(a).localeCompare(displayNameFor(b)));
-
-      if (filtered.length === 0) {
-        recipientsEmptyEl.style.display = "block";
-        recipientsEmptyEl.textContent = "No users in this group yet.";
-        recipientsListEl.appendChild(recipientsEmptyEl);
-        updateCountsAndSafety();
-        return;
-      }
-
-      filtered.forEach((u) => {
-        const row = document.createElement("div");
-        row.className = "user-row";
-
-        const cb = document.createElement("input");
-        cb.type = "checkbox";
-        cb.checked = selectedUids.has(u.uid);
-        cb.addEventListener("change", () => {
-          if (cb.checked) selectedUids.add(u.uid);
-          else selectedUids.delete(u.uid);
-          setStatus("", "");
-          updateCountsAndSafety();
-        });
-
-        const label = document.createElement("div");
-        label.style.flex = "1";
-        label.style.minWidth = "0";
-        label.textContent = displayNameFor(u);
-
-        row.appendChild(cb);
-        row.appendChild(label);
-
-        recipientsListEl.appendChild(row);
-      });
-
-      updateCountsAndSafety();
-    }
-
-    function escapeHtml(str) {
-      return (str || "").toString()
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-
-    function formatTime(ts) {
-      if (!ts) return "";
-      try {
-        const d = ts.toDate ? ts.toDate() : new Date(ts);
-        return d.toLocaleString(undefined, {
-          year: "numeric", month: "short", day: "numeric",
-          hour: "2-digit", minute: "2-digit"
-        });
-      } catch {
-        return "";
-      }
-    }
-
-    function renderMail() {
-      mailListEl.innerHTML = "";
-
-      const items = Array.from(mailMap.entries())
-        .map(([id, m]) => ({ id, ...m }))
-        .sort((a, b) => {
-          const at = a.createdAt?.seconds ? a.createdAt.seconds : 0;
-          const bt = b.createdAt?.seconds ? b.createdAt.seconds : 0;
-          return bt - at;
-        });
-
-      const filtered = items.filter((m) => {
-        const isSentByMe = m.fromUid === currentUser.uid;
-        const isToMe = Array.isArray(m.toUids) && m.toUids.includes(currentUser.uid);
-
-        if (activeMailFilter === "inbox") return isToMe;
-        if (activeMailFilter === "sent") return isSentByMe;
-        return isToMe || isSentByMe;
-      });
-
-      if (filtered.length === 0) {
-        mailEmptyEl.style.display = "block";
-        mailEmptyEl.textContent = "No messages to show.";
-        return;
-      }
-      mailEmptyEl.style.display = "none";
-
-      filtered.forEach((m) => {
-        const card = document.createElement("div");
-        card.className = "mail-item";
-
-        const fromInfo = directory.get(m.fromUid) || {};
-        const fromName = (m.fromUid === currentUser.uid) ? "You" : displayNameFor(fromInfo);
-
-        const subject = m.subject || "(No subject)";
-        const meta = `From ${fromName}${m.createdAt ? " • " + formatTime(m.createdAt) : ""}`;
-        const body = m.body || "";
-
-        card.innerHTML = `
-          <div class="mail-subject">${escapeHtml(subject)}</div>
-          <div class="mail-meta">${escapeHtml(meta)}</div>
-          <div style="margin-top:6px; font-size:13px; white-space:pre-wrap; overflow-wrap:break-word;">
-            ${escapeHtml(body)}
-          </div>
-        `;
-
-        mailListEl.appendChild(card);
-      });
-    }
-
-    function startDirectoryListener() {
-      if (unsubDir) unsubDir();
-      directory.clear();
-
-      // IMPORTANT: This expects a public-to-approved directory collection.
-      unsubDir = onSnapshot(
-        query(collection(db, "userDirectory"), orderBy("fullName", "asc")),
-        (snapshot) => {
-          directory.clear();
-          snapshot.forEach((docSnap) => {
-            directory.set(docSnap.id, docSnap.data() || {});
-          });
-          renderRecipients();
-          renderMail();
-        },
-        (error) => {
-          console.error("Directory listener error:", error);
-          recipientsListEl.innerHTML = "";
-          recipientsEmptyEl.style.display = "block";
-          recipientsEmptyEl.textContent = "Directory not available yet (userDirectory).";
-          recipientsListEl.appendChild(recipientsEmptyEl);
-          updateCountsAndSafety();
-        }
-      );
-    }
-
-    function startMailListeners() {
-      if (unsubInbox) unsubInbox();
-      if (unsubSent) unsubSent();
-
-      mailMap.clear();
-      renderMail();
-      mailEmptyEl.style.display = "block";
-      mailEmptyEl.textContent = "Loading messages…";
-
-      unsubInbox = onSnapshot(
-        query(
-          collection(db, "mailOutbox"),
-          where("toUids", "array-contains", currentUser.uid),
-          orderBy("createdAt", "desc")
-        ),
-        (snap) => {
-          snap.docChanges().forEach((chg) => {
-            if (chg.type === "removed") mailMap.delete(chg.doc.id);
-            else mailMap.set(chg.doc.id, chg.doc.data());
-          });
-          renderMail();
-        },
-        (err) => {
-          console.error("Inbox listener error:", err);
-          mailEmptyEl.style.display = "block";
-          mailEmptyEl.textContent = "Error loading inbox.";
-        }
-      );
-
-      unsubSent = onSnapshot(
-        query(
-          collection(db, "mailOutbox"),
-          where("fromUid", "==", currentUser.uid),
-          orderBy("createdAt", "desc")
-        ),
-        (snap) => {
-          snap.docChanges().forEach((chg) => {
-            if (chg.type === "removed") mailMap.delete(chg.doc.id);
-            else mailMap.set(chg.doc.id, chg.doc.data());
-          });
-          renderMail();
-        },
-        (err) => {
-          console.error("Sent listener error:", err);
-        }
-      );
-    }
-
-    async function handleAuth(user) {
-      if (!user) {
-        window.location.href = "/";
-        return;
-      }
-
-      currentUser = user;
-      authInfoEl.textContent = "Signed in as " + (user.email || user.uid);
-
-      const infoRef = doc(db, "accountInfo", user.uid);
-      const infoSnap = await getDoc(infoRef);
-
-      if (!infoSnap.exists()) {
-        window.location.href = "/under-review/";
-        return;
-      }
-
-      const info = infoSnap.data() || {};
-      const role = info.authRole;
-
-      if (role !== "admin" && role !== "viewer") {
-        window.location.href = "/under-review/";
-        return;
-      }
-
-      currentInfo = info;
-      currentRole = role;
-      roleBadgeEl.textContent = role;
-
-      startDirectoryListener();
-      startMailListeners();
-      updateCountsAndSafety();
-    }
-
-    logoutBtn.addEventListener("click", async () => {
-      await signOut(auth);
-      window.location.href = "/";
-    });
-
-    // Tabs
-    tabScouts.addEventListener("click", () => setActiveRecipientTab("scouts"));
-    tabAdults.addEventListener("click", () => setActiveRecipientTab("adults"));
-    tabParents.addEventListener("click", () => setActiveRecipientTab("parents"));
-
-    inboxTab.addEventListener("click", () => setActiveMailFilter("inbox"));
-    sentTab.addEventListener("click", () => setActiveMailFilter("sent"));
-    allTab.addEventListener("click", () => setActiveMailFilter("all"));
-
-    // Clear buttons
-    clearSelectedBtn.addEventListener("click", () => {
-      selectedUids.clear();
-      setStatus("", "");
-      renderRecipients();
-    });
-
-    clearDraftBtn.addEventListener("click", () => {
-      subjectEl.value = "";
-      bodyEl.value = "";
-      setStatus("", "");
-      updateCountsAndSafety();
-    });
-
-    // Send
-    composeForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      setStatus("", "");
-
-      if (!validateRecipients(false)) return;
-
-      const subject = (subjectEl.value || "").toString().trim();
-      const body = (bodyEl.value || "").toString().trim();
-      if (!subject) return setStatus("Subject is required.", "");
-      if (!body) return setStatus("Message is required.", "");
-
-      const toUids = Array.from(selectedUids).filter(uid => uid !== currentUser.uid);
-
-      sendBtn.disabled = true;
-      sendBtn.textContent = "Sending…";
-
-      try {
-        await addDoc(collection(db, "mailOutbox"), {
-          fromUid: currentUser.uid,
-          toUids,
-          subject,
-          body,
-          status: "queued",
-          createdAt: serverTimestamp()
-        });
-
-        setStatus("", "Queued. It will send shortly.");
-        subjectEl.value = "";
-        bodyEl.value = "";
-        selectedUids.clear();
-        renderRecipients();
-      } catch (err) {
-        console.error(err);
-        setStatus(err?.message || "Error sending message.", "");
-      } finally {
-        sendBtn.textContent = "Send";
-        updateCountsAndSafety();
-      }
-    });
-
-    // Initial tab styles
-    setActiveRecipientTab("scouts");
-    setActiveMailFilter("inbox");
-  import {
-    collection,
-    doc,
-    getDoc,
-    addDoc,
-    query,
-    where,
-    orderBy,
-    onSnapshot,
-    serverTimestamp
-  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-  const auth = window.auth;
-  const db = window.db;
-
-  // Header
-  const authInfoEl = document.getElementById("auth-info");
-  const logoutBtn = document.getElementById("logout-btn");
-  const roleBadgeEl = document.getElementById("role-badge");
-  const safetyNoteEl = document.getElementById("safety-note");
-
-  // Compose
-  const composeForm = document.getElementById("compose-form");
-  const subjectEl = document.getElementById("subject");
-  const bodyEl = document.getElementById("body");
-  const sendBtn = document.getElementById("send-btn");
-  const clearSelectedBtn = document.getElementById("clear-selected");
-  const clearDraftBtn = document.getElementById("clear-draft");
-  const composeErrorEl = document.getElementById("compose-error");
-  const composeSuccessEl = document.getElementById("compose-success");
-  const selectedCountEl = document.getElementById("selected-count");
-  const adultCountEl = document.getElementById("adult-count");
-
-  // Recipients
-  const recipientsListEl = document.getElementById("recipients-list");
-  const recipientsEmptyEl = document.getElementById("recipients-empty");
-  const tabScouts = document.getElementById("tab-scouts");
-  const tabAdults = document.getElementById("tab-adults");
-  const tabParents = document.getElementById("tab-parents");
-
-  // Mail list
-  const mailListEl = document.getElementById("mail-list");
-  const mailEmptyEl = document.getElementById("mail-empty");
-  const inboxTab = document.getElementById("inbox-tab");
-  const sentTab = document.getElementById("sent-tab");
-  const allTab = document.getElementById("all-tab");
-
-  // State
-  let currentUser = null;
-  let myInfo = null;
-  let myAuthRole = "viewer";
-  let myAccountType = ""; // from accountInfo.accountType
-  let activeRecipientTab = "scouts"; // scouts|adults|parents
-  let activeMailFilter = "inbox"; // inbox|sent|all
-
-  const directory = new Map(); // uid -> userDirectory doc data
-  const selectedUids = new Set();
-
-  const mailMap = new Map(); // docId -> outbox doc data
-  let unsubDir = null;
-  let unsubInbox = null;
-  let unsubSent = null;
-
-  function setStatus(err = "", ok = "") {
-    composeErrorEl.textContent = err;
-    composeSuccessEl.textContent = ok;
+/* ================================
+   Elements
+================================ */
+
+const authInfoEl = document.getElementById("auth-info");
+const logoutBtn = document.getElementById("logout-btn");
+const roleBadgeEl = document.getElementById("role-badge");
+
+const subjectEl = document.getElementById("subject");
+const bodyEl = document.getElementById("body");
+const sendBtn = document.getElementById("send-btn");
+
+const userListEl = document.getElementById("recipients-list");
+const recipientsEmptyEl = document.getElementById("recipients-empty");
+
+const tabScouts = document.getElementById("tab-scouts");
+const tabParents = document.getElementById("tab-parents");
+const tabAdults = document.getElementById("tab-adults");
+
+const selectedCountEl = document.getElementById("selected-count");
+const adultCountEl = document.getElementById("adult-count");
+const safetyNoteEl = document.getElementById("safety-note");
+
+const mailListEl = document.getElementById("mail-list");
+
+/* ================================
+   State
+================================ */
+
+let currentUser = null;
+let myAccountType = "";
+let activeTab = "scouts";
+
+const directory = new Map();   // uid -> user
+const selectedUids = new Set();
+const mailMap = new Map();
+
+/* ================================
+   Helpers
+================================ */
+
+function norm(t){
+  return (t || "").toLowerCase();
+}
+
+function isScout(t){ return norm(t).includes("scout"); }
+function isParent(t){ return norm(t).includes("parent"); }
+function isLeader(t){ return norm(t).includes("leader"); }
+function isAdult(t){ return isParent(t) || isLeader(t); }
+
+function displayName(u){
+  if(u.fullName) return u.fullName;
+  if(u.firstName || u.lastName)
+    return `${u.firstName||""} ${u.lastName||""}`.trim();
+  return u.email || "Unknown";
+}
+
+/* ================================
+   Auth
+================================ */
+
+onAuthStateChanged(auth, async (user)=>{
+  if(!user){
+    location.href="/";
+    return;
   }
 
-  function normType(t) {
-    return (t || "").toString().trim().toLowerCase();
+  currentUser = user;
+  authInfoEl.textContent = "Signed in as " + user.email;
+
+  const snap = await getDoc(doc(db,"accountInfo",user.uid));
+  if(!snap.exists()){
+    location.href="/under-review/";
+    return;
   }
 
-  function isScoutType(t) {
-    return normType(t).includes("scout");
+  const info = snap.data();
+  if(!["admin","viewer"].includes(info.authRole)){
+    location.href="/under-review/";
+    return;
   }
 
-  function isParentType(t) {
-    return normType(t).includes("parent");
-  }
+  myAccountType = info.accountType || "";
 
-  function isLeaderType(t) {
-    return normType(t).includes("leader");
-  }
+  roleBadgeEl.textContent = info.authRole;
 
-  function isAdultType(t) {
-    const nt = normType(t);
-    return nt.includes("parent") || nt.includes("leader") || nt.includes("adult");
-  }
+  startDirectory();
+  startMail();
+});
 
-  function senderIsAdult() {
-    return isAdultType(myAccountType);
-  }
+logoutBtn.onclick = async ()=>{
+  await signOut(auth);
+  location.href="/";
+};
 
-  function displayNameFor(u) {
-    const full = (u.fullName || "").toString().trim();
-    if (full) return full;
+/* ================================
+   Directory
+================================ */
 
-    const first = (u.firstName || "").toString().trim();
-    const last = (u.lastName || "").toString().trim();
-    const combined = (first + " " + last).trim();
-    if (combined) return combined;
-
-    const email = (u.email || "").toString().trim();
-    return email || "(No name)";
-  }
-
-  function escapeHtml(str) {
-    return (str || "").toString()
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
-  }
-
-  function formatTime(ts) {
-    if (!ts) return "";
-    try {
-      const d = ts.toDate ? ts.toDate() : new Date(ts);
-      return d.toLocaleString(undefined, {
-        year: "numeric", month: "short", day: "numeric",
-        hour: "2-digit", minute: "2-digit"
-      });
-    } catch {
-      return "";
-    }
-  }
-
-  function setActiveRecipientTab(tab) {
-    activeRecipientTab = tab;
-    tabScouts.classList.toggle("active", tab === "scouts");
-    tabAdults.classList.toggle("active", tab === "adults");
-    tabParents.classList.toggle("active", tab === "parents");
-    renderRecipients();
-  }
-
-  function setActiveMailFilter(filter) {
-    activeMailFilter = filter;
-
-    function styleBtn(btn, active) {
-      if (active) {
-        btn.style.background = "var(--blue)";
-        btn.style.color = "#fff";
-        btn.style.border = "none";
-      } else {
-        btn.style.background = "rgba(31,78,121,.08)";
-        btn.style.color = "var(--blue)";
-        btn.style.border = "1px solid rgba(148,163,184,.7)";
-      }
-    }
-
-    styleBtn(inboxTab, filter === "inbox");
-    styleBtn(sentTab, filter === "sent");
-    styleBtn(allTab, filter === "all");
-
-    renderMail();
-  }
-
-  function updateCountsAndSafety() {
-    const sel = Array.from(selectedUids);
-    let adultCount = 0;
-
-    sel.forEach((uid) => {
-      const u = directory.get(uid);
-      if (u && isAdultType(u.accountType)) adultCount++;
-    });
-
-    selectedCountEl.textContent = String(sel.length);
-    adultCountEl.textContent = String(adultCount);
-
-    if (!senderIsAdult()) {
-      safetyNoteEl.textContent = "Scout rule: include 0 adults OR 2+ adults (no 1-adult messages).";
-    } else {
-      safetyNoteEl.textContent = "Adult rule: include at least 1 adult recipient.";
-    }
-
-    sendBtn.disabled = !validateRecipients(true);
-  }
-
-  function validateRecipients(quiet) {
-    const toUids = Array.from(selectedUids).filter(uid => uid !== currentUser?.uid);
-
-    if (toUids.length < 1) {
-      if (!quiet) setStatus("Select at least one recipient.", "");
-      return false;
-    }
-    if (toUids.length > 20) {
-      if (!quiet) setStatus("Max 20 recipients.", "");
-      return false;
-    }
-
-    let adultCount = 0;
-    toUids.forEach((uid) => {
-      const u = directory.get(uid);
-      if (u && isAdultType(u.accountType)) adultCount++;
-    });
-
-    if (!senderIsAdult()) {
-      if (!(adultCount === 0 || adultCount >= 2)) {
-        if (!quiet) setStatus("Scout safety rule: 0 adults OR 2+ adults required.", "");
-        return false;
-      }
-    } else {
-      if (adultCount < 1) {
-        if (!quiet) setStatus("Adult safety rule: must include at least 1 adult recipient.", "");
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  function renderRecipients() {
-    recipientsListEl.innerHTML = "";
-
-    const meUid = currentUser?.uid;
-
-    const users = Array.from(directory.entries())
-      .map(([uid, data]) => ({ uid, ...data }))
-      .filter(u => u.uid !== meUid);
-
-    let filtered = [];
-    if (activeRecipientTab === "scouts") {
-      filtered = users.filter(u => isScoutType(u.accountType));
-    } else if (activeRecipientTab === "parents") {
-      filtered = users.filter(u => isParentType(u.accountType));
-    } else if (activeRecipientTab === "adults") {
-      filtered = users.filter(u => isLeaderType(u.accountType));
-    }
-
-    filtered.sort((a, b) => displayNameFor(a).localeCompare(displayNameFor(b)));
-
-    if (filtered.length === 0) {
-      recipientsEmptyEl.style.display = "block";
-      recipientsEmptyEl.textContent = "No users in this group.";
-      recipientsListEl.appendChild(recipientsEmptyEl);
-      updateCountsAndSafety();
-      return;
-    }
-
-    recipientsEmptyEl.style.display = "none";
-
-    filtered.forEach((u) => {
-      const row = document.createElement("div");
-      row.className = "user-row";
-
-      const cb = document.createElement("input");
-      cb.type = "checkbox";
-      cb.checked = selectedUids.has(u.uid);
-      cb.addEventListener("change", () => {
-        if (cb.checked) selectedUids.add(u.uid);
-        else selectedUids.delete(u.uid);
-        setStatus("", "");
-        updateCountsAndSafety();
-      });
-
-      const label = document.createElement("div");
-      label.style.flex = "1";
-      label.style.minWidth = "0";
-      label.textContent = displayNameFor(u);
-
-      row.appendChild(cb);
-      row.appendChild(label);
-      recipientsListEl.appendChild(row);
-    });
-
-    updateCountsAndSafety();
-  }
-
-  function renderMail() {
-    mailListEl.innerHTML = "";
-
-    const items = Array.from(mailMap.entries())
-      .map(([id, m]) => ({ id, ...m }))
-      .sort((a, b) => {
-        const at = a.createdAt?.seconds ? a.createdAt.seconds : 0;
-        const bt = b.createdAt?.seconds ? b.createdAt.seconds : 0;
-        return bt - at;
-      });
-
-    const filtered = items.filter((m) => {
-      const sentByMe = m.fromUid === currentUser.uid;
-      const toMe = Array.isArray(m.toUids) && m.toUids.includes(currentUser.uid);
-
-      if (activeMailFilter === "inbox") return toMe;
-      if (activeMailFilter === "sent") return sentByMe;
-      return toMe || sentByMe;
-    });
-
-    if (filtered.length === 0) {
-      mailEmptyEl.style.display = "block";
-      mailEmptyEl.textContent = "No messages to show.";
-      return;
-    }
-
-    mailEmptyEl.style.display = "none";
-
-    filtered.forEach((m) => {
-      const card = document.createElement("div");
-      card.className = "mail-item";
-
-      const fromInfo = directory.get(m.fromUid) || {};
-      const fromName = (m.fromUid === currentUser.uid) ? "You" : displayNameFor(fromInfo);
-      const subject = m.subject || "(No subject)";
-      const meta = `From ${fromName}${m.createdAt ? " • " + formatTime(m.createdAt) : ""}`;
-      const body = m.body || "";
-
-      card.innerHTML = `
-        <div class="mail-subject">${escapeHtml(subject)}</div>
-        <div class="mail-meta">${escapeHtml(meta)}</div>
-        <div style="margin-top:6px; font-size:13px; white-space:pre-wrap; overflow-wrap:break-word;">
-          ${escapeHtml(body)}
-        </div>
-      `;
-
-      mailListEl.appendChild(card);
-    });
-  }
-
-  function startDirectoryListener() {
-    if (unsubDir) unsubDir();
+function startDirectory(){
+  onSnapshot(collection(db,"userDirectory"), snap=>{
     directory.clear();
+    snap.forEach(d=>{
+      directory.set(d.id, d.data());
+    });
+    renderUsers();
+  });
+}
 
-    unsubDir = onSnapshot(
-      collection(db, "userDirectory"),
-      (snapshot) => {
-        directory.clear();
-        snapshot.forEach((docSnap) => {
-          directory.set(docSnap.id, docSnap.data() || {});
-        });
-        renderRecipients();
-        renderMail();
-      },
-      (error) => {
-        console.error("userDirectory listener error:", error);
-        recipientsListEl.innerHTML = "";
-        recipientsEmptyEl.style.display = "block";
-        recipientsEmptyEl.textContent = "Directory not available.";
-        recipientsListEl.appendChild(recipientsEmptyEl);
-        updateCountsAndSafety();
-      }
-    );
+function renderUsers(){
+  userListEl.innerHTML="";
+
+  const users = [...directory.entries()]
+    .map(([uid,data])=>({uid,...data}))
+    .filter(u=>u.uid!==currentUser.uid);
+
+  let filtered=[];
+
+  if(activeTab==="scouts") filtered=users.filter(u=>isScout(u.accountType));
+  if(activeTab==="parents") filtered=users.filter(u=>isParent(u.accountType));
+  if(activeTab==="adults") filtered=users.filter(u=>isLeader(u.accountType));
+
+  if(filtered.length===0){
+    recipientsEmptyEl.style.display="block";
+    recipientsEmptyEl.textContent="No users in this group";
+    updateCounts();
+    return;
   }
 
-  function startMailListeners() {
-    if (unsubInbox) unsubInbox();
-    if (unsubSent) unsubSent();
+  recipientsEmptyEl.style.display="none";
 
-    mailMap.clear();
-    renderMail();
-    mailEmptyEl.style.display = "block";
-    mailEmptyEl.textContent = "Loading messages…";
+  filtered.sort((a,b)=>displayName(a).localeCompare(displayName(b)));
 
-    // Inbox: messages addressed to me
-    unsubInbox = onSnapshot(
-      query(
-        collection(db, "mailOutbox"),
-        where("toUids", "array-contains", currentUser.uid),
-        orderBy("createdAt", "desc")
-      ),
-      (snap) => {
-        snap.docChanges().forEach((chg) => {
-          if (chg.type === "removed") mailMap.delete(chg.doc.id);
-          else mailMap.set(chg.doc.id, chg.doc.data());
-        });
-        renderMail();
-      },
-      (err) => {
-        console.error("Inbox listener error:", err);
-        mailEmptyEl.style.display = "block";
-        mailEmptyEl.textContent = "Error loading inbox.";
-      }
-    );
+  filtered.forEach(u=>{
+    const row=document.createElement("div");
+    row.className="user-row";
 
-    // Sent: messages sent by me
-    unsubSent = onSnapshot(
-      query(
-        collection(db, "mailOutbox"),
-        where("fromUid", "==", currentUser.uid),
-        orderBy("createdAt", "desc")
-      ),
-      (snap) => {
-        snap.docChanges().forEach((chg) => {
-          if (chg.type === "removed") mailMap.delete(chg.doc.id);
-          else mailMap.set(chg.doc.id, chg.doc.data());
-        });
-        renderMail();
-      },
-      (err) => {
-        console.error("Sent listener error:", err);
-      }
-    );
+    const cb=document.createElement("input");
+    cb.type="checkbox";
+    cb.checked=selectedUids.has(u.uid);
+
+    cb.onchange=()=>{
+      if(cb.checked) selectedUids.add(u.uid);
+      else selectedUids.delete(u.uid);
+      updateCounts();
+    };
+
+    row.appendChild(cb);
+    row.appendChild(document.createTextNode(" "+displayName(u)));
+    userListEl.appendChild(row);
+  });
+
+  updateCounts();
+}
+
+/* ================================
+   Tabs
+================================ */
+
+tabScouts.onclick=()=>{activeTab="scouts";renderUsers();};
+tabParents.onclick=()=>{activeTab="parents";renderUsers();};
+tabAdults.onclick=()=>{activeTab="adults";renderUsers();};
+
+/* ================================
+   Safety Rules
+================================ */
+
+function updateCounts(){
+  let adults=0;
+  selectedUids.forEach(uid=>{
+    const u=directory.get(uid);
+    if(u && isAdult(u.accountType)) adults++;
+  });
+
+  selectedCountEl.textContent=selectedUids.size;
+  adultCountEl.textContent=adults;
+
+  if(isAdult(myAccountType)){
+    safetyNoteEl.textContent="Adult must include at least one adult.";
+    sendBtn.disabled = adults < 1;
+  }else{
+    safetyNoteEl.textContent="Scout must include 0 or 2+ adults.";
+    sendBtn.disabled = !(adults===0 || adults>=2);
+  }
+}
+
+/* ================================
+   Send Mail
+================================ */
+
+sendBtn.onclick = async ()=>{
+  if(selectedUids.size===0){
+    alert("Select at least one recipient");
+    return;
   }
 
-  async function handleAuth(user) {
-    if (!user) {
-      window.location.href = "/";
-      return;
-    }
-
-    currentUser = user;
-    authInfoEl.textContent = "Signed in as " + (user.email || user.uid);
-
-    const infoSnap = await getDoc(doc(db, "accountInfo", user.uid));
-    if (!infoSnap.exists()) {
-      window.location.href = "/under-review/";
-      return;
-    }
-
-    const info = infoSnap.data() || {};
-    if (!["admin", "viewer"].includes(info.authRole)) {
-      window.location.href = "/under-review/";
-      return;
-    }
-
-    myInfo = info;
-    myAuthRole = info.authRole;
-    myAccountType = info.accountType || info.roleType || "";
-
-    roleBadgeEl.textContent = myAuthRole;
-
-    startDirectoryListener();
-    startMailListeners();
-    updateCountsAndSafety();
+  if(!subjectEl.value.trim() || !bodyEl.value.trim()){
+    alert("Subject and message required");
+    return;
   }
 
-
-
-  // Logout
-  logoutBtn.addEventListener("click", async () => {
-    await signOut(auth);
-    window.location.href = "/";
+  await addDoc(collection(db,"mailOutbox"),{
+    fromUid: currentUser.uid,
+    toUids: [...selectedUids],
+    subject: subjectEl.value.trim(),
+    body: bodyEl.value.trim(),
+    senderAccountType: myAccountType,
+    status:"queued",
+    createdAt: serverTimestamp()
   });
 
-  // Recipient tabs
-  tabScouts.addEventListener("click", () => setActiveRecipientTab("scouts"));
-  tabAdults.addEventListener("click", () => setActiveRecipientTab("adults"));
-  tabParents.addEventListener("click", () => setActiveRecipientTab("parents"));
+  subjectEl.value="";
+  bodyEl.value="";
+  selectedUids.clear();
+  renderUsers();
+};
 
-  // Mail tabs
-  inboxTab.addEventListener("click", () => setActiveMailFilter("inbox"));
-  sentTab.addEventListener("click", () => setActiveMailFilter("sent"));
-  allTab.addEventListener("click", () => setActiveMailFilter("all"));
+/* ================================
+   Mail List
+================================ */
 
-  // Clear buttons
-  clearSelectedBtn.addEventListener("click", () => {
-    selectedUids.clear();
-    setStatus("", "");
-    renderRecipients();
-  });
+function startMail(){
 
-  clearDraftBtn.addEventListener("click", () => {
-    subjectEl.value = "";
-    bodyEl.value = "";
-    setStatus("", "");
-    updateCountsAndSafety();
-  });
-
-  // Send
-  composeForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    setStatus("", "");
-
-    if (!validateRecipients(false)) return;
-
-    const subject = (subjectEl.value || "").toString().trim();
-    const body = (bodyEl.value || "").toString().trim();
-    if (!subject) return setStatus("Subject is required.", "");
-    if (!body) return setStatus("Message is required.", "");
-
-    const toUids = Array.from(selectedUids).filter(uid => uid !== currentUser.uid);
-
-    sendBtn.disabled = true;
-    sendBtn.textContent = "Sending…";
-
-    try {
-      await addDoc(collection(db, "mailOutbox"), {
-        fromUid: currentUser.uid,
-        toUids,
-        subject,
-        body,
-        senderAccountType: myAccountType,
-        status: "queued",
-        createdAt: serverTimestamp()
-      });
-
-      setStatus("", "Queued. It will send shortly.");
-      subjectEl.value = "";
-      bodyEl.value = "";
-      selectedUids.clear();
-      renderRecipients();
-    } catch (err) {
-      console.error(err);
-      setStatus(err?.message || "Error sending message.", "");
-    } finally {
-      sendBtn.textContent = "Send";
-      updateCountsAndSafety();
+  onSnapshot(
+    query(collection(db,"mailOutbox"),
+      where("toUids","array-contains",currentUser.uid),
+      orderBy("createdAt","desc")
+    ),
+    snap=>{
+      mailMap.clear();
+      snap.forEach(d=>mailMap.set(d.id,d.data()));
+      renderMail();
     }
-  });
+  );
+}
 
-  // Initial UI state
-  setActiveRecipientTab("scouts");
-  setActiveMailFilter("inbox");
+function renderMail(){
+  mailListEl.innerHTML="";
+  [...mailMap.values()].forEach(m=>{
+    const div=document.createElement("div");
+    div.className="mail-item";
+    div.innerHTML=`
+      <b>${m.subject}</b><br>
+      ${m.body}
+    `;
+    mailListEl.appendChild(div);
+  });
+}
+
 </script>
 </body>
 </html>
