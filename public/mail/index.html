@@ -4,453 +4,229 @@
   <meta charset="UTF-8" />
   <title>Mail — Troop 248</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Favicon -->
   <link rel="icon" type="image/png" href="/favicon.png">
 
+  <!-- Firebase SDKs -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    window.firebaseConfig = {
+      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+      authDomain: "troop-248.firebaseapp.com",
+      projectId: "troop-248",
+      storageBucket: "troop-248.firebasestorage.app",
+      messagingSenderId: "925363875752",
+      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+      measurementId: "G-NY75GX5TBH"
+    };
+
+    window.firebaseApp = initializeApp(window.firebaseConfig);
+    window.auth = getAuth(window.firebaseApp);
+    window.db = getFirestore(window.firebaseApp);
+  </script>
+
+  <!-- Styles -->
   <style>
     :root {
-      --red: #b22222;
-      --blue: #1f4e79;
-      --tan: #f4eee3;
-      --white: #ffffff;
-      --text-main: #1f2933;
-      --text-muted: #6b7280;
-      --radius-lg: 16px;
-      --radius-pill: 999px;
-      --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
+      --red:#b22222;
+      --blue:#1f4e79;
+      --tan:#f4eee3;
+      --white:#ffffff;
+      --text-main:#1f2933;
+      --text-muted:#6b7280;
+      --radius-lg:16px;
+      --radius-pill:999px;
+      --shadow-soft:0 10px 25px rgba(0,0,0,0.06);
     }
 
-    * { box-sizing: border-box; }
+    * { box-sizing:border-box; }
 
     body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
-      background: #d2cab6;
-      color: var(--text-main);
-      min-height: 100vh;
+      margin:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:#d2cab6;
+      color:var(--text-main);
+      min-height:100vh;
     }
 
     header {
-      background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
-      color: var(--white);
-      padding: 14px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 10;
+      background:linear-gradient(120deg,#b22222,#ffffff,#1f4e79);
+      padding:14px 24px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      position:sticky;
+      top:0;
+      z-index:10;
     }
 
     header h2 {
-      margin: 0;
-      font-size: 19px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      margin:0;
+      font-size:19px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      display:flex;
+      gap:8px;
+      align-items:center;
     }
 
-    header h2::before { content: "★"; font-size: 18px; }
-
-    .troop-home-link {
-      text-decoration: none;
-      color: inherit;
-      display: inline-flex;
-      align-items: center;
-    }
-    .troop-home-link:hover h2 {
-      opacity: 0.9;
-      text-decoration: underline;
-    }
+    header h2::before { content:"★"; }
 
     nav {
-      display: flex;
-      gap: 12px;
-      font-size: 13px;
-      text-transform: uppercase;
+      display:flex;
+      gap:12px;
+      font-size:13px;
+      text-transform:uppercase;
     }
 
     nav a {
-      color: #1f4e79;
-      font-weight: bold;
-      text-decoration: none;
-      padding: 6px 10px;
-      border-radius: var(--radius-pill);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      backdrop-filter: blur(4px);
-      opacity: 0.9;
+      color:#1f4e79;
+      font-weight:bold;
+      text-decoration:none;
+      padding:6px 10px;
+      border-radius:var(--radius-pill);
+      border:1px solid rgba(255,255,255,.25);
     }
 
     nav a:hover {
-      opacity: 1;
-      background: rgba(255, 255, 255, 0.12);
+      background:rgba(255,255,255,.12);
     }
-
-    #auth-bar {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      font-size: 13px;
-    }
-
-    #logout-btn {
-      padding: 5px 12px;
-      font-size: 13px;
-      border-radius: var(--radius-pill);
-      border: 1px solid rgba(255, 255, 255, 0.7);
-      background: rgba(255, 255, 255, 0.1);
-      color: var(--white);
-      cursor: pointer;
-    }
-
-    #logout-btn:hover { background: rgba(255, 255, 255, 0.2); }
 
     main {
-      padding: 24px 16px 40px;
-      max-width: 1100px;
-      margin: 0 auto;
+      max-width:1200px;
+      margin:0 auto;
+      padding:24px 16px 40px;
     }
 
-    .welcome-card {
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: var(--radius-lg);
-      padding: 18px 18px 10px;
-      margin-bottom: 20px;
-      box-shadow: var(--shadow-soft);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
+    .mail-layout {
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:16px;
     }
-
-    .welcome-card h3 {
-      margin: 0 0 4px;
-      font-size: 18px;
-    }
-
-    .welcome-card p {
-      margin: 0;
-      font-size: 14px;
-      color: var(--text-muted);
-    }
-
-    .badge {
-      font-size: 11px;
-      padding: 4px 8px;
-      border-radius: var(--radius-pill);
-      background: rgba(148, 163, 184, 0.2);
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .badge.admin {
-      background: rgba(240, 180, 41, 0.16);
-      color: #92400e;
-      border: 1px solid rgba(245, 158, 11, 0.6);
-    }
-
-    .badge.role-scout { background: rgba(31,78,121,.10); color: var(--blue); }
-    .badge.role-adult { background: rgba(178,34,34,.10); color: var(--red); }
 
     section {
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: var(--radius-lg);
-      padding: 18px 18px 14px;
-      margin-bottom: 18px;
-      box-shadow: var(--shadow-soft);
-      border: 1px solid rgba(148, 163, 184, 0.4);
+      background:rgba(255,255,255,.96);
+      border-radius:var(--radius-lg);
+      padding:16px;
+      box-shadow:var(--shadow-soft);
+      border:1px solid rgba(148,163,184,.4);
+      height:70vh;
+      display:flex;
+      flex-direction:column;
     }
 
-    section h2 {
-      margin-top: 0;
-      font-size: 18px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    section h3 {
+      margin:0 0 10px;
+      font-size:16px;
+      color:var(--blue);
     }
 
-    section h2::before {
-      content: "▸";
-      font-size: 14px;
-      color: var(--blue);
+    .scroll {
+      overflow-y:auto;
+      flex:1;
     }
 
-    .small-help {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 6px;
-      line-height: 1.4;
+    .btn {
+      padding:8px 14px;
+      border:none;
+      border-radius:var(--radius-pill);
+      background:var(--blue);
+      color:white;
+      cursor:pointer;
+      font-size:14px;
     }
 
-    .layout {
-      display: grid;
-      grid-template-columns: 420px minmax(0, 1fr);
-      gap: 16px;
+    .btn:disabled {
+      opacity:.5;
+      cursor:not-allowed;
     }
 
-    @media (max-width: 980px) {
-      .layout { grid-template-columns: minmax(0, 1fr); }
+    input, textarea {
+      width:100%;
+      padding:8px;
+      border-radius:10px;
+      border:1px solid #d1d5db;
+      font-size:14px;
     }
 
-    form {
-      margin: 0;
-      padding: 10px 10px 10px;
-      background: #f9fafb;
-      border-radius: 12px;
-      border: 1px dashed rgba(148, 163, 184, 0.8);
+    textarea {
+      resize:vertical;
+      min-height:140px;
     }
 
-    .field { margin-bottom: 10px; }
-    .field label {
-      display: block;
-      font-size: 12px;
-      margin-bottom: 3px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: .05em;
+    .tri-toggle {
+      display:flex;
+      gap:6px;
+      margin-bottom:10px;
     }
 
-    .field input, .field textarea, .field select {
-      width: 100%;
-      padding: 8px 10px;
-      border-radius: 10px;
-      border: 1px solid #d1d5db;
-      background: #ffffff;
-      font-size: 14px;
+    .tri-toggle button {
+      flex:1;
+      border-radius:var(--radius-pill);
+      border:1px solid rgba(148,163,184,.6);
+      background:#f9fafb;
+      padding:6px;
+      cursor:pointer;
+      font-size:13px;
     }
 
-    .field textarea {
-      resize: vertical;
-      min-height: 140px;
-      white-space: pre-wrap;
-      overflow-wrap: break-word;
-      word-wrap: break-word;
+    .tri-toggle button.active {
+      background:rgba(31,78,121,.1);
+      border-color:var(--blue);
+      font-weight:600;
     }
 
-    .field input:focus, .field textarea:focus, .field select:focus {
-      outline: none;
-      border-color: var(--blue);
-      box-shadow: 0 0 0 2px rgba(31,78,121,.1);
+    .user-row {
+      display:flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 0;
+      border-bottom:1px solid rgba(229,231,235,.8);
+      font-size:14px;
     }
 
-    .btn-row {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      align-items: center;
+    .user-row:last-child {
+      border-bottom:none;
     }
 
-    .btn-chip {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 7px 14px;
-      font-size: 13px;
-      border-radius: var(--radius-pill);
-      border: none;
-      cursor: pointer;
-      text-decoration: none;
-      font-weight: 600;
+    .mail-item {
+      padding:8px 0;
+      border-bottom:1px solid rgba(229,231,235,.8);
+      cursor:pointer;
     }
 
-    .btn-primary { background: var(--blue); color: var(--white); }
-    .btn-outlined { background: rgba(31,78,121,.08); color: var(--blue); border: 1px solid rgba(148,163,184,.7); }
-    .btn-danger { background: var(--red); color: var(--white); }
-
-    .btn-chip:hover { opacity: .96; }
-
-    /* Directory */
-    .dir-toolbar {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      margin-bottom: 10px;
-      flex-wrap: wrap;
-    }
-
-    .dir-toolbar input {
-      flex: 1;
-      min-width: 180px;
-    }
-
-    .dir-list {
-      max-height: 380px;
-      overflow: auto;
-      border-radius: 12px;
-      border: 1px solid rgba(209,213,219,.9);
-      background: #fff;
-      padding: 8px;
-    }
-
-    .dir-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 8px 8px;
-      border-bottom: 1px solid rgba(229,231,235,.9);
-    }
-
-    .dir-item:last-child { border-bottom: none; }
-
-    .dir-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 0;
-    }
-
-    .dir-name {
-      font-weight: 600;
-      font-size: 14px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 220px;
-    }
-
-    .dir-meta {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 2px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 260px;
-    }
-
-    .dir-right {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-shrink: 0;
-    }
-
-    .pill {
-      font-size: 11px;
-      padding: 4px 8px;
-      border-radius: var(--radius-pill);
-      border: 1px solid rgba(148,163,184,.7);
-      background: rgba(148,163,184,.12);
-      color: var(--text-main);
-      text-transform: uppercase;
-      letter-spacing: .06em;
-    }
-
-    .pill.adult { border-color: rgba(178,34,34,.35); background: rgba(178,34,34,.08); color: var(--red); }
-    .pill.scout { border-color: rgba(31,78,121,.35); background: rgba(31,78,121,.08); color: var(--blue); }
-
-    /* Inbox */
-    .tabs {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 10px;
-    }
-
-    .tab {
-      padding: 6px 12px;
-      border-radius: var(--radius-pill);
-      border: 1px solid rgba(148,163,184,.7);
-      background: rgba(31,78,121,.08);
-      color: var(--blue);
-      font-size: 13px;
-      cursor: pointer;
-      user-select: none;
-    }
-    .tab.active {
-      background: var(--blue);
-      color: #fff;
-      border-color: var(--blue);
-    }
-
-    .mail-list {
-      list-style: none;
-      padding-left: 0;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .mail-card {
-      background: #f9fafb;
-      border: 1px solid rgba(209,213,219,.9);
-      border-radius: 14px;
-      padding: 12px 12px 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,.04);
-    }
-
-    .mail-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items: baseline;
-      margin-bottom: 6px;
+    .mail-item:hover {
+      background:rgba(31,78,121,.05);
     }
 
     .mail-subject {
-      font-weight: 700;
-      font-size: 14px;
+      font-weight:600;
+      font-size:14px;
     }
-
-    .mail-status {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      padding: 3px 8px;
-      border-radius: var(--radius-pill);
-      border: 1px solid rgba(148,163,184,.7);
-      background: rgba(148,163,184,.10);
-      color: var(--text-muted);
-      white-space: nowrap;
-    }
-
-    .mail-status.sent { border-color: rgba(22,101,52,.35); background: rgba(22,101,52,.10); color: #166534; }
-    .mail-status.queued,
-    .mail-status.processing { border-color: rgba(31,78,121,.35); background: rgba(31,78,121,.08); color: var(--blue); }
-    .mail-status.rejected,
-    .mail-status.error { border-color: rgba(185,28,28,.35); background: rgba(185,28,28,.08); color: #b91c1c; }
 
     .mail-meta {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-bottom: 6px;
+      font-size:12px;
+      color:var(--text-muted);
     }
 
-    .mail-body {
-      font-size: 13px;
-      white-space: pre-wrap;
-      overflow-wrap: break-word;
-      word-wrap: break-word;
-      color: var(--text-main);
-    }
-
-    .empty-text {
-      font-size: 14px;
-      color: var(--text-muted);
-      margin-top: 6px;
-    }
-
-    @media (max-width: 640px) {
-      header { flex-direction: column; align-items: flex-start; gap: 8px; }
-      nav { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
+    @media (max-width:900px) {
+      .mail-layout {
+        grid-template-columns:1fr;
+      }
+      section {
+        height:auto;
+      }
     }
   </style>
 </head>
-
 <body>
   <header>
     <div>
-      <a href="/home" class="troop-home-link">
+      <a href="/home" class="troop-home-link" style="text-decoration:none; color:inherit; display:inline-flex; align-items:center;">
         <h2>Troop 248</h2>
       </a>
     </div>
@@ -466,96 +242,113 @@
       <a href="/mail">Mail</a>
     </nav>
 
-    <div id="auth-bar">
+    <div id="auth-bar" style="display:flex; gap:10px; align-items:center; font-size:13px;">
       <div id="auth-info">Signed in as …</div>
-      <button id="logout-btn">Log Out</button>
+      <button id="logout-btn" style="padding:5px 12px; font-size:13px; border-radius:999px; border:1px solid rgba(255,255,255,.7); background:rgba(255,255,255,.1); color:#fff; cursor:pointer;">
+        Log Out
+      </button>
     </div>
   </header>
 
   <main>
-    <div class="welcome-card">
+    <div style="background:rgba(255,255,255,.96); border-radius:16px; padding:18px 18px 10px; margin-bottom:16px; box-shadow:0 10px 25px rgba(0,0,0,.06); border:1px solid rgba(148,163,184,.4); display:flex; align-items:center; justify-content:space-between; gap:16px;">
       <div>
-        <h3>Troop Mail</h3>
-        <p>Message other approved members. Replies go to the sender’s email.</p>
+        <div style="font-size:18px; font-weight:700; margin-bottom:4px;">Troop Mail</div>
+        <div style="font-size:14px; color:#6b7280;">
+          Message other signed-up members. Replies go to your email.
+        </div>
+        <div id="safety-note" style="font-size:12px; color:#6b7280; margin-top:6px;"></div>
       </div>
-      <div id="role-badge-container">
-        <span class="badge">Viewer</span>
+      <div id="role-badge" style="font-size:11px; padding:4px 8px; border-radius:999px; background:rgba(148,163,184,.2); color:#6b7280; text-transform:uppercase; letter-spacing:.07em;">
+        Viewer
       </div>
     </div>
 
-    <div class="layout">
-      <!-- Left: Compose -->
+    <div class="mail-layout">
+      <!-- LEFT: COMPOSE -->
       <section>
-        <h2>Compose</h2>
+        <h3>Compose</h3>
 
-        <div class="small-help" id="safety-help">
-          Safety rules apply automatically.
+        <div style="display:flex; gap:8px; margin-bottom:10px;">
+          <button id="clear-selected" class="btn" type="button" style="background:rgba(31,78,121,.08); color:#1f4e79; border:1px solid rgba(148,163,184,.7);">
+            Clear Recipients
+          </button>
+          <button id="clear-draft" class="btn" type="button" style="background:rgba(31,78,121,.08); color:#1f4e79; border:1px solid rgba(148,163,184,.7);">
+            Clear Draft
+          </button>
         </div>
 
-        <div class="dir-toolbar" style="margin-top:10px;">
-          <input id="dir-search" type="text" placeholder="Search people…" />
-          <button id="clear-recipients" class="btn-chip btn-outlined" type="button">Clear</button>
-        </div>
-
-        <div class="dir-list" id="dir-list">
-          <div class="empty-text" id="dir-empty">Loading directory…</div>
-        </div>
-
-        <div class="small-help" style="margin-top:10px;">
-          Selected: <b><span id="selected-count">0</span></b> |
-          Adults selected: <b><span id="adult-count">0</span></b>
-        </div>
-
-        <form id="compose-form" style="margin-top:12px;">
-          <div class="field">
-            <label for="subject">Subject</label>
-            <input id="subject" type="text" maxlength="160" placeholder="Subject…" required />
+        <form id="compose-form" style="display:flex; flex-direction:column; gap:10px;">
+          <div>
+            <label style="display:block; font-size:12px; color:#6b7280; text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px;">Subject</label>
+            <input id="subject" type="text" maxlength="160" required />
           </div>
 
-          <div class="field">
-            <label for="body">Message</label>
-            <textarea id="body" maxlength="5000" placeholder="Write your message…" required></textarea>
+          <div style="flex:1;">
+            <label style="display:block; font-size:12px; color:#6b7280; text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px;">Message</label>
+            <textarea id="body" maxlength="5000" required></textarea>
           </div>
 
-          <div class="btn-row">
-            <button class="btn-chip btn-primary" type="submit" id="send-btn">Send</button>
-            <button class="btn-chip btn-outlined" type="button" id="draft-clear">Clear Message</button>
-          </div>
+          <button id="send-btn" class="btn" type="submit" disabled>Send</button>
 
-          <div class="small-help" id="compose-error" style="color:#b91c1c;"></div>
-          <div class="small-help" id="compose-success" style="color:#166534;"></div>
+          <div id="compose-error" style="font-size:12px; color:#b91c1c;"></div>
+          <div id="compose-success" style="font-size:12px; color:#166534;"></div>
+
+          <div style="font-size:12px; color:#6b7280;">
+            Selected: <b><span id="selected-count">0</span></b> • Adults selected: <b><span id="adult-count">0</span></b>
+          </div>
         </form>
+      </section>
 
-        <div class="small-help" style="margin-top:10px;">
-          If “Send” is blocked, it’s because the selected recipients violate the troop safety rules.
+      <!-- MIDDLE: RECIPIENTS -->
+      <section>
+        <h3>Recipients</h3>
+
+        <div class="tri-toggle">
+          <button id="tab-scouts" type="button" class="active">Scouts</button>
+          <button id="tab-adults" type="button">Adult Leaders</button>
+          <button id="tab-parents" type="button">Parents</button>
+        </div>
+
+        <div class="scroll" id="recipients-list">
+          <div id="recipients-empty" style="font-size:14px; color:#6b7280;">Loading directory…</div>
+        </div>
+
+        <div style="font-size:12px; color:#6b7280; margin-top:10px;">
+          Names show as: fullName → first+last → email (only if no name exists).
         </div>
       </section>
 
-      <!-- Right: Inbox -->
+      <!-- RIGHT: INBOX -->
       <section>
-        <h2>Inbox</h2>
+        <h3>Inbox</h3>
 
-        <div class="tabs">
-          <div class="tab active" data-filter="inbox">Inbox</div>
-          <div class="tab" data-filter="sent">Sent</div>
-          <div class="tab" data-filter="all">All</div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
+          <button id="inbox-tab" type="button" class="btn" style="padding:6px 12px; font-size:13px;">Inbox</button>
+          <button id="sent-tab" type="button" class="btn" style="padding:6px 12px; font-size:13px; background:rgba(31,78,121,.08); color:#1f4e79; border:1px solid rgba(148,163,184,.7);">
+            Sent
+          </button>
+          <button id="all-tab" type="button" class="btn" style="padding:6px 12px; font-size:13px; background:rgba(31,78,121,.08); color:#1f4e79; border:1px solid rgba(148,163,184,.7);">
+            All
+          </button>
         </div>
 
-        <ul class="mail-list" id="mail-list"></ul>
-        <div class="empty-text" id="mail-empty">Loading messages…</div>
+        <div class="scroll">
+          <div id="mail-empty" style="font-size:14px; color:#6b7280;">Loading messages…</div>
+          <div id="mail-list"></div>
+        </div>
       </section>
     </div>
   </main>
 
+  <!-- Logic -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import {
-      getAuth,
       onAuthStateChanged,
       signOut
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
     import {
-      getFirestore,
       doc,
       getDoc,
       collection,
@@ -567,66 +360,65 @@
       serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
-      authDomain: "troop-248.firebaseapp.com",
-      projectId: "troop-248",
-      storageBucket: "troop-248.firebasestorage.app",
-      messagingSenderId: "925363875752",
-      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
-      measurementId: "G-NY75GX5TBH"
-    };
+    const auth = window.auth;
+    const db = window.db;
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    // Header UI
+    // Header
     const authInfoEl = document.getElementById("auth-info");
     const logoutBtn = document.getElementById("logout-btn");
-    const roleBadgeContainer = document.getElementById("role-badge-container");
+    const roleBadgeEl = document.getElementById("role-badge");
+    const safetyNoteEl = document.getElementById("safety-note");
 
-    // Directory UI
-    const dirListEl = document.getElementById("dir-list");
-    const dirEmptyEl = document.getElementById("dir-empty");
-    const dirSearchEl = document.getElementById("dir-search");
-    const clearRecipientsBtn = document.getElementById("clear-recipients");
-    const selectedCountEl = document.getElementById("selected-count");
-    const adultCountEl = document.getElementById("adult-count");
-    const safetyHelpEl = document.getElementById("safety-help");
-
-    // Compose UI
+    // Compose
     const composeForm = document.getElementById("compose-form");
     const subjectEl = document.getElementById("subject");
     const bodyEl = document.getElementById("body");
     const sendBtn = document.getElementById("send-btn");
-    const draftClearBtn = document.getElementById("draft-clear");
+    const clearSelectedBtn = document.getElementById("clear-selected");
+    const clearDraftBtn = document.getElementById("clear-draft");
     const composeErrorEl = document.getElementById("compose-error");
     const composeSuccessEl = document.getElementById("compose-success");
+    const selectedCountEl = document.getElementById("selected-count");
+    const adultCountEl = document.getElementById("adult-count");
 
-    // Mail list UI
+    // Recipients
+    const recipientsListEl = document.getElementById("recipients-list");
+    const recipientsEmptyEl = document.getElementById("recipients-empty");
+    const tabScouts = document.getElementById("tab-scouts");
+    const tabAdults = document.getElementById("tab-adults");
+    const tabParents = document.getElementById("tab-parents");
+
+    // Mail list
     const mailListEl = document.getElementById("mail-list");
     const mailEmptyEl = document.getElementById("mail-empty");
-    const tabs = Array.from(document.querySelectorAll(".tab"));
+    const inboxTab = document.getElementById("inbox-tab");
+    const sentTab = document.getElementById("sent-tab");
+    const allTab = document.getElementById("all-tab");
 
+    // State
     let currentUser = null;
     let currentInfo = null;
-    let currentIsAdmin = false;
+    let currentRole = "viewer"; // viewer|admin
+    let activeRecipientTab = "scouts"; // scouts|adults|parents
+    let activeMailFilter = "inbox"; // inbox|sent|all
 
-    // Directory cache
-    const directory = new Map(); // uid -> {fullName, roleType}
-    const selected = new Map();  // uid -> same
+    // Directory: expects collection `userDirectory` readable by approved users
+    // Each doc id = uid, with fields: fullName?, firstName?, lastName?, email?, roleType?
+    const directory = new Map(); // uid -> data
+    const selectedUids = new Set();
+    const mailMap = new Map(); // id -> message
 
-    // Mail cache
-    const mailMap = new Map(); // docId -> data
-    let activeFilter = "inbox";
     let unsubDir = null;
     let unsubInbox = null;
     let unsubSent = null;
 
+    function setStatus(error = "", success = "") {
+      composeErrorEl.textContent = error;
+      composeSuccessEl.textContent = success;
+    }
+
     function isAdultRole(roleType) {
       const r = (roleType || "").toString().trim().toLowerCase();
-      // robust matching (covers minor casing/wording differences)
       if (!r) return false;
       if (r === "parent") return true;
       if (r === "adult leader") return true;
@@ -640,20 +432,165 @@
       return isAdultRole(currentInfo?.roleType);
     }
 
-    function formatTime(ts) {
-      if (!ts) return "";
-      try {
-        const d = ts.toDate ? ts.toDate() : new Date(ts);
-        return d.toLocaleString(undefined, {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-          hour: "2-digit",
-          minute: "2-digit"
-        });
-      } catch {
-        return "";
+    function displayNameFor(u) {
+      const full = (u.fullName || "").toString().trim();
+      if (full) return full;
+
+      const first = (u.firstName || "").toString().trim();
+      const last = (u.lastName || "").toString().trim();
+      const combined = (first + " " + last).trim();
+      if (combined) return combined;
+
+      const email = (u.email || "").toString().trim();
+      if (email) return email;
+
+      return "(No name)";
+    }
+
+    function setActiveRecipientTab(tab) {
+      activeRecipientTab = tab;
+      tabScouts.classList.toggle("active", tab === "scouts");
+      tabAdults.classList.toggle("active", tab === "adults");
+      tabParents.classList.toggle("active", tab === "parents");
+      renderRecipients();
+    }
+
+    function setActiveMailFilter(filter) {
+      activeMailFilter = filter;
+
+      // Simple visual: make active one blue, others outlined-ish
+      function styleActive(btn, active) {
+        if (active) {
+          btn.style.background = "var(--blue)";
+          btn.style.color = "#fff";
+          btn.style.border = "none";
+        } else {
+          btn.style.background = "rgba(31,78,121,.08)";
+          btn.style.color = "var(--blue)";
+          btn.style.border = "1px solid rgba(148,163,184,.7)";
+        }
       }
+      styleActive(inboxTab, filter === "inbox");
+      styleActive(sentTab, filter === "sent");
+      styleActive(allTab, filter === "all");
+
+      renderMail();
+    }
+
+    function updateCountsAndSafety() {
+      const sel = Array.from(selectedUids);
+      let adultCount = 0;
+
+      sel.forEach((uid) => {
+        const u = directory.get(uid);
+        if (u && isAdultRole(u.roleType)) adultCount++;
+      });
+
+      selectedCountEl.textContent = String(sel.length);
+      adultCountEl.textContent = String(adultCount);
+
+      if (!senderIsAdult()) {
+        safetyNoteEl.textContent = "Scout rule: include 0 adults OR 2+ adults (no 1-adult messages).";
+      } else {
+        safetyNoteEl.textContent = "Adult rule: include at least 1 adult recipient.";
+      }
+
+      const ok = validateRecipients(true);
+      sendBtn.disabled = !ok;
+    }
+
+    function validateRecipients(quiet) {
+      const toUids = Array.from(selectedUids).filter(uid => uid !== currentUser?.uid);
+      if (toUids.length < 1) {
+        if (!quiet) setStatus("Select at least one recipient.", "");
+        return false;
+      }
+      if (toUids.length > 20) {
+        if (!quiet) setStatus("Max 20 recipients.", "");
+        return false;
+      }
+
+      let adultCount = 0;
+      toUids.forEach((uid) => {
+        const u = directory.get(uid);
+        if (u && isAdultRole(u.roleType)) adultCount++;
+      });
+
+      if (!senderIsAdult()) {
+        if (!(adultCount === 0 || adultCount >= 2)) {
+          if (!quiet) setStatus("Scout safety rule: 0 adults OR 2+ adults required.", "");
+          return false;
+        }
+      } else {
+        if (adultCount < 1) {
+          if (!quiet) setStatus("Adult safety rule: must include at least 1 adult recipient.", "");
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    function renderRecipients() {
+      recipientsListEl.innerHTML = "";
+
+      const meUid = currentUser?.uid;
+
+      const users = Array.from(directory.entries())
+        .map(([uid, data]) => ({ uid, ...data }))
+        .filter(u => u.uid !== meUid);
+
+      function isScout(u) {
+        return !isAdultRole(u.roleType) && (u.roleType || "").toLowerCase().includes("scout");
+      }
+      function isParent(u) {
+        return (u.roleType || "").toLowerCase().includes("parent");
+      }
+      function isAdultLeader(u) {
+        return (u.roleType || "").toLowerCase().includes("leader");
+      }
+
+      let filtered = [];
+      if (activeRecipientTab === "scouts") filtered = users.filter(isScout);
+      if (activeRecipientTab === "parents") filtered = users.filter(isParent);
+      if (activeRecipientTab === "adults") filtered = users.filter(isAdultLeader);
+
+      filtered.sort((a, b) => displayNameFor(a).localeCompare(displayNameFor(b)));
+
+      if (filtered.length === 0) {
+        recipientsEmptyEl.style.display = "block";
+        recipientsEmptyEl.textContent = "No users in this group yet.";
+        recipientsListEl.appendChild(recipientsEmptyEl);
+        updateCountsAndSafety();
+        return;
+      }
+
+      filtered.forEach((u) => {
+        const row = document.createElement("div");
+        row.className = "user-row";
+
+        const cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.checked = selectedUids.has(u.uid);
+        cb.addEventListener("change", () => {
+          if (cb.checked) selectedUids.add(u.uid);
+          else selectedUids.delete(u.uid);
+          setStatus("", "");
+          updateCountsAndSafety();
+        });
+
+        const label = document.createElement("div");
+        label.style.flex = "1";
+        label.style.minWidth = "0";
+        label.textContent = displayNameFor(u);
+
+        row.appendChild(cb);
+        row.appendChild(label);
+
+        recipientsListEl.appendChild(row);
+      });
+
+      updateCountsAndSafety();
     }
 
     function escapeHtml(str) {
@@ -665,211 +602,24 @@
         .replaceAll("'", "&#039;");
     }
 
-    function setRoleBadge() {
-      const roleLabel = currentIsAdmin ? "Admin" : "Viewer";
-      roleBadgeContainer.innerHTML = `
-        <span class="badge ${currentIsAdmin ? "admin" : ""}">
-          ${roleLabel}
-        </span>
-      `;
-    }
-
-    function updateAuthBar() {
-      authInfoEl.textContent = `Signed in as ${currentUser?.email || currentUser?.uid || "…"}`;
-      setRoleBadge();
-    }
-
-    function setComposeStatus({ error = "", success = "" } = {}) {
-      composeErrorEl.textContent = error;
-      composeSuccessEl.textContent = success;
-    }
-
-    function updateCountsAndSafety() {
-      const sel = Array.from(selected.values());
-      const adultCount = sel.filter(u => isAdultRole(u.roleType)).length;
-
-      selectedCountEl.textContent = String(sel.length);
-      adultCountEl.textContent = String(adultCount);
-
-      let msg = "";
-      if (!senderIsAdult()) {
-        msg = "Scout rule: you may message 0 adults, OR 2+ adults (no 1-adult messages).";
-      } else {
-        msg = "Adult rule: you must include at least 1 adult recipient.";
-      }
-      safetyHelpEl.textContent = msg;
-
-      // UI enable/disable send based on rules
-      const ok = validateRecipients({ quiet: true });
-      sendBtn.disabled = !ok;
-      sendBtn.style.opacity = ok ? "1" : "0.6";
-      sendBtn.style.cursor = ok ? "pointer" : "not-allowed";
-    }
-
-    function validateRecipients({ quiet = false } = {}) {
-      const toUids = Array.from(selected.keys()).filter(uid => uid !== currentUser.uid);
-      const sel = Array.from(selected.values());
-      const adultCount = sel.filter(u => isAdultRole(u.roleType)).length;
-
-      if (toUids.length < 1) {
-        if (!quiet) setComposeStatus({ error: "Select at least 1 recipient." });
-        return false;
-      }
-      if (toUids.length > 20) {
-        if (!quiet) setComposeStatus({ error: "Maximum 20 recipients." });
-        return false;
-      }
-
-      if (!senderIsAdult()) {
-        // Scout: 0 adults OR 2+ adults
-        if (!(adultCount === 0 || adultCount >= 2)) {
-          if (!quiet) setComposeStatus({ error: "Scout safety rule: include 0 adults OR 2+ adults." });
-          return false;
-        }
-      } else {
-        // Adult: must include at least 1 adult
-        if (adultCount < 1) {
-          if (!quiet) setComposeStatus({ error: "Adult safety rule: include at least 1 adult recipient." });
-          return false;
-        }
-      }
-
-      return true;
-    }
-
-    function renderDirectory() {
-      const q = (dirSearchEl.value || "").toString().trim().toLowerCase();
-
-      dirListEl.innerHTML = "";
-      const items = Array.from(directory.entries())
-        .map(([uid, info]) => ({ uid, ...info }))
-        .filter(x => x.uid !== currentUser?.uid)
-        .filter(x => {
-          if (!q) return true;
-          const hay = `${x.fullName || ""} ${x.roleType || ""} ${x.uid || ""}`.toLowerCase();
-          return hay.includes(q);
-        })
-        .sort((a, b) => (a.fullName || "").localeCompare(b.fullName || ""));
-
-      if (items.length === 0) {
-        dirEmptyEl.style.display = "block";
-        dirEmptyEl.textContent = directory.size ? "No matches." : "No directory entries found.";
-        dirListEl.appendChild(dirEmptyEl);
-        updateCountsAndSafety();
-        return;
-      }
-
-      items.forEach((u) => {
-        const row = document.createElement("div");
-        row.className = "dir-item";
-
-        const left = document.createElement("div");
-        left.className = "dir-left";
-
-        const cb = document.createElement("input");
-        cb.type = "checkbox";
-        cb.checked = selected.has(u.uid);
-        cb.addEventListener("change", () => {
-          if (cb.checked) selected.set(u.uid, u);
-          else selected.delete(u.uid);
-          updateCountsAndSafety();
-        });
-
-        const nameWrap = document.createElement("div");
-        nameWrap.style.minWidth = "0";
-
-        const name = document.createElement("div");
-        name.className = "dir-name";
-        name.textContent = u.fullName || "(No name)";
-
-        const meta = document.createElement("div");
-        meta.className = "dir-meta";
-        meta.textContent = u.roleType || "Role unknown";
-
-        nameWrap.appendChild(name);
-        nameWrap.appendChild(meta);
-
-        left.appendChild(cb);
-        left.appendChild(nameWrap);
-
-        const right = document.createElement("div");
-        right.className = "dir-right";
-
-        const isAdult = isAdultRole(u.roleType);
-        const pill = document.createElement("span");
-        pill.className = "pill " + (isAdult ? "adult" : "scout");
-        pill.textContent = isAdult ? "Adult" : "Scout";
-        right.appendChild(pill);
-
-        row.appendChild(left);
-        row.appendChild(right);
-
-        dirListEl.appendChild(row);
-      });
-
-      updateCountsAndSafety();
-    }
-
-    function clearRecipients() {
-      selected.clear();
-      renderDirectory();
-    }
-
-    function clearDraft() {
-      subjectEl.value = "";
-      bodyEl.value = "";
-      setComposeStatus({ error: "", success: "" });
-    }
-
-    async function sendMessage() {
-      setComposeStatus({ error: "", success: "" });
-
-      if (!validateRecipients()) return;
-
-      const subject = (subjectEl.value || "").toString().trim();
-      const body = (bodyEl.value || "").toString().trim();
-
-      if (!subject) return setComposeStatus({ error: "Subject is required." });
-      if (!body) return setComposeStatus({ error: "Message body is required." });
-
-      const toUids = Array.from(selected.keys()).filter(uid => uid !== currentUser.uid);
-
-      sendBtn.disabled = true;
-      sendBtn.textContent = "Sending…";
-
+    function formatTime(ts) {
+      if (!ts) return "";
       try {
-        await addDoc(collection(db, "mailOutbox"), {
-          fromUid: currentUser.uid,
-          toUids,
-          subject,
-          body,
-          status: "queued",
-          createdAt: serverTimestamp()
+        const d = ts.toDate ? ts.toDate() : new Date(ts);
+        return d.toLocaleString(undefined, {
+          year: "numeric", month: "short", day: "numeric",
+          hour: "2-digit", minute: "2-digit"
         });
-
-        setComposeStatus({ success: "Queued. It will send in a few seconds." });
-        clearDraft();
-        clearRecipients();
-      } catch (err) {
-        console.error(err);
-        setComposeStatus({ error: err?.message || "Error sending message." });
-      } finally {
-        sendBtn.textContent = "Send";
-        updateCountsAndSafety(); // re-enables if valid
+      } catch {
+        return "";
       }
     }
 
-    function setActiveTab(filter) {
-      activeFilter = filter;
-      tabs.forEach(t => t.classList.toggle("active", t.dataset.filter === filter));
-      renderMailList();
-    }
-
-    function renderMailList() {
+    function renderMail() {
       mailListEl.innerHTML = "";
 
       const items = Array.from(mailMap.entries())
-        .map(([id, d]) => ({ id, ...d }))
+        .map(([id, m]) => ({ id, ...m }))
         .sort((a, b) => {
           const at = a.createdAt?.seconds ? a.createdAt.seconds : 0;
           const bt = b.createdAt?.seconds ? b.createdAt.seconds : 0;
@@ -880,9 +630,9 @@
         const isSentByMe = m.fromUid === currentUser.uid;
         const isToMe = Array.isArray(m.toUids) && m.toUids.includes(currentUser.uid);
 
-        if (activeFilter === "inbox") return isToMe;
-        if (activeFilter === "sent") return isSentByMe;
-        return (isToMe || isSentByMe);
+        if (activeMailFilter === "inbox") return isToMe;
+        if (activeMailFilter === "sent") return isSentByMe;
+        return isToMe || isSentByMe;
       });
 
       if (filtered.length === 0) {
@@ -893,54 +643,63 @@
       mailEmptyEl.style.display = "none";
 
       filtered.forEach((m) => {
-        const card = document.createElement("li");
-        card.className = "mail-card";
+        const card = document.createElement("div");
+        card.className = "mail-item";
 
-        const fromInfo = directory.get(m.fromUid);
-        const fromName = (m.fromUid === currentUser.uid)
-          ? "You"
-          : (fromInfo?.fullName || "Unknown");
-
-        const when = formatTime(m.createdAt);
-        const status = (m.status || "").toString();
-        const statusClass = status.toLowerCase();
-
-        const toNames = Array.isArray(m.toUids)
-          ? m.toUids
-              .map(uid => uid === currentUser.uid ? "You" : (directory.get(uid)?.fullName || "Unknown"))
-              .join(", ")
-          : "";
+        const fromInfo = directory.get(m.fromUid) || {};
+        const fromName = (m.fromUid === currentUser.uid) ? "You" : displayNameFor(fromInfo);
 
         const subject = m.subject || "(No subject)";
+        const meta = `From ${fromName}${m.createdAt ? " • " + formatTime(m.createdAt) : ""}`;
         const body = m.body || "";
-        const errText = m.error ? ` • ${m.error}` : "";
 
         card.innerHTML = `
-          <div class="mail-top">
-            <div class="mail-subject">${escapeHtml(subject)}</div>
-            <div class="mail-status ${escapeHtml(statusClass)}">${escapeHtml(status || "unknown")}</div>
+          <div class="mail-subject">${escapeHtml(subject)}</div>
+          <div class="mail-meta">${escapeHtml(meta)}</div>
+          <div style="margin-top:6px; font-size:13px; white-space:pre-wrap; overflow-wrap:break-word;">
+            ${escapeHtml(body)}
           </div>
-          <div class="mail-meta">
-            From <b>${escapeHtml(fromName)}</b>${when ? " • " + escapeHtml(when) : ""}${toNames ? " • To: " + escapeHtml(toNames) : ""}${errText ? "<span style='color:#b91c1c'>" + escapeHtml(errText) + "</span>" : ""}
-          </div>
-          <div class="mail-body">${escapeHtml(body)}</div>
         `;
 
         mailListEl.appendChild(card);
       });
     }
 
+    function startDirectoryListener() {
+      if (unsubDir) unsubDir();
+      directory.clear();
+
+      // IMPORTANT: This expects a public-to-approved directory collection.
+      unsubDir = onSnapshot(
+        query(collection(db, "userDirectory"), orderBy("fullName", "asc")),
+        (snapshot) => {
+          directory.clear();
+          snapshot.forEach((docSnap) => {
+            directory.set(docSnap.id, docSnap.data() || {});
+          });
+          renderRecipients();
+          renderMail();
+        },
+        (error) => {
+          console.error("Directory listener error:", error);
+          recipientsListEl.innerHTML = "";
+          recipientsEmptyEl.style.display = "block";
+          recipientsEmptyEl.textContent = "Directory not available yet (userDirectory).";
+          recipientsListEl.appendChild(recipientsEmptyEl);
+          updateCountsAndSafety();
+        }
+      );
+    }
+
     function startMailListeners() {
-      // Clear old listeners if any
       if (unsubInbox) unsubInbox();
       if (unsubSent) unsubSent();
 
       mailMap.clear();
-      renderMailList();
+      renderMail();
       mailEmptyEl.style.display = "block";
       mailEmptyEl.textContent = "Loading messages…";
 
-      // Inbox: you are a recipient
       unsubInbox = onSnapshot(
         query(
           collection(db, "mailOutbox"),
@@ -950,18 +709,17 @@
         (snap) => {
           snap.docChanges().forEach((chg) => {
             if (chg.type === "removed") mailMap.delete(chg.doc.id);
-            else mailMap.set(chg.doc.id, { id: chg.doc.id, ...chg.doc.data() });
+            else mailMap.set(chg.doc.id, chg.doc.data());
           });
-          renderMailList();
+          renderMail();
         },
         (err) => {
           console.error("Inbox listener error:", err);
           mailEmptyEl.style.display = "block";
-          mailEmptyEl.textContent = "Error loading inbox: " + (err?.message || "unknown error");
+          mailEmptyEl.textContent = "Error loading inbox.";
         }
       );
 
-      // Sent: you are sender
       unsubSent = onSnapshot(
         query(
           collection(db, "mailOutbox"),
@@ -971,46 +729,12 @@
         (snap) => {
           snap.docChanges().forEach((chg) => {
             if (chg.type === "removed") mailMap.delete(chg.doc.id);
-            else mailMap.set(chg.doc.id, { id: chg.doc.id, ...chg.doc.data() });
+            else mailMap.set(chg.doc.id, chg.doc.data());
           });
-          renderMailList();
+          renderMail();
         },
         (err) => {
           console.error("Sent listener error:", err);
-          // don't overwrite inbox error if inbox is fine
-        }
-      );
-    }
-
-    function startDirectoryListener() {
-      if (unsubDir) unsubDir();
-
-      directory.clear();
-      selected.clear();
-
-      // IMPORTANT: This expects collection `userDirectory` to exist and be readable by approved users.
-      unsubDir = onSnapshot(
-        query(collection(db, "userDirectory"), orderBy("fullName", "asc")),
-        (snapshot) => {
-          directory.clear();
-          snapshot.forEach((docSnap) => {
-            const d = docSnap.data() || {};
-            directory.set(docSnap.id, {
-              fullName: d.fullName || d.displayName || "",
-              roleType: d.roleType || ""
-            });
-          });
-          renderDirectory();
-          renderMailList(); // so names resolve in inbox
-        },
-        (error) => {
-          console.error("Directory listener error:", error);
-          dirListEl.innerHTML = "";
-          dirEmptyEl.style.display = "block";
-          dirEmptyEl.textContent =
-            "Directory not available yet. Tell me and I’ll add the auto-sync function + rule change.";
-          dirListEl.appendChild(dirEmptyEl);
-          updateCountsAndSafety();
         }
       );
     }
@@ -1022,7 +746,7 @@
       }
 
       currentUser = user;
-      authInfoEl.textContent = `Signed in as ${user.email || user.uid}`;
+      authInfoEl.textContent = "Signed in as " + (user.email || user.uid);
 
       const infoRef = doc(db, "accountInfo", user.uid);
       const infoSnap = await getDoc(infoRef);
@@ -1041,22 +765,17 @@
       }
 
       currentInfo = info;
-      currentIsAdmin = role === "admin";
-      updateAuthBar();
+      currentRole = role;
+      roleBadgeEl.textContent = role;
 
-      // Safety help text
-      updateCountsAndSafety();
-
-      // Start listeners
       startDirectoryListener();
       startMailListeners();
+      updateCountsAndSafety();
     }
 
     onAuthStateChanged(auth, (user) => {
-      // avoid redirect loops: only decide after auth resolves
       handleAuth(user).catch((e) => {
         console.error("Auth handler error:", e);
-        // fallback: go home
         window.location.href = "/home";
       });
     });
@@ -1066,19 +785,263 @@
       window.location.href = "/";
     });
 
-    dirSearchEl.addEventListener("input", renderDirectory);
-    clearRecipientsBtn.addEventListener("click", clearRecipients);
+    // Tabs
+    tabScouts.addEventListener("click", () => setActiveRecipientTab("scouts"));
+    tabAdults.addEventListener("click", () => setActiveRecipientTab("adults"));
+    tabParents.addEventListener("click", () => setActiveRecipientTab("parents"));
 
-    draftClearBtn.addEventListener("click", clearDraft);
+    inboxTab.addEventListener("click", () => setActiveMailFilter("inbox"));
+    sentTab.addEventListener("click", () => setActiveMailFilter("sent"));
+    allTab.addEventListener("click", () => setActiveMailFilter("all"));
 
+    // Clear buttons
+    clearSelectedBtn.addEventListener("click", () => {
+      selectedUids.clear();
+      setStatus("", "");
+      renderRecipients();
+    });
+
+    clearDraftBtn.addEventListener("click", () => {
+      subjectEl.value = "";
+      bodyEl.value = "";
+      setStatus("", "");
+      updateCountsAndSafety();
+    });
+
+    // Send
     composeForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      await sendMessage();
+      setStatus("", "");
+
+      if (!validateRecipients(false)) return;
+
+      const subject = (subjectEl.value || "").toString().trim();
+      const body = (bodyEl.value || "").toString().trim();
+      if (!subject) return setStatus("Subject is required.", "");
+      if (!body) return setStatus("Message is required.", "");
+
+      const toUids = Array.from(selectedUids).filter(uid => uid !== currentUser.uid);
+
+      sendBtn.disabled = true;
+      sendBtn.textContent = "Sending…";
+
+      try {
+        await addDoc(collection(db, "mailOutbox"), {
+          fromUid: currentUser.uid,
+          toUids,
+          subject,
+          body,
+          status: "queued",
+          createdAt: serverTimestamp()
+        });
+
+        setStatus("", "Queued. It will send shortly.");
+        subjectEl.value = "";
+        bodyEl.value = "";
+        selectedUids.clear();
+        renderRecipients();
+      } catch (err) {
+        console.error(err);
+        setStatus(err?.message || "Error sending message.", "");
+      } finally {
+        sendBtn.textContent = "Send";
+        updateCountsAndSafety();
+      }
     });
 
-    tabs.forEach((t) => {
-      t.addEventListener("click", () => setActiveTab(t.dataset.filter));
-    });
+    // Initial tab styles
+    setActiveRecipientTab("scouts");
+    setActiveMailFilter("inbox");
   </script>
+  <script type="module">
+import {
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  addDoc,
+  query,
+  where,
+  orderBy,
+  onSnapshot,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const auth = window.auth;
+const db = window.db;
+
+/* ---------------- AUTH GUARD ---------------- */
+
+let currentUser = null;
+let myRoleType = null;   // Scout | Parent | Adult Leader
+let myAuthRole = null;   // viewer | admin
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    location.href = "/";
+    return;
+  }
+
+  const infoSnap = await getDoc(doc(db,"accountInfo",user.uid));
+  if (!infoSnap.exists()) {
+    location.href="/under-review/";
+    return;
+  }
+
+  const info = infoSnap.data();
+  if (!["viewer","admin"].includes(info.authRole)) {
+    location.href="/under-review/";
+    return;
+  }
+
+  currentUser = user;
+  myRoleType = info.roleType || "";
+  myAuthRole = info.authRole;
+
+  loadDirectory();
+  loadInbox();
+});
+
+/* ---------------- ELEMENTS ---------------- */
+
+const scoutsList = document.getElementById("scouts-list");
+const adultsList = document.getElementById("adults-list");
+const parentsList = document.getElementById("parents-list");
+
+const subjectInput = document.getElementById("mail-subject");
+const bodyInput = document.getElementById("mail-body");
+const sendBtn = document.getElementById("send-btn");
+
+const inboxList = document.getElementById("inbox-list");
+
+let selectedUsers = new Map();
+
+/* ---------------- HELPERS ---------------- */
+
+function displayName(u){
+  if (u.fullName) return u.fullName;
+  const combo = `${u.firstName||""} ${u.lastName||""}`.trim();
+  if (combo) return combo;
+  return u.email || "User";
+}
+
+function toggleUser(uid,user){
+  if (selectedUsers.has(uid)){
+    selectedUsers.delete(uid);
+  } else {
+    selectedUsers.set(uid,user);
+  }
+}
+
+/* ---------------- DIRECTORY LOAD ---------------- */
+
+async function loadDirectory(){
+  scoutsList.innerHTML="";
+  adultsList.innerHTML="";
+  parentsList.innerHTML="";
+
+  const snap = await getDocs(collection(db,"userDirectory"));
+
+  snap.forEach(d=>{
+    const u=d.data();
+    const row=document.createElement("label");
+    row.className="user-row";
+
+    const cb=document.createElement("input");
+    cb.type="checkbox";
+
+    cb.onchange=()=>toggleUser(d.id,u);
+
+    row.appendChild(cb);
+    row.appendChild(document.createTextNode(displayName(u)));
+
+    if (u.roleType==="Scout") scoutsList.appendChild(row);
+    else if (u.roleType==="Parent") parentsList.appendChild(row);
+    else adultsList.appendChild(row);
+  });
+}
+
+/* ---------------- SAFETY CHECK ---------------- */
+
+function passesRules(){
+  let adultCount=0;
+
+  selectedUsers.forEach(u=>{
+    if (u.roleType==="Parent" || u.roleType==="Adult Leader") adultCount++;
+  });
+
+  if (myRoleType==="Scout"){
+    return adultCount===0 || adultCount>=2;
+  }
+
+  if (myRoleType==="Parent" || myRoleType==="Adult Leader"){
+    return adultCount>=1;
+  }
+
+  return false;
+}
+
+/* ---------------- SEND ---------------- */
+
+sendBtn.onclick = async ()=>{
+  if (!passesRules()){
+    alert("Recipient selection violates safety rules.");
+    return;
+  }
+
+  if (!subjectInput.value || !bodyInput.value){
+    alert("Subject and body required.");
+    return;
+  }
+
+  const uids=[...selectedUsers.keys()];
+
+  await addDoc(collection(db,"mailOutbox"),{
+    fromUid: currentUser.uid,
+    subject: subjectInput.value.trim(),
+    body: bodyInput.value.trim(),
+    recipientUids: uids,
+    senderRoleType: myRoleType,
+    status: "pending",
+    createdAt: serverTimestamp()
+  });
+
+  subjectInput.value="";
+  bodyInput.value="";
+  selectedUsers.clear();
+  document.querySelectorAll(".user-row input").forEach(cb=>cb.checked=false);
+
+  alert("Message queued.");
+};
+
+/* ---------------- INBOX ---------------- */
+
+function loadInbox(){
+  const q=query(
+    collection(db,"mailInbox",currentUser.uid,"messages"),
+    orderBy("createdAt","desc")
+  );
+
+  onSnapshot(q,snap=>{
+    inboxList.innerHTML="";
+    snap.forEach(d=>{
+      const m=d.data();
+      const div=document.createElement("div");
+      div.className="mail-item";
+      div.innerHTML=`
+        <div class="mail-subject">${m.subject}</div>
+        <div class="mail-meta">${m.fromName||"Troop Mail"}</div>
+      `;
+      inboxList.appendChild(div);
+    });
+  });
+}
+
+</script>
 </body>
 </html>
