@@ -344,6 +344,7 @@
   <!-- Logic -->
   <script type="module">
     import {
+      getAuth,
       onAuthStateChanged,
       signOut
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -789,13 +790,6 @@ const db = getFirestore(app);
       updateCountsAndSafety();
     }
 
-    onAuthStateChanged(auth, (user) => {
-      handleAuth(user).catch((e) => {
-        console.error("Auth handler error:", e);
-        window.location.href = "/home";
-      });
-    });
-
     logoutBtn.addEventListener("click", async () => {
       await signOut(auth);
       window.location.href = "/";
@@ -868,7 +862,6 @@ const db = getFirestore(app);
     // Initial tab styles
     setActiveRecipientTab("scouts");
     setActiveMailFilter("inbox");
-  import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
   import {
     collection,
     doc,
@@ -1295,13 +1288,7 @@ const db = getFirestore(app);
     updateCountsAndSafety();
   }
 
-  // Auth
-  onAuthStateChanged(auth, (user) => {
-    handleAuth(user).catch((e) => {
-      console.error("Auth handler error:", e);
-      window.location.href = "/home";
-    });
-  });
+
 
   // Logout
   logoutBtn.addEventListener("click", async () => {
