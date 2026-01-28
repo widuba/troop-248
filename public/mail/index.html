@@ -403,7 +403,7 @@
     let activeMailFilter = "inbox"; // inbox|sent|all
 
     // Directory: expects collection `userDirectory` readable by approved users
-    // Each doc id = uid, with fields: fullName?, firstName?, lastName?, email?, roleType?
+    // Each doc id = uid, with fields: fullName?, firstName?, lastName?, email?, accountType?
     const directory = new Map(); // uid -> data
     const selectedUids = new Set();
     const mailMap = new Map(); // id -> message
@@ -417,8 +417,8 @@
       composeSuccessEl.textContent = success;
     }
 
-    function isAdultRole(roleType) {
-      const r = (roleType || "").toString().trim().toLowerCase();
+    function isAdultRole(accountType) {
+      const r = (accountType || "").toString().trim().toLowerCase();
       if (!r) return false;
       if (r === "parent") return true;
       if (r === "adult leader") return true;
@@ -429,7 +429,7 @@
     }
 
     function senderIsAdult() {
-      return isAdultRole(currentInfo?.roleType);
+      return isAdultRole(currentInfo?.accountType);
     }
 
     function displayNameFor(u) {
@@ -483,7 +483,7 @@
 
       sel.forEach((uid) => {
         const u = directory.get(uid);
-        if (u && isAdultRole(u.roleType)) adultCount++;
+        if (u && isAdultRole(u.accountType)) adultCount++;
       });
 
       selectedCountEl.textContent = String(sel.length);
@@ -513,7 +513,7 @@
       let adultCount = 0;
       toUids.forEach((uid) => {
         const u = directory.get(uid);
-        if (u && isAdultRole(u.roleType)) adultCount++;
+        if (u && isAdultRole(u.accountType)) adultCount++;
       });
 
       if (!senderIsAdult()) {
@@ -541,13 +541,13 @@
         .filter(u => u.uid !== meUid);
 
       function isScout(u) {
-        return !isAdultRole(u.roleType) && (u.roleType || "").toLowerCase().includes("scout");
+        return !isAdultRole(u.accountType) && (u.accountType || "").toLowerCase().includes("scout");
       }
       function isParent(u) {
-        return (u.roleType || "").toLowerCase().includes("parent");
+        return (u.accountType || "").toLowerCase().includes("parent");
       }
       function isAdultLeader(u) {
-        return (u.roleType || "").toLowerCase().includes("leader");
+        return (u.accountType || "").toLowerCase().includes("leader");
       }
 
       let filtered = [];
@@ -878,7 +878,7 @@ const db = window.db;
 /* ---------------- AUTH GUARD ---------------- */
 
 let currentUser = null;
-let myRoleType = null;   // Scout | Parent | Adult Leader
+let myaccountType = null;   // Scout | Parent | Adult Leader
 let myAuthRole = null;   // viewer | admin
 
 onAuthStateChanged(auth, async (user) => {
@@ -900,7 +900,7 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   currentUser = user;
-  myRoleType = info.roleType || "";
+  myaccountType = info.accountType || "";
   myAuthRole = info.authRole;
 
   loadDirectory();
@@ -960,8 +960,8 @@ async function loadDirectory(){
     row.appendChild(cb);
     row.appendChild(document.createTextNode(displayName(u)));
 
-    if (u.roleType==="Scout") scoutsList.appendChild(row);
-    else if (u.roleType==="Parent") parentsList.appendChild(row);
+    if (u.accountType==="Scout") scoutsList.appendChild(row);
+    else if (u.accountType==="Parent") parentsList.appendChild(row);
     else adultsList.appendChild(row);
   });
 }
@@ -972,14 +972,14 @@ function passesRules(){
   let adultCount=0;
 
   selectedUsers.forEach(u=>{
-    if (u.roleType==="Parent" || u.roleType==="Adult Leader") adultCount++;
+    if (u.accountType==="Parent" || u.accountType==="Adult Leader") adultCount++;
   });
 
-  if (myRoleType==="Scout"){
+  if (myaccountType==="Scout"){
     return adultCount===0 || adultCount>=2;
   }
 
-  if (myRoleType==="Parent" || myRoleType==="Adult Leader"){
+  if (myaccountType==="Parent" || myaccountType==="Adult Leader"){
     return adultCount>=1;
   }
 
@@ -1006,7 +1006,7 @@ sendBtn.onclick = async ()=>{
     subject: subjectInput.value.trim(),
     body: bodyInput.value.trim(),
     recipientUids: uids,
-    senderRoleType: myRoleType,
+    senderaccountType: myaccountType,
     status: "pending",
     createdAt: serverTimestamp()
   });
