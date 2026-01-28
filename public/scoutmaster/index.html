@@ -540,7 +540,12 @@ body.dark-theme .badge {
             const infoSnap = await getDoc(infoRef);
             if (infoSnap.exists()) {
               const info = infoSnap.data();
-              if (info.firstName || info.lastName) {
+
+              // ✅ NEW: preferred fullName
+              if (info.fullName && String(info.fullName).trim()) {
+                authorName = String(info.fullName).trim();
+              } else if (info.firstName || info.lastName) {
+                // fallback for older accounts
                 authorName = `${info.firstName || ""} ${info.lastName || ""}`.trim() || authorName;
               }
             }
