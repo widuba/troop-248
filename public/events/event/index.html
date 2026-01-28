@@ -524,7 +524,7 @@
       <p class="small-help">
         Location and quick access tools for this outing.
       </p>
-      <div class="btn-row">
+      <div class="btn-row" id="details-btn-row">
         <a id="maps-btn" href="#" target="_blank" rel="noopener noreferrer"
            class="btn-chip btn-outlined" style="display:none;">
           Open in Google Maps
@@ -704,6 +704,7 @@
     const mapsBtn = document.getElementById("maps-btn");
     const signupBtn = document.getElementById("signup-btn");
     const signupMissingEl = document.getElementById("signup-missing");
+    const detailsBtnRow = document.getElementById("details-btn-row");
 
     // Links
     const linkForm = document.getElementById("link-form");
@@ -743,16 +744,32 @@
 
     let currentUser = null;
     let currentIsAdmin = false;
-    let eventSlug = null;
+
+    let eventId = null;
     let eventLocation = "";
     let eventSignupUrl = "";
 
-    function parseSlugFromPath() {
+    // --- Event id resolver (supports both /events/event/<id> and ?id=<id>) ---
+    function getEventIdFromUrl() {
+      const sp = new URLSearchParams(window.location.search);
+      const qpId = (sp.get("id") || sp.get("eventId") || sp.get("slug") || "").trim();
+      if (qpId) return qpId;
+
       const parts = window.location.pathname.split("/").filter(Boolean);
-      // Expect something like ["events", "fall-camporee-2026"]
-      if (parts.length >= 2 && parts[0] === "events") {
-        return parts[1];
+      // expected: ["events","event","<eventId>"]
+      const idxEvents = parts.indexOf("events");
+      if (idxEvents === -1) return null;
+
+      // If URL is /events/event/<id>, "event" should be right after "events"
+      if (parts[idxEvents + 1] === "event" && parts[idxEvents + 2]) {
+        return parts[idxEvents + 2];
       }
+
+      // Fallback: if someone linked /events/<id> (older pattern), allow it
+      if (parts[idxEvents + 1] && parts[idxEvents + 1] !== "event") {
+        return parts[idxEvents + 1];
+      }
+
       return null;
     }
 
@@ -769,61 +786,132 @@
       }
     }
 
-    function formatDateDisplay(dateStr, timeStr) {
-  if (!dateStr) return "";
+    function toDateMaybe(ts) {
+      if (!ts) return null;
+      // Firestore Timestamp has toDate()
+      if (typeof ts.toDate === "function") return ts.toDate();
+      // Already Date
+      if (ts instanceof Date) return ts;
+      // ISO string fallback
+      try {
+        const d = new Date(ts);
+        return isNaN(d.getTime()) ? null : d;
+      } catch {
+        return null;
+      }
+    }
 
-  const date = new Date(dateStr + (timeStr ? "T" + timeStr : "T00:00"));
-  return date.toLocaleString("en-US", {
-    month: "short",   // Jan
-    day: "numeric",   // 5
-    year: "numeric"   // 2026
-  }) + (timeStr ? ` • ${timeStr}` : "");
-}
+    function formatDateTime(d) {
+      if (!d) return "";
+      return d.toLocaleString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
 
-function formatDateRange(ev) {
-  const start = formatDateDisplay(ev.startDate, ev.startTime);
-  const end = formatDateDisplay(ev.endDate, ev.endTime);
+    function formatDateRange(ev) {
+      const start = toDateMaybe(ev.startDate);
+      const end = toDateMaybe(ev.endDate);
 
-  // Same day
-  if (ev.startDate === ev.endDate || !ev.endDate) {
-    return start;
-  }
+      if (!start && !end) return "";
+      if (start && !end) return formatDateTime(start);
+      if (!start && end) return formatDateTime(end);
 
-  // Multi-day
-  return `${start} → ${end}`;
-}
+      const sameDay =
+        start.getFullYear() === end.getFullYear() &&
+        start.getMonth() === end.getMonth() &&
+        start.getDate() === end.getDate();
 
-    async function loadEvent() {
-      eventSlug = parseSlugFromPath();
+      if (sameDay) {
+        // Same-day: show date once, times if present
+        const datePart = start.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric"
+        });
+        const startTime = start.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+        const endTime = end.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+        return `${datePart} • ${startTime} → ${endTime}`;
+      }
 
-      if (!eventSlug) {
-        eventTitleEl.textContent = "Event";
-        eventNotFoundEl.style.display = "block";
+      return `${formatDateTime(start)} → ${formatDateTime(end)}`;
+    }
+
+    function setNotFoundState() {
+      eventTitleEl.textContent = "Event not found";
+      eventDateRangeEl.textContent = "";
+      eventLocationEl.textContent = "";
+      eventSummaryEl.textContent = "";
+      eventNotFoundEl.style.display = "block";
+
+      mapsBtn.style.display = "none";
+      signupBtn.style.display = "none";
+      signupMissingEl.style.display = "none";
+    }
+
+    function ensureAdminEditButton() {
+      // Inject an edit button without changing page structure
+      const existing = document.getElementById("edit-event-btn");
+      if (existing) {
+        existing.style.display = currentIsAdmin ? "inline-flex" : "none";
         return;
       }
 
-      const eventRef = doc(db, "events", eventSlug);
+      const a = document.createElement("a");
+      a.id = "edit-event-btn";
+      a.className = "btn-chip btn-danger";
+      a.textContent = "Edit This Event";
+      a.style.display = currentIsAdmin ? "inline-flex" : "none";
+
+      // Prefer last path segment if it exists, otherwise use eventId (query param flow)
+      const parts = window.location.pathname.split("/").filter(Boolean);
+      const lastSeg = parts.length ? parts[parts.length - 1] : "";
+      const idForEdit =
+        (parts.includes("events") && parts.includes("event") && lastSeg && lastSeg !== "event")
+          ? lastSeg
+          : (eventId || "");
+
+      a.href = idForEdit ? `/events-edit?id=${encodeURIComponent(idForEdit)}` : "/events-edit";
+
+      // Put it next to existing buttons
+      detailsBtnRow.appendChild(a);
+    }
+
+    async function loadEvent() {
+      eventId = getEventIdFromUrl();
+
+      if (!eventId) {
+        setNotFoundState();
+        return;
+      }
+
+      const eventRef = doc(db, "events", eventId);
       const snap = await getDoc(eventRef);
 
       if (!snap.exists()) {
-        eventTitleEl.textContent = "Event not found";
-        eventDateRangeEl.textContent = "";
-        eventLocationEl.textContent = "";
-        eventSummaryEl.textContent = "";
-        eventNotFoundEl.style.display = "block";
+        setNotFoundState();
         return;
       }
 
+      eventNotFoundEl.style.display = "none";
+
       const data = snap.data();
+
       eventTitleEl.textContent = data.title || "Event";
       eventDateRangeEl.textContent = formatDateRange(data);
-      eventLocation = data.location || "";
-      eventSignupUrl = data.signupUrl || "";
+
+      eventLocation = (data.location || "").trim();
+      eventSignupUrl = (data.signupUrl || "").trim();
 
       if (eventLocation) {
         eventLocationEl.textContent = "Location: " + eventLocation;
-        const mapsUrl = "https://www.google.com/maps/search/?api=1&query=" +
-          encodeURIComponent(eventLocation);
+
+        const mapsUrl =
+          "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(eventLocation);
+
         mapsBtn.href = mapsUrl;
         mapsBtn.style.display = "inline-flex";
       } else {
@@ -840,11 +928,16 @@ function formatDateRange(ev) {
         signupMissingEl.style.display = "block";
       }
 
-      eventSummaryEl.textContent = data.summary || "";
+      // Your schema calls this "description". Keep backward compatibility with "summary".
+      const desc = (data.description || data.summary || "").trim();
+      eventSummaryEl.textContent = desc;
+
+      ensureAdminEditButton();
     }
 
     async function handleAuth(user) {
       if (!user) {
+        // Keep your existing behavior to avoid breaking your current login routing.
         window.location.href = "/";
         return;
       }
@@ -870,7 +963,7 @@ function formatDateRange(ev) {
       updateAdminUI();
 
       await loadEvent();
-      if (!eventSlug) return; // event not found or bad URL
+      if (!eventId) return; // no id / invalid URL
 
       initSubcollections();
       initRSVP(info);
@@ -917,7 +1010,7 @@ function formatDateRange(ev) {
       });
 
       // Load existing RSVP
-      const rsvpRef = doc(db, "events", eventSlug, "rsvps", currentUser.uid);
+      const rsvpRef = doc(db, "events", eventId, "rsvps", currentUser.uid);
       getDoc(rsvpRef).then((snap) => {
         if (snap.exists()) {
           const data = snap.data();
@@ -946,8 +1039,10 @@ function formatDateRange(ev) {
 
         const status = selected.getAttribute("data-status");
         const notes = rsvpNotesInput.value.trim();
+
         const displayName = `${accountInfo.firstName || ""} ${accountInfo.lastName || ""}`.trim();
-        const memberType = accountInfo.memberType || "";
+        // You store roleType ("Scout"/"Parent"/"Adult Leader"). Keep backward compatibility.
+        const memberType = accountInfo.roleType || accountInfo.memberType || "";
 
         try {
           await setDoc(rsvpRef, {
@@ -963,7 +1058,7 @@ function formatDateRange(ev) {
           rsvpSuccessEl.textContent = "RSVP saved.";
         } catch (err) {
           console.error(err);
-          rsvpErrorEl.textContent = err.message || "Error saving RSVP.";
+          rsvpErrorEl.textContent = err?.message || "Error saving RSVP.";
         }
       });
     }
@@ -999,7 +1094,7 @@ function formatDateRange(ev) {
           btn.className = "small-btn";
           btn.onclick = async () => {
             if (confirm("Delete this link?")) {
-              await deleteDoc(doc(db, "events", eventSlug, "links", snap.id));
+              await deleteDoc(doc(db, "events", eventId, "links", snap.id));
             }
           };
           li.appendChild(btn);
@@ -1037,7 +1132,7 @@ function formatDateRange(ev) {
           btn.className = "small-btn";
           btn.onclick = async () => {
             if (confirm("Delete this document?")) {
-              await deleteDoc(doc(db, "events", eventSlug, "documents", snap.id));
+              await deleteDoc(doc(db, "events", eventId, "documents", snap.id));
             }
           };
           li.appendChild(btn);
@@ -1049,7 +1144,8 @@ function formatDateRange(ev) {
 
     function formatUpdateDate(ts) {
       if (!ts) return "";
-      const d = ts.toDate();
+      const d = toDateMaybe(ts);
+      if (!d) return "";
       return d.toLocaleString(undefined, {
         year: "numeric",
         month: "short",
@@ -1084,7 +1180,7 @@ function formatDateRange(ev) {
         li.innerHTML = `
           ${titleHtml}
           <div class="item-meta">${formatUpdateDate(createdAt)}</div>
-          <div>${body.replace(/\n/g, "<br>")}</div>
+          <div>${String(body).replace(/\n/g, "<br>")}</div>
         `;
 
         if (currentIsAdmin) {
@@ -1093,7 +1189,7 @@ function formatDateRange(ev) {
           btn.className = "small-btn";
           btn.onclick = async () => {
             if (confirm("Delete this update?")) {
-              await deleteDoc(doc(db, "events", eventSlug, "updates", snap.id));
+              await deleteDoc(doc(db, "events", eventId, "updates", snap.id));
             }
           };
           li.appendChild(btn);
@@ -1129,7 +1225,7 @@ function formatDateRange(ev) {
         const memberType = data.memberType || "";
         const notes = data.notes || "";
         const updatedAt = data.updatedAt
-          ? data.updatedAt.toDate().toLocaleString()
+          ? (toDateMaybe(data.updatedAt)?.toLocaleString() || "")
           : "";
 
         let statusLabel = status;
@@ -1170,7 +1266,7 @@ function formatDateRange(ev) {
             return;
           }
 
-          await addDoc(collection(db, "events", eventSlug, "links"), {
+          await addDoc(collection(db, "events", eventId, "links"), {
             title,
             url,
             description: desc,
@@ -1183,7 +1279,7 @@ function formatDateRange(ev) {
         });
       }
 
-      onSnapshot(collection(db, "events", eventSlug, "links"), (snapshot) => {
+      onSnapshot(collection(db, "events", eventId, "links"), (snapshot) => {
         renderLinks(snapshot.docs);
       });
 
@@ -1200,7 +1296,7 @@ function formatDateRange(ev) {
             return;
           }
 
-          await addDoc(collection(db, "events", eventSlug, "documents"), {
+          await addDoc(collection(db, "events", eventId, "documents"), {
             title,
             url,
             description: desc,
@@ -1213,7 +1309,7 @@ function formatDateRange(ev) {
         });
       }
 
-      onSnapshot(collection(db, "events", eventSlug, "documents"), (snapshot) => {
+      onSnapshot(collection(db, "events", eventId, "documents"), (snapshot) => {
         renderDocs(snapshot.docs);
       });
 
@@ -1229,7 +1325,7 @@ function formatDateRange(ev) {
             return;
           }
 
-          await addDoc(collection(db, "events", eventSlug, "updates"), {
+          await addDoc(collection(db, "events", eventId, "updates"), {
             title,
             body,
             createdAt: serverTimestamp(),
@@ -1242,7 +1338,7 @@ function formatDateRange(ev) {
       }
 
       const updatesQuery = query(
-        collection(db, "events", eventSlug, "updates"),
+        collection(db, "events", eventId, "updates"),
         orderBy("createdAt", "desc")
       );
       onSnapshot(updatesQuery, (snapshot) => {
@@ -1251,10 +1347,8 @@ function formatDateRange(ev) {
 
       // Admin RSVP (list + summary)
       if (currentIsAdmin) {
-        onSnapshot(collection(db, "events", eventSlug, "rsvps"), (snapshot) => {
+        onSnapshot(collection(db, "events", eventId, "rsvps"), (snapshot) => {
           renderRSVPAdmin(snapshot.docs);
-
-       const slug = new URLSearchParams(location.search).get("slug");   
         });
       }
     }
