@@ -176,6 +176,16 @@
           </div>
         </div>
 
+        <!-- ✅ NEW: Phone -->
+        <label>Phone Number</label>
+        <input
+          id="phone"
+          type="tel"
+          inputmode="tel"
+          autocomplete="tel"
+          placeholder="(555) 555-5555"
+        />
+
         <label>Email</label>
         <input id="signupEmail" type="email" autocomplete="email" placeholder="you@example.com" />
 
@@ -277,6 +287,7 @@
 
     const fullName = document.getElementById("fullName");
     const accountType = document.getElementById("accountType");
+    const phone = document.getElementById("phone"); // ✅ NEW
     const signupEmail = document.getElementById("signupEmail");
     const signupPassword = document.getElementById("signupPassword");
     const signupPassword2 = document.getElementById("signupPassword2");
@@ -382,6 +393,9 @@
       if (!pw1 || pw1.length < 6) return setMsg(signupMsg, "Password must be at least 6 characters.");
       if (pw1 !== pw2) return setMsg(signupMsg, "Passwords do not match.");
 
+      // ✅ Phone is optional, but stored if provided
+      const phoneRaw = (phone?.value || "").trim();
+
       signupBtn.disabled = true;
 
       try {
@@ -390,24 +404,21 @@
         const cred = await createUserWithEmailAndPassword(auth, email, pw1);
         const user = cred.user;
 
-        // Create/overwrite the accountInfo document
-        // Add fields you want to store for approval + auditing.
         await setDoc(doc(db, "accountInfo", user.uid), {
-          authRole: "pending",                // ✅ default role for new accounts
+          authRole: "pending",
           email: user.email || email,
           fullName: fullName.value.trim() || "",
           accountType: accountType.value,
+          phone: phoneRaw || "",              // ✅ NEW
           notes: notes.value.trim() || "",
           createdAt: serverTimestamp(),
           updatedAt: serverTimestamp()
         }, { merge: true });
 
-        // New users go to under review
         redirectOnce("/under-review/");
       } catch (e) {
         console.error(e);
 
-        // Friendly messages for common cases
         if (e?.code === "auth/email-already-in-use") {
           setMsg(signupMsg, "That email is already in use. Try logging in instead.");
         } else if (e?.code === "auth/invalid-email") {
@@ -418,7 +429,6 @@
           setMsg(signupMsg, "Sign up failed. Please try again.");
         }
 
-        // If user got created but doc write failed, safest is sign out and retry
         try { await signOut(auth); } catch {}
       } finally {
         signupBtn.disabled = false;
