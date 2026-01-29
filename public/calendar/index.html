@@ -310,6 +310,25 @@ body.dark-theme .badge {
       color: var(--white);
     }
 
+    /* Responsive Google Calendar embed */
+  .gcal-wrap{
+    width:100%;
+    max-width:100%;
+    overflow:hidden;      /* prevents horizontal scroll */
+    border-radius:12px;   /* optional */
+  }
+  .gcal-wrap iframe{
+    width:100% !important;
+    max-width:100% !important;
+    border:0;
+    display:block;
+  }
+
+  .gcal-wrap iframe{ height: 720px; }
+  @media (max-width: 640px){
+    .gcal-wrap iframe{ height: 560px; }
+  }
+
     .small-btn:hover { opacity: .95; }
 
     @media (max-width: 640px) {
@@ -369,7 +388,14 @@ body.dark-theme .badge {
 
     <section>
       <h2>Calendar</h2>
-      <iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FNew_York&src=ZW4udXNhI2hvbGlkYXlAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&src=azNscWFqOG12bnZvYmFxdGZzM2E0OWVwZW1sMTBmcGxAaW1wb3J0LmNhbGVuZGFyLmdvb2dsZS5jb20&color=%230b8043&color=%23f4511e" style="border:solid 1px #777" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+      <div class="gcal-wrap">
+  <iframe
+    src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FNew_York&src=ZW4udXNhI2hvbGlkYXlAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&src=azNscWFqOG12bnZvYmFxdGZzM2E0OWVwZW1sMTBmcGxAaW1wb3J0LmNhbGVuZGFyLmdvb2dsZS5jb20&color=%230b8043&color=%23f4511e" style="border:solid 1px #777" width="800" height="600" frameborder="0" scrolling="no"></iframe>"
+    loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade">
+  </iframe>
+</div>
+
     </section>
   </main>
 
