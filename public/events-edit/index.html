@@ -485,7 +485,7 @@ body.dark-theme .badge {
 
     backToEventBtn.addEventListener("click", () => {
       if (eventId) {
-        window.location.href = "/events/" + encodeURIComponent(eventId);
+        window.location.href = "/events/event?id=" + encodeURIComponent(eventId);
       } else {
         window.location.href = "/events";
       }
