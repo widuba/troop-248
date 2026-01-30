@@ -470,7 +470,7 @@ body.dark-theme .badge {
         roleBadgeContainer.innerHTML = '<span class="badge admin">Admin</span>';
         loadEvent();
       } else if (role === "viewer") {
-        window.location.href = "/events/" + encodeURIComponent(eventId);
+        window.location.href = "/events/event?id=" + encodeURIComponent(eventId);
         return;
       } else {
         window.location.href = "/under-review/";
