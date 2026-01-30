@@ -1042,7 +1042,7 @@
         const status = selected.getAttribute("data-status");
         const notes = rsvpNotesInput.value.trim();
 
-        const displayName = `${accountInfo.firstName || ""} ${accountInfo.lastName || ""}`.trim();
+        const displayName = `${accountInfo.fullName || ""}`.trim();
         // You store roleType ("Scout"/"Parent"/"Adult Leader"). Keep backward compatibility.
         const memberType = accountInfo.roleType || accountInfo.memberType || "";
 
