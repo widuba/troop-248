@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Account — Troop 248</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --red: #b22222;
+      --blue: #1f4e79;
+      --tan: #d2cab6;
+      --card: rgba(255,255,255,.97);
+      --muted: #6b7280;
+      --text: #1f2933;
+      --radius: 16px;
+      --pill: 999px;
+      --shadow: 0 10px 25px rgba(0,0,0,.06);
+      --border: rgba(148,163,184,.45);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--tan);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* Dark theme */
+    body.dark-theme { background:#111827; color:#e5e7eb; }
+    body.dark-theme .card, body.dark-theme section { background:#1f2937; border-color: rgba(55,65,81,.9); }
+    body.dark-theme input, body.dark-theme textarea { background:#111827; color:#e5e7eb; border-color: rgba(75,85,99,.9); }
+    body.dark-theme .muted { color:#cbd5e1; }
+    body.dark-theme .badge { background: rgba(55,65,81,.8); color:#e5e7eb; }
+
+    header {
+      background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
+      color: #fff;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .brand a {
+      text-decoration: none;
+      color: inherit;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    nav {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    nav a {
+      color: #1f4e79;
+      font-weight: 800;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: var(--pill);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(4px);
+      opacity: 0.92;
+    }
+    nav a:hover { opacity: 1; background: rgba(255,255,255,0.12); }
+
+    #auth-bar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      font-size: 13px;
+      flex-wrap: wrap;
+    }
+
+    #theme-toggle, #logout-btn {
+      padding: 6px 12px;
+      font-size: 13px;
+      border-radius: var(--pill);
+      border: 1px solid rgba(255,255,255,.7);
+      background: rgba(255,255,255,.10);
+      color: #fff;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    #theme-toggle:hover, #logout-btn:hover { background: rgba(255,255,255,.18); }
+
+    main { max-width: 900px; margin: 0 auto; padding: 24px 16px 40px; }
+
+    .card, section {
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: var(--pill);
+      background: rgba(148, 163, 184, 0.2);
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      font-weight: 800;
+      display: inline-block;
+      margin-top: 4px;
+    }
+    .badge.admin { background: rgba(240, 180, 41, 0.16); color: #92400e; border: 1px solid rgba(245, 158, 11, 0.6); }
+    .badge.viewer { background: rgba(31,78,121,.10); color: var(--blue); border: 1px solid rgba(31,78,121,.25); }
+    .badge.pending { background: rgba(178,34,34,.08); color:#7f1d1d; border: 1px solid rgba(178,34,34,.22); }
+
+    h1 { margin: 0 0 6px; font-size: 22px; }
+    .muted { color: var(--muted); font-size: 13px; margin: 0; }
+
+    label { display:block; font-size: 12px; color: var(--muted); margin: 10px 0 6px; text-transform: uppercase; letter-spacing: .06em; font-weight: 800; }
+    input, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(209,213,219,.9);
+      font-size: 15px;
+      background: #fff;
+    }
+    textarea { min-height: 110px; resize: vertical; }
+
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 720px) { .row { grid-template-columns: 1fr; } }
+
+    .btn {
+      margin-top: 12px;
+      padding: 11px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(31,78,121,.25);
+      background: rgba(31,78,121,.10);
+      color: var(--blue);
+      font-weight: 900;
+      cursor: pointer;
+      font-size: 15px;
+      width: 100%;
+    }
+    .btn:hover { background: rgba(31,78,121,.16); }
+    .btn.danger { border-color: rgba(178,34,34,.30); background: rgba(178,34,34,.08); color:#7f1d1d; }
+
+    .msg { margin-top: 10px; font-size: 13px; color: #7f1d1d; }
+    .msg.ok { color: #065f46; }
+
+    .kv {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 8px 12px;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    @media (max-width: 560px) { .kv { grid-template-columns: 1fr; } }
+    .k { color: var(--muted); font-weight: 800; text-transform: uppercase; letter-spacing: .04em; font-size: 12px; }
+    .v { word-break: break-word; }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="brand">
+      <a href="/home">★ Troop 248</a>
+    </div>
+
+    <nav>
+      <a href="/home">Home</a>
+      <a href="/calendar">Calendar</a>
+      <a href="/documents">Documents</a>
+      <a href="/events">Events</a>
+      <a href="/mail">Mail</a>
+      <a href="/account">Account</a>
+    </nav>
+
+    <div id="auth-bar">
+      <button id="theme-toggle" type="button">🌞 Light mode</button>
+      <div id="auth-info">Signed in as …</div>
+      <button id="logout-btn" type="button">Log Out</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="card">
+      <div class="top-row">
+        <div>
+          <h1>Account</h1>
+          <p class="muted">Update your profile. “Notes” can include positions (SPL, ASPL, Patrol Leader, Committee, etc.).</p>
+        </div>
+        <div id="role-badge"></div>
+      </div>
+
+      <div class="kv">
+        <div class="k">Account Level</div><div class="v" id="levelText">Loading…</div>
+        <div class="k">Account Type</div><div class="v" id="typeText">Loading…</div>
+        <div class="k">UID</div><div class="v" id="uidText">Loading…</div>
+      </div>
+    </div>
+
+    <section>
+      <h2 style="margin:0 0 8px; font-size:18px;">Edit Profile</h2>
+
+      <div class="row">
+        <div>
+          <label for="fullName">Full Name</label>
+          <input id="fullName" type="text" autocomplete="name" placeholder="First Last" />
+        </div>
+        <div>
+          <label for="emailDisplay">Email (current)</label>
+          <input id="emailDisplay" type="email" disabled />
+        </div>
+      </div>
+
+      <label for="notes">Notes / Positions</label>
+      <textarea id="notes" placeholder="Example: Patrol Leader (Ravens), SPL, Committee Chair, etc."></textarea>
+
+      <button id="saveBtn" class="btn" type="button">Save Changes</button>
+      <div id="saveMsg" class="msg"></div>
+    </section>
+
+    <section>
+      <h2 style="margin:0 0 8px; font-size:18px;">Change Email (optional)</h2>
+      <p class="muted" style="margin:0 0 8px;">
+        This changes the Firebase sign-in email. You’ll need your password again for security.
+      </p>
+
+      <div class="row">
+        <div>
+          <label for="newEmail">New Email</label>
+          <input id="newEmail" type="email" autocomplete="email" placeholder="new@example.com" />
+        </div>
+        <div>
+          <label for="confirmPassword">Confirm Password</label>
+          <input id="confirmPassword" type="password" autocomplete="current-password" placeholder="••••••••" />
+        </div>
+      </div>
+
+      <button id="changeEmailBtn" class="btn danger" type="button">Change Email</button>
+      <div id="emailMsg" class="msg"></div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut,
+      updateEmail,
+      EmailAuthProvider,
+      reauthenticateWithCredential
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      updateDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+      authDomain: "troop-248.firebaseapp.com",
+      projectId: "troop-248",
+      storageBucket: "troop-248.firebasestorage.app",
+      messagingSenderId: "925363875752",
+      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+      measurementId: "G-NY75GX5TBH"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const authInfoEl = document.getElementById("auth-info");
+    const logoutBtn = document.getElementById("logout-btn");
+
+    const roleBadgeEl = document.getElementById("role-badge");
+    const levelTextEl = document.getElementById("levelText");
+    const typeTextEl = document.getElementById("typeText");
+    const uidTextEl = document.getElementById("uidText");
+
+    const fullNameEl = document.getElementById("fullName");
+    const emailDisplayEl = document.getElementById("emailDisplay");
+    const notesEl = document.getElementById("notes");
+    const saveBtn = document.getElementById("saveBtn");
+    const saveMsg = document.getElementById("saveMsg");
+
+    const newEmailEl = document.getElementById("newEmail");
+    const confirmPasswordEl = document.getElementById("confirmPassword");
+    const changeEmailBtn = document.getElementById("changeEmailBtn");
+    const emailMsg = document.getElementById("emailMsg");
+
+    const setMsg = (el, text, ok=false) => {
+      el.textContent = text || "";
+      el.classList.toggle("ok", !!ok);
+    };
+
+    function badgeForRole(role) {
+      const r = (role || "").toLowerCase();
+      if (r === "admin") return `<span class="badge admin">Admin</span>`;
+      if (r === "viewer") return `<span class="badge viewer">Viewer</span>`;
+      return `<span class="badge pending">Pending</span>`;
+    }
+
+    let currentUser = null;
+    let accountRef = null;
+    let accountData = null;
+
+    async function loadAccount() {
+      if (!currentUser) return;
+
+      accountRef = doc(db, "accountInfo", currentUser.uid);
+      const snap = await getDoc(accountRef);
+
+      if (!snap.exists()) {
+        // If they signed in but somehow don't have the doc, send to under review
+        window.location.href = "/under-review/";
+        return;
+      }
+
+      accountData = snap.data() || {};
+      const role = accountData.authRole || "pending";
+      const accountType = accountData.accountType || "(not set)";
+
+      roleBadgeEl.innerHTML = badgeForRole(role);
+      levelTextEl.textContent = role;
+      typeTextEl.textContent = accountType;
+      uidTextEl.textContent = currentUser.uid;
+
+      // Fill inputs
+      fullNameEl.value = accountData.fullName || "";
+      notesEl.value = accountData.notes || "";
+      emailDisplayEl.value = currentUser.email || accountData.email || "";
+    }
+
+    // Save profile changes (fullName + notes)
+    saveBtn.addEventListener("click", async () => {
+      setMsg(saveMsg, "");
+      if (!currentUser || !accountRef) return;
+
+      saveBtn.disabled = true;
+      try {
+        await updateDoc(accountRef, {
+          fullName: (fullNameEl.value || "").trim(),
+          notes: (notesEl.value || "").trim(),
+          updatedAt: serverTimestamp()
+        });
+        setMsg(saveMsg, "Saved.", true);
+      } catch (e) {
+        console.error(e);
+        setMsg(saveMsg, "Could not save. Try again.");
+      } finally {
+        saveBtn.disabled = false;
+      }
+    });
+
+    // Change auth email + update accountInfo.email too
+    changeEmailBtn.addEventListener("click", async () => {
+      setMsg(emailMsg, "");
+      if (!currentUser || !accountRef) return;
+
+      const newEmail = (newEmailEl.value || "").trim();
+      const pw = confirmPasswordEl.value || "";
+
+      if (!newEmail) return setMsg(emailMsg, "Enter a new email.");
+      if (!pw) return setMsg(emailMsg, "Enter your password to confirm.");
+
+      changeEmailBtn.disabled = true;
+      try {
+        // Re-auth required by Firebase for sensitive actions
+        const cred = EmailAuthProvider.credential(currentUser.email || "", pw);
+        await reauthenticateWithCredential(currentUser, cred);
+
+        await updateEmail(currentUser, newEmail);
+
+        await updateDoc(accountRef, {
+          email: newEmail,
+          updatedAt: serverTimestamp()
+        });
+
+        emailDisplayEl.value = newEmail;
+        newEmailEl.value = "";
+        confirmPasswordEl.value = "";
+        setMsg(emailMsg, "Email updated.", true);
+      } catch (e) {
+        console.error(e);
+        // Common: wrong password or needs recent login
+        setMsg(emailMsg, "Email update failed. Check password and try again.");
+      } finally {
+        changeEmailBtn.disabled = false;
+      }
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "/login/";
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "/login/";
+        return;
+      }
+      currentUser = user;
+      authInfoEl.textContent = "Signed in as " + (user.email || user.uid);
+      await loadAccount();
+    });
+  </script>
+
+  <script>
+    (function () {
+      const STORAGE_KEY = "troop248-theme";
+      const body = document.body;
+      const toggleBtn = document.getElementById("theme-toggle");
+      if (!toggleBtn) return;
+
+      function applyTheme(theme) {
+        const isDark = theme === "dark";
+        body.classList.toggle("dark-theme", isDark);
+        toggleBtn.textContent = isDark ? "🌙 Dark mode" : "🌞 Light mode";
+      }
+
+      const saved = localStorage.getItem(STORAGE_KEY);
+      const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const initial = saved || (prefersDark ? "dark" : "light");
+
+      applyTheme(initial);
+      localStorage.setItem(STORAGE_KEY, initial);
+
+      toggleBtn.addEventListener("click", function () {
+        const newTheme = body.classList.contains("dark-theme") ? "light" : "dark";
+        applyTheme(newTheme);
+        localStorage.setItem(STORAGE_KEY, newTheme);
+      });
+    })();
+  </script>
+</body>
+</html>
