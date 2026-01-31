@@ -326,6 +326,22 @@
       return `<span class="badge pending">Pending</span>`;
     }
 
+    function prettyRole(role) {
+  const r = (role || "").toLowerCase();
+  if (r === "admin") return "Admin";
+  if (r === "viewer") return "Approved/Viewer";
+  if (r === "pending") return "Pending";
+  return "Unknown";
+}
+
+function prettyAccountType(type) {
+  const t = (type || "").toLowerCase();
+  if (t === "scout") return "Scout";
+  if (t === "leader") return "Adult Leader";
+  if (t === "parent") return "Parent/Guardian";
+  return "Unknown";
+}
+
     let currentUser = null;
     let accountRef = null;
     let accountData = null;
