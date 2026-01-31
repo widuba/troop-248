@@ -323,7 +323,10 @@
           <strong>Drag & drop</strong> a file here
         </p>
         <p style="margin:0;font-size:12px;color:#6b7280;">
-          or click to choose from your device (max ~20 MB)
+          or click to choose from your device (max ~10 MB for security)
+        </p>
+        <p style="margin:0;font-size:12px;color:#6b7280;">
+          Only allows jpg, png, webp, gif, or pdf.
         </p>
         <p id="chosen-file" style="margin-top:6px;font-size:12px;color:#6b7280;"></p>
       </div>
@@ -627,7 +630,7 @@
 
           const maxSizeBytes = 20 * 1024 * 1024;
           if (currentFile.size > maxSizeBytes) {
-            setUploadStatus("File too large (max 20 MB).", "#b91c1c");
+            setUploadStatus("File too large (max 10 MB).", "#b91c1c");
             return;
           }
 
