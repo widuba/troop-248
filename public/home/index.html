@@ -287,7 +287,7 @@
   <main>
     <div class="welcome-card">
       <div>
-        <h3>Welcome to Troop 248 Portal</h3>
+        <h3 id="welcome-title">Welcome</h3>
         <p>
           This private site is for Troop 248 Scouts, parents, and adult leaders.
           Use the sections below to get where you need to go quickly.
@@ -415,22 +415,22 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    const authInfoEl = document.getElementById("auth-info");
     const logoutBtn = document.getElementById("logout-btn");
     const roleBadgeContainer = document.getElementById("role-badge-container");
+    const authInfoEl = document.getElementById("auth-info");
 
     let currentUser = null;
     let currentIsAdmin = false;
 
     function updateUI() {
-      if (currentUser) {
-        authInfoEl.textContent = `Signed in as ${currentUser.email}`;
-        roleBadgeContainer.innerHTML = `
-          <span class="badge ${currentIsAdmin ? "admin" : ""}">
-            ${currentIsAdmin ? "Admin" : "Viewer"}
-          </span>`;
-      }
-    }
+  if (currentUser) {
+    roleBadgeContainer.innerHTML = `
+      <span class="badge ${currentIsAdmin ? "admin" : ""}">
+        ${currentIsAdmin ? "Admin" : "Viewer"}
+      </span>
+    `;
+  }
+}
 
     async function handleAuth(user) {
       if (!user) {
@@ -448,6 +448,10 @@
 
       const data = infoSnap.data();
       const role = data.authRole;
+      
+      if (data.fullName && data.fullName.trim()) {
+  welcomeTitleEl.textContent = "Welcome, " + data.fullName.trim();
+}
 
       if (role !== "admin" && role !== "viewer") {
         window.location.href = "/under-review/";
