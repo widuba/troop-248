@@ -22,20 +22,12 @@
 
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
       background: #d2cab6;
       color: var(--text-main);
       min-height: 100vh;
     }
-
-    /* Dark theme styles */
-    body.dark-theme { background: #111827; color: #e5e7eb; }
-    body.dark-theme .welcome-card,
-    body.dark-theme section { background: #1f2937; border-color: rgba(55, 65, 81, 0.9); }
-    body.dark-theme .feature-card { background: #111827; border-color: rgba(75, 85, 99, 0.9); }
-    body.dark-theme .feature-text,
-    body.dark-theme .quick-note { color: #d1d5db; }
-    body.dark-theme .badge { background: rgba(55, 65, 81, 0.8); color: #e5e7eb; }
 
     header {
       background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
@@ -58,7 +50,11 @@
       align-items: center;
       gap: 8px;
     }
-    header h2::before { content: "★"; font-size: 18px; }
+
+    header h2::before {
+      content: "★";
+      font-size: 18px;
+    }
 
     .troop-home-link {
       text-decoration: none;
@@ -66,7 +62,10 @@
       display: inline-flex;
       align-items: center;
     }
-    .troop-home-link:hover h2 { opacity: 0.9; text-decoration: underline; }
+    .troop-home-link:hover h2 {
+      opacity: 0.9;
+      text-decoration: underline;
+    }
 
     nav {
       display: flex;
@@ -84,13 +83,14 @@
       border: 1px solid rgba(255, 255, 255, 0.25);
       backdrop-filter: blur(4px);
       opacity: 0.9;
-      background: rgba(255, 255, 255, 0.4);
     }
 
-    nav a:hover { opacity: 1; background: rgba(255, 255, 255, 0.7); }
+    nav a:hover {
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.12);
+    }
 
     #auth-bar {
-      color: #000000;
       display: flex;
       gap: 10px;
       align-items: center;
@@ -106,20 +106,10 @@
       color: var(--white);
       cursor: pointer;
     }
-    #logout-btn:hover { background: rgba(255, 255, 255, 0.2); }
 
-    /* Dark mode toggle button in header */
-    #theme-toggle {
-      padding: 5px 10px;
-      font-size: 13px;
-      border-radius: var(--radius-pill);
-      border: 1px solid rgba(255, 255, 255, 0.8);
+    #logout-btn:hover {
       background: rgba(255, 255, 255, 0.2);
-      color: #1f2933;
-      cursor: pointer;
-      white-space: nowrap;
     }
-    #theme-toggle:hover { background: rgba(255, 255, 255, 0.35); }
 
     main {
       padding: 24px 16px 40px;
@@ -140,8 +130,16 @@
       border: 1px solid rgba(148, 163, 184, 0.4);
     }
 
-    .welcome-card h3 { margin: 0 0 6px; font-size: 20px; }
-    .welcome-card p { margin: 0; font-size: 14px; color: var(--text-muted); }
+    .welcome-card h3 {
+      margin: 0 0 6px;
+      font-size: 20px;
+    }
+
+    .welcome-card p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
 
     .badge {
       font-size: 11px;
@@ -175,7 +173,12 @@
       align-items: center;
       gap: 8px;
     }
-    section h2::before { content: "▸"; font-size: 14px; color: var(--blue); }
+
+    section h2::before {
+      content: "▸";
+      font-size: 14px;
+      color: var(--blue);
+    }
 
     .grid {
       display: grid;
@@ -185,10 +188,15 @@
     }
 
     @media (max-width: 720px) {
-      .grid { grid-template-columns: minmax(0, 1fr); }
+      .grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
     }
 
-    .feature-card-link { text-decoration: none; color: inherit; }
+    .feature-card-link {
+      text-decoration: none;
+      color: inherit;
+    }
 
     .feature-card {
       border-radius: 14px;
@@ -205,7 +213,12 @@
       border-color: rgba(148,163,184,.9);
     }
 
-    .feature-title { font-size: 15px; font-weight: 600; margin: 0 0 4px; }
+    .feature-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin: 0 0 4px;
+    }
+
     .feature-badge {
       display: inline-block;
       font-size: 11px;
@@ -217,38 +230,41 @@
       letter-spacing: .07em;
       margin-bottom: 4px;
     }
-    .feature-text { font-size: 13px; color: var(--text-muted); margin: 0; }
-    .quick-note { font-size: 12px; color: var(--text-muted); margin-top: 8px; }
+
+    .feature-text {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .quick-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
 
     @media (max-width: 640px) {
-      header { flex-direction: column; align-items: flex-start; gap: 8px; }
-      nav { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
-      .welcome-card { flex-direction: column; align-items: flex-start; }
-      #auth-bar { flex-wrap: wrap; }
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      nav {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+      .welcome-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
-    .big-login-btn {
-  display: inline-block;
-  background: #b22222;
-  color: white;
-  padding: 8px 17px;
-  border-radius: 500px;
-  font-size: 13px;
-  font-weight: 800;
-  text-decoration: none;
-  box-shadow: 0 8px 18px rgba(0,0,0,0.2);
-}
-
-.big-login-btn:hover {
-  opacity: 0.9;
-}
-
   </style>
 </head>
-
 <body>
   <header>
     <div>
-      <a href="/" class="troop-home-link">
+      <a href="/home" class="troop-home-link">
         <h2>Troop 248</h2>
       </a>
     </div>
@@ -264,8 +280,8 @@
     </nav>
 
     <div id="auth-bar">
-      <div id="auth-info">Not signed in</div>
-      <button id="logout-btn" style="display:none;">Log Out</button>
+      <div id="auth-info">Signed in as …</div>
+      <button id="logout-btn">Log Out</button>
     </div>
   </header>
 
@@ -275,20 +291,14 @@
         <h3>Welcome to Troop 248 Portal</h3>
         <p>
           This private site is for Troop 248 Scouts, parents, and adult leaders.
-          Please log in to access member resources.
-        </p>
-        <p style="margin-top:10px;">
-          <a href="/login/" class="big-login-btn">
-            Log In / Sign Up
-          </a>
+          Use the sections below to get where you need to go quickly.
         </p>
       </div>
       <div id="role-badge-container">
-        <span class="badge">Public</span>
+        <span class="badge">Viewer</span>
       </div>
     </div>
 
-    <!-- Keeping your original sections/links as you had them -->
     <section>
       <h2>Troop Resources</h2>
       <div class="grid">
@@ -307,7 +317,7 @@
             <div class="feature-badge">Forms</div>
             <h3 class="feature-title">Troop Documents</h3>
             <p class="feature-text">
-              Find permission slips, packing lists, medical forms, and other important paperwork.
+              Find meeting plans, packing lists, medical forms, and other important paperwork.
             </p>
           </div>
         </a>
@@ -371,39 +381,36 @@
             </p>
           </div>
         </a>
+
+        <a href="/accountinfo" class="feature-card-link">
+          <div class="feature-card">
+            <div class="feature-badge">Your Account</div>
+            <h3 class="feature-title">Account Info</h3>
+            <p class="feature-text">
+              View and edit account info.
+            </p>
+          </div>
+        </a>
       </div>
 
       <div class="quick-note">
-        Log in to see member-only content and editing permissions.
+        Your access level (Viewer / Admin) controls whether you can edit content or just view it.
       </div>
     </section>
   </main>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-    // Debug bypass: add ?noredirect=1 to stop redirects
-    const params = new URLSearchParams(window.location.search);
-    const NO_REDIRECT = params.has("noredirect");
-
-    // Safe redirect helper
-    const redirectOnce = (url) => {
-      if (NO_REDIRECT) return;
-
-      const current = (window.location.pathname.replace(/\/+$/, "") || "/");
-      const target = (new URL(url, window.location.origin).pathname.replace(/\/+$/, "") || "/");
-
-      if (current === target) return;
-
-      const KEY = "__redirected_to__";
-      const last = sessionStorage.getItem(KEY);
-      if (last === target) return;
-
-      sessionStorage.setItem(KEY, target);
-      window.location.replace(url);
-    };
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
@@ -423,62 +430,52 @@
     const logoutBtn = document.getElementById("logout-btn");
     const roleBadgeContainer = document.getElementById("role-badge-container");
 
+    let currentUser = null;
+    let currentIsAdmin = false;
+
+    function updateUI() {
+      if (currentUser) {
+        authInfoEl.textContent = `Signed in as ${currentUser.email}`;
+        roleBadgeContainer.innerHTML = `
+          <span class="badge ${currentIsAdmin ? "admin" : ""}">
+            ${currentIsAdmin ? "Admin" : "Viewer"}
+          </span>`;
+      }
+    }
+
     async function handleAuth(user) {
-      // Logged OUT: stay on "/" (no redirect). Show login link.
       if (!user) {
-        authInfoEl.textContent = "Not signed in";
-        logoutBtn.style.display = "none";
-        roleBadgeContainer.innerHTML = `<span class="badge">Public</span>`;
+        window.location.href = "/";
         return;
       }
 
-      // Logged IN: send to /home/ (member portal)
-      sessionStorage.removeItem("__redirected_to__");
-      redirectOnce("/home/");
+      const infoRef = doc(db, "accountInfo", user.uid);
+      const infoSnap = await getDoc(infoRef);
+
+      if (!infoSnap.exists()) {
+        window.location.href = "/under-review/";
+        return;
+      }
+
+      const data = infoSnap.data();
+      const role = data.authRole;
+
+      if (role !== "admin" && role !== "viewer") {
+        window.location.href = "/under-review/";
+        return;
+      }
+
+      currentUser = user;
+      currentIsAdmin = role === "admin";
+      updateUI();
     }
 
     onAuthStateChanged(auth, handleAuth);
 
-    // If someone hits logout from this page (rare), handle safely
     logoutBtn.addEventListener("click", async () => {
-      try {
-        await signOut(auth);
-      } finally {
-        sessionStorage.removeItem("__redirected_to__");
-        redirectOnce("/login/");
-      }
+      await signOut(auth);
+      window.location.href = "/";
     });
-  </script>
-
-  <!-- Dark mode script (unchanged) -->
-  <script>
-    (function () {
-      const STORAGE_KEY = "troop248-theme";
-      const body = document.body;
-      const toggleBtn = document.getElementById("theme-toggle");
-
-      if (!toggleBtn) return;
-
-      function applyTheme(theme) {
-        const isDark = theme === "dark";
-        body.classList.toggle("dark-theme", isDark);
-        toggleBtn.textContent = isDark ? "🌙 Dark mode" : "🌞 Light mode";
-      }
-
-      const saved = localStorage.getItem(STORAGE_KEY);
-      const prefersDark = window.matchMedia &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches;
-      const initial = saved || (prefersDark ? "dark" : "light");
-
-      applyTheme(initial);
-      localStorage.setItem(STORAGE_KEY, initial);
-
-      toggleBtn.addEventListener("click", function () {
-        const newTheme = body.classList.contains("dark-theme") ? "light" : "dark";
-        applyTheme(newTheme);
-        localStorage.setItem(STORAGE_KEY, newTheme);
-      });
-    })();
   </script>
 </body>
 </html>
