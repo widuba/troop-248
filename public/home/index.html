@@ -400,82 +400,95 @@
   </main>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import {
-      getAuth,
-      onAuthStateChanged,
-      signOut
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import {
-      getFirestore,
-      doc,
-      getDoc
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
-      authDomain: "troop-248.firebaseapp.com",
-      projectId: "troop-248",
-      storageBucket: "troop-248.firebasestorage.app",
-      messagingSenderId: "925363875752",
-      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
-      measurementId: "G-NY75GX5TBH"
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+    authDomain: "troop-248.firebaseapp.com",
+    projectId: "troop-248",
+    storageBucket: "troop-248.firebasestorage.app",
+    messagingSenderId: "925363875752",
+    appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+    measurementId: "G-NY75GX5TBH"
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
-    const authInfoEl = document.getElementById("auth-info");
-    const logoutBtn = document.getElementById("logout-btn");
-    const roleBadgeContainer = document.getElementById("role-badge-container");
+  const logoutBtn = document.getElementById("logout-btn");
+  const roleBadgeContainer = document.getElementById("role-badge-container");
+  const welcomeTitleEl = document.getElementById("welcome-title");
 
-    let currentUser = null;
-    let currentIsAdmin = false;
+  function clean(v) {
+    return (typeof v === "string") ? v.trim() : "";
+  }
 
-    function updateUI() {
-      if (currentUser) {
-        authInfoEl.textContent = `Signed in as ${currentUser.email}`;
-        roleBadgeContainer.innerHTML = `
-          <span class="badge ${currentIsAdmin ? "admin" : ""}">
-            ${currentIsAdmin ? "Admin" : "Viewer"}
-          </span>`;
-      }
+  function displayNameFrom(info, user) {
+    const full = clean(info?.fullName);
+    if (full) return full;
+
+    const first = clean(info?.firstName);
+    const last = clean(info?.lastName);
+    const combined = clean(`${first} ${last}`);
+    if (combined) return combined;
+
+    return user?.email || user?.uid || "Member";
+  }
+
+  function setBadge(authRole) {
+    const isAdmin = authRole === "admin";
+    roleBadgeContainer.innerHTML = `
+      <span class="badge ${isAdmin ? "admin" : ""}">
+        ${isAdmin ? "Admin" : "Viewer"}
+      </span>
+    `;
+  }
+
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      window.location.href = "/";
+      return;
     }
 
-    async function handleAuth(user) {
-      if (!user) {
-        window.location.href = "/";
-        return;
-      }
+    // Default immediately so you NEVER see blank "Welcome"
+    welcomeTitleEl.textContent = `Welcome, ${user.email || "Member"}`;
+    setBadge("viewer");
 
+    try {
       const infoRef = doc(db, "accountInfo", user.uid);
-      const infoSnap = await getDoc(infoRef);
+      const snap = await getDoc(infoRef);
 
-      if (!infoSnap.exists()) {
+      if (!snap.exists()) {
         window.location.href = "/under-review/";
         return;
       }
 
-      const data = infoSnap.data();
-      const role = data.authRole;
+      const info = snap.data() || {};
+      const role = info.authRole;
 
       if (role !== "admin" && role !== "viewer") {
         window.location.href = "/under-review/";
         return;
       }
 
-      currentUser = user;
-      currentIsAdmin = role === "admin";
-      updateUI();
+      const name = displayNameFrom(info, user);
+      welcomeTitleEl.textContent = `Welcome, ${name}`;
+      setBadge(role);
+
+      console.log("HOME loaded accountInfo:", { uid: user.uid, role, name, info });
+    } catch (err) {
+      console.error("HOME failed to load accountInfo:", err);
+      // Keep fallback welcome+email
     }
+  });
 
-    onAuthStateChanged(auth, handleAuth);
-
-    logoutBtn.addEventListener("click", async () => {
-      await signOut(auth);
-      window.location.href = "/";
-    });
-  </script>
+  logoutBtn.addEventListener("click", async () => {
+    await signOut(auth);
+    window.location.href = "/";
+  });
+</script>
 </body>
 </html>
