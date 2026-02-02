@@ -219,12 +219,46 @@
     .feature-text { font-size: 13px; color: var(--text-muted); margin: 0; }
     .quick-note { font-size: 12px; color: var(--text-muted); margin-top: 8px; }
 
-    @media (max-width: 640px) {
-      header { flex-direction: column; align-items: flex-start; gap: 8px; }
-      nav { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
-      .welcome-card { flex-direction: column; align-items: flex-start; }
-      #auth-bar { flex-wrap: wrap; }
-    }
+   @media (max-width: 640px) {
+  header {
+    flex-direction: row;        /* keep one line */
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    flex-wrap: nowrap;          /* do NOT wrap to new lines */
+  }
+
+  header > div:first-child {
+    flex: 0 0 auto;             /* Troop 248 stays compact */
+  }
+
+  nav {
+    flex: 1 1 auto;             /* nav takes remaining space */
+    flex-wrap: nowrap;          /* keep nav in one row */
+    overflow-x: auto;           /* allow swipe */
+    -webkit-overflow-scrolling: touch;
+    gap: 8px;
+    padding: 4px 0;
+    scrollbar-width: none;      /* Firefox hide scrollbar */
+  }
+  nav::-webkit-scrollbar { display: none; } /* Chrome/Safari hide scrollbar */
+
+  nav a {
+    white-space: nowrap;        /* prevent link wrapping */
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+
+  #auth-bar {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    gap: 8px;
+  }
+
+  #auth-info {
+    display: none;              /* optional: keeps header tighter */
+  }
+}
     .big-login-btn {
   display: inline-block;
   background: #b22222;
