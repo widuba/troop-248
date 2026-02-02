@@ -22,8 +22,7 @@
 
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: #d2cab6;
       color: var(--text-main);
       min-height: 100vh;
@@ -72,6 +71,7 @@
       gap: 12px;
       font-size: 13px;
       text-transform: uppercase;
+      flex-wrap: wrap;
     }
 
     nav a {
@@ -149,6 +149,7 @@
       color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.07em;
+      white-space: nowrap;
     }
 
     .badge.admin {
@@ -188,9 +189,7 @@
     }
 
     @media (max-width: 720px) {
-      .grid {
-        grid-template-columns: minmax(0, 1fr);
-      }
+      .grid { grid-template-columns: minmax(0, 1fr); }
     }
 
     .feature-card-link {
@@ -252,7 +251,6 @@
       nav {
         width: 100%;
         justify-content: flex-start;
-        flex-wrap: wrap;
       }
       .welcome-card {
         flex-direction: column;
@@ -261,6 +259,7 @@
     }
   </style>
 </head>
+
 <body>
   <header>
     <div>
@@ -280,15 +279,14 @@
     </nav>
 
     <div id="auth-bar">
-      <div id="auth-info">Signed in as …</div>
-      <button id="logout-btn">Log Out</button>
+      <button id="logout-btn" type="button">Log Out</button>
     </div>
   </header>
 
   <main>
     <div class="welcome-card">
       <div>
-        <h3>Welcome to Troop 248 Portal</h3>
+        <h3 id="welcome-title">Welcome</h3>
         <p>
           This private site is for Troop 248 Scouts, parents, and adult leaders.
           Use the sections below to get where you need to go quickly.
@@ -301,6 +299,7 @@
 
     <section>
       <h2>Troop Resources</h2>
+
       <div class="grid">
         <a href="/calendar" class="feature-card-link">
           <div class="feature-card">
@@ -378,16 +377,6 @@
             <h3 class="feature-title">Report</h3>
             <p class="feature-text">
               Report any problems/suggestions for the website to the devs.
-            </p>
-          </div>
-        </a>
-
-        <a href="/accountinfo" class="feature-card-link">
-          <div class="feature-card">
-            <div class="feature-badge">Your Account</div>
-            <h3 class="feature-title">Account Info</h3>
-            <p class="feature-text">
-              View and edit account info.
             </p>
           </div>
         </a>
