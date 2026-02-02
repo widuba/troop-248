@@ -244,21 +244,60 @@
     }
 
     @media (max-width: 640px) {
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-      }
-      nav {
-        width: 100%;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-      }
-      .welcome-card {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-    }
+  header {
+    flex-direction: row;      /* keep header in one row */
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 12px;
+    flex-wrap: nowrap;        /* prevent wrapping into multiple lines */
+  }
+
+  /* Keep the title compact */
+  header h2 {
+    font-size: 16px;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+
+  /* Nav becomes a single-line, swipeable strip */
+  nav {
+    flex: 1 1 auto;
+    flex-wrap: nowrap;        /* no wrapping */
+    overflow-x: auto;         /* swipe left/right */
+    -webkit-overflow-scrolling: touch;
+    gap: 8px;
+    padding: 4px 0;
+    scrollbar-width: none;    /* Firefox hide scrollbar */
+  }
+  nav::-webkit-scrollbar { display: none; } /* Chrome/Safari hide scrollbar */
+
+  nav a {
+    white-space: nowrap;      /* keep each link on one line */
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+
+  /* Auth stays on one line */
+  #auth-bar {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    gap: 8px;
+  }
+
+  #auth-info {
+    max-width: 140px;          /* adjust to taste */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Keep your welcome card behavior */
+  .welcome-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
   </style>
 </head>
 <body>
