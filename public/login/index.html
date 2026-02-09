@@ -168,6 +168,11 @@
             <input id="fullName" type="text" autocomplete="name" placeholder="First Last" />
           </div>
           <div>
+  <label>Username (letters & numbers, up to 15)</label>
+  <input id="signupUsername" type="text" maxlength="15" placeholder="e.g. troop248joe" autocomplete="username" />
+  <div id="signupUsernameHelp" style="font-size:12px;color:#6b7280;margin-top:6px;">Only letters & numbers. 1–15 chars.</div>
+</div>
+          <div>
             <label>Account Type</label>
             <select id="accountType">
               <option value="scout">Scout</option>
@@ -176,8 +181,7 @@
             </select>
           </div>
         </div>
-
-        <!-- ✅ NEW: Phone -->
+        
         <label>Phone Number</label>
         <input
           id="phone"
@@ -271,6 +275,78 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
+
+    // get element refs
+const signupUsername = document.getElementById("signupUsername");
+const signupUsernameHelp = document.getElementById("signupUsernameHelp");
+
+// helper: valid username
+function validUsername(v){
+  if(!v) return false;
+  return /^[A-Za-z0-9]{1,15}$/.test(v);
+}
+
+signupBtn.addEventListener("click", async () => {
+  setMsg(signupMsg, "");
+  const email = signupEmail.value.trim();
+  const pw1 = signupPassword.value;
+  const pw2 = signupPassword2.value;
+  const usernameVal = signupUsername.value.trim();
+
+  if (!email) return setMsg(signupMsg, "Please enter an email.");
+  if (!pw1 || pw1.length < 6) return setMsg(signupMsg, "Password must be at least 6 characters.");
+  if (pw1 !== pw2) return setMsg(signupMsg, "Passwords do not match.");
+  if (usernameVal && !validUsername(usernameVal)) return setMsg(signupMsg, "Username must be 1–15 letters and numbers only.");
+
+  signupBtn.disabled = true;
+
+  try {
+    // If username entered, check quick uniqueness by querying accountInfo
+    if (usernameVal) {
+      const q = query(collection(db, "accountInfo"), where("username", "==", usernameVal));
+      const snap = await getDocs(q);
+      if (!snap.empty) {
+        setMsg(signupMsg, "Username already taken. Pick another.");
+        signupBtn.disabled = false;
+        return;
+      }
+    }
+
+    sessionStorage.removeItem("__redirected_to__");
+    const cred = await createUserWithEmailAndPassword(auth, email, pw1);
+    const user = cred.user;
+
+    // create accountInfo doc for the new user
+    await setDoc(doc(db, "accountInfo", user.uid), {
+      authRole: "pending",
+      email: user.email || email,
+      fullName: fullName.value.trim() || "",
+      accountType: accountType.value,
+      notes: notes.value.trim() || "",
+      // include username only if provided
+      ...(usernameVal ? { username: usernameVal } : {}),
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    }, { merge: true });
+
+    // redirect to under-review
+    redirectOnce("/under-review/");
+  } catch (e) {
+    console.error(e);
+    if (e?.code === "auth/email-already-in-use") {
+      setMsg(signupMsg, "That email is already in use. Try logging in instead.");
+    } else if (e?.code === "auth/invalid-email") {
+      setMsg(signupMsg, "That email address doesn't look valid.");
+    } else if (e?.code === "auth/weak-password") {
+      setMsg(signupMsg, "That password is too weak. Use at least 6 characters.");
+    } else {
+      setMsg(signupMsg, "Sign up failed. Please try again.");
+    }
+    try { await signOut(auth); } catch {}
+  } finally {
+    signupBtn.disabled = false;
+  }
+});
 
     // ====== UI helpers ======
     const statusEl = document.getElementById("status");
