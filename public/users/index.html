@@ -30,7 +30,6 @@
       min-height: 100vh;
     }
 
-    /* ✅ Header / Nav matches your Home page */
     header {
       background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
       color: var(--white);
@@ -119,7 +118,6 @@
       margin: 0 auto;
     }
 
-    /* Existing page cards keep your tan/red/blue look (no redesign) */
     .card {
       background: rgba(255, 255, 255, 0.95);
       border-radius: var(--radius-lg);
@@ -199,6 +197,78 @@
       .user-card { grid-column: span 12; }
     }
 
+    /* Detail view */
+    .detail-card {
+      padding: 26px 22px 22px;
+    }
+
+    .detail-title {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: .02em;
+      font-weight: 900;
+    }
+
+    .detail-sub {
+      margin: 6px 0 0;
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .detail-item {
+      grid-column: span 6;
+      padding: 14px 14px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(209,213,219,.9);
+      background: #f9fafb;
+      box-shadow: 0 4px 12px rgba(0,0,0,.04);
+    }
+    .detail-item.full { grid-column: span 12; }
+
+    .detail-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--text-muted);
+      margin: 0 0 6px;
+      font-weight: 800;
+    }
+
+    .detail-value {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-main);
+      word-break: break-word;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      font-weight: 700;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      background: rgba(31,78,121,.08);
+      color: var(--blue);
+      border: 1px solid rgba(31,78,121,.18);
+    }
+    .pill.gray{
+      background: rgba(148, 163, 184, 0.2);
+      color: var(--text-muted);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+    }
+
     .tag{
       display:inline-flex;
       align-items:center;
@@ -254,6 +324,24 @@
     }
     .link:hover{ text-decoration: underline; }
 
+    .btn-soft {
+      padding: 8px 12px;
+      font-size: 13px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(209,213,219,.9);
+      background: rgba(255,255,255,.65);
+      color: var(--text-main);
+      cursor: pointer;
+      font-weight: 800;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-soft:hover{
+      background: rgba(255,255,255,.85);
+    }
+
     @media (max-width: 640px) {
       header {
         flex-direction: column;
@@ -265,6 +353,7 @@
         justify-content: flex-start;
         flex-wrap: wrap;
       }
+      .detail-item { grid-column: span 12; }
     }
   </style>
 </head>
@@ -295,7 +384,8 @@
   </header>
 
   <main>
-    <div class="card" id="statusCard">
+    <!-- LIST MODE ONLY (hidden in detail mode) -->
+    <div class="card" id="listHeaderCard">
       <div class="row">
         <div>
           <div style="font-weight:900; font-size:18px;">Users</div>
@@ -320,14 +410,16 @@
     <div class="card" id="loadingCard">
       <div class="loading">
         <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-        <div class="muted">Loading users…</div>
+        <div class="muted">Loading…</div>
       </div>
     </div>
 
     <div class="card error" id="errorCard" style="display:none;"></div>
 
+    <!-- DETAIL MODE -->
     <div id="detailWrap" style="display:none;"></div>
 
+    <!-- LIST MODE -->
     <div class="grid" id="usersGrid" style="display:none;"></div>
   </main>
 
@@ -357,6 +449,7 @@
     const roleLine = document.getElementById("roleLine");
     const roleTag  = document.getElementById("roleTag");
 
+    const listHeaderCard = document.getElementById("listHeaderCard");
     const loadingCard = document.getElementById("loadingCard");
     const errorCard = document.getElementById("errorCard");
 
@@ -367,7 +460,6 @@
     const typeFilter = document.getElementById("typeFilter");
 
     let allUsers = [];
-    let currentViewerRole = "pending";
 
     function showError(msg){
       errorCard.style.display = "block";
@@ -375,8 +467,6 @@
     }
 
     function setRoleUI(role){
-      currentViewerRole = role;
-
       if (role === "admin") {
         roleLine.textContent = "Approved: Admin (full access)";
         roleTag.textContent = "Admin";
@@ -393,8 +483,7 @@
     }
 
     function getQueryParam(name){
-      const url = new URL(window.location.href);
-      return url.searchParams.get(name);
+      return new URL(window.location.href).searchParams.get(name);
     }
 
     function escapeHtml(str){
@@ -416,8 +505,7 @@
     async function getMyRole(uid){
       const snap = await getDoc(doc(db, "accountInfo", uid));
       if (!snap.exists()) return "pending";
-      const data = snap.data() || {};
-      return normalizeRole(data.authRole);
+      return normalizeRole((snap.data() || {}).authRole);
     }
 
     function guardOrRedirect(user, role){
@@ -430,6 +518,14 @@
         return false;
       }
       return true;
+    }
+
+    function setMode(mode){
+      // mode: "list" | "detail"
+      const isDetail = mode === "detail";
+      listHeaderCard.style.display = isDetail ? "none" : "block";
+      usersGrid.style.display = isDetail ? "none" : "grid";
+      detailWrap.style.display = isDetail ? "block" : "none";
     }
 
     function renderList(){
@@ -473,29 +569,55 @@
     function renderDetail(uid){
       const u = allUsers.find(x => x.uid === uid);
       if (!u) {
-        detailWrap.style.display = "block";
         detailWrap.innerHTML = `
-          <div class="card error">
-            Could not find that user. <a class="link" href="/users/">Back to users</a>
+          <div class="card error detail-card">
+            <div style="font-weight:900; font-size:18px;">User not found</div>
+            <div class="muted small" style="margin-top:6px;">
+              That link may be outdated. <a class="link" href="/users/">Back to Users</a>
+            </div>
           </div>
         `;
         return;
       }
 
-      detailWrap.style.display = "block";
+      const acct = (u.accountType || "unknown").toLowerCase();
+      const acctLabel = acct ? (acct.charAt(0).toUpperCase() + acct.slice(1)) : "Unknown";
+      const pillClass = acct === "leader" ? "pill" : (acct === "parent" ? "pill" : "pill gray");
+
       detailWrap.innerHTML = `
-        <div class="card">
-          <div class="row">
+        <div class="card detail-card">
+          <div class="row" style="align-items:flex-start;">
             <div>
-              <div style="font-weight:900; font-size:18px;">${escapeHtml(u.fullName || "Unnamed")}</div>
-              <div class="muted small">${escapeHtml(u.email || "")}</div>
+              <h1 class="detail-title">${escapeHtml(u.fullName || "Unnamed")}</h1>
+              <p class="detail-sub">${escapeHtml(u.email || "")}</p>
+              <div style="margin-top:10px;">
+                <span class="${pillClass}">${escapeHtml(acctLabel)}</span>
+              </div>
             </div>
-            <a class="link" href="/users/">Back</a>
+
+            <a class="btn-soft" href="/users/">
+              ← Back to Users
+            </a>
           </div>
+
           <div class="hr"></div>
-          <div class="small"><strong>Account Type:</strong> ${escapeHtml(u.accountType || "—")}</div>
-          <div class="small"><strong>Phone:</strong> ${escapeHtml(u.phone || "—")}</div>
-          <div class="small muted" style="margin-top:10px;">UID: ${escapeHtml(u.uid)}</div>
+
+          <div class="detail-grid">
+            <div class="detail-item">
+              <p class="detail-label">Phone</p>
+              <p class="detail-value">${escapeHtml(u.phone || "—")}</p>
+            </div>
+
+            <div class="detail-item">
+              <p class="detail-label">Account Type</p>
+              <p class="detail-value">${escapeHtml(acctLabel)}</p>
+            </div>
+
+            <div class="detail-item full">
+              <p class="detail-label">UID</p>
+              <p class="detail-value">${escapeHtml(u.uid)}</p>
+            </div>
+          </div>
         </div>
       `;
     }
@@ -570,10 +692,11 @@
 
         const uidParam = getQueryParam("u");
         if (uidParam) {
-          usersGrid.style.display = "none";
+          // ✅ DETAIL MODE: hide list header + list entirely
+          setMode("detail");
           renderDetail(uidParam);
         } else {
-          detailWrap.style.display = "none";
+          setMode("list");
           renderList();
         }
       } catch (err) {
