@@ -220,10 +220,10 @@
 
     const infoSnap = await getDoc(doc(db, "accountInfo", user.uid));
 
-    if (!infoSnap.exists() || infoSnap.data().authRole !== "admin") {
-      window.location.href = "/home";
-      return;
-    }
+    if (role !== "admin" && role !== "viewer") {
+  window.location.href = "/under-review/";
+  return;
+}
 
     await loadUsers();
   });
