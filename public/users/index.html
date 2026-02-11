@@ -1,233 +1,551 @@
+<!-- /public/users/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>Users — Troop 248</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="/bsafavicon.ico">
+
   <style>
-    :root {
-      --red: #b22222;
-      --blue: #1f4e79;
-      --tan: #d2cab6;
-      --white: #ffffff;
-      --text-main: #1f2933;
-      --text-muted: #6b7280;
-      --radius-lg: 16px;
-      --radius-pill: 999px;
-      --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
+    :root{
+      --red:#b22222;
+      --blue:#1f4e79;
+      --tan:#d2cab6;
+      --tan-2:#efe8d6;
+      --white:#ffffff;
+      --text:#1f2933;
+      --muted:#6b7280;
+      --shadow:0 10px 25px rgba(0,0,0,.08);
+      --radius:16px;
+      --pill:999px;
+      --max:1100px;
     }
 
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--tan);
-      color: var(--text-main);
-      min-height: 100vh;
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: linear-gradient(180deg, var(--tan-2), var(--tan));
+      color:var(--text);
     }
 
-    header {
-      background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
-      color: white;
-      padding: 14px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
+    header{
+      background: linear-gradient(90deg, var(--red), var(--white), var(--blue));
+      padding: 18px 16px;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
 
-    header h2 {
-      margin: 0;
-      font-size: 19px;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-    }
-
-    nav {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      font-size: 13px;
-      text-transform: uppercase;
-    }
-
-    nav a {
-      text-decoration: none;
-      font-weight: bold;
-      color: var(--blue);
-      background: rgba(255,255,255,.25);
-      padding: 6px 10px;
-      border-radius: var(--radius-pill);
-    }
-
-    main {
-      max-width: 960px;
+    .header-inner{
+      max-width: var(--max);
       margin: 0 auto;
-      padding: 20px 14px 40px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
     }
 
-    .card, section {
-      background: rgba(255,255,255,.95);
-      border-radius: var(--radius-lg);
-      padding: 16px;
-      margin-bottom: 16px;
-      box-shadow: var(--shadow-soft);
-      border: 1px solid rgba(148,163,184,.4);
+    .brand{
+      display:flex;
+      align-items:baseline;
+      gap:10px;
+      color:#111;
     }
-
-    h3 { margin-top: 0; }
-
-    .user-row {
-      padding: 8px 10px;
-      border-radius: 10px;
-      cursor: pointer;
+    .brand h1{
+      margin:0;
+      font-size: 18px;
+      letter-spacing:.2px;
+      font-weight: 800;
     }
-
-    .user-row:hover {
-      background: rgba(31,78,121,.08);
-    }
-
-    .muted {
-      color: var(--text-muted);
+    .brand span{
       font-size: 13px;
+      color:#111;
+      opacity:.75;
+      font-weight:600;
     }
 
-    .detail-grid {
-      display: grid;
-      grid-template-columns: 140px 1fr;
-      gap: 6px 10px;
+    .top-actions{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap: wrap;
+      justify-content:flex-end;
+    }
+
+    .btn{
+      border:0;
+      padding:10px 12px;
+      border-radius: var(--pill);
+      background: rgba(255,255,255,.85);
+      box-shadow: 0 6px 16px rgba(0,0,0,.10);
+      color:#111;
+      font-weight: 700;
+      cursor:pointer;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      line-height:1;
+    }
+    .btn:active{ transform: translateY(1px); }
+    .btn.secondary{
+      background: rgba(255,255,255,.65);
+      font-weight: 700;
+    }
+
+    main{
+      max-width: var(--max);
+      margin: 18px auto 56px;
+      padding: 0 16px;
+    }
+
+    .card{
+      background: rgba(255,255,255,.72);
+      backdrop-filter: blur(6px);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      margin-bottom: 14px;
+      border: 1px solid rgba(0,0,0,.06);
+    }
+
+    .row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .muted{ color: var(--muted); }
+    .small{ font-size: 13px; }
+
+    .searchbar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    input[type="search"]{
+      width: min(520px, 100%);
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(0,0,0,.12);
+      outline: none;
+      background: rgba(255,255,255,.85);
+      font-size: 14px;
+    }
+    select{
+      padding: 12px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(0,0,0,.12);
+      background: rgba(255,255,255,.85);
       font-size: 14px;
     }
 
-    .label {
-      color: var(--text-muted);
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 12px;
+    }
+    .user-card{
+      grid-column: span 6;
+      padding: 14px;
+      cursor:pointer;
+      transition: transform .08s ease;
+    }
+    .user-card:hover{ transform: translateY(-1px); }
+    @media (max-width: 820px){
+      .user-card{ grid-column: span 12; }
+    }
+
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding: 6px 10px;
+      border-radius: var(--pill);
+      font-weight: 800;
+      font-size: 12px;
+      background: rgba(31,78,121,.10);
+      color: var(--blue);
+      border: 1px solid rgba(31,78,121,.18);
+    }
+    .tag.red{
+      background: rgba(178,34,34,.10);
+      color: var(--red);
+      border-color: rgba(178,34,34,.18);
+    }
+    .tag.gray{
+      background: rgba(107,114,128,.12);
+      color: #374151;
+      border-color: rgba(107,114,128,.18);
+    }
+
+    .loading{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .dot{
+      width:10px; height:10px; border-radius:50%;
+      background: rgba(0,0,0,.25);
+      animation: pulse 1s infinite ease-in-out;
+    }
+    .dot:nth-child(2){ animation-delay: .15s; }
+    .dot:nth-child(3){ animation-delay: .30s; }
+    @keyframes pulse{
+      0%,100%{ transform: scale(.9); opacity:.4; }
+      50%{ transform: scale(1.2); opacity:.9; }
+    }
+
+    .hr{
+      height:1px;
+      background: rgba(0,0,0,.08);
+      margin: 12px 0;
+    }
+
+    .link{
+      color: var(--blue);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .link:hover{ text-decoration: underline; }
+
+    .error{
+      border: 1px solid rgba(178,34,34,.25);
+      background: rgba(178,34,34,.08);
+      color: #7f1d1d;
     }
   </style>
 </head>
+
 <body>
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <h1>Troop 248</h1>
+        <span>Users</span>
+      </div>
+      <div class="top-actions">
+        <a class="btn secondary" href="/home/">Home</a>
+        <button id="logoutBtn" class="btn" type="button">Log out</button>
+      </div>
+    </div>
+  </header>
 
-<header>
-  <h2>Troop 248</h2>
-  <nav>
-    <a href="/home">Home</a>
-    <a href="/users">Users</a>
-    <a href="/mail">Mail</a>
-    <a href="/events">Events</a>
-  </nav>
-</header>
+  <main>
+    <div class="card" id="statusCard">
+      <div class="row">
+        <div>
+          <div style="font-weight:900;">Directory</div>
+          <div class="muted small" id="roleLine">Checking access…</div>
+        </div>
+        <div class="tag gray" id="roleTag">Loading</div>
+      </div>
+      <div class="hr"></div>
+      <div class="searchbar">
+        <input id="searchInput" type="search" placeholder="Search by name or email…" autocomplete="off" />
+        <select id="typeFilter">
+          <option value="all">All account types</option>
+          <option value="scout">Scout</option>
+          <option value="parent">Parent</option>
+          <option value="leader">Leader</option>
+        </select>
+      </div>
+    </div>
 
-<main>
+    <div class="card" id="loadingCard">
+      <div class="loading">
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        <div class="muted">Loading users…</div>
+      </div>
+    </div>
 
-  <section>
-    <h3>Member Directory (Admin)</h3>
-    <div id="status" class="muted">Loading users…</div>
-    <div id="users-list"></div>
-  </section>
+    <div class="card error" id="errorCard" style="display:none;"></div>
 
-  <section id="detail-section" style="display:none;">
-    <h3>User Details</h3>
-    <div id="user-detail" class="detail-grid"></div>
-  </section>
+    <div id="detailWrap" style="display:none;"></div>
 
-</main>
+    <div class="grid" id="usersGrid" style="display:none;"></div>
+  </main>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import {
-    getFirestore,
-    doc,
-    getDoc,
-    collection,
-    getDocs
-  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      collection,
+      getDocs,
+      query,
+      orderBy
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
-    authDomain: "troop-248.firebaseapp.com",
-    projectId: "troop-248",
-    storageBucket: "troop-248.firebasestorage.app",
-    messagingSenderId: "925363875752",
-    appId: "1:925363875752:web:0b001c1a7a09fb8232f79d"
-  };
+    // ✅ MUST match exactly
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+      authDomain: "troop-248.firebaseapp.com",
+      projectId: "troop-248",
+      storageBucket: "troop-248.firebasestorage.app",
+      messagingSenderId: "925363875752",
+      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+      measurementId: "G-NY75GX5TBH"
+    };
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-  const usersListEl = document.getElementById("users-list");
-  const statusEl = document.getElementById("status");
-  const detailSection = document.getElementById("detail-section");
-  const detailEl = document.getElementById("user-detail");
+    const roleLine = document.getElementById("roleLine");
+    const roleTag  = document.getElementById("roleTag");
+    const logoutBtn = document.getElementById("logoutBtn");
 
-  const params = new URLSearchParams(window.location.search);
-  const selectedUid = params.get("u");
+    const loadingCard = document.getElementById("loadingCard");
+    const errorCard = document.getElementById("errorCard");
 
-  function safe(v) {
-    return v ? v : "—";
-  }
+    const usersGrid = document.getElementById("usersGrid");
+    const detailWrap = document.getElementById("detailWrap");
 
-  function renderDetail(data) {
-    detailEl.innerHTML = `
-      <div class="label">Name</div><div>${safe(data.fullName)}</div>
-      <div class="label">Email</div><div>${safe(data.email)}</div>
-      <div class="label">Phone</div><div>${safe(data.phone)}</div>
-      <div class="label">Type</div><div>${safe(data.accountType)}</div>
-      <div class="label">Role</div><div>${safe(data.authRole)}</div>
-      <div class="label">Notes</div><div>${safe(data.notes)}</div>
-    `;
-    detailSection.style.display = "block";
-  }
+    const searchInput = document.getElementById("searchInput");
+    const typeFilter = document.getElementById("typeFilter");
 
-  async function loadUsers() {
-    usersListEl.innerHTML = "";
-    const snap = await getDocs(collection(db, "accountInfo"));
+    let allUsers = [];
+    let currentViewerRole = "pending";
 
-    if (snap.empty) {
-      statusEl.textContent = "No users found.";
-      return;
+    function showError(msg){
+      errorCard.style.display = "block";
+      errorCard.textContent = msg;
     }
 
-    statusEl.textContent = "";
+    function setRoleUI(role){
+      currentViewerRole = role;
 
-    snap.forEach(docSnap => {
-      const data = docSnap.data();
-      const uid = docSnap.id;
-      const name = data.fullName || data.email || uid;
+      if (role === "admin") {
+        roleLine.textContent = "Approved: Admin (full access)";
+        roleTag.textContent = "Admin";
+        roleTag.className = "tag red";
+      } else if (role === "viewer") {
+        roleLine.textContent = "Approved: Viewer (read-only)";
+        roleTag.textContent = "Viewer";
+        roleTag.className = "tag";
+      } else {
+        roleLine.textContent = "Pending approval";
+        roleTag.textContent = "Pending";
+        roleTag.className = "tag gray";
+      }
+    }
 
-      const row = document.createElement("div");
-      row.className = "user-row";
-      row.textContent = name;
-      row.onclick = () => {
-        window.location.href = "/users?u=" + encodeURIComponent(uid);
-      };
+    function getQueryParam(name){
+      const url = new URL(window.location.href);
+      return url.searchParams.get(name);
+    }
 
-      usersListEl.appendChild(row);
+    function escapeHtml(str){
+      return String(str ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
 
-      if (selectedUid === uid) {
-        renderDetail(data);
+    function normalizeRole(authRole){
+      // ✅ Rules logic: only admin/viewer are approved; anything else = pending
+      const r = (authRole || "").toString().trim().toLowerCase();
+      if (r === "admin") return "admin";
+      if (r === "viewer") return "viewer";
+      return "pending";
+    }
+
+    async function getMyRole(uid){
+      const snap = await getDoc(doc(db, "accountInfo", uid));
+      if (!snap.exists()) return "pending";
+      const data = snap.data() || {};
+      return normalizeRole(data.authRole);
+    }
+
+    function guardOrRedirect(user, role){
+      // ✅ Auth guard required on every page
+      if (!user) {
+        window.location.replace("/"); // login page
+        return false;
+      }
+
+      // ✅ FIX: viewers MUST be allowed here.
+      // Only redirect pending users.
+      if (role !== "admin" && role !== "viewer") {
+        window.location.replace("/under-review/");
+        return false;
+      }
+
+      // ✅ Allowed: admin OR viewer
+      return true;
+    }
+
+    function renderList(){
+      const q = (searchInput.value || "").trim().toLowerCase();
+      const type = typeFilter.value;
+
+      const filtered = allUsers.filter(u => {
+        const name = (u.fullName || "").toLowerCase();
+        const email = (u.email || "").toLowerCase();
+        const phone = (u.phone || "").toLowerCase();
+        const acct = (u.accountType || "").toLowerCase();
+
+        const matchesText = !q || name.includes(q) || email.includes(q) || phone.includes(q);
+        const matchesType = (type === "all") || (acct === type);
+        return matchesText && matchesType;
+      });
+
+      usersGrid.innerHTML = filtered.map(u => {
+        const acct = (u.accountType || "unknown").toLowerCase();
+        const tagClass = acct === "leader" ? "tag red" : (acct === "parent" ? "tag" : "tag gray");
+        const acctLabel = acct.charAt(0).toUpperCase() + acct.slice(1);
+
+        return `
+          <div class="card user-card" data-uid="${escapeHtml(u.uid)}" role="button" tabindex="0" aria-label="Open user">
+            <div class="row">
+              <div style="min-width: 220px;">
+                <div style="font-weight: 900; font-size: 16px;">${escapeHtml(u.fullName || "Unnamed")}</div>
+                <div class="muted small">${escapeHtml(u.email || "")}</div>
+              </div>
+              <div class="${tagClass}">${escapeHtml(acctLabel)}</div>
+            </div>
+            <div class="hr"></div>
+            <div class="small muted">
+              Phone: ${escapeHtml(u.phone || "—")}
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      usersGrid.style.display = "grid";
+    }
+
+    function renderDetail(uid){
+      const u = allUsers.find(x => x.uid === uid);
+      if (!u) {
+        detailWrap.style.display = "block";
+        detailWrap.innerHTML = `
+          <div class="card error">
+            Could not find that user. <a class="link" href="/users/">Back to users</a>
+          </div>
+        `;
+        return;
+      }
+
+      detailWrap.style.display = "block";
+      detailWrap.innerHTML = `
+        <div class="card">
+          <div class="row">
+            <div>
+              <div style="font-weight:900; font-size:18px;">${escapeHtml(u.fullName || "Unnamed")}</div>
+              <div class="muted small">${escapeHtml(u.email || "")}</div>
+            </div>
+            <a class="btn secondary" href="/users/">Back</a>
+          </div>
+          <div class="hr"></div>
+          <div class="small"><strong>Account Type:</strong> ${escapeHtml(u.accountType || "—")}</div>
+          <div class="small"><strong>Phone:</strong> ${escapeHtml(u.phone || "—")}</div>
+          <div class="small muted" style="margin-top:10px;">
+            UID: ${escapeHtml(u.uid)}
+          </div>
+        </div>
+      `;
+    }
+
+    async function loadUsers(){
+      // Order by name if present; if not, Firestore will still return docs
+      const qy = query(collection(db, "accountInfo"), orderBy("fullName"));
+      const snap = await getDocs(qy);
+
+      allUsers = [];
+      snap.forEach(d => {
+        const data = d.data() || {};
+        allUsers.push({
+          uid: d.id,
+          fullName: data.fullName || "",
+          email: data.email || "",
+          phone: data.phone || "",
+          accountType: data.accountType || ""
+        });
+      });
+    }
+
+    function wireEvents(){
+      logoutBtn.addEventListener("click", async () => {
+        await signOut(auth);
+        window.location.replace("/");
+      });
+
+      searchInput.addEventListener("input", () => {
+        if (getQueryParam("u")) return; // don't re-render list when in detail
+        renderList();
+      });
+
+      typeFilter.addEventListener("change", () => {
+        if (getQueryParam("u")) return;
+        renderList();
+      });
+
+      usersGrid.addEventListener("click", (e) => {
+        const card = e.target.closest("[data-uid]");
+        if (!card) return;
+        const uid = card.getAttribute("data-uid");
+        window.location.href = `/users/?u=${encodeURIComponent(uid)}`;
+      });
+
+      usersGrid.addEventListener("keydown", (e) => {
+        if (e.key !== "Enter" && e.key !== " ") return;
+        const card = e.target.closest("[data-uid]");
+        if (!card) return;
+        const uid = card.getAttribute("data-uid");
+        window.location.href = `/users/?u=${encodeURIComponent(uid)}`;
+      });
+    }
+
+    wireEvents();
+
+    onAuthStateChanged(auth, async (user) => {
+      try {
+        // Always decide role first, then guard.
+        if (!user) {
+          window.location.replace("/");
+          return;
+        }
+
+        const role = await getMyRole(user.uid);
+        setRoleUI(role);
+
+        // ✅ FIXED GUARD: allow admin OR viewer; redirect only pending
+        if (!guardOrRedirect(user, role)) return;
+
+        // Now load page content (safe for both viewer + admin)
+        await loadUsers();
+
+        loadingCard.style.display = "none";
+
+        const uidParam = getQueryParam("u");
+        if (uidParam) {
+          usersGrid.style.display = "none";
+          renderDetail(uidParam);
+        } else {
+          detailWrap.style.display = "none";
+          renderList();
+        }
+      } catch (err) {
+        loadingCard.style.display = "none";
+        showError("Error loading users. " + (err?.message || String(err)));
       }
     });
-  }
-
-  onAuthStateChanged(auth, async (user) => {
-    if (!user) {
-      window.location.href = "/";
-      return;
-    }
-
-    const infoSnap = await getDoc(doc(db, "accountInfo", user.uid));
-
-    if (!infoSnap.exists() || infoSnap.data().authRole !== "admin") {
-      window.location.href = "/home";
-      return;
-    }
-
-    await loadUsers();
-  });
-</script>
-
+  </script>
 </body>
 </html>
