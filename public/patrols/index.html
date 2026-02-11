@@ -161,24 +161,16 @@
       border: 1px solid rgba(245, 158, 11, 0.6);
     }
 
-    .grid {
+    .grid2 {
       display: grid;
       grid-template-columns: repeat(12, 1fr);
       gap: 14px;
-      margin-top: 8px;
     }
-
-    .panel {
-      grid-column: span 6;
-      border-radius: 14px;
-      padding: 12px 12px 10px;
-      border: 1px solid rgba(209,213,219,.9);
-      background: #f9fafb;
-      box-shadow: 0 4px 12px rgba(0,0,0,.04);
-    }
+    .col6 { grid-column: span 6; }
+    .col12 { grid-column: span 12; }
 
     @media (max-width: 820px){
-      .panel { grid-column: span 12; }
+      .col6 { grid-column: span 12; }
     }
 
     label {
@@ -215,18 +207,21 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      white-space: nowrap;
     }
     .btn:hover { background: rgba(255,255,255,.9); }
+    .btn:disabled { opacity: .55; cursor:not-allowed; }
+
+    .btn.primary {
+      border-color: rgba(31,78,121,.25);
+      background: rgba(31,78,121,.08);
+      color: var(--blue);
+    }
 
     .btn.danger {
       border-color: rgba(178,34,34,.35);
       background: rgba(178,34,34,.08);
       color: #7f1d1d;
-    }
-
-    .btn:disabled {
-      opacity: .55;
-      cursor: not-allowed;
     }
 
     .pill {
@@ -244,29 +239,55 @@
       letter-spacing: .07em;
     }
 
-    .list {
-      display:flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .patrol-card {
+    .patrol-box {
       border-radius: 14px;
       padding: 12px 12px 10px;
       border: 1px solid rgba(209,213,219,.9);
       background: #ffffff;
       box-shadow: 0 4px 12px rgba(0,0,0,.04);
+      margin-bottom: 10px;
     }
 
     .patrol-title {
       font-weight: 900;
-      font-size: 16px;
+      font-size: 15px;
       margin: 0;
     }
 
     .patrol-meta {
       margin: 4px 0 0;
       font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .scout-list {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(0,0,0,.08);
+      display: none;
+    }
+
+    .scout-item {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(209,213,219,.9);
+      background: #f9fafb;
+      margin-bottom: 8px;
+    }
+
+    .scout-name {
+      font-weight: 900;
+      font-size: 14px;
+      margin: 0;
+    }
+
+    .scout-sub {
+      margin: 2px 0 0;
+      font-size: 12px;
       color: var(--text-muted);
     }
 
@@ -291,6 +312,12 @@
     @keyframes pulse{
       0%,100%{ transform: scale(.9); opacity:.4; }
       50%{ transform: scale(1.2); opacity:.9; }
+    }
+
+    .note {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 8px;
     }
 
     @media (max-width: 640px) {
@@ -344,10 +371,8 @@
         <div id="roleBadge" class="badge">Viewer</div>
       </div>
       <div class="hr"></div>
-
       <div class="muted small">
-        This page shows patrols and (for admins) allows creating patrols and assigning scouts.
-        Patrol assignment is stored on each scout’s <span class="pill">accountInfo.patrol</span>.
+        Patrol assignment is stored in each scout’s <span class="pill">accountInfo.patrol</span> (value = patrol document ID).
       </div>
     </div>
 
@@ -360,57 +385,66 @@
 
     <div class="card error" id="errorCard" style="display:none;"></div>
 
-    <div class="grid" id="adminGrid" style="display:none;">
-      <div class="panel">
-        <div style="font-weight:900; margin-bottom:8px;">Create Patrol (Admin)</div>
+    <!-- ✅ 1) Create Patrol (left) + All Patrols (right) -->
+    <div class="grid2">
+      <section class="card col6" id="createPatrolSection" style="display:none;">
+        <div style="font-weight:900; font-size:16px;">Create Patrol</div>
+        <div class="note">Admins only. Creates a document in <strong>patrols</strong> with fields <strong>name</strong>, <strong>tag</strong>, <strong>createdAt</strong>.</div>
+        <div class="hr"></div>
 
         <label for="patrolName">Patrol name</label>
         <input id="patrolName" maxlength="60" placeholder="e.g., Raven Patrol" />
 
         <div style="height:10px;"></div>
 
-        <label for="patrolTag">Tag (stored as field: tag)</label>
+        <label for="patrolTag">Patrol tag (field: tag)</label>
         <input id="patrolTag" maxlength="40" placeholder="e.g., RAVEN" />
 
         <div style="height:12px;"></div>
 
-        <button class="btn" id="createPatrolBtn" type="button">Create patrol</button>
+        <button class="btn primary" id="createPatrolBtn" type="button">Create patrol</button>
+      </section>
 
-        <div class="muted small" style="margin-top:10px;">
-          Creates a document in <strong>patrols</strong> with fields <strong>name</strong>, <strong>tag</strong>, <strong>createdAt</strong>.
+      <section class="card col6" id="allPatrolsSection">
+        <div class="row">
+          <div style="font-weight:900; font-size:16px;">All Patrols</div>
+          <div class="muted small" id="patrolCount">—</div>
         </div>
-      </div>
+        <div class="note">Pick a patrol to reveal the scouts assigned to it.</div>
+        <div class="hr"></div>
 
-      <div class="panel">
-        <div style="font-weight:900; margin-bottom:8px;">Assign Scouts (Admin)</div>
-
-        <label for="assignPatrolSelect">Choose patrol</label>
-        <select id="assignPatrolSelect"></select>
-
-        <div style="height:10px;"></div>
-
-        <button class="btn" id="assignAllScoutsBtn" type="button">
-          Assign ALL scouts to selected patrol
-        </button>
-
-        <button class="btn danger" id="clearAllScoutsBtn" type="button" style="margin-left:8px;">
-          Clear patrol for ALL scouts
-        </button>
-
-        <div class="muted small" style="margin-top:10px;">
-          Bulk updates only users with <strong>accountType = "scout"</strong>.
-        </div>
-      </div>
+        <div id="patrolBoxes"></div>
+      </section>
     </div>
 
-    <div class="card">
-      <div class="row">
-        <div style="font-weight:900;">All Patrols</div>
-        <div class="muted small" id="patrolCount">—</div>
-      </div>
+    <!-- ✅ 3) Assign Scouts (full width) -->
+    <section class="card col12" id="assignScoutsSection" style="display:none;">
+      <div style="font-weight:900; font-size:16px;">Assign Scouts</div>
+      <div class="note">Admins only. Assigns one scout’s <strong>accountInfo.patrol</strong> to a patrol doc ID.</div>
       <div class="hr"></div>
-      <div class="list" id="patrolList"></div>
-    </div>
+
+      <div class="grid2">
+        <div class="col6">
+          <label for="scoutSelect">Select scout</label>
+          <select id="scoutSelect"></select>
+          <div class="note" id="scoutCurrentPatrolNote">Current patrol: —</div>
+        </div>
+
+        <div class="col6">
+          <label for="patrolSelect">Select patrol</label>
+          <select id="patrolSelect"></select>
+          <div class="note">Choose “Unassigned” to clear patrol.</div>
+        </div>
+
+        <div class="col12">
+          <div class="row">
+            <button class="btn primary" id="assignBtn" type="button">Assign</button>
+            <button class="btn danger" id="clearBtn" type="button">Clear patrol</button>
+          </div>
+          <div class="note" id="assignStatus" style="margin-top:10px;"></div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <script type="module">
@@ -426,7 +460,7 @@
       serverTimestamp,
       query,
       orderBy,
-      writeBatch
+      updateDoc
     } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
     // ✅ MUST match exactly
@@ -453,27 +487,44 @@
     const loadingCard = document.getElementById("loadingCard");
     const errorCard = document.getElementById("errorCard");
 
-    const adminGrid = document.getElementById("adminGrid");
+    const createPatrolSection = document.getElementById("createPatrolSection");
+    const allPatrolsSection = document.getElementById("allPatrolsSection");
+    const assignScoutsSection = document.getElementById("assignScoutsSection");
 
     const patrolName = document.getElementById("patrolName");
     const patrolTag = document.getElementById("patrolTag");
     const createPatrolBtn = document.getElementById("createPatrolBtn");
 
-    const assignPatrolSelect = document.getElementById("assignPatrolSelect");
-    const assignAllScoutsBtn = document.getElementById("assignAllScoutsBtn");
-    const clearAllScoutsBtn = document.getElementById("clearAllScoutsBtn");
-
-    const patrolList = document.getElementById("patrolList");
+    const patrolBoxes = document.getElementById("patrolBoxes");
     const patrolCount = document.getElementById("patrolCount");
+
+    const scoutSelect = document.getElementById("scoutSelect");
+    const patrolSelect = document.getElementById("patrolSelect");
+    const scoutCurrentPatrolNote = document.getElementById("scoutCurrentPatrolNote");
+    const assignBtn = document.getElementById("assignBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const assignStatus = document.getElementById("assignStatus");
+
+    let currentRole = "pending";
+    let patrolsCache = []; // {id,name,tag}
+    let scoutsCache = [];  // {uid,fullName,email,patrol}
 
     function showError(msg){
       errorCard.style.display = "block";
       errorCard.textContent = msg;
     }
-
     function hideError(){
       errorCard.style.display = "none";
       errorCard.textContent = "";
+    }
+
+    function escapeHtml(str){
+      return String(str ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
     }
 
     function normalizeRole(authRole){
@@ -502,152 +553,200 @@
     }
 
     function setRoleUI(role){
+      currentRole = role;
+
       if (role === "admin") {
         roleLine.textContent = "Approved: Admin (full access)";
         roleBadge.textContent = "Admin";
         roleBadge.className = "badge admin";
-        adminGrid.style.display = "grid";
+        createPatrolSection.style.display = "block";
+        assignScoutsSection.style.display = "block";
       } else if (role === "viewer") {
         roleLine.textContent = "Approved: Viewer (read-only)";
         roleBadge.textContent = "Viewer";
         roleBadge.className = "badge";
-        adminGrid.style.display = "none";
+        createPatrolSection.style.display = "none";
+        assignScoutsSection.style.display = "none";
       } else {
         roleLine.textContent = "Pending approval";
         roleBadge.textContent = "Pending";
         roleBadge.className = "badge";
-        adminGrid.style.display = "none";
+        createPatrolSection.style.display = "none";
+        assignScoutsSection.style.display = "none";
       }
     }
 
-    function escapeHtml(str){
-      return String(str ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
-
-    function safeUpper(s){
-      return (s || "").toString().trim().toUpperCase();
+    function patrolNameById(id){
+      if (!id) return "Unassigned";
+      const p = patrolsCache.find(x => x.id === id);
+      return p ? p.name : "Unknown patrol";
     }
 
     async function loadPatrols(){
       const qy = query(collection(db, "patrols"), orderBy("name"));
       const snap = await getDocs(qy);
 
-      const patrols = [];
+      patrolsCache = [];
       snap.forEach(d => {
         const data = d.data() || {};
-        patrols.push({
+        patrolsCache.push({
           id: d.id,
           name: data.name || "",
           tag: data.tag || ""
         });
       });
 
-      // Populate select for admin actions
-      assignPatrolSelect.innerHTML = patrols.length
-        ? patrols.map(p => `<option value="${escapeHtml(p.id)}">${escapeHtml(p.name)} (${escapeHtml(p.tag || "—")})</option>`).join("")
-        : `<option value="">No patrols yet</option>`;
-
-      patrolCount.textContent = `${patrols.length} patrol${patrols.length === 1 ? "" : "s"}`;
-
-      return patrols;
+      patrolCount.textContent = `${patrolsCache.length} patrol${patrolsCache.length === 1 ? "" : "s"}`;
     }
 
     async function loadScouts(){
-      // Pull from accountInfo to compute counts by patrol (only scouts)
       const snap = await getDocs(collection(db, "accountInfo"));
-      const scouts = [];
+      scoutsCache = [];
       snap.forEach(d => {
         const data = d.data() || {};
-        if ((data.accountType || "").toString().toLowerCase() === "scout") {
-          scouts.push({
-            uid: d.id,
-            fullName: data.fullName || "",
-            patrol: data.patrol || ""
-          });
-        }
+        const type = (data.accountType || "").toString().toLowerCase();
+        if (type !== "scout") return;
+        scoutsCache.push({
+          uid: d.id,
+          fullName: data.fullName || "",
+          email: data.email || "",
+          patrol: (data.patrol || "").toString().trim()
+        });
       });
-      return scouts;
+
+      // nicer stable ordering
+      scoutsCache.sort((a,b) => (a.fullName || "").localeCompare(b.fullName || ""));
     }
 
-    function renderPatrolList(patrols, scouts){
-      const patrolIdToName = new Map(patrols.map(p => [p.id, p.name]));
-      const patrolIdToTag  = new Map(patrols.map(p => [p.id, p.tag]));
-
-      // Count scouts per patrol
-      const counts = new Map(); // patrolId -> count
-      let unassigned = 0;
-
-      for (const s of scouts) {
-        const pid = (s.patrol || "").toString().trim();
-        if (!pid) {
-          unassigned++;
-          continue;
-        }
-        counts.set(pid, (counts.get(pid) || 0) + 1);
+    function renderAllPatrolsDropdowns(){
+      // counts and membership lists
+      const byPatrol = new Map(); // patrolId -> [scouts]
+      for (const s of scoutsCache) {
+        const pid = s.patrol || "";
+        if (!byPatrol.has(pid)) byPatrol.set(pid, []);
+        byPatrol.get(pid).push(s);
       }
 
-      // Render
-      const blocks = patrols.map(p => {
-        const c = counts.get(p.id) || 0;
-        const tag = p.tag ? safeUpper(p.tag) : "—";
-        return `
-          <div class="patrol-card">
-            <div class="row">
-              <div>
-                <p class="patrol-title">${escapeHtml(p.name || "Untitled Patrol")}</p>
-                <p class="patrol-meta">Tag: <strong>${escapeHtml(tag)}</strong></p>
-              </div>
-              <div class="pill">${c} scout${c === 1 ? "" : "s"}</div>
-            </div>
-          </div>
-        `;
-      });
+      // Ensure patrol order: Unassigned first, then patrols by name
+      const blocks = [];
 
-      blocks.unshift(`
-        <div class="patrol-card" style="border-style:dashed;">
+      const unassigned = byPatrol.get("") || [];
+      blocks.push(renderPatrolBox({
+        id: "",
+        name: "Unassigned",
+        tag: "—",
+        scouts: unassigned
+      }));
+
+      for (const p of patrolsCache) {
+        const scouts = byPatrol.get(p.id) || [];
+        blocks.push(renderPatrolBox({
+          id: p.id,
+          name: p.name || "Untitled Patrol",
+          tag: p.tag || "—",
+          scouts
+        }));
+      }
+
+      patrolBoxes.innerHTML = blocks.join("");
+
+      // Hook up each dropdown to show/hide its list
+      document.querySelectorAll("[data-patrol-toggle]").forEach(sel => {
+        sel.addEventListener("change", (e) => {
+          const pid = e.target.getAttribute("data-patrol-toggle");
+          const list = document.querySelector(`[data-patrol-list="${CSS.escape(pid)}"]`);
+          if (!list) return;
+          list.style.display = (e.target.value === "show") ? "block" : "none";
+        });
+      });
+    }
+
+    function renderPatrolBox({id, name, tag, scouts}){
+      const safeId = (id || "");
+      const safeTag = (tag || "").toString().trim().toUpperCase() || "—";
+      const count = scouts.length;
+
+      const listHtml = scouts.length
+        ? scouts.map(s => `
+            <div class="scout-item">
+              <div>
+                <p class="scout-name">${escapeHtml(s.fullName || "Unnamed Scout")}</p>
+                <p class="scout-sub">${escapeHtml(s.email || "")}</p>
+              </div>
+              <div class="pill">${escapeHtml(patrolNameById(s.patrol))}</div>
+            </div>
+          `).join("")
+        : `<div class="muted small">No scouts in this patrol.</div>`;
+
+      // Dropdown per patrol controlling the list below it
+      return `
+        <div class="patrol-box">
           <div class="row">
             <div>
-              <p class="patrol-title">Unassigned</p>
-              <p class="patrol-meta">Scouts with no <strong>accountInfo.patrol</strong> set</p>
+              <p class="patrol-title">${escapeHtml(name)}</p>
+              <p class="patrol-meta">Tag: <strong>${escapeHtml(safeTag)}</strong></p>
             </div>
-            <div class="pill">${unassigned} scout${unassigned === 1 ? "" : "s"}</div>
+            <div class="pill">${count} scout${count === 1 ? "" : "s"}</div>
+          </div>
+
+          <div style="height:10px;"></div>
+
+          <label>Show scouts</label>
+          <select data-patrol-toggle="${escapeHtml(safeId)}">
+            <option value="hide" selected>Hide</option>
+            <option value="show">Show</option>
+          </select>
+
+          <div class="scout-list" data-patrol-list="${escapeHtml(safeId)}">
+            ${listHtml}
           </div>
         </div>
-      `);
+      `;
+    }
 
-      patrolList.innerHTML = blocks.join("");
+    function renderAssignSection(){
+      // Scout dropdown
+      scoutSelect.innerHTML = scoutsCache.length
+        ? scoutsCache.map(s => {
+            const label = `${s.fullName || "Unnamed"} — ${s.email || "no email"}`;
+            return `<option value="${escapeHtml(s.uid)}">${escapeHtml(label)}</option>`;
+          }).join("")
+        : `<option value="">No scouts found</option>`;
+
+      // Patrol dropdown (include Unassigned)
+      const patrolOptions = [
+        `<option value="">Unassigned</option>`,
+        ...patrolsCache.map(p => `<option value="${escapeHtml(p.id)}">${escapeHtml(p.name)} (${escapeHtml((p.tag || "—").toString().toUpperCase())})</option>`)
+      ];
+      patrolSelect.innerHTML = patrolOptions.join("");
+
+      updateScoutCurrentPatrolNote();
+    }
+
+    function updateScoutCurrentPatrolNote(){
+      const uid = scoutSelect.value;
+      const s = scoutsCache.find(x => x.uid === uid);
+      const patrolLabel = s ? patrolNameById(s.patrol) : "—";
+      scoutCurrentPatrolNote.textContent = `Current patrol: ${patrolLabel}`;
     }
 
     async function createPatrol(){
       hideError();
+      assignStatus.textContent = "";
+
+      if (currentRole !== "admin") return;
 
       const name = (patrolName.value || "").trim();
       const tag = (patrolTag.value || "").trim();
 
-      if (!name) {
-        showError("Please enter a patrol name.");
-        return;
-      }
-      if (!tag) {
-        showError("Please enter a patrol tag.");
-        return;
-      }
+      if (!name) { showError("Please enter a patrol name."); return; }
+      if (!tag) { showError("Please enter a patrol tag."); return; }
 
       createPatrolBtn.disabled = true;
       try {
-        await addDoc(collection(db, "patrols"), {
-          name,
-          tag,
-          createdAt: serverTimestamp()
-        });
+        await addDoc(collection(db, "patrols"), { name, tag, createdAt: serverTimestamp() });
         patrolName.value = "";
         patrolTag.value = "";
-
         await refreshAll();
       } catch (e) {
         showError("Failed to create patrol: " + (e?.message || String(e)));
@@ -656,93 +755,47 @@
       }
     }
 
-    async function assignAllScoutsToSelected(){
+    async function assignScoutToPatrol(patrolIdOrEmpty){
       hideError();
+      assignStatus.textContent = "";
 
-      const patrolId = assignPatrolSelect.value;
-      if (!patrolId) {
-        showError("No patrol selected.");
-        return;
-      }
+      if (currentRole !== "admin") return;
 
-      assignAllScoutsBtn.disabled = true;
-      clearAllScoutsBtn.disabled = true;
+      const uid = scoutSelect.value;
+      if (!uid) { showError("Please select a scout."); return; }
+
+      assignBtn.disabled = true;
+      clearBtn.disabled = true;
 
       try {
-        const snap = await getDocs(collection(db, "accountInfo"));
-
-        // Batch writes: Firestore limits ~500 writes per batch
-        let batch = writeBatch(db);
-        let ops = 0;
-
-        for (const docSnap of snap.docs) {
-          const data = docSnap.data() || {};
-          const type = (data.accountType || "").toString().toLowerCase();
-          if (type !== "scout") continue;
-
-          batch.update(doc(db, "accountInfo", docSnap.id), { patrol: patrolId });
-          ops++;
-
-          if (ops === 450) {
-            await batch.commit();
-            batch = writeBatch(db);
-            ops = 0;
-          }
-        }
-
-        if (ops > 0) await batch.commit();
-
-        await refreshAll();
+        await updateDoc(doc(db, "accountInfo", uid), { patrol: patrolIdOrEmpty || "" });
+        assignStatus.textContent = "Saved.";
+        await refreshAll(true);
       } catch (e) {
-        showError("Failed to assign scouts: " + (e?.message || String(e)));
+        showError("Failed to assign scout: " + (e?.message || String(e)));
       } finally {
-        assignAllScoutsBtn.disabled = false;
-        clearAllScoutsBtn.disabled = false;
+        assignBtn.disabled = false;
+        clearBtn.disabled = false;
       }
     }
 
-    async function clearAllScoutsPatrol(){
-      hideError();
+    async function refreshAll(preserveSelections = false){
+      const selectedScout = preserveSelections ? scoutSelect.value : "";
+      const selectedPatrol = preserveSelections ? patrolSelect.value : "";
 
-      clearAllScoutsBtn.disabled = true;
-      assignAllScoutsBtn.disabled = true;
+      await loadPatrols();
+      await loadScouts();
 
-      try {
-        const snap = await getDocs(collection(db, "accountInfo"));
+      renderAllPatrolsDropdowns();
 
-        let batch = writeBatch(db);
-        let ops = 0;
-
-        for (const docSnap of snap.docs) {
-          const data = docSnap.data() || {};
-          const type = (data.accountType || "").toString().toLowerCase();
-          if (type !== "scout") continue;
-
-          batch.update(doc(db, "accountInfo", docSnap.id), { patrol: "" });
-          ops++;
-
-          if (ops === 450) {
-            await batch.commit();
-            batch = writeBatch(db);
-            ops = 0;
-          }
+      if (currentRole === "admin") {
+        renderAssignSection();
+        if (preserveSelections) {
+          if (selectedScout) scoutSelect.value = selectedScout;
+          if (selectedPatrol !== null) patrolSelect.value = selectedPatrol;
+          updateScoutCurrentPatrolNote();
         }
-
-        if (ops > 0) await batch.commit();
-
-        await refreshAll();
-      } catch (e) {
-        showError("Failed to clear patrols: " + (e?.message || String(e)));
-      } finally {
-        clearAllScoutsBtn.disabled = false;
-        assignAllScoutsBtn.disabled = false;
       }
-    }
-
-    async function refreshAll(){
-      const patrols = await loadPatrols();
-      const scouts = await loadScouts();
-      renderPatrolList(patrols, scouts);
     }
 
     logoutBtn.addEventListener("click", async () => {
@@ -751,8 +804,16 @@
     });
 
     createPatrolBtn.addEventListener("click", createPatrol);
-    assignAllScoutsBtn.addEventListener("click", assignAllScoutsToSelected);
-    clearAllScoutsBtn.addEventListener("click", clearAllScoutsPatrol);
+
+    scoutSelect.addEventListener("change", updateScoutCurrentPatrolNote);
+
+    assignBtn.addEventListener("click", async () => {
+      await assignScoutToPatrol(patrolSelect.value);
+    });
+
+    clearBtn.addEventListener("click", async () => {
+      await assignScoutToPatrol("");
+    });
 
     onAuthStateChanged(auth, async (user) => {
       try {
