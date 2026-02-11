@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Users — Troop 248</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --red: #b22222;
+      --blue: #1f4e79;
+      --tan: #d2cab6;
+      --white: #ffffff;
+      --text-main: #1f2933;
+      --text-muted: #6b7280;
+      --radius-lg: 16px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--tan);
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
+      color: white;
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    header h2 {
+      margin: 0;
+      font-size: 19px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    nav {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    nav a {
+      text-decoration: none;
+      font-weight: bold;
+      color: var(--blue);
+      background: rgba(255,255,255,.25);
+      padding: 6px 10px;
+      border-radius: var(--radius-pill);
+    }
+
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 20px 14px 40px;
+    }
+
+    .card, section {
+      background: rgba(255,255,255,.95);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148,163,184,.4);
+    }
+
+    h3 { margin-top: 0; }
+
+    .user-row {
+      padding: 8px 10px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .user-row:hover {
+      background: rgba(31,78,121,.08);
+    }
+
+    .muted {
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 6px 10px;
+      font-size: 14px;
+    }
+
+    .label {
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h2>Troop 248</h2>
+  <nav>
+    <a href="/home">Home</a>
+    <a href="/users">Users</a>
+    <a href="/mail">Mail</a>
+    <a href="/events">Events</a>
+  </nav>
+</header>
+
+<main>
+
+  <section>
+    <h3>Member Directory (Admin)</h3>
+    <div id="status" class="muted">Loading users…</div>
+    <div id="users-list"></div>
+  </section>
+
+  <section id="detail-section" style="display:none;">
+    <h3>User Details</h3>
+    <div id="user-detail" class="detail-grid"></div>
+  </section>
+
+</main>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import {
+    getFirestore,
+    doc,
+    getDoc,
+    collection,
+    getDocs
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+    authDomain: "troop-248.firebaseapp.com",
+    projectId: "troop-248",
+    storageBucket: "troop-248.firebasestorage.app",
+    messagingSenderId: "925363875752",
+    appId: "1:925363875752:web:0b001c1a7a09fb8232f79d"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  const usersListEl = document.getElementById("users-list");
+  const statusEl = document.getElementById("status");
+  const detailSection = document.getElementById("detail-section");
+  const detailEl = document.getElementById("user-detail");
+
+  const params = new URLSearchParams(window.location.search);
+  const selectedUid = params.get("u");
+
+  function safe(v) {
+    return v ? v : "—";
+  }
+
+  function renderDetail(data) {
+    detailEl.innerHTML = `
+      <div class="label">Name</div><div>${safe(data.fullName)}</div>
+      <div class="label">Email</div><div>${safe(data.email)}</div>
+      <div class="label">Phone</div><div>${safe(data.phone)}</div>
+      <div class="label">Type</div><div>${safe(data.accountType)}</div>
+      <div class="label">Role</div><div>${safe(data.authRole)}</div>
+      <div class="label">Notes</div><div>${safe(data.notes)}</div>
+    `;
+    detailSection.style.display = "block";
+  }
+
+  async function loadUsers() {
+    usersListEl.innerHTML = "";
+    const snap = await getDocs(collection(db, "accountInfo"));
+
+    if (snap.empty) {
+      statusEl.textContent = "No users found.";
+      return;
+    }
+
+    statusEl.textContent = "";
+
+    snap.forEach(docSnap => {
+      const data = docSnap.data();
+      const uid = docSnap.id;
+      const name = data.fullName || data.email || uid;
+
+      const row = document.createElement("div");
+      row.className = "user-row";
+      row.textContent = name;
+      row.onclick = () => {
+        window.location.href = "/users?u=" + encodeURIComponent(uid);
+      };
+
+      usersListEl.appendChild(row);
+
+      if (selectedUid === uid) {
+        renderDetail(data);
+      }
+    });
+  }
+
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      window.location.href = "/";
+      return;
+    }
+
+    const infoSnap = await getDoc(doc(db, "accountInfo", user.uid));
+
+    if (!infoSnap.exists() || infoSnap.data().authRole !== "admin") {
+      window.location.href = "/home";
+      return;
+    }
+
+    await loadUsers();
+  });
+</script>
+
+</body>
+</html>
