@@ -74,6 +74,10 @@
 
     main { padding: 24px 16px 40px; max-width: 960px; margin: 0 auto; }
 
+    .breadcrumb { font-size: 13px; margin-bottom: 8px; color: var(--text-muted); }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
     .card {
       background: rgba(255, 255, 255, 0.95);
       border-radius: var(--radius-lg);
@@ -83,21 +87,11 @@
       border: 1px solid rgba(148, 163, 184, 0.4);
     }
 
-    .breadcrumb { font-size: 13px; margin-bottom: 10px; color: var(--text-muted); }
-    .breadcrumb a { color: var(--blue); text-decoration: none; }
-    .breadcrumb a:hover { text-decoration: underline; }
-
-    .row {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 10px;
-      margin-bottom: 6px;
-    }
+    .event-title-row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 6px; }
     #event-title { font-size: 20px; font-weight: 600; margin: 0; }
-    #event-when { font-size: 13px; color: var(--text-muted); white-space: nowrap; }
-    #event-location { font-size: 14px; color: var(--text-muted); margin-top: 2px; }
-    #event-desc { font-size: 14px; margin: 10px 0 0; }
+    #event-date { font-size: 13px; color: var(--text-muted); white-space: nowrap; }
+    #event-location { font-size: 14px; color: var(--text-muted); margin-bottom: 4px; }
+    #event-desc { font-size: 14px; margin: 0; }
 
     .badge {
       font-size: 11px;
@@ -114,8 +108,25 @@
       border: 1px solid rgba(245, 158, 11, 0.6);
     }
 
-    .btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-    .btn {
+    section {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 14px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+    section h2 {
+      margin-top: 0;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    section h2::before { content: "▸"; font-size: 14px; color: var(--blue); }
+
+    .btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .btn-chip {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -128,21 +139,32 @@
       font-weight: 500;
     }
     .btn-primary { background: var(--blue); color: var(--white); }
-    .btn-outline { background: rgba(31,78,121,.08); color: var(--blue); border: 1px solid rgba(148,163,184,.7); }
-    .btn:hover { opacity: .96; }
+    .btn-danger { background: var(--red); color: var(--white); }
+    .btn-outlined { background: rgba(31,78,121,.08); color: var(--blue); border: 1px solid rgba(148,163,184,.7); }
+    .btn-chip:hover { opacity: .96; }
 
-    .small-help { font-size: 12px; color: var(--text-muted); margin-top: 8px; }
+    .item-list { list-style: none; padding-left: 0; margin: 6px 0 0; }
+    .item { padding: 10px 0; border-bottom: 1px solid rgba(229,231,235,.9); }
+    .item:last-child { border-bottom: none; }
+    .item-title { font-weight: 600; }
+    .item-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .item-link { color: var(--blue); text-decoration: none; }
+    .item-link:hover { text-decoration: underline; }
+
+    .empty-text { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
 
     @media (max-width: 640px) {
       header { flex-direction: column; align-items: flex-start; gap: 8px; }
       nav { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
-      .row { flex-direction: column; align-items: flex-start; }
+      .event-title-row { flex-direction: column; align-items: flex-start; }
+      #event-date { white-space: normal; }
     }
   </style>
 </head>
 <body>
   <header>
     <div><a href="/home" class="troop-home-link"><h2>Troop 248</h2></a></div>
+
     <nav>
       <a href="/home">Home</a>
       <a href="/calendar">Calendar</a>
@@ -153,6 +175,7 @@
       <a href="/events">Events</a>
       <a href="/mail">Mail</a>
     </nav>
+
     <div id="auth-bar">
       <div id="auth-info">Signed in as …</div>
       <button id="logout-btn">Log Out</button>
@@ -163,31 +186,51 @@
     <div class="breadcrumb"><a href="/events">← Back to Events</a></div>
 
     <div class="card">
-      <div class="row">
+      <div class="event-title-row">
         <h1 id="event-title">Loading…</h1>
-        <div id="event-when"></div>
+        <div id="event-date"></div>
       </div>
-
       <div id="event-location"></div>
       <p id="event-desc"></p>
 
-      <div style="margin-top:10px; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
-        <div class="btn-row">
-          <a id="maps-btn" class="btn btn-outline" target="_blank" rel="noopener noreferrer" style="display:none;">Open in Google Maps</a>
-        </div>
+      <div style="margin-top:10px; display:flex; align-items:center; justify-content:space-between; gap:10px;">
         <div id="role-badge-container"><span class="badge">Viewer</span></div>
+        <div class="btn-row" id="top-btns"></div>
       </div>
 
-      <div id="not-found" class="small-help" style="color:#b91c1c; display:none;">
-        Event not found. Check the link.
+      <div id="not-found" class="item-meta" style="color:#b91c1c; display:none; margin-top:8px;">
+        Event not found (missing or invalid id in URL).
       </div>
     </div>
+
+    <section>
+      <h2>Quick Links</h2>
+      <div class="btn-row">
+        <a id="maps-btn" class="btn-chip btn-outlined" target="_blank" rel="noopener noreferrer" style="display:none;">Open in Google Maps</a>
+        <a id="signup-btn" class="btn-chip btn-primary" target="_blank" rel="noopener noreferrer" style="display:none;">Event Signup</a>
+      </div>
+      <div id="signup-missing" class="empty-text" style="display:none;">No signup link has been added.</div>
+    </section>
+
+    <section>
+      <h2>Documents</h2>
+      <ul id="docs-list" class="item-list"></ul>
+      <div id="docs-empty" class="empty-text">No documents yet.</div>
+    </section>
   </main>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      collection,
+      onSnapshot,
+      query,
+      orderBy
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
@@ -208,84 +251,130 @@
     const roleBadgeContainer = document.getElementById("role-badge-container");
 
     const titleEl = document.getElementById("event-title");
-    const whenEl = document.getElementById("event-when");
+    const dateEl = document.getElementById("event-date");
     const locEl = document.getElementById("event-location");
     const descEl = document.getElementById("event-desc");
     const notFoundEl = document.getElementById("not-found");
+
     const mapsBtn = document.getElementById("maps-btn");
+    const signupBtn = document.getElementById("signup-btn");
+    const signupMissing = document.getElementById("signup-missing");
+
+    const docsList = document.getElementById("docs-list");
+    const docsEmpty = document.getElementById("docs-empty");
+
+    const topBtns = document.getElementById("top-btns");
+
+    const sp = new URLSearchParams(window.location.search);
+    const eventId = (sp.get("id") || "").trim();
 
     let currentUser = null;
     let currentIsAdmin = false;
 
-    function getId() {
-      const sp = new URLSearchParams(window.location.search);
-      return (sp.get("id") || "").trim();
+    function formatDateRange(ev) {
+      if (!ev.startDate) return "";
+      const start = new Date(ev.startDate + "T" + (ev.startTime || "00:00"));
+      const end = ev.endDate ? new Date(ev.endDate + "T" + (ev.endTime || "00:00")) : null;
+
+      const fmt = (d) => d.toLocaleString("en-US", { month:"short", day:"numeric", year:"numeric" });
+      const fmtTime = (d) => d.toLocaleTimeString("en-US", { hour:"2-digit", minute:"2-digit" });
+
+      if (!end) return `${fmt(start)} • ${fmtTime(start)}`;
+      const sameDay = start.toDateString() === end.toDateString();
+      if (sameDay) return `${fmt(start)} • ${fmtTime(start)} → ${fmtTime(end)}`;
+      return `${fmt(start)} • ${fmtTime(start)} → ${fmt(end)} • ${fmtTime(end)}`;
     }
 
-    function setBadge() {
+    function updateHeaderUI() {
+      authInfoEl.textContent = `Signed in as ${currentUser.email}`;
       roleBadgeContainer.innerHTML = `
         <span class="badge ${currentIsAdmin ? "admin" : ""}">
           ${currentIsAdmin ? "Admin" : "Viewer"}
         </span>`;
     }
 
-    function formatRange(d) {
-      const sd = d.startDate || "";
-      const st = d.startTime || "";
-      const ed = d.endDate || "";
-      const et = d.endTime || "";
+    function renderDocs(docs) {
+      docsList.innerHTML = "";
+      if (!docs.length) {
+        docsEmpty.style.display = "block";
+        return;
+      }
+      docsEmpty.style.display = "none";
 
-      if (!sd) return "";
-
-      const start = new Date(`${sd}T${st || "00:00"}`);
-      const end = ed ? new Date(`${ed}T${et || "00:00"}`) : null;
-
-      const fmtDate = (x) => x.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-      const fmtTime = (x) => x.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
-
-      if (!end || isNaN(end.getTime())) return `${fmtDate(start)}${st ? " • " + fmtTime(start) : ""}`;
-
-      const sameDay =
-        start.getFullYear() === end.getFullYear() &&
-        start.getMonth() === end.getMonth() &&
-        start.getDate() === end.getDate();
-
-      if (sameDay) return `${fmtDate(start)} • ${fmtTime(start)} → ${fmtTime(end)}`;
-
-      return `${fmtDate(start)}${st ? " • " + fmtTime(start) : ""} → ${fmtDate(end)}${et ? " • " + fmtTime(end) : ""}`;
+      docs.forEach((snap) => {
+        const d = snap.data();
+        const li = document.createElement("li");
+        li.className = "item";
+        li.innerHTML = `
+          <div class="item-title">${d.title || "Document"}</div>
+          <div class="item-meta">
+            <a class="item-link" href="${d.url || "#"}" target="_blank" rel="noopener noreferrer">
+              ${d.url || ""}
+            </a>
+          </div>
+        `;
+        docsList.appendChild(li);
+      });
     }
 
-    async function loadEvent(eventId) {
-      notFoundEl.style.display = "none";
-      mapsBtn.style.display = "none";
-
+    async function loadEvent() {
       if (!eventId) {
-        titleEl.textContent = "Event not found";
         notFoundEl.style.display = "block";
+        titleEl.textContent = "Event not found";
         return;
       }
 
       const snap = await getDoc(doc(db, "troop-events", eventId));
       if (!snap.exists()) {
-        titleEl.textContent = "Event not found";
         notFoundEl.style.display = "block";
+        titleEl.textContent = "Event not found";
         return;
       }
 
-      const d = snap.data();
-      titleEl.textContent = d.title || "Event";
-      whenEl.textContent = formatRange(d);
+      notFoundEl.style.display = "none";
 
-      const location = (d.location || "").trim();
+      const data = snap.data();
+      titleEl.textContent = data.title || "Event";
+      dateEl.textContent = formatDateRange(data);
+
+      const location = (data.location || "").trim();
       locEl.textContent = location ? ("Location: " + location) : "";
 
-      const desc = (d.description || d.summary || "").trim();
+      const desc = (data.description || "").trim();
       descEl.textContent = desc;
 
+      // Maps
       if (location) {
         mapsBtn.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(location);
         mapsBtn.style.display = "inline-flex";
+      } else {
+        mapsBtn.style.display = "none";
       }
+
+      // Signup
+      const signupUrl = (data.signupUrl || "").trim();
+      if (signupUrl) {
+        signupBtn.href = signupUrl;
+        signupBtn.style.display = "inline-flex";
+        signupMissing.style.display = "none";
+      } else {
+        signupBtn.style.display = "none";
+        signupMissing.style.display = "block";
+      }
+
+      // Admin button (optional, just convenient)
+      topBtns.innerHTML = "";
+      if (currentIsAdmin) {
+        const a = document.createElement("a");
+        a.className = "btn-chip btn-danger";
+        a.textContent = "Edit Event";
+        a.href = `/events-edit?id=${encodeURIComponent(eventId)}`;
+        topBtns.appendChild(a);
+      }
+
+      // Documents subcollection
+      const docsQ = query(collection(db, "troop-events", eventId, "documents"), orderBy("createdAt", "asc"));
+      onSnapshot(docsQ, (s) => renderDocs(s.docs), () => renderDocs([]));
     }
 
     async function handleAuth(user) {
@@ -299,10 +388,9 @@
 
       currentUser = user;
       currentIsAdmin = role === "admin";
-      authInfoEl.textContent = `Signed in as ${user.email}`;
-      setBadge();
+      updateHeaderUI();
 
-      await loadEvent(getId());
+      await loadEvent();
     }
 
     onAuthStateChanged(auth, handleAuth);
