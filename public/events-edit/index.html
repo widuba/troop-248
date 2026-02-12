@@ -47,9 +47,21 @@
       gap: 8px;
     }
     header h2::before { content: "★"; font-size: 18px; }
-    .troop-home-link { text-decoration: none; color: inherit; display: inline-flex; align-items: center; }
+
+    .troop-home-link {
+      text-decoration: none;
+      color: inherit;
+      display: inline-flex;
+      align-items: center;
+    }
     .troop-home-link:hover h2 { opacity: 0.9; text-decoration: underline; }
-    nav { display: flex; gap: 12px; font-size: 13px; text-transform: uppercase; }
+
+    nav {
+      display: flex;
+      gap: 12px;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
     nav a {
       color: #1f4e79;
       font-weight: bold;
@@ -62,7 +74,12 @@
     }
     nav a:hover { opacity: 1; background: rgba(255, 255, 255, 0.12); }
 
-    #auth-bar { display: flex; gap: 10px; align-items: center; font-size: 13px; }
+    #auth-bar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      font-size: 13px;
+    }
     #logout-btn {
       padding: 5px 12px;
       font-size: 13px;
@@ -74,7 +91,11 @@
     }
     #logout-btn:hover { background: rgba(255, 255, 255, 0.2); }
 
-    main { padding: 24px 16px 40px; max-width: 900px; margin: 0 auto; }
+    main {
+      padding: 24px 16px 40px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
 
     .card {
       background: rgba(255, 255, 255, 0.97);
@@ -84,7 +105,13 @@
       box-shadow: var(--shadow-soft);
       border: 1px solid rgba(148, 163, 184, 0.5);
     }
-    .card-header-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+    .card-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
 
     .badge {
       font-size: 11px;
@@ -112,7 +139,13 @@
       box-shadow: var(--shadow-soft);
       border: 1px solid rgba(148, 163, 184, 0.4);
     }
-    section h2 { margin-top: 0; font-size: 18px; display: flex; align-items: center; gap: 8px; }
+    section h2 {
+      margin-top: 0;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
     section h2::before { content: "▸"; font-size: 14px; color: var(--blue); }
 
     .field { margin-bottom: 10px; }
@@ -133,13 +166,18 @@
       background: #ffffff;
     }
     .field textarea { resize: vertical; min-height: 80px; }
+
     .field input:focus, .field textarea:focus {
       outline: none;
       border-color: var(--blue);
       box-shadow: 0 0 0 2px rgba(31,78,121,.12);
     }
 
-    .field-row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .field-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
     .field-row .field { flex: 1 1 140px; }
 
     button {
@@ -156,20 +194,57 @@
 
     .btn-secondary { background: #b22222; }
     .small-help { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
-    #status { font-size: 13px; margin-top: 8px; color: var(--text-muted); white-space: pre-wrap; }
-    .top-buttons { margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap; }
+    #status { font-size: 13px; margin-top: 8px; color: var(--text-muted); }
+
+    .top-buttons {
+      margin-top: 8px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* Lists */
+    .item-list {
+      list-style: none;
+      padding-left: 0;
+      margin: 10px 0 0;
+      font-size: 14px;
+    }
+    .item {
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(229,231,235,.9);
+    }
+    .item:last-child { border-bottom: none; }
+    .item-title { font-weight: 800; }
+    .item-meta { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+    .item-link { color: var(--blue); text-decoration: none; font-weight: 800; }
+    .item-link:hover { text-decoration: underline; }
+
+    .small-btn {
+      font-size: 11px;
+      padding: 3px 10px;
+      margin-top: 8px;
+      border-radius: var(--radius-pill);
+      border: none;
+      cursor: pointer;
+      background: var(--red);
+      color: var(--white);
+    }
+    .small-btn:hover { opacity: .95; }
 
     @media (max-width: 640px) {
       header { flex-direction: column; align-items: flex-start; gap: 8px; }
       nav { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
-      .card-header-row { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
+
 <body>
   <header>
     <div>
-      <a href="/home" class="troop-home-link"><h2>Troop 248</h2></a>
+      <a href="/home" class="troop-home-link">
+        <h2>Troop 248</h2>
+      </a>
     </div>
     <nav>
       <a href="/home">Home</a>
@@ -194,12 +269,15 @@
           <h1 id="page-title">Edit Event</h1>
           <p id="event-id-text" style="font-size:12px;"></p>
         </div>
-        <div id="role-badge-container"><span class="badge">Viewer</span></div>
+        <div id="role-badge-container">
+          <span class="badge">Viewer</span>
+        </div>
       </div>
       <div class="top-buttons">
-        <button id="back-to-event-btn" class="btn-secondary">Back to Event Page</button>
-        <button id="back-to-events-btn">Back to Events List</button>
+        <button id="back-to-event-btn" class="btn-secondary" type="button">Back to Event Page</button>
+        <button id="back-to-events-btn" type="button">Back to Events List</button>
       </div>
+      <div id="status"></div>
     </div>
 
     <section>
@@ -212,28 +290,28 @@
 
         <div class="field">
           <label for="edit-location">Location</label>
-          <input id="edit-location" type="text" />
+          <input id="edit-location" type="text" placeholder="Camp Rainey Mountain, Clayton GA" />
         </div>
 
         <div class="field">
-          <label for="edit-signup-url">Signup URL</label>
-          <input id="edit-signup-url" type="url" placeholder="https://..." />
+          <label for="edit-signup-url">Signup URL (optional)</label>
+          <input id="edit-signup-url" type="url" placeholder="https://example.com/signup" />
         </div>
 
         <div class="field">
           <label for="edit-description">Description</label>
-          <textarea id="edit-description"></textarea>
+          <textarea id="edit-description" placeholder="Details about this event"></textarea>
         </div>
 
         <h3 style="font-size:15px; margin-top:14px;">Start Date & Time</h3>
         <div class="field-row">
           <div class="field">
             <label for="start-date">Start Date</label>
-            <input id="start-date" type="date" required />
+            <input id="start-date" type="date" />
           </div>
           <div class="field">
             <label for="start-time">Start Time</label>
-            <input id="start-time" type="time" required />
+            <input id="start-time" type="time" />
           </div>
         </div>
 
@@ -241,28 +319,80 @@
         <div class="field-row">
           <div class="field">
             <label for="end-date">End Date</label>
-            <input id="end-date" type="date" required />
+            <input id="end-date" type="date" />
           </div>
           <div class="field">
             <label for="end-time">End Time</label>
-            <input id="end-time" type="time" required />
+            <input id="end-time" type="time" />
           </div>
         </div>
 
         <button type="submit">Save Changes</button>
-        <p class="small-help">
-          This editor writes to <code>troop-events</code> and keeps fields consistent:
-          <code>startDate/startTime/endDate/endTime</code> as strings + ISO strings for sorting.
-        </p>
-        <p id="status"></p>
+        <div class="small-help">
+          This updates the main event doc in <code>troop-events</code>.
+        </div>
       </form>
+    </section>
+
+    <section>
+      <h2>Event Documents</h2>
+      <form id="doc-form">
+        <div class="field">
+          <label for="doc-title">Document Name</label>
+          <input id="doc-title" type="text" placeholder="Packing List" required />
+        </div>
+        <div class="field">
+          <label for="doc-url">Document Link</label>
+          <input id="doc-url" type="url" placeholder="https://..." required />
+        </div>
+        <div class="field">
+          <label for="doc-desc">Description (optional)</label>
+          <input id="doc-desc" type="text" placeholder="What this document is for" />
+        </div>
+        <button type="submit">Add Document</button>
+        <div class="small-help">Adds to <code>troop-events/{eventId}/documents</code>.</div>
+      </form>
+
+      <ul id="docs-list" class="item-list"></ul>
+      <div id="docs-empty" class="small-help">No event documents yet.</div>
+    </section>
+
+    <section>
+      <h2>Event Updates</h2>
+      <form id="update-form">
+        <div class="field">
+          <label for="update-title">Title (optional)</label>
+          <input id="update-title" type="text" placeholder="Reminder / schedule change / etc." />
+        </div>
+        <div class="field">
+          <label for="update-body">Message</label>
+          <textarea id="update-body" placeholder="Write the update..." required></textarea>
+        </div>
+        <button type="submit">Post Update</button>
+        <div class="small-help">Adds to <code>troop-events/{eventId}/updates</code>.</div>
+      </form>
+
+      <ul id="updates-list" class="item-list"></ul>
+      <div id="updates-empty" class="small-help">No updates posted yet.</div>
     </section>
   </main>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      updateDoc,
+      collection,
+      addDoc,
+      deleteDoc,
+      onSnapshot,
+      query,
+      orderBy,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
@@ -274,7 +404,7 @@
       measurementId: "G-NY75GX5TBH"
     };
 
-    const COLLECTION = "troop-events";
+    const EVENT_COLLECTION = "troop-events";
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
@@ -288,6 +418,7 @@
     const eventIdTextEl = document.getElementById("event-id-text");
     const backToEventBtn = document.getElementById("back-to-event-btn");
     const backToEventsBtn = document.getElementById("back-to-events-btn");
+    const statusEl = document.getElementById("status");
 
     const editForm = document.getElementById("edit-form");
     const editTitleInput = document.getElementById("edit-title");
@@ -298,91 +429,271 @@
     const startTimeInput = document.getElementById("start-time");
     const endDateInput = document.getElementById("end-date");
     const endTimeInput = document.getElementById("end-time");
-    const statusEl = document.getElementById("status");
 
-    const sp = new URLSearchParams(window.location.search);
-    const eventId = (sp.get("id") || "").trim();
+    const docForm = document.getElementById("doc-form");
+    const docTitleInput = document.getElementById("doc-title");
+    const docUrlInput = document.getElementById("doc-url");
+    const docDescInput = document.getElementById("doc-desc");
+    const docsList = document.getElementById("docs-list");
+    const docsEmpty = document.getElementById("docs-empty");
 
-    const eventRef = eventId ? doc(db, COLLECTION, eventId) : null;
+    const updateForm = document.getElementById("update-form");
+    const updateTitleInput = document.getElementById("update-title");
+    const updateBodyInput = document.getElementById("update-body");
+    const updatesList = document.getElementById("updates-list");
+    const updatesEmpty = document.getElementById("updates-empty");
 
-    function setStatus(text, color = "#6b7280") {
-      statusEl.textContent = text;
-      statusEl.style.color = color;
-      console.log("EDIT STATUS:", text);
-    }
+    const params = new URLSearchParams(window.location.search);
+    const eventId = (params.get("id") || "").trim();
 
     if (!eventId) {
       pageTitleEl.textContent = "Event Not Found";
       eventIdTextEl.textContent = "";
-      setStatus("No event id was provided in the URL.", "#b91c1c");
-      backToEventBtn.disabled = true;
+      statusEl.textContent = "No event id was provided in the URL.";
+      statusEl.style.color = "#b91c1c";
     } else {
       eventIdTextEl.textContent = "Event ID: " + eventId;
     }
 
     let currentUser = null;
     let currentIsAdmin = false;
+    const eventDocRef = eventId ? doc(db, EVENT_COLLECTION, eventId) : null;
+
+    function setStatus(text, color = "#6b7280") {
+      statusEl.textContent = text;
+      statusEl.style.color = color;
+    }
+
+    function combineDateTime(dateStr, timeStr) {
+      if (!dateStr || !timeStr) return null;
+      const d = new Date(`${dateStr}T${timeStr}:00`);
+      if (isNaN(d.getTime())) return null;
+      return d;
+    }
+
+    function dateToInputParts(date) {
+      if (!date) return { d: "", t: "" };
+      const iso = date.toISOString();
+      return { d: iso.slice(0, 10), t: iso.slice(11, 16) };
+    }
 
     async function loadEvent() {
-      if (!eventRef) return;
+      if (!eventDocRef) return;
 
       setStatus("Loading event...");
-      const snap = await getDoc(eventRef);
-
+      const snap = await getDoc(eventDocRef);
       if (!snap.exists()) {
+        setStatus("Event not found in Firestore.", "#b91c1c");
         pageTitleEl.textContent = "Event Not Found";
-        setStatus("Event not found in troop-events.", "#b91c1c");
         return;
       }
 
-      const data = snap.data();
-
-      editTitleInput.value = (data.title || "").trim();
-      editLocationInput.value = (data.location || "").trim();
-      editSignupUrlInput.value = (data.signupUrl || "").trim();
-      editDescriptionInput.value = (data.description || data.summary || "").trim();
-
-      startDateInput.value = (data.startDate || "").toString();
-      startTimeInput.value = (data.startTime || "").toString();
-      endDateInput.value = (data.endDate || "").toString();
-      endTimeInput.value = (data.endTime || "").toString();
+      const data = snap.data() || {};
+      editTitleInput.value = data.title || "";
+      editLocationInput.value = data.location || "";
+      editSignupUrlInput.value = data.signupUrl || "";
+      editDescriptionInput.value = data.description || data.summary || "";
 
       pageTitleEl.textContent = "Edit Event: " + (data.title || "Untitled Event");
-      setStatus("Ready.");
+
+      // If you store ISO strings (startDate/startTime), keep them
+      if (data.startDate && data.startTime) {
+        startDateInput.value = data.startDate;
+        startTimeInput.value = data.startTime;
+      } else if (data.startDateTime) {
+        const dt = new Date(data.startDateTime);
+        if (!isNaN(dt.getTime())) {
+          const { d, t } = dateToInputParts(dt);
+          startDateInput.value = d;
+          startTimeInput.value = t;
+        }
+      }
+
+      if (data.endDate && data.endTime) {
+        endDateInput.value = data.endDate;
+        endTimeInput.value = data.endTime;
+      } else if (data.endDateTime) {
+        const dt = new Date(data.endDateTime);
+        if (!isNaN(dt.getTime())) {
+          const { d, t } = dateToInputParts(dt);
+          endDateInput.value = d;
+          endTimeInput.value = t;
+        }
+      }
+
+      setStatus("Ready.", "#166534");
+    }
+
+    function renderDocs(docs) {
+      docsList.innerHTML = "";
+      if (!docs.length) {
+        docsEmpty.style.display = "block";
+        return;
+      }
+      docsEmpty.style.display = "none";
+
+      docs.forEach((snap) => {
+        const d = snap.data() || {};
+        const li = document.createElement("li");
+        li.className = "item";
+
+        const title = d.title || "Untitled";
+        const url = d.url || "#";
+        const desc = d.description || "";
+
+        li.innerHTML = `
+          <div class="item-title"><a class="item-link" href="${url}" target="_blank" rel="noopener noreferrer">${title}</a></div>
+          ${desc ? `<div class="item-meta">${desc}</div>` : ``}
+        `;
+
+        const del = document.createElement("button");
+        del.className = "small-btn";
+        del.type = "button";
+        del.textContent = "Delete";
+        del.onclick = async () => {
+          if (!confirm("Delete this document?")) return;
+          await deleteDoc(doc(db, EVENT_COLLECTION, eventId, "documents", snap.id));
+        };
+
+        li.appendChild(del);
+        docsList.appendChild(li);
+      });
+    }
+
+    function renderUpdates(docs) {
+      updatesList.innerHTML = "";
+      if (!docs.length) {
+        updatesEmpty.style.display = "block";
+        return;
+      }
+      updatesEmpty.style.display = "none";
+
+      docs.forEach((snap) => {
+        const d = snap.data() || {};
+        const li = document.createElement("li");
+        li.className = "item";
+
+        const title = (d.title || "").trim();
+        const body = (d.body || "").trim();
+        const when = d.createdAt && typeof d.createdAt.toDate === "function"
+          ? d.createdAt.toDate().toLocaleString()
+          : "";
+
+        li.innerHTML = `
+          ${title ? `<div class="item-title">${title}</div>` : `<div class="item-title">Update</div>`}
+          ${when ? `<div class="item-meta">${when}</div>` : ``}
+          <div style="margin-top:6px;">${body.replace(/\n/g, "<br>")}</div>
+        `;
+
+        const del = document.createElement("button");
+        del.className = "small-btn";
+        del.type = "button";
+        del.textContent = "Delete";
+        del.onclick = async () => {
+          if (!confirm("Delete this update?")) return;
+          await deleteDoc(doc(db, EVENT_COLLECTION, eventId, "updates", snap.id));
+        };
+
+        li.appendChild(del);
+        updatesList.appendChild(li);
+      });
+    }
+
+    function initDocsAndUpdates() {
+      // Documents (newest first)
+      const docsQ = query(
+        collection(db, EVENT_COLLECTION, eventId, "documents"),
+        orderBy("createdAt", "desc")
+      );
+      onSnapshot(docsQ, (snap) => renderDocs(snap.docs));
+
+      // Updates (newest first)
+      const updatesQ = query(
+        collection(db, EVENT_COLLECTION, eventId, "updates"),
+        orderBy("createdAt", "desc")
+      );
+      onSnapshot(updatesQ, (snap) => renderUpdates(snap.docs));
+
+      docForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const title = docTitleInput.value.trim();
+        const url = docUrlInput.value.trim();
+        const desc = docDescInput.value.trim();
+
+        if (!title || !url) {
+          alert("Please enter a document name and URL.");
+          return;
+        }
+
+        await addDoc(collection(db, EVENT_COLLECTION, eventId, "documents"), {
+          title,
+          url,
+          description: desc,
+          createdAt: serverTimestamp(),
+          createdBy: currentUser ? currentUser.uid : null
+        });
+
+        docTitleInput.value = "";
+        docUrlInput.value = "";
+        docDescInput.value = "";
+      });
+
+      updateForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const title = updateTitleInput.value.trim();
+        const body = updateBodyInput.value.trim();
+
+        if (!body) {
+          alert("Please write an update message.");
+          return;
+        }
+
+        await addDoc(collection(db, EVENT_COLLECTION, eventId, "updates"), {
+          title,
+          body,
+          createdAt: serverTimestamp(),
+          createdBy: currentUser ? currentUser.uid : null
+        });
+
+        updateTitleInput.value = "";
+        updateBodyInput.value = "";
+      });
     }
 
     onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        window.location.href = "/";
-        return;
-      }
+      try {
+        if (!user) {
+          window.location.href = "/";
+          return;
+        }
 
-      currentUser = user;
-      authInfoEl.textContent = "Signed in as " + (user.email || user.uid);
+        currentUser = user;
+        authInfoEl.textContent = "Signed in as " + (user.email || user.uid);
 
-      const infoRef = doc(db, "accountInfo", user.uid);
-      const infoSnap = await getDoc(infoRef);
+        if (!eventDocRef) return;
 
-      if (!infoSnap.exists()) {
-        window.location.href = "/under-review/";
-        return;
-      }
+        const infoSnap = await getDoc(doc(db, "accountInfo", user.uid));
+        if (!infoSnap.exists()) {
+          window.location.href = "/under-review/";
+          return;
+        }
 
-      const role = infoSnap.data().authRole;
+        const role = (infoSnap.data()?.authRole || "").toLowerCase().trim();
+        if (role !== "admin") {
+          // viewers go back to the event page
+          window.location.href = "/events/event?id=" + encodeURIComponent(eventId);
+          return;
+        }
 
-      if (role === "admin") {
         currentIsAdmin = true;
         roleBadgeContainer.innerHTML = '<span class="badge admin">Admin</span>';
-        if (eventRef) await loadEvent();
-        return;
-      }
 
-      if (role === "viewer") {
-        window.location.href = eventId ? ("/events/event?id=" + encodeURIComponent(eventId)) : "/events";
-        return;
+        await loadEvent();
+        initDocsAndUpdates();
+      } catch (err) {
+        console.error(err);
+        setStatus("Error: " + (err?.message || String(err)), "#b91c1c");
       }
-
-      window.location.href = "/under-review/";
     });
 
     logoutBtn.addEventListener("click", async () => {
@@ -391,7 +702,8 @@
     });
 
     backToEventBtn.addEventListener("click", () => {
-      window.location.href = eventId ? ("/events/event?id=" + encodeURIComponent(eventId)) : "/events";
+      if (eventId) window.location.href = "/events/event?id=" + encodeURIComponent(eventId);
+      else window.location.href = "/events";
     });
 
     backToEventsBtn.addEventListener("click", () => {
@@ -400,52 +712,39 @@
 
     editForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-
-      if (!currentIsAdmin) {
-        setStatus("You are not allowed to edit this event.", "#b91c1c");
-        return;
-      }
-      if (!eventRef) {
-        setStatus("No event reference to update.", "#b91c1c");
-        return;
-      }
+      if (!currentIsAdmin || !eventDocRef) return;
 
       const title = editTitleInput.value.trim();
       const location = editLocationInput.value.trim();
       const signupUrl = editSignupUrlInput.value.trim();
       const description = editDescriptionInput.value.trim();
 
-      const startDate = startDateInput.value;
-      const startTime = startTimeInput.value;
-      const endDate = endDateInput.value;
-      const endTime = endTimeInput.value;
+      if (!title) {
+        setStatus("Title is required.", "#b91c1c");
+        return;
+      }
 
-      if (!title) return setStatus("Title is required.", "#b91c1c");
-      if (!startDate || !startTime) return setStatus("Start date/time are required.", "#b91c1c");
-      if (!endDate || !endTime) return setStatus("End date/time are required.", "#b91c1c");
+      const sCombined = combineDateTime(startDateInput.value, startTimeInput.value);
+      const eCombined = combineDateTime(endDateInput.value, endTimeInput.value);
 
-      const isoStart = `${startDate}T${startTime}`;
-      const isoEnd = `${endDate}T${endTime}`;
+      const updates = {
+        title,
+        location,
+        signupUrl,
+        description,
+        summary: description, // keeps compatibility with older pages
+        // keep string fields if your list page expects them
+        startDate: startDateInput.value || "",
+        startTime: startTimeInput.value || "",
+        endDate: endDateInput.value || "",
+        endTime: endTimeInput.value || "",
+        startDateTime: sCombined ? `${startDateInput.value}T${startTimeInput.value}` : "",
+        endDateTime: eCombined ? `${endDateInput.value}T${endTimeInput.value}` : ""
+      };
 
       try {
         setStatus("Saving changes...");
-
-        await updateDoc(eventRef, {
-          title,
-          location,
-          signupUrl: signupUrl || "",
-          description,
-          summary: description,
-
-          startDate,
-          startTime,
-          endDate,
-          endTime,
-
-          startDateTime: isoStart,
-          endDateTime: isoEnd
-        });
-
+        await updateDoc(eventDocRef, updates);
         setStatus("Changes saved.", "#166534");
         pageTitleEl.textContent = "Edit Event: " + title;
       } catch (err) {
