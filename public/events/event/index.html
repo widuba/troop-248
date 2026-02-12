@@ -814,33 +814,54 @@
       });
     }
 
-    function formatDateRange(ev) {
-      const start = toDateMaybe(ev.startDate);
-      const end = toDateMaybe(ev.endDate);
+    function parseEventDateTime(ev, which) {
+  const dateKey = which === "start" ? "startDate" : "endDate";
+  const timeKey = which === "start" ? "startTime" : "endTime";
 
-      if (!start && !end) return "";
-      if (start && !end) return formatDateTime(start);
-      if (!start && end) return formatDateTime(end);
+  const d = (ev[dateKey] || "").trim();
+  const t = (ev[timeKey] || "").trim();
 
-      const sameDay =
-        start.getFullYear() === end.getFullYear() &&
-        start.getMonth() === end.getMonth() &&
-        start.getDate() === end.getDate();
+  if (d) {
+    const iso = `${d}T${t || "00:00"}`;
+    const dt = new Date(iso);
+    if (!isNaN(dt.getTime())) return dt;
+  }
 
-      if (sameDay) {
-        // Same-day: show date once, times if present
-        const datePart = start.toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-          year: "numeric"
-        });
-        const startTime = start.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
-        const endTime = end.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
-        return `${datePart} • ${startTime} → ${endTime}`;
-      }
+  const legacy = which === "start" ? ev.startDateTime : ev.endDateTime;
+  if (legacy) {
+    const dt = new Date(legacy);
+    if (!isNaN(dt.getTime())) return dt;
+  }
 
-      return `${formatDateTime(start)} → ${formatDateTime(end)}`;
-    }
+  return null;
+}
+
+function formatDateRange(ev) {
+  const start = parseEventDateTime(ev, "start");
+  const end = parseEventDateTime(ev, "end");
+
+  if (!start && !end) return "";
+  if (start && !end) return formatDateTime(start);
+  if (!start && end) return formatDateTime(end);
+
+  const sameDay =
+    start.getFullYear() === end.getFullYear() &&
+    start.getMonth() === end.getMonth() &&
+    start.getDate() === end.getDate();
+
+  if (sameDay) {
+    const datePart = start.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric"
+    });
+    const startTime = start.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+    const endTime = end.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+    return `${datePart} • ${startTime} → ${endTime}`;
+  }
+
+  return `${formatDateTime(start)} → ${formatDateTime(end)}`;
+}
 
     function setNotFoundState() {
       eventTitleEl.textContent = "Event not found";
@@ -1044,7 +1065,7 @@
 
         const displayName = `${accountInfo.fullName || ""}`.trim();
         // You store roleType ("Scout"/"Parent"/"Adult Leader"). Keep backward compatibility.
-        const memberType = accountInfo.roleType || accountInfo.memberType || "";
+        const memberType = accountInfo.accountType || "";
 
         try {
           await setDoc(rsvpRef, {
