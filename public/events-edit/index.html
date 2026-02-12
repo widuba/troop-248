@@ -46,26 +46,10 @@
       align-items: center;
       gap: 8px;
     }
-    header h2::before {
-      content: "★";
-      font-size: 18px;
-    }
-    .troop-home-link {
-      text-decoration: none;
-      color: inherit;
-      display: inline-flex;
-      align-items: center;
-    }
-    .troop-home-link:hover h2 {
-      opacity: 0.9;
-      text-decoration: underline;
-    }
-    nav {
-      display: flex;
-      gap: 12px;
-      font-size: 13px;
-      text-transform: uppercase;
-    }
+    header h2::before { content: "★"; font-size: 18px; }
+    .troop-home-link { text-decoration: none; color: inherit; display: inline-flex; align-items: center; }
+    .troop-home-link:hover h2 { opacity: 0.9; text-decoration: underline; }
+    nav { display: flex; gap: 12px; font-size: 13px; text-transform: uppercase; }
     nav a {
       color: #1f4e79;
       font-weight: bold;
@@ -76,16 +60,9 @@
       backdrop-filter: blur(4px);
       opacity: 0.9;
     }
-    nav a:hover {
-      opacity: 1;
-      background: rgba(255, 255, 255, 0.12);
-    }
-    #auth-bar {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      font-size: 13px;
-    }
+    nav a:hover { opacity: 1; background: rgba(255, 255, 255, 0.12); }
+
+    #auth-bar { display: flex; gap: 10px; align-items: center; font-size: 13px; }
     #logout-btn {
       padding: 5px 12px;
       font-size: 13px;
@@ -95,15 +72,10 @@
       color: var(--white);
       cursor: pointer;
     }
-    #logout-btn:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
+    #logout-btn:hover { background: rgba(255, 255, 255, 0.2); }
 
-    main {
-      padding: 24px 16px 40px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
+    main { padding: 24px 16px 40px; max-width: 900px; margin: 0 auto; }
+
     .card {
       background: rgba(255, 255, 255, 0.97);
       border-radius: var(--radius-lg);
@@ -112,13 +84,8 @@
       box-shadow: var(--shadow-soft);
       border: 1px solid rgba(148, 163, 184, 0.5);
     }
-    .card-header-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 6px;
-    }
+    .card-header-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+
     .badge {
       font-size: 11px;
       padding: 4px 8px;
@@ -133,15 +100,10 @@
       color: #92400e;
       border: 1px solid rgba(245, 158, 11, 0.6);
     }
-    h1 {
-      margin: 0;
-      font-size: 22px;
-    }
-    p {
-      margin: 4px 0;
-      font-size: 14px;
-      color: var(--text-muted);
-    }
+
+    h1 { margin: 0; font-size: 22px; }
+    p { margin: 4px 0; font-size: 14px; color: var(--text-muted); }
+
     section {
       background: rgba(255, 255, 255, 0.97);
       border-radius: var(--radius-lg);
@@ -150,21 +112,10 @@
       box-shadow: var(--shadow-soft);
       border: 1px solid rgba(148, 163, 184, 0.4);
     }
-    section h2 {
-      margin-top: 0;
-      font-size: 18px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    section h2::before {
-      content: "▸";
-      font-size: 14px;
-      color: var(--blue);
-    }
-    .field {
-      margin-bottom: 10px;
-    }
+    section h2 { margin-top: 0; font-size: 18px; display: flex; align-items: center; gap: 8px; }
+    section h2::before { content: "▸"; font-size: 14px; color: var(--blue); }
+
+    .field { margin-bottom: 10px; }
     .field label {
       display: block;
       font-size: 12px;
@@ -173,8 +124,7 @@
       text-transform: uppercase;
       letter-spacing: 0.06em;
     }
-    .field input,
-    .field textarea {
+    .field input, .field textarea {
       width: 100%;
       padding: 7px 8px;
       border-radius: 10px;
@@ -182,24 +132,16 @@
       font-size: 14px;
       background: #ffffff;
     }
-    .field textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
-    .field input:focus,
-    .field textarea:focus {
+    .field textarea { resize: vertical; min-height: 80px; }
+    .field input:focus, .field textarea:focus {
       outline: none;
       border-color: var(--blue);
       box-shadow: 0 0 0 2px rgba(31,78,121,.12);
     }
-    .field-row {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .field-row .field {
-      flex: 1 1 140px;
-    }
+
+    .field-row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .field-row .field { flex: 1 1 140px; }
+
     button {
       padding: 8px 16px;
       border-radius: var(--radius-pill);
@@ -211,51 +153,23 @@
       cursor: pointer;
     }
     button:hover { opacity: 0.96; }
-    .btn-secondary {
-      background: #b22222;
-    }
-    .small-help {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 6px;
-    }
-    #status {
-      font-size: 13px;
-      margin-top: 8px;
-      color: var(--text-muted);
-      white-space: pre-wrap;
-    }
-    .top-buttons {
-      margin-top: 8px;
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
+
+    .btn-secondary { background: #b22222; }
+    .small-help { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+    #status { font-size: 13px; margin-top: 8px; color: var(--text-muted); white-space: pre-wrap; }
+    .top-buttons { margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap; }
 
     @media (max-width: 640px) {
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-      }
-      nav {
-        width: 100%;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-      }
-      .card-header-row {
-        flex-direction: column;
-        align-items: flex-start;
-      }
+      header { flex-direction: column; align-items: flex-start; gap: 8px; }
+      nav { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
+      .card-header-row { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
 <body>
   <header>
     <div>
-      <a href="/home" class="troop-home-link">
-        <h2>Troop 248</h2>
-      </a>
+      <a href="/home" class="troop-home-link"><h2>Troop 248</h2></a>
     </div>
     <nav>
       <a href="/home">Home</a>
@@ -280,9 +194,7 @@
           <h1 id="page-title">Edit Event</h1>
           <p id="event-id-text" style="font-size:12px;"></p>
         </div>
-        <div id="role-badge-container">
-          <span class="badge">Viewer</span>
-        </div>
+        <div id="role-badge-container"><span class="badge">Viewer</span></div>
       </div>
       <div class="top-buttons">
         <button id="back-to-event-btn" class="btn-secondary">Back to Event Page</button>
@@ -300,28 +212,28 @@
 
         <div class="field">
           <label for="edit-location">Location</label>
-          <input id="edit-location" type="text" placeholder="Camp Rainey Mountain, Clayton GA" />
+          <input id="edit-location" type="text" />
         </div>
 
         <div class="field">
           <label for="edit-signup-url">Signup URL</label>
-          <input id="edit-signup-url" type="url" placeholder="https://example.com/signup" />
+          <input id="edit-signup-url" type="url" placeholder="https://..." />
         </div>
 
         <div class="field">
           <label for="edit-description">Description</label>
-          <textarea id="edit-description" placeholder="Details about this event"></textarea>
+          <textarea id="edit-description"></textarea>
         </div>
 
         <h3 style="font-size:15px; margin-top:14px;">Start Date & Time</h3>
         <div class="field-row">
           <div class="field">
             <label for="start-date">Start Date</label>
-            <input id="start-date" type="date" />
+            <input id="start-date" type="date" required />
           </div>
           <div class="field">
             <label for="start-time">Start Time</label>
-            <input id="start-time" type="time" />
+            <input id="start-time" type="time" required />
           </div>
         </div>
 
@@ -329,31 +241,18 @@
         <div class="field-row">
           <div class="field">
             <label for="end-date">End Date</label>
-            <input id="end-date" type="date" />
+            <input id="end-date" type="date" required />
           </div>
           <div class="field">
             <label for="end-time">End Time</label>
-            <input id="end-time" type="time" />
-          </div>
-        </div>
-
-        <h3 style="font-size:15px; margin-top:14px;">Created At (override)</h3>
-        <div class="field-row">
-          <div class="field">
-            <label for="created-date">Created Date</label>
-            <input id="created-date" type="date" />
-          </div>
-          <div class="field">
-            <label for="created-time">Created Time</label>
-            <input id="created-time" type="time" />
+            <input id="end-time" type="time" required />
           </div>
         </div>
 
         <button type="submit">Save Changes</button>
         <p class="small-help">
-          This page keeps event fields consistent with the rest of the site:
-          <code>startDate/startTime/endDate/endTime</code> are stored as strings,
-          and <code>startDateTime/endDateTime</code> are stored as ISO strings for sorting.
+          This editor writes to <code>troop-events</code> and keeps fields consistent:
+          <code>startDate/startTime/endDate/endTime</code> as strings + ISO strings for sorting.
         </p>
         <p id="status"></p>
       </form>
@@ -363,7 +262,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc, updateDoc, Timestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
@@ -374,6 +273,8 @@
       appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
       measurementId: "G-NY75GX5TBH"
     };
+
+    const COLLECTION = "troop-events";
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
@@ -393,71 +294,21 @@
     const editLocationInput = document.getElementById("edit-location");
     const editSignupUrlInput = document.getElementById("edit-signup-url");
     const editDescriptionInput = document.getElementById("edit-description");
-
     const startDateInput = document.getElementById("start-date");
     const startTimeInput = document.getElementById("start-time");
     const endDateInput = document.getElementById("end-date");
     const endTimeInput = document.getElementById("end-time");
-    const createdDateInput = document.getElementById("created-date");
-    const createdTimeInput = document.getElementById("created-time");
-
     const statusEl = document.getElementById("status");
 
-    const params = new URLSearchParams(window.location.search);
-    const eventId = (params.get("id") || "").trim();
+    const sp = new URLSearchParams(window.location.search);
+    const eventId = (sp.get("id") || "").trim();
 
-    const eventDocRef = eventId ? doc(db, "events", eventId) : null;
+    const eventRef = eventId ? doc(db, COLLECTION, eventId) : null;
 
     function setStatus(text, color = "#6b7280") {
       statusEl.textContent = text;
       statusEl.style.color = color;
       console.log("EDIT STATUS:", text);
-    }
-
-    function dateToInputParts(date) {
-      if (!date) return { d: "", t: "" };
-      const iso = date.toISOString(); // UTC
-      return { d: iso.slice(0, 10), t: iso.slice(11, 16) };
-    }
-
-    function combineLocalDateTime(dateStr, timeStr) {
-      if (!dateStr) return null;
-      const iso = `${dateStr}T${timeStr || "00:00"}:00`;
-      const d = new Date(iso);
-      return isNaN(d.getTime()) ? null : d;
-    }
-
-    function readDateTimeFromEvent(data, which) {
-      const dateKey = which === "start" ? "startDate" : "endDate";
-      const timeKey = which === "start" ? "startTime" : "endTime";
-
-      const dStr = typeof data[dateKey] === "string" ? data[dateKey] : "";
-      const tStr = typeof data[timeKey] === "string" ? data[timeKey] : "";
-
-      if (dStr) {
-        // If we already have strings, use them directly in inputs
-        return { dateStr: dStr, timeStr: tStr || "" };
-      }
-
-      // Legacy: if someone stored Timestamp in startDate/endDate
-      const maybeTs = data[dateKey];
-      if (maybeTs && typeof maybeTs.toDate === "function") {
-        const dt = maybeTs.toDate();
-        const { d, t } = dateToInputParts(dt);
-        return { dateStr: d, timeStr: t };
-      }
-
-      // Legacy: if only startDateTime/endDateTime exist as ISO strings
-      const legacyKey = which === "start" ? "startDateTime" : "endDateTime";
-      if (typeof data[legacyKey] === "string" && data[legacyKey]) {
-        const dt = new Date(data[legacyKey]);
-        if (!isNaN(dt.getTime())) {
-          const { d, t } = dateToInputParts(dt);
-          return { dateStr: d, timeStr: t };
-        }
-      }
-
-      return { dateStr: "", timeStr: "" };
     }
 
     if (!eventId) {
@@ -473,49 +324,31 @@
     let currentIsAdmin = false;
 
     async function loadEvent() {
-      if (!eventDocRef) return;
-      try {
-        setStatus("Loading event...");
-        const snap = await getDoc(eventDocRef);
+      if (!eventRef) return;
 
-        if (!snap.exists()) {
-          pageTitleEl.textContent = "Event Not Found";
-          setStatus("Event not found.", "#b91c1c");
-          return;
-        }
+      setStatus("Loading event...");
+      const snap = await getDoc(eventRef);
 
-        const data = snap.data();
-
-        editTitleInput.value = (data.title || "").trim();
-        editLocationInput.value = (data.location || "").trim();
-        editDescriptionInput.value = (data.description || data.summary || "").trim();
-        editSignupUrlInput.value = (data.signupUrl || "").trim();
-
-        pageTitleEl.textContent = "Edit Event: " + (data.title || "Untitled Event");
-
-        const startParts = readDateTimeFromEvent(data, "start");
-        startDateInput.value = startParts.dateStr;
-        startTimeInput.value = startParts.timeStr;
-
-        const endParts = readDateTimeFromEvent(data, "end");
-        endDateInput.value = endParts.dateStr;
-        endTimeInput.value = endParts.timeStr;
-
-        if (data.createdAt && typeof data.createdAt.toDate === "function") {
-          const created = data.createdAt.toDate();
-          const { d, t } = dateToInputParts(created);
-          createdDateInput.value = d;
-          createdTimeInput.value = t;
-        } else {
-          createdDateInput.value = "";
-          createdTimeInput.value = "";
-        }
-
-        setStatus("Ready.");
-      } catch (err) {
-        console.error(err);
-        setStatus("Error loading event: " + (err?.message || String(err)), "#b91c1c");
+      if (!snap.exists()) {
+        pageTitleEl.textContent = "Event Not Found";
+        setStatus("Event not found in troop-events.", "#b91c1c");
+        return;
       }
+
+      const data = snap.data();
+
+      editTitleInput.value = (data.title || "").trim();
+      editLocationInput.value = (data.location || "").trim();
+      editSignupUrlInput.value = (data.signupUrl || "").trim();
+      editDescriptionInput.value = (data.description || data.summary || "").trim();
+
+      startDateInput.value = (data.startDate || "").toString();
+      startTimeInput.value = (data.startTime || "").toString();
+      endDateInput.value = (data.endDate || "").toString();
+      endTimeInput.value = (data.endTime || "").toString();
+
+      pageTitleEl.textContent = "Edit Event: " + (data.title || "Untitled Event");
+      setStatus("Ready.");
     }
 
     onAuthStateChanged(auth, async (user) => {
@@ -535,20 +368,17 @@
         return;
       }
 
-      const info = infoSnap.data();
-      const role = info.authRole;
+      const role = infoSnap.data().authRole;
 
       if (role === "admin") {
         currentIsAdmin = true;
         roleBadgeContainer.innerHTML = '<span class="badge admin">Admin</span>';
-        if (eventDocRef) loadEvent();
+        if (eventRef) await loadEvent();
         return;
       }
 
       if (role === "viewer") {
-        // viewers shouldn't be able to edit; send to event page
-        if (eventId) window.location.href = "/events/event?id=" + encodeURIComponent(eventId);
-        else window.location.href = "/events";
+        window.location.href = eventId ? ("/events/event?id=" + encodeURIComponent(eventId)) : "/events";
         return;
       }
 
@@ -561,8 +391,7 @@
     });
 
     backToEventBtn.addEventListener("click", () => {
-      if (eventId) window.location.href = "/events/event?id=" + encodeURIComponent(eventId);
-      else window.location.href = "/events";
+      window.location.href = eventId ? ("/events/event?id=" + encodeURIComponent(eventId)) : "/events";
     });
 
     backToEventsBtn.addEventListener("click", () => {
@@ -576,69 +405,47 @@
         setStatus("You are not allowed to edit this event.", "#b91c1c");
         return;
       }
-      if (!eventDocRef) {
+      if (!eventRef) {
         setStatus("No event reference to update.", "#b91c1c");
         return;
       }
 
       const title = editTitleInput.value.trim();
       const location = editLocationInput.value.trim();
-      const description = editDescriptionInput.value.trim();
       const signupUrl = editSignupUrlInput.value.trim();
+      const description = editDescriptionInput.value.trim();
 
-      const sDate = startDateInput.value;
-      const sTime = startTimeInput.value;
-      const eDate = endDateInput.value;
-      const eTime = endTimeInput.value;
+      const startDate = startDateInput.value;
+      const startTime = startTimeInput.value;
+      const endDate = endDateInput.value;
+      const endTime = endTimeInput.value;
 
-      if (!title) {
-        setStatus("Title is required.", "#b91c1c");
-        return;
-      }
-      if (!sDate) {
-        setStatus("Start Date is required.", "#b91c1c");
-        return;
-      }
-      if (!eDate) {
-        setStatus("End Date is required.", "#b91c1c");
-        return;
-      }
+      if (!title) return setStatus("Title is required.", "#b91c1c");
+      if (!startDate || !startTime) return setStatus("Start date/time are required.", "#b91c1c");
+      if (!endDate || !endTime) return setStatus("End date/time are required.", "#b91c1c");
 
-      // For sorting + grouping consistency
-      const isoStart = `${sDate}T${(sTime || "00:00")}`;
-      const isoEnd = `${eDate}T${(eTime || "00:00")}`;
-
-      const updates = {
-        title,
-        location,
-        signupUrl: signupUrl || "",
-        description,
-
-        // ✅ canonical string fields
-        startDate: sDate,
-        startTime: sTime || "",
-        endDate: eDate,
-        endTime: eTime || "",
-
-        // ✅ legacy/compat for sorting
-        startDateTime: isoStart,
-        endDateTime: isoEnd,
-
-        // keep summary mirrored if other pages read it
-        summary: description
-      };
-
-      // Created at override (optional; keep Timestamp here)
-      const cDate = createdDateInput.value;
-      const cTime = createdTimeInput.value;
-      const cCombined = combineLocalDateTime(cDate, cTime || "00:00");
-      if (cCombined) {
-        updates.createdAt = Timestamp.fromDate(cCombined);
-      }
+      const isoStart = `${startDate}T${startTime}`;
+      const isoEnd = `${endDate}T${endTime}`;
 
       try {
         setStatus("Saving changes...");
-        await updateDoc(eventDocRef, updates);
+
+        await updateDoc(eventRef, {
+          title,
+          location,
+          signupUrl: signupUrl || "",
+          description,
+          summary: description,
+
+          startDate,
+          startTime,
+          endDate,
+          endTime,
+
+          startDateTime: isoStart,
+          endDateTime: isoEnd
+        });
+
         setStatus("Changes saved.", "#166534");
         pageTitleEl.textContent = "Edit Event: " + title;
       } catch (err) {
