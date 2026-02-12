@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Troop 248 — Home</title>
+  <title>Mail — Troop 248</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" type="image/png" href="/bsafavicon.ico">
+
   <style>
     :root {
       --red: #b22222;
@@ -21,12 +22,12 @@
     * { box-sizing: border-box; }
 
     body {
-  background: #d2cab6;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  background-attachment: fixed;
-}
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #d2cab6;
+      color: var(--text-main);
+      min-height: 100vh;
+    }
 
     header {
       background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
@@ -49,11 +50,7 @@
       align-items: center;
       gap: 8px;
     }
-
-    header h2::before {
-      content: "★";
-      font-size: 18px;
-    }
+    header h2::before { content: "★"; font-size: 18px; }
 
     .troop-home-link {
       text-decoration: none;
@@ -61,16 +58,14 @@
       display: inline-flex;
       align-items: center;
     }
-    .troop-home-link:hover h2 {
-      opacity: 0.9;
-      text-decoration: underline;
-    }
+    .troop-home-link:hover h2 { opacity: 0.9; text-decoration: underline; }
 
     nav {
       display: flex;
       gap: 12px;
       font-size: 13px;
       text-transform: uppercase;
+      flex-wrap: wrap;
     }
 
     nav a {
@@ -83,17 +78,15 @@
       backdrop-filter: blur(4px);
       opacity: 0.9;
     }
-
-    nav a:hover {
-      opacity: 1;
-      background: rgba(255, 255, 255, 0.12);
-    }
+    nav a:hover { opacity: 1; background: rgba(255, 255, 255, 0.12); }
 
     #auth-bar {
       display: flex;
       gap: 10px;
       align-items: center;
       font-size: 13px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
 
     #logout-btn {
@@ -105,22 +98,19 @@
       color: var(--white);
       cursor: pointer;
     }
-
-    #logout-btn:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
+    #logout-btn:hover { background: rgba(255, 255, 255, 0.2); }
 
     main {
       padding: 24px 16px 40px;
-      max-width: 960px;
+      max-width: 1100px;
       margin: 0 auto;
     }
 
     .welcome-card {
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(255, 255, 255, 0.97);
       border-radius: var(--radius-lg);
-      padding: 20px 18px 12px;
-      margin-bottom: 20px;
+      padding: 18px 18px 10px;
+      margin-bottom: 16px;
       box-shadow: var(--shadow-soft);
       display: flex;
       align-items: center;
@@ -129,16 +119,8 @@
       border: 1px solid rgba(148, 163, 184, 0.4);
     }
 
-    .welcome-card h3 {
-      margin: 0 0 6px;
-      font-size: 20px;
-    }
-
-    .welcome-card p {
-      margin: 0;
-      font-size: 14px;
-      color: var(--text-muted);
-    }
+    .welcome-card h3 { margin: 0 0 4px; font-size: 18px; }
+    .welcome-card p { margin: 0; font-size: 14px; color: var(--text-muted); }
 
     .badge {
       font-size: 11px;
@@ -150,16 +132,10 @@
       letter-spacing: 0.07em;
     }
 
-    .badge.admin {
-      background: rgba(240, 180, 41, 0.16);
-      color: #92400e;
-      border: 1px solid rgba(245, 158, 11, 0.6);
-    }
-
     section {
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(255, 255, 255, 0.97);
       border-radius: var(--radius-lg);
-      padding: 18px 18px 16px;
+      padding: 18px 18px 14px;
       margin-bottom: 18px;
       box-shadow: var(--shadow-soft);
       border: 1px solid rgba(148, 163, 184, 0.4);
@@ -172,165 +148,135 @@
       align-items: center;
       gap: 8px;
     }
-
-    section h2::before {
-      content: "▸";
-      font-size: 14px;
-      color: var(--blue);
-    }
+    section h2::before { content: "▸"; font-size: 14px; color: var(--blue); }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: 1fr;
       gap: 14px;
-      margin-top: 8px;
     }
 
-    @media (max-width: 720px) {
-      .grid {
-        grid-template-columns: minmax(0, 1fr);
-      }
+    @media (min-width: 980px) {
+      .grid { grid-template-columns: 1fr 1fr 1fr; }
+      .compose { grid-column: 1 / span 1; }
+      .recipients { grid-column: 2 / span 1; }
+      .inbox { grid-column: 3 / span 1; }
     }
 
-    .feature-card-link {
+    .small-help { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+    .danger { color: #b91c1c; }
+    .success { color: #166534; }
+
+    /* Buttons */
+    .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 12px;
+      font-size: 13px;
+      border-radius: var(--radius-pill);
+      border: none;
+      cursor: pointer;
       text-decoration: none;
-      color: inherit;
+      font-weight: 600;
+    }
+    .btn-primary { background: var(--blue); color: var(--white); }
+    .btn-outlined { background: rgba(31,78,121,.08); color: var(--blue); border: 1px solid rgba(148,163,184,.7); }
+    .btn-danger { background: var(--red); color: var(--white); }
+    .btn-chip:hover { opacity: .96; }
+    .btn-chip:disabled { opacity: .55; cursor: not-allowed; }
+
+    /* Form */
+    form {
+      margin: 0;
+      padding: 10px 10px 8px;
+      background: #f9fafb;
+      border-radius: 12px;
+      border: 1px dashed rgba(148, 163, 184, 0.8);
+    }
+    .field { margin-bottom: 10px; }
+    .field label {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 3px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .field input, .field textarea {
+      width: 100%;
+      padding: 7px 8px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      font-size: 14px;
+      background: #ffffff;
+    }
+    .field textarea { resize: vertical; min-height: 140px; }
+    .field input:focus, .field textarea:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 2px rgba(31,78,121,.12);
     }
 
-    .feature-card {
+    /* Recipient picker */
+    .tri-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+    .tri-tabs button { border: 1px solid rgba(148,163,184,.7); }
+    .tri-tabs button.active { background: var(--blue); color: #fff; border: none; }
+
+    #recipients-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 420px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .user-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(209,213,219,.9);
+      background: #fff;
+    }
+
+    .empty-text {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Mail list */
+    .mail-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+    .mail-item {
       border-radius: 14px;
       padding: 12px 12px 10px;
       border: 1px solid rgba(209,213,219,.9);
       background: #f9fafb;
       box-shadow: 0 4px 12px rgba(0,0,0,.04);
-      transition: transform .1s ease, box-shadow .1s ease, border-color .1s ease;
-    }
-
-    .feature-card:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 8px 20px rgba(0,0,0,.06);
-      border-color: rgba(148,163,184,.9);
-    }
-
-    .feature-title {
-      font-size: 15px;
-      font-weight: 600;
-      margin: 0 0 4px;
-    }
-
-    .feature-badge {
-      display: inline-block;
-      font-size: 11px;
-      padding: 3px 8px;
-      border-radius: var(--radius-pill);
-      background: rgba(31,78,121,.08);
-      color: var(--blue);
-      text-transform: uppercase;
-      letter-spacing: .07em;
-      margin-bottom: 4px;
-    }
-
-    .feature-text {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin: 0;
-    }
-
-    .quick-note {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 8px;
-    }
-
-    /* ✅ Roster search bar (same vibe as Users page search) */
-    .roster-search {
-      margin-top: 10px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .roster-search input[type="search"]{
-      width: min(520px, 100%);
-      padding: 12px 14px;
-      border-radius: 12px;
-      border: 1px solid rgba(0,0,0,.12);
-      outline: none;
-      background: rgba(255,255,255,.85);
-      font-size: 14px;
-    }
-
-    .roster-results {
-      margin-top: 10px;
-      display: none;
-      padding: 10px;
-      border-radius: 14px;
-      border: 1px dashed rgba(148,163,184,.8);
-      background: rgba(249,250,251,.85);
-    }
-
-    .roster-result-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 10px 10px;
-      border-radius: 12px;
-      border: 1px solid rgba(209,213,219,.9);
-      background: #ffffff;
-      box-shadow: 0 4px 12px rgba(0,0,0,.04);
-      cursor: pointer;
-      text-decoration: none;
-      color: inherit;
       margin-bottom: 10px;
-      transition: transform .1s ease, box-shadow .1s ease, border-color .1s ease;
     }
-
-    .roster-result-item:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 8px 20px rgba(0,0,0,.06);
-      border-color: rgba(148,163,184,.9);
-    }
-
-    .roster-result-item:last-child { margin-bottom: 0; }
-
-    .roster-result-title {
-      font-weight: 900;
-      font-size: 14px;
-      margin: 0;
-    }
-
-    .roster-result-sub {
-      margin: 2px 0 0;
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .roster-empty {
+    .mail-subject { font-weight: 700; font-size: 14px; }
+    .mail-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .mail-body {
+      margin-top: 8px;
       font-size: 13px;
-      color: var(--text-muted);
-      padding: 6px 2px;
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
     }
 
     @media (max-width: 640px) {
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-      }
-      nav {
-        width: 100%;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-      }
-      .welcome-card {
-        flex-direction: column;
-        align-items: flex-start;
-      }
+      header { flex-direction: column; align-items: flex-start; gap: 8px; }
+      nav { width: 100%; }
+      #auth-bar { width: 100%; justify-content: flex-start; }
     }
   </style>
 </head>
+
 <body>
   <header>
     <div>
@@ -340,6 +286,7 @@
     </div>
 
     <nav>
+      <a href="/home">Home</a>
       <a href="/calendar">Calendar</a>
       <a href="/documents">Documents</a>
       <a href="/scoutmaster">SM Blog</a>
@@ -358,157 +305,88 @@
   <main>
     <div class="welcome-card">
       <div>
-        <h3>Welcome to Troop 248 Portal</h3>
-        <p>
-          This private site is for Troop 248 Scouts, parents, and adult leaders.
-          Use the sections below to get where you need to go quickly.
-        </p>
+        <h3>Troop Mail</h3>
+        <p>Send troop messages with safety rules enforced.</p>
       </div>
-      <div id="role-badge-container">
-        <span class="badge">Viewer</span>
+      <div>
+        <span class="badge">Role: <span id="role-badge">…</span></span>
       </div>
     </div>
 
-    <section>
-      <h2>Troop Resources</h2>
+    <div class="grid">
+      <!-- Compose -->
+      <section class="compose">
+        <h2>Compose</h2>
 
-      <!-- ✅ NEW: Roster search bar -->
-      <div class="roster-search">
-        <input id="rosterSearch" type="search" placeholder="Roster search… (try: calendar, patrols, mail)" autocomplete="off" />
-      </div>
+        <div class="small-help">
+          Selected: <b><span id="selected-count">0</span></b> • Adults: <b><span id="adult-count">0</span></b>
+        </div>
+        <div class="small-help" id="safety-note"></div>
 
-      <!-- ✅ NEW: Search results area -->
-      <div id="rosterResults" class="roster-results" aria-live="polite"></div>
-
-      <div class="grid" id="resourceGrid">
-        <a href="/calendar" class="feature-card-link" data-title="Troop Calendar" data-keywords="calendar schedule meetings campouts service board of review">
-          <div class="feature-card">
-            <div class="feature-badge">Schedule</div>
-            <h3 class="feature-title">Troop Calendar</h3>
-            <p class="feature-text">
-              See upcoming meetings, campouts, service projects, and board of reviews.
-            </p>
+        <form id="compose-form" style="margin-top:10px;">
+          <div class="field">
+            <label for="subject">Subject</label>
+            <input id="subject" type="text" placeholder="PLC update, ride plan, packing reminder…" />
           </div>
-        </a>
 
-        <a href="/documents" class="feature-card-link" data-title="Troop Documents" data-keywords="documents forms packing list medical forms paperwork">
-          <div class="feature-card">
-            <div class="feature-badge">Forms</div>
-            <h3 class="feature-title">Troop Documents</h3>
-            <p class="feature-text">
-              Find meeting plans, packing lists, medical forms, and other important paperwork.
-            </p>
+          <div class="field">
+            <label for="body">Message</label>
+            <textarea id="body" placeholder="Type your message…"></textarea>
           </div>
-        </a>
 
-        <a href="/scoutmaster" class="feature-card-link" data-title="Scoutmaster Blog" data-keywords="scoutmaster blog leadership updates messages">
-          <div class="feature-card">
-            <div class="feature-badge">Leadership</div>
-            <h3 class="feature-title">Scoutmaster Blog</h3>
-            <p class="feature-text">
-              Read messages and updates directly from the Scoutmaster to the troop.
-            </p>
+          <div class="btn-row">
+            <button id="send-btn" class="btn-chip btn-primary" type="submit">Send</button>
           </div>
-        </a>
 
-        <a href="/spl" class="feature-card-link" data-title="SPL Blog" data-keywords="spl blog youth led senior patrol leader plans goals">
-          <div class="feature-card">
-            <div class="feature-badge">Youth Led</div>
-            <h3 class="feature-title">SPL Blog</h3>
-            <p class="feature-text">
-              Hear from the Senior Patrol Leader about plans, goals, and upcoming activities.
-            </p>
-          </div>
-        </a>
+          <div id="compose-error" class="small-help danger"></div>
+          <div id="compose-success" class="small-help success"></div>
+        </form>
+      </section>
 
-        <a href="/useful-links" class="feature-card-link" data-title="Useful Links" data-keywords="useful links resources advancement camping merit badges parent info">
-          <div class="feature-card">
-            <div class="feature-badge">Resources</div>
-            <h3 class="feature-title">Useful Links</h3>
-            <p class="feature-text">
-              Browse helpful websites for advancement, camping, merit badges, and parent info.
-            </p>
-          </div>
-        </a>
+      <!-- Recipients -->
+      <section class="recipients">
+        <h2>Recipients</h2>
 
-        <a href="/events" class="feature-card-link" data-title="Events" data-keywords="events campouts service projects prepare">
-          <div class="feature-card">
-            <div class="feature-badge">Campouts/Service</div>
-            <h3 class="feature-title">Events</h3>
-            <p class="feature-text">
-              View and prepare for upcoming events.
-            </p>
-          </div>
-        </a>
+        <div class="tri-tabs">
+          <button id="tab-scouts" class="btn-chip btn-outlined active" type="button">Scouts</button>
+          <button id="tab-adults" class="btn-chip btn-outlined" type="button">Adult Leaders</button>
+          <button id="tab-parents" class="btn-chip btn-outlined" type="button">Parents</button>
+        </div>
 
-        <a href="/mail" class="feature-card-link" data-title="Mail" data-keywords="mail contact email message reach out">
-          <div class="feature-card">
-            <div class="feature-badge">Contact</div>
-            <h3 class="feature-title">Mail</h3>
-            <p class="feature-text">
-              Reach out to other members of the troop.
-            </p>
-          </div>
-        </a>
+        <div id="recipients-list"></div>
+        <div id="recipients-empty" class="empty-text" style="display:none;">No users in this group.</div>
+      </section>
 
-        <a href="/roster" class="feature-card-link" data-title="Roster" data-keywords="roster users contact info troop directory">
-          <div class="feature-card">
-            <div class="feature-badge">Roster</div>
-            <h3 class="feature-title">Roster</h3>
-            <p class="feature-text">
-              View contact info for anyone in the troop.
-            </p>
-          </div>
-        </a>
+      <!-- Inbox -->
+      <section class="inbox">
+        <h2>Messages</h2>
 
-        <a href="/patrols" class="feature-card-link" data-title="Patrols" data-keywords="patrols patrol assignments scouts">
-          <div class="feature-card">
-            <div class="feature-badge">Patrols</div>
-            <h3 class="feature-title">Patrols</h3>
-            <p class="feature-text">
-              View scout accounts and assigned patrols.
-            </p>
-          </div>
-        </a>
+        <div class="mail-tabs">
+          <button id="inbox-tab" class="btn-chip btn-outlined" type="button">Inbox</button>
+          <button id="sent-tab" class="btn-chip btn-outlined" type="button">Sent</button>
+          <button id="all-tab" class="btn-chip btn-outlined" type="button">All</button>
+        </div>
 
-        <a href="/report" class="feature-card-link" data-title="Report" data-keywords="report problems suggestions feedback">
-          <div class="feature-card">
-            <div class="feature-badge">Report</div>
-            <h3 class="feature-title">Report</h3>
-            <p class="feature-text">
-              Report any problems/suggestions for the website to the devs.
-            </p>
-          </div>
-        </a>
-
-        <a href="/accountinfo" class="feature-card-link" data-title="Account Info" data-keywords="account info profile edit personal">
-          <div class="feature-card">
-            <div class="feature-badge">Account</div>
-            <h3 class="feature-title">Account Info</h3>
-            <p class="feature-text">
-              View and edit personal account info.
-            </p>
-          </div>
-        </a>
-      </div>
-
-      <div class="quick-note">
-        Your access level (Viewer / Admin) controls whether you can edit content or just view it.
-      </div>
-    </section>
+        <div id="mail-empty" class="empty-text">Loading…</div>
+        <div id="mail-list"></div>
+      </section>
+    </div>
   </main>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import {
-      getAuth,
-      onAuthStateChanged,
-      signOut
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
     import {
       getFirestore,
+      collection,
       doc,
-      getDoc
+      getDoc,
+      addDoc,
+      onSnapshot,
+      query,
+      where,
+      orderBy,
+      serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -525,26 +403,324 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
+    // Header
     const authInfoEl = document.getElementById("auth-info");
     const logoutBtn = document.getElementById("logout-btn");
-    const roleBadgeContainer = document.getElementById("role-badge-container");
+    const roleBadgeEl = document.getElementById("role-badge");
 
-    // ✅ NEW: roster search elements
-    const rosterSearchEl = document.getElementById("rosterSearch");
-    const rosterResultsEl = document.getElementById("rosterResults");
-    const resourceGridEl = document.getElementById("resourceGrid");
+    // Compose
+    const composeForm = document.getElementById("compose-form");
+    const subjectEl = document.getElementById("subject");
+    const bodyEl = document.getElementById("body");
+    const sendBtn = document.getElementById("send-btn");
+    const composeErrorEl = document.getElementById("compose-error");
+    const composeSuccessEl = document.getElementById("compose-success");
 
+    // Recipients
+    const recipientsListEl = document.getElementById("recipients-list");
+    const recipientsEmptyEl = document.getElementById("recipients-empty");
+    const tabScouts = document.getElementById("tab-scouts");
+    const tabAdults = document.getElementById("tab-adults");
+    const tabParents = document.getElementById("tab-parents");
+
+    const selectedCountEl = document.getElementById("selected-count");
+    const adultCountEl = document.getElementById("adult-count");
+    const safetyNoteEl = document.getElementById("safety-note");
+
+    // Mail list
+    const mailListEl = document.getElementById("mail-list");
+    const mailEmptyEl = document.getElementById("mail-empty");
+    const inboxTab = document.getElementById("inbox-tab");
+    const sentTab = document.getElementById("sent-tab");
+    const allTab = document.getElementById("all-tab");
+
+    // State
     let currentUser = null;
-    let currentIsAdmin = false;
+    let myAuthRole = "viewer";
+    let myAccountType = "";
+    let activeRecipientTab = "scouts"; // scouts | adults | parents
+    let activeMailFilter = "inbox";    // inbox | sent | all
 
-    function updateUI() {
-      if (currentUser) {
-        authInfoEl.textContent = `Signed in as ${currentUser.email}`;
-        roleBadgeContainer.innerHTML = `
-          <span class="badge ${currentIsAdmin ? "admin" : ""}">
-            ${currentIsAdmin ? "Admin" : "Viewer"}
-          </span>`;
+    const directory = new Map(); // uid -> accountInfo doc data
+    const selectedUids = new Set();
+    const mailMap = new Map();
+
+    function norm(v) { return (v || "").toString().trim().toLowerCase(); }
+    function isScoutType(t) { return norm(t).includes("scout"); }
+    function isParentType(t) { return norm(t).includes("parent"); }
+    function isLeaderType(t) { return norm(t).includes("leader"); }
+    function isAdultType(t) {
+      const n = norm(t);
+      return n.includes("parent") || n.includes("leader") || n.includes("adult");
+    }
+    function senderIsAdult() { return isAdultType(myAccountType); }
+
+    function setStatus(err = "", ok = "") {
+      composeErrorEl.textContent = err;
+      composeSuccessEl.textContent = ok;
+    }
+
+    function displayNameFor(u) {
+      const full = (u.fullName || "").toString().trim();
+      if (full) return full;
+
+      const first = (u.firstName || "").toString().trim();
+      const last = (u.lastName || "").toString().trim();
+      const combo = `${first} ${last}`.trim();
+      if (combo) return combo;
+
+      const email = (u.email || "").toString().trim();
+      return email || "(No name)";
+    }
+
+    function formatTime(ts) {
+      if (!ts) return "";
+      try {
+        const d = ts.toDate ? ts.toDate() : new Date(ts);
+        return d.toLocaleString(undefined, {
+          year: "numeric", month: "short", day: "numeric",
+          hour: "2-digit", minute: "2-digit"
+        });
+      } catch {
+        return "";
       }
+    }
+
+    function escapeHtml(str) {
+      return (str || "").toString()
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function setActiveRecipientTab(tab) {
+      activeRecipientTab = tab;
+      tabScouts.classList.toggle("active", tab === "scouts");
+      tabAdults.classList.toggle("active", tab === "adults");
+      tabParents.classList.toggle("active", tab === "parents");
+      renderRecipients();
+    }
+
+    function setActiveMailFilter(filter) {
+      activeMailFilter = filter;
+
+      function style(btn, active) {
+        btn.classList.remove("btn-primary");
+        btn.classList.add("btn-outlined");
+        if (active) {
+          btn.classList.remove("btn-outlined");
+          btn.classList.add("btn-primary");
+        }
+      }
+
+      style(inboxTab, filter === "inbox");
+      style(sentTab, filter === "sent");
+      style(allTab, filter === "all");
+
+      renderMail();
+    }
+
+    function updateCountsAndSafety() {
+      let adultCount = 0;
+      selectedUids.forEach((uid) => {
+        const u = directory.get(uid);
+        if (u && isAdultType(u.accountType)) adultCount++;
+      });
+
+      selectedCountEl.textContent = String(selectedUids.size);
+      adultCountEl.textContent = String(adultCount);
+
+      if (!senderIsAdult()) {
+        safetyNoteEl.textContent = "Scout rule: include 0 adults OR 2+ adults (no 1-adult messages).";
+        sendBtn.disabled = !(adultCount === 0 || adultCount >= 2) || selectedUids.size === 0;
+      } else {
+        safetyNoteEl.textContent = "Adult rule: must include at least 1 adult recipient.";
+        sendBtn.disabled = (adultCount < 1) || selectedUids.size === 0;
+      }
+    }
+
+    function validateRecipients() {
+      const toUids = Array.from(selectedUids).filter(uid => uid !== currentUser?.uid);
+      if (toUids.length < 1) return { ok: false, msg: "Select at least one recipient." };
+      if (toUids.length > 20) return { ok: false, msg: "Max 20 recipients." };
+
+      let adultCount = 0;
+      toUids.forEach(uid => {
+        const u = directory.get(uid);
+        if (u && isAdultType(u.accountType)) adultCount++;
+      });
+
+      if (!senderIsAdult()) {
+        if (!(adultCount === 0 || adultCount >= 2)) {
+          return { ok: false, msg: "Scout safety rule: 0 adults OR 2+ adults required." };
+        }
+      } else {
+        if (adultCount < 1) return { ok: false, msg: "Adult safety rule: include at least 1 adult." };
+      }
+
+      return { ok: true, toUids };
+    }
+
+    function renderRecipients() {
+      recipientsListEl.innerHTML = "";
+
+      const me = currentUser?.uid;
+      const users = Array.from(directory.entries())
+        .map(([uid, data]) => ({ uid, ...data }))
+        .filter(u => u.uid !== me);
+
+      let filtered = [];
+      if (activeRecipientTab === "scouts") filtered = users.filter(u => isScoutType(u.accountType));
+      if (activeRecipientTab === "parents") filtered = users.filter(u => isParentType(u.accountType));
+      if (activeRecipientTab === "adults") filtered = users.filter(u => isLeaderType(u.accountType));
+
+      filtered.sort((a, b) => displayNameFor(a).localeCompare(displayNameFor(b)));
+
+      if (filtered.length === 0) {
+        recipientsEmptyEl.style.display = "block";
+        updateCountsAndSafety();
+        return;
+      }
+
+      recipientsEmptyEl.style.display = "none";
+
+      filtered.forEach(u => {
+        const row = document.createElement("div");
+        row.className = "user-row";
+
+        const cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.checked = selectedUids.has(u.uid);
+        cb.addEventListener("change", () => {
+          if (cb.checked) selectedUids.add(u.uid);
+          else selectedUids.delete(u.uid);
+          setStatus("", "");
+          updateCountsAndSafety();
+        });
+
+        const label = document.createElement("div");
+        label.style.flex = "1";
+        label.style.minWidth = "0";
+        label.textContent = displayNameFor(u);
+
+        row.appendChild(cb);
+        row.appendChild(label);
+        recipientsListEl.appendChild(row);
+      });
+
+      updateCountsAndSafety();
+    }
+
+    function renderMail() {
+      mailListEl.innerHTML = "";
+
+      const items = Array.from(mailMap.entries())
+        .map(([id, m]) => ({ id, ...m }))
+        .sort((a, b) => {
+          const at = a.createdAt?.seconds ? a.createdAt.seconds : 0;
+          const bt = b.createdAt?.seconds ? b.createdAt.seconds : 0;
+          return bt - at;
+        });
+
+      const filtered = items.filter((m) => {
+        const sentByMe = m.fromUid === currentUser.uid;
+        const toMe = Array.isArray(m.toUids) && m.toUids.includes(currentUser.uid);
+        if (activeMailFilter === "inbox") return toMe;
+        if (activeMailFilter === "sent") return sentByMe;
+        return toMe || sentByMe;
+      });
+
+      if (filtered.length === 0) {
+        mailEmptyEl.style.display = "block";
+        mailEmptyEl.textContent = "No messages to show.";
+        return;
+      }
+
+      mailEmptyEl.style.display = "none";
+
+      filtered.forEach((m) => {
+        const fromInfo = directory.get(m.fromUid) || {};
+        const fromName = (m.fromUid === currentUser.uid) ? "You" : displayNameFor(fromInfo);
+        const subject = m.subject || "(No subject)";
+        const meta = `From ${fromName}${m.createdAt ? " • " + formatTime(m.createdAt) : ""}`;
+
+        const card = document.createElement("div");
+        card.className = "mail-item";
+        card.innerHTML = `
+          <div class="mail-subject">${escapeHtml(subject)}</div>
+          <div class="mail-meta">${escapeHtml(meta)}</div>
+          <div class="mail-body">${escapeHtml(m.body || "")}</div>
+        `;
+        mailListEl.appendChild(card);
+      });
+    }
+
+    function startDirectoryListener() {
+      onSnapshot(
+        collection(db, "accountInfo"),
+        (snapshot) => {
+          directory.clear();
+          snapshot.forEach((docSnap) => directory.set(docSnap.id, docSnap.data() || {}));
+          renderRecipients();
+          renderMail();
+        },
+        (error) => {
+          console.error("accountInfo listener error:", error);
+          recipientsListEl.innerHTML = "";
+          recipientsEmptyEl.style.display = "block";
+          recipientsEmptyEl.textContent = "Directory not available (check rules).";
+          updateCountsAndSafety();
+        }
+      );
+    }
+
+    function startMailListeners() {
+      mailMap.clear();
+      renderMail();
+      mailEmptyEl.style.display = "block";
+      mailEmptyEl.textContent = "Loading…";
+
+      // Inbox
+      onSnapshot(
+        query(
+          collection(db, "mailOutbox"),
+          where("toUids", "array-contains", currentUser.uid),
+          orderBy("createdAt", "desc")
+        ),
+        (snap) => {
+          snap.docChanges().forEach((chg) => {
+            if (chg.type === "removed") mailMap.delete(chg.doc.id);
+            else mailMap.set(chg.doc.id, chg.doc.data());
+          });
+          renderMail();
+        },
+        (err) => {
+          console.error("Inbox listener error:", err);
+          mailEmptyEl.style.display = "block";
+          mailEmptyEl.textContent = "Inbox error (maybe needs an index).";
+        }
+      );
+
+      // Sent
+      onSnapshot(
+        query(
+          collection(db, "mailOutbox"),
+          where("fromUid", "==", currentUser.uid),
+          orderBy("createdAt", "desc")
+        ),
+        (snap) => {
+          snap.docChanges().forEach((chg) => {
+            if (chg.type === "removed") mailMap.delete(chg.doc.id);
+            else mailMap.set(chg.doc.id, chg.doc.data());
+          });
+          renderMail();
+        },
+        (err) => {
+          console.error("Sent listener error:", err);
+        }
+      );
     }
 
     async function handleAuth(user) {
@@ -553,108 +729,96 @@
         return;
       }
 
-      const infoRef = doc(db, "accountInfo", user.uid);
-      const infoSnap = await getDoc(infoRef);
+      currentUser = user;
+      authInfoEl.textContent = "Signed in as " + (user.email || user.uid);
 
+      const infoSnap = await getDoc(doc(db, "accountInfo", user.uid));
       if (!infoSnap.exists()) {
         window.location.href = "/under-review/";
         return;
       }
 
-      const data = infoSnap.data();
-      const role = data.authRole;
-
+      const info = infoSnap.data() || {};
+      const role = info.authRole;
       if (role !== "admin" && role !== "viewer") {
         window.location.href = "/under-review/";
         return;
       }
 
-      currentUser = user;
-      currentIsAdmin = role === "admin";
-      updateUI();
+      myAuthRole = role;
+      myAccountType = info.accountType || info.roleType || "";
+
+      roleBadgeEl.textContent = myAuthRole;
+
+      startDirectoryListener();
+      startMailListeners();
+
+      setActiveRecipientTab("scouts");
+      setActiveMailFilter("inbox");
+      updateCountsAndSafety();
     }
 
-    onAuthStateChanged(auth, handleAuth);
+    onAuthStateChanged(auth, (user) => {
+      handleAuth(user).catch((e) => {
+        console.error("Auth handler error:", e);
+        window.location.href = "/home";
+      });
+    });
 
     logoutBtn.addEventListener("click", async () => {
       await signOut(auth);
       window.location.href = "/";
     });
 
-    // ✅ NEW: Roster search logic (searches the main titles + keywords)
-    function escapeHtml(str) {
-      return String(str ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
+    tabScouts.addEventListener("click", () => setActiveRecipientTab("scouts"));
+    tabAdults.addEventListener("click", () => setActiveRecipientTab("adults"));
+    tabParents.addEventListener("click", () => setActiveRecipientTab("parents"));
 
-    function buildRosterItems() {
-      const links = Array.from(resourceGridEl.querySelectorAll("a.feature-card-link"));
-      return links.map(a => {
-        const title = a.getAttribute("data-title") || a.querySelector(".feature-title")?.textContent?.trim() || "";
-        const keywords = a.getAttribute("data-keywords") || "";
-        const href = a.getAttribute("href") || "#";
-        const badge = a.querySelector(".feature-badge")?.textContent?.trim() || "";
-        const desc = a.querySelector(".feature-text")?.textContent?.trim() || "";
-        return {
-          title,
-          keywords,
-          href,
-          badge,
-          desc,
-          _haystack: (title + " " + keywords + " " + badge + " " + desc).toLowerCase()
-        };
-      });
-    }
+    inboxTab.addEventListener("click", () => setActiveMailFilter("inbox"));
+    sentTab.addEventListener("click", () => setActiveMailFilter("sent"));
+    allTab.addEventListener("click", () => setActiveMailFilter("all"));
 
-    const rosterItems = buildRosterItems();
+    composeForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      setStatus("", "");
 
-    function renderRosterResults(query) {
-      const q = (query || "").trim().toLowerCase();
-
-      if (!q) {
-        rosterResultsEl.style.display = "none";
-        rosterResultsEl.innerHTML = "";
+      const res = validateRecipients();
+      if (!res.ok) {
+        setStatus(res.msg, "");
         return;
       }
 
-      const matches = rosterItems
-        .filter(item => item._haystack.includes(q))
-        .slice(0, 8); // keep it tidy
+      const subject = subjectEl.value.trim();
+      const body = bodyEl.value.trim();
 
-      rosterResultsEl.style.display = "block";
+      if (!subject) return setStatus("Subject is required.", "");
+      if (!body) return setStatus("Message is required.", "");
 
-      if (matches.length === 0) {
-        rosterResultsEl.innerHTML = `<div class="roster-empty">No matches for “${escapeHtml(query)}”.</div>`;
-        return;
-      }
+      sendBtn.disabled = true;
 
-      rosterResultsEl.innerHTML = matches.map(item => `
-        <a class="roster-result-item" href="${escapeHtml(item.href)}">
-          <div>
-            <div class="roster-result-title">${escapeHtml(item.title)}</div>
-            <div class="roster-result-sub">${escapeHtml(item.desc || item.badge || "")}</div>
-          </div>
-          <div class="feature-badge" style="margin:0;">${escapeHtml(item.badge || "Open")}</div>
-        </a>
-      `).join("");
-    }
+      try {
+        await addDoc(collection(db, "mailOutbox"), {
+          fromUid: currentUser.uid,
+          toUids: res.toUids,
+          subject,
+          body,
+          senderAccountType: myAccountType,
+          status: "queued",
+          createdAt: serverTimestamp()
+        });
 
-    rosterSearchEl.addEventListener("input", (e) => {
-      renderRosterResults(e.target.value);
-    });
-
-    rosterSearchEl.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
-        rosterSearchEl.value = "";
-        renderRosterResults("");
-        rosterSearchEl.blur();
+        setStatus("", "Queued. It will send shortly.");
+        subjectEl.value = "";
+        bodyEl.value = "";
+        selectedUids.clear();
+        renderRecipients();
+      } catch (err) {
+        console.error(err);
+        setStatus(err?.message || "Error sending message.", "");
+      } finally {
+        updateCountsAndSafety();
       }
     });
   </script>
-  <script src="/assets/js/background.js"></script>
 </body>
 </html>
