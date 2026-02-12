@@ -20,41 +20,12 @@
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: #d2cab6;
       color: var(--text-main);
       min-height: 100vh;
     }
-    /* Dark theme body */
-body.dark-theme {
-  background: #111827;
-  color: #e5e7eb;
-}
 
-/* Main cards / sections */
-body.dark-theme .welcome-card,
-body.dark-theme section {
-  background: #1f2937;
-  border-color: rgba(55,65,81,.9);
-}
-
-/* Feature cards */
-body.dark-theme .feature-card {
-  background: #111827;
-  border-color: rgba(75,85,99,.9);
-}
-
-/* Text + small labels */
-body.dark-theme .feature-text,
-body.dark-theme .quick-note {
-  color: #d1d5db;
-}
-
-body.dark-theme .badge {
-  background: rgba(55,65,81,.8);
-  color: #e5e7eb;
-}
     header {
       background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
       color: var(--white);
@@ -127,6 +98,7 @@ body.dark-theme .badge {
     #logout-btn:hover {
       background: rgba(255, 255, 255, 0.2);
     }
+
     main {
       padding: 24px 16px 40px;
       max-width: 900px;
@@ -251,12 +223,30 @@ body.dark-theme .badge {
       font-size: 13px;
       margin-top: 8px;
       color: var(--text-muted);
+      white-space: pre-wrap;
     }
     .top-buttons {
       margin-top: 8px;
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
+    }
+
+    @media (max-width: 640px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      nav {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+      .card-header-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
   </style>
 </head>
@@ -361,8 +351,9 @@ body.dark-theme .badge {
 
         <button type="submit">Save Changes</button>
         <p class="small-help">
-          All of these fields update the existing event document in Firestore.  
-          Start/End/Created will be stored as Firestore Timestamps.
+          This page keeps event fields consistent with the rest of the site:
+          <code>startDate/startTime/endDate/endTime</code> are stored as strings,
+          and <code>startDateTime/endDateTime</code> are stored as ISO strings for sorting.
         </p>
         <p id="status"></p>
       </form>
@@ -371,18 +362,8 @@ body.dark-theme .badge {
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import {
-      getAuth,
-      onAuthStateChanged,
-      signOut
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import {
-      getFirestore,
-      doc,
-      getDoc,
-      updateDoc,
-      Timestamp
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, updateDoc, Timestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
@@ -422,21 +403,10 @@ body.dark-theme .badge {
 
     const statusEl = document.getElementById("status");
 
-    // Get event ID from URL (?id=...)
     const params = new URLSearchParams(window.location.search);
-    const eventId = params.get("id");
+    const eventId = (params.get("id") || "").trim();
 
-    if (!eventId) {
-      pageTitleEl.textContent = "Event Not Found";
-      statusEl.textContent = "No event id was provided in the URL.";
-      statusEl.style.color = "#b91c1c";
-    } else {
-      eventIdTextEl.textContent = "Event ID: " + eventId;
-    }
-
-    let currentUser = null;
-    let currentIsAdmin = false;
-    let eventDocRef = eventId ? doc(db, "events", eventId) : null;
+    const eventDocRef = eventId ? doc(db, "events", eventId) : null;
 
     function setStatus(text, color = "#6b7280") {
       statusEl.textContent = text;
@@ -444,15 +414,118 @@ body.dark-theme .badge {
       console.log("EDIT STATUS:", text);
     }
 
+    function dateToInputParts(date) {
+      if (!date) return { d: "", t: "" };
+      const iso = date.toISOString(); // UTC
+      return { d: iso.slice(0, 10), t: iso.slice(11, 16) };
+    }
+
+    function combineLocalDateTime(dateStr, timeStr) {
+      if (!dateStr) return null;
+      const iso = `${dateStr}T${timeStr || "00:00"}:00`;
+      const d = new Date(iso);
+      return isNaN(d.getTime()) ? null : d;
+    }
+
+    function readDateTimeFromEvent(data, which) {
+      const dateKey = which === "start" ? "startDate" : "endDate";
+      const timeKey = which === "start" ? "startTime" : "endTime";
+
+      const dStr = typeof data[dateKey] === "string" ? data[dateKey] : "";
+      const tStr = typeof data[timeKey] === "string" ? data[timeKey] : "";
+
+      if (dStr) {
+        // If we already have strings, use them directly in inputs
+        return { dateStr: dStr, timeStr: tStr || "" };
+      }
+
+      // Legacy: if someone stored Timestamp in startDate/endDate
+      const maybeTs = data[dateKey];
+      if (maybeTs && typeof maybeTs.toDate === "function") {
+        const dt = maybeTs.toDate();
+        const { d, t } = dateToInputParts(dt);
+        return { dateStr: d, timeStr: t };
+      }
+
+      // Legacy: if only startDateTime/endDateTime exist as ISO strings
+      const legacyKey = which === "start" ? "startDateTime" : "endDateTime";
+      if (typeof data[legacyKey] === "string" && data[legacyKey]) {
+        const dt = new Date(data[legacyKey]);
+        if (!isNaN(dt.getTime())) {
+          const { d, t } = dateToInputParts(dt);
+          return { dateStr: d, timeStr: t };
+        }
+      }
+
+      return { dateStr: "", timeStr: "" };
+    }
+
+    if (!eventId) {
+      pageTitleEl.textContent = "Event Not Found";
+      eventIdTextEl.textContent = "";
+      setStatus("No event id was provided in the URL.", "#b91c1c");
+      backToEventBtn.disabled = true;
+    } else {
+      eventIdTextEl.textContent = "Event ID: " + eventId;
+    }
+
+    let currentUser = null;
+    let currentIsAdmin = false;
+
+    async function loadEvent() {
+      if (!eventDocRef) return;
+      try {
+        setStatus("Loading event...");
+        const snap = await getDoc(eventDocRef);
+
+        if (!snap.exists()) {
+          pageTitleEl.textContent = "Event Not Found";
+          setStatus("Event not found.", "#b91c1c");
+          return;
+        }
+
+        const data = snap.data();
+
+        editTitleInput.value = (data.title || "").trim();
+        editLocationInput.value = (data.location || "").trim();
+        editDescriptionInput.value = (data.description || data.summary || "").trim();
+        editSignupUrlInput.value = (data.signupUrl || "").trim();
+
+        pageTitleEl.textContent = "Edit Event: " + (data.title || "Untitled Event");
+
+        const startParts = readDateTimeFromEvent(data, "start");
+        startDateInput.value = startParts.dateStr;
+        startTimeInput.value = startParts.timeStr;
+
+        const endParts = readDateTimeFromEvent(data, "end");
+        endDateInput.value = endParts.dateStr;
+        endTimeInput.value = endParts.timeStr;
+
+        if (data.createdAt && typeof data.createdAt.toDate === "function") {
+          const created = data.createdAt.toDate();
+          const { d, t } = dateToInputParts(created);
+          createdDateInput.value = d;
+          createdTimeInput.value = t;
+        } else {
+          createdDateInput.value = "";
+          createdTimeInput.value = "";
+        }
+
+        setStatus("Ready.");
+      } catch (err) {
+        console.error(err);
+        setStatus("Error loading event: " + (err?.message || String(err)), "#b91c1c");
+      }
+    }
+
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
         window.location.href = "/";
         return;
       }
+
       currentUser = user;
       authInfoEl.textContent = "Signed in as " + (user.email || user.uid);
-
-      if (!eventDocRef) return;
 
       const infoRef = doc(db, "accountInfo", user.uid);
       const infoSnap = await getDoc(infoRef);
@@ -462,20 +535,24 @@ body.dark-theme .badge {
         return;
       }
 
-      const data = infoSnap.data();
-      const role = data.authRole;
+      const info = infoSnap.data();
+      const role = info.authRole;
 
       if (role === "admin") {
         currentIsAdmin = true;
         roleBadgeContainer.innerHTML = '<span class="badge admin">Admin</span>';
-        loadEvent();
-      } else if (role === "viewer") {
-        window.location.href = "/events/event?id=" + encodeURIComponent(eventId);
-        return;
-      } else {
-        window.location.href = "/under-review/";
+        if (eventDocRef) loadEvent();
         return;
       }
+
+      if (role === "viewer") {
+        // viewers shouldn't be able to edit; send to event page
+        if (eventId) window.location.href = "/events/event?id=" + encodeURIComponent(eventId);
+        else window.location.href = "/events";
+        return;
+      }
+
+      window.location.href = "/under-review/";
     });
 
     logoutBtn.addEventListener("click", async () => {
@@ -484,91 +561,17 @@ body.dark-theme .badge {
     });
 
     backToEventBtn.addEventListener("click", () => {
-      if (eventId) {
-        window.location.href = "/events/event?id=" + encodeURIComponent(eventId);
-      } else {
-        window.location.href = "/events";
-      }
+      if (eventId) window.location.href = "/events/event?id=" + encodeURIComponent(eventId);
+      else window.location.href = "/events";
     });
 
     backToEventsBtn.addEventListener("click", () => {
       window.location.href = "/events";
     });
 
-    function dateToInputParts(date) {
-      if (!date) return { d: "", t: "" };
-      const iso = date.toISOString(); // YYYY-MM-DDTHH:mm:ss.sssZ
-      const d = iso.slice(0, 10);
-      const t = iso.slice(11, 16); // HH:mm
-      return { d, t };
-    }
-
-    function combineDateTime(dateStr, timeStr) {
-      if (!dateStr || !timeStr) return null;
-      // Construct local date/time, then convert to Date
-      const iso = `${dateStr}T${timeStr}:00`;
-      const d = new Date(iso);
-      if (isNaN(d.getTime())) return null;
-      return d;
-    }
-
-    async function loadEvent() {
-      if (!eventDocRef) return;
-      try {
-        setStatus("Loading event...");
-        const snap = await getDoc(eventDocRef);
-        if (!snap.exists()) {
-          setStatus("Event not found.", "#b91c1c");
-          pageTitleEl.textContent = "Event Not Found";
-          return;
-        }
-        const data = snap.data();
-
-        const title = data.title || "";
-        const location = data.location || "";
-        const description = data.description || "";
-        const signupUrl = data.signupUrl || "";
-
-        editTitleInput.value = title;
-        editLocationInput.value = location;
-        editDescriptionInput.value = description;
-        editSignupUrlInput.value = signupUrl;
-
-        pageTitleEl.textContent = "Edit Event: " + (title || "Untitled Event");
-
-        // Start date/time (stored as Firestore Timestamp in startDate)
-        if (data.startDate && data.startDate.toDate) {
-          const s = data.startDate.toDate();
-          const { d, t } = dateToInputParts(s);
-          startDateInput.value = d;
-          startTimeInput.value = t;
-        }
-
-        // End date/time (stored as Firestore Timestamp in endDate)
-        if (data.endDate && data.endDate.toDate) {
-          const e = data.endDate.toDate();
-          const { d, t } = dateToInputParts(e);
-          endDateInput.value = d;
-          endTimeInput.value = t;
-        }
-
-        // Created at (stored as Firestore Timestamp in createdAt)
-        if (data.createdAt && data.createdAt.toDate) {
-          const c = data.createdAt.toDate();
-          const { d, t } = dateToInputParts(c);
-          createdDateInput.value = d;
-          createdTimeInput.value = t;
-        }
-
-        setStatus("Ready.");
-      } catch (err) {
-        console.error(err);
-        setStatus("Error loading event: " + err.message, "#b91c1c");
-      }
-    }
-
     editForm.addEventListener("submit", async (e) => {
       e.preventDefault();
+
       if (!currentIsAdmin) {
         setStatus("You are not allowed to edit this event.", "#b91c1c");
         return;
@@ -578,43 +581,57 @@ body.dark-theme .badge {
         return;
       }
 
-      const newTitle = editTitleInput.value.trim();
-      const newLocation = editLocationInput.value.trim();
-      const newDescription = editDescriptionInput.value.trim();
-      const newSignupUrl = editSignupUrlInput.value.trim();
+      const title = editTitleInput.value.trim();
+      const location = editLocationInput.value.trim();
+      const description = editDescriptionInput.value.trim();
+      const signupUrl = editSignupUrlInput.value.trim();
 
-      if (!newTitle) {
+      const sDate = startDateInput.value;
+      const sTime = startTimeInput.value;
+      const eDate = endDateInput.value;
+      const eTime = endTimeInput.value;
+
+      if (!title) {
         setStatus("Title is required.", "#b91c1c");
         return;
       }
+      if (!sDate) {
+        setStatus("Start Date is required.", "#b91c1c");
+        return;
+      }
+      if (!eDate) {
+        setStatus("End Date is required.", "#b91c1c");
+        return;
+      }
+
+      // For sorting + grouping consistency
+      const isoStart = `${sDate}T${(sTime || "00:00")}`;
+      const isoEnd = `${eDate}T${(eTime || "00:00")}`;
 
       const updates = {
-        title: newTitle,
-        location: newLocation,
-        description: newDescription,
-        signupUrl: newSignupUrl
+        title,
+        location,
+        signupUrl: signupUrl || "",
+        description,
+
+        // ✅ canonical string fields
+        startDate: sDate,
+        startTime: sTime || "",
+        endDate: eDate,
+        endTime: eTime || "",
+
+        // ✅ legacy/compat for sorting
+        startDateTime: isoStart,
+        endDateTime: isoEnd,
+
+        // keep summary mirrored if other pages read it
+        summary: description
       };
 
-      // Start date/time → startDate (Timestamp)
-      const sDate = startDateInput.value;
-      const sTime = startTimeInput.value;
-      const sCombined = combineDateTime(sDate, sTime);
-      if (sCombined) {
-        updates.startDate = Timestamp.fromDate(sCombined);
-      }
-
-      // End date/time → endDate (Timestamp)
-      const eDate = endDateInput.value;
-      const eTime = endTimeInput.value;
-      const eCombined = combineDateTime(eDate, eTime);
-      if (eCombined) {
-        updates.endDate = Timestamp.fromDate(eCombined);
-      }
-
-      // Created at override → createdAt (Timestamp)
+      // Created at override (optional; keep Timestamp here)
       const cDate = createdDateInput.value;
       const cTime = createdTimeInput.value;
-      const cCombined = combineDateTime(cDate, cTime);
+      const cCombined = combineLocalDateTime(cDate, cTime || "00:00");
       if (cCombined) {
         updates.createdAt = Timestamp.fromDate(cCombined);
       }
@@ -623,41 +640,12 @@ body.dark-theme .badge {
         setStatus("Saving changes...");
         await updateDoc(eventDocRef, updates);
         setStatus("Changes saved.", "#166534");
-        pageTitleEl.textContent = "Edit Event: " + newTitle;
+        pageTitleEl.textContent = "Edit Event: " + title;
       } catch (err) {
         console.error(err);
-        setStatus("Error saving changes: " + err.message, "#b91c1c");
+        setStatus("Error saving changes: " + (err?.message || String(err)), "#b91c1c");
       }
     });
   </script>
-  <script>
-  (function () {
-    const STORAGE_KEY = "troop248-theme";
-    const body = document.body;
-    const toggleBtn = document.getElementById("theme-toggle");
-
-    if (!toggleBtn) return;
-
-    function applyTheme(theme) {
-      const isDark = theme === "dark";
-      body.classList.toggle("dark-theme", isDark);
-      toggleBtn.textContent = isDark ? "🌙 Dark mode" : "🌞 Light mode";
-    }
-
-    const saved = localStorage.getItem(STORAGE_KEY);
-    const prefersDark = window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const initial = saved || (prefersDark ? "dark" : "light");
-
-    applyTheme(initial);
-    localStorage.setItem(STORAGE_KEY, initial);
-
-    toggleBtn.addEventListener("click", function () {
-      const newTheme = body.classList.contains("dark-theme") ? "light" : "dark";
-      applyTheme(newTheme);
-      localStorage.setItem(STORAGE_KEY, newTheme);
-    });
-  })();
-</script>
 </body>
 </html>
