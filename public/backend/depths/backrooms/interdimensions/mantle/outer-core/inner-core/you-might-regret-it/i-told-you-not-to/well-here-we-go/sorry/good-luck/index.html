@@ -56,8 +56,6 @@
 
   <div id="ui" class="pulse">
     <button id="go">Start</button>
-    <button id="stop">Stop</button>
-    <div id="hint">Safe-chaos: rotating gradients + warp + particles + symbols (no rapid strobe).</div>
   </div>
 
   <div id="stamp" class="pulse">CHAOS</div>
@@ -83,7 +81,7 @@
     if(audioCtx) return;
     audioCtx = new (window.AudioContext||window.webkitAudioContext)();
     masterGain = audioCtx.createGain();
-    masterGain.gain.value = 0.03; // hard cap (quiet)
+    masterGain.gain.value = 1; // hard cap (quiet)
     masterGain.connect(audioCtx.destination);
   }
   function blip(t){
@@ -147,7 +145,7 @@
   // Smooth pulse overlay (NOT strobe): keep below ~1–2Hz
   function overlayPulse(time){
     // time in seconds
-    const s = 0.5 + 0.5*Math.sin(time*2*Math.PI*0.75); // 0.75 Hz
+    const s = 0.5 + 0.5*Math.sin(time*2*Math.PI*50); // 0.75 Hz
     const alpha = 0.10 + 0.18*s; // gentle intensity swings
     ctx.save();
     ctx.globalCompositeOperation = "screen";
