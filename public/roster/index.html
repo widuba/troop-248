@@ -155,7 +155,7 @@
       width: min(520px, 100%);
       padding: 12px 14px;
       border-radius: 12px;
-      border: 1px solid rgba(0,0,0,.12);
+      border: 1px solid #000; /* ✅ black outline */
       outline: none;
       background: rgba(255,255,255,.85);
       font-size: 14px;
@@ -292,6 +292,13 @@
       background: rgba(148, 163, 184, 0.2);
       color: var(--text-muted);
       border: 1px solid rgba(148, 163, 184, 0.35);
+    }
+
+    /* ✅ streak chip */
+    .tag.streak{
+      background: rgba(178, 34, 34, 0.08);
+      color: #7f1d1d;
+      border: 1px solid rgba(178, 34, 34, 0.22);
     }
 
     .loading{
@@ -527,6 +534,11 @@
       detailWrap.style.display = isDetail ? "block" : "none";
     }
 
+    function toStreakCount(v){
+      const n = Number(v);
+      return Number.isFinite(n) && n > 0 ? Math.floor(n) : 0;
+    }
+
     function renderList(){
       const q = (searchInput.value || "").trim().toLowerCase();
       const type = typeFilter.value;
@@ -547,6 +559,8 @@
         const tagClass = acct === "leader" ? "tag admin" : (acct === "parent" ? "tag" : "tag gray");
         const acctLabel = acct ? (acct.charAt(0).toUpperCase() + acct.slice(1)) : "Unknown";
 
+        const streak = toStreakCount(u.streakCount);
+
         return `
           <div class="user-card" data-uid="${escapeHtml(u.uid)}" role="button" tabindex="0" aria-label="Open user">
             <div class="row">
@@ -554,9 +568,15 @@
                 <div style="font-weight: 900; font-size: 16px;">${escapeHtml(u.fullName || "Unnamed")}</div>
                 <div class="muted small">${escapeHtml(u.email || "")}</div>
               </div>
-              <div class="${tagClass}">${escapeHtml(acctLabel)}</div>
+
+              <div class="row" style="justify-content:flex-end; gap:8px;">
+                <div class="tag streak">🔥 ${streak}</div>
+                <div class="${tagClass}">${escapeHtml(acctLabel)}</div>
+              </div>
             </div>
+
             <div class="hr"></div>
+
             <div class="small muted">Phone: ${escapeHtml(u.phone || "—")}</div>
           </div>
         `;
@@ -572,7 +592,7 @@
           <div class="card error detail-card">
             <div style="font-weight:900; font-size:18px;">User not found</div>
             <div class="muted small" style="margin-top:6px;">
-              That link may be outdated. <a class="link" href="/users/">Back to Users</a>
+              That link may be outdated. <a class="link" href="/roster/">Back to Roster</a>
             </div>
           </div>
         `;
@@ -583,19 +603,23 @@
       const acctLabel = acct ? (acct.charAt(0).toUpperCase() + acct.slice(1)) : "Unknown";
       const pillClass = acct === "leader" ? "pill" : (acct === "parent" ? "pill" : "pill gray");
 
+      const streak = toStreakCount(u.streakCount);
+      const lastDay = (u.lastStreakDate || "").trim() || "—";
+
       detailWrap.innerHTML = `
         <div class="card detail-card">
           <div class="row" style="align-items:flex-start;">
             <div>
               <h1 class="detail-title">${escapeHtml(u.fullName || "Unnamed")}</h1>
               <p class="detail-sub">${escapeHtml(u.email || "")}</p>
-              <div style="margin-top:10px;">
+              <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
                 <span class="${pillClass}">${escapeHtml(acctLabel)}</span>
+                <span class="pill">🔥 Streak: ${streak}</span>
               </div>
             </div>
 
-            <a class="btn-soft" href="/users/">
-              ← Back to Users
+            <a class="btn-soft" href="/roster/">
+              ← Back to Roster
             </a>
           </div>
 
@@ -610,6 +634,16 @@
             <div class="detail-item">
               <p class="detail-label">Account Type</p>
               <p class="detail-value">${escapeHtml(acctLabel)}</p>
+            </div>
+
+            <div class="detail-item">
+              <p class="detail-label">Streak</p>
+              <p class="detail-value">🔥 ${streak} day(s)</p>
+            </div>
+
+            <div class="detail-item">
+              <p class="detail-label">Last Streak Day</p>
+              <p class="detail-value">${escapeHtml(lastDay)}</p>
             </div>
 
             <div class="detail-item full">
@@ -633,7 +667,10 @@
           fullName: data.fullName || "",
           email: data.email || "",
           phone: data.phone || "",
-          accountType: data.accountType || ""
+          accountType: data.accountType || "",
+          // ✅ streak fields
+          streakCount: data.streakCount ?? 0,
+          lastStreakDate: data.lastStreakDate ?? ""
         });
       });
     }
@@ -658,7 +695,7 @@
         const card = e.target.closest("[data-uid]");
         if (!card) return;
         const uid = card.getAttribute("data-uid");
-        window.location.href = `/users/?u=${encodeURIComponent(uid)}`;
+        window.location.href = `/roster/?u=${encodeURIComponent(uid)}`;
       });
 
       usersGrid.addEventListener("keydown", (e) => {
@@ -666,7 +703,7 @@
         const card = e.target.closest("[data-uid]");
         if (!card) return;
         const uid = card.getAttribute("data-uid");
-        window.location.href = `/users/?u=${encodeURIComponent(uid)}`;
+        window.location.href = `/roster/?u=${encodeURIComponent(uid)}`;
       });
     }
 
@@ -691,7 +728,6 @@
 
         const uidParam = getQueryParam("u");
         if (uidParam) {
-          // ✅ DETAIL MODE: hide list header + list entirely
           setMode("detail");
           renderDetail(uidParam);
         } else {
