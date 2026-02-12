@@ -49,6 +49,7 @@
       align-items: center;
       gap: 8px;
     }
+
     header h2::before { content: "★"; font-size: 18px; }
 
     .troop-home-link {
@@ -65,6 +66,7 @@
       font-size: 13px;
       text-transform: uppercase;
     }
+
     nav a {
       color: #1f4e79;
       font-weight: bold;
@@ -75,6 +77,7 @@
       backdrop-filter: blur(4px);
       opacity: 0.9;
     }
+
     nav a:hover { opacity: 1; background: rgba(255, 255, 255, 0.12); }
 
     #auth-bar {
@@ -83,6 +86,7 @@
       align-items: center;
       font-size: 13px;
     }
+
     #logout-btn {
       padding: 5px 12px;
       font-size: 13px;
@@ -92,6 +96,7 @@
       color: var(--white);
       cursor: pointer;
     }
+
     #logout-btn:hover { background: rgba(255, 255, 255, 0.2); }
 
     main {
@@ -103,8 +108,8 @@
     .welcome-card {
       background: rgba(255, 255, 255, 0.95);
       border-radius: var(--radius-lg);
-      padding: 18px 18px 10px;
-      margin-bottom: 18px;
+      padding: 18px 18px 8px;
+      margin-bottom: 20px;
       box-shadow: var(--shadow-soft);
       display: flex;
       align-items: center;
@@ -112,6 +117,7 @@
       gap: 16px;
       border: 1px solid rgba(148, 163, 184, 0.4);
     }
+
     .welcome-card h3 { margin: 0 0 4px; font-size: 18px; }
     .welcome-card p { margin: 0; font-size: 14px; color: var(--text-muted); }
 
@@ -124,6 +130,7 @@
       text-transform: uppercase;
       letter-spacing: 0.07em;
     }
+
     .badge.admin {
       background: rgba(240, 180, 41, 0.16);
       color: #92400e;
@@ -138,6 +145,7 @@
       box-shadow: var(--shadow-soft);
       border: 1px solid rgba(148, 163, 184, 0.4);
     }
+
     section h2 {
       margin-top: 0;
       font-size: 18px;
@@ -150,15 +158,17 @@
     .admin-only { display: none; }
 
     form {
-      margin-top: 10px;
+      margin-bottom: 10px;
       padding: 10px 10px 8px;
       background: #f9fafb;
       border-radius: 12px;
       border: 1px dashed rgba(148, 163, 184, 0.8);
     }
+
     form h3 { margin: 0 0 8px; font-size: 15px; color: var(--blue); }
 
     .field { margin-bottom: 8px; }
+
     .field label {
       display: block;
       font-size: 12px;
@@ -167,6 +177,7 @@
       text-transform: uppercase;
       letter-spacing: .05em;
     }
+
     .field input, .field textarea {
       width: 100%;
       padding: 6px 8px;
@@ -175,21 +186,16 @@
       background: #ffffff;
       font-size: 14px;
     }
-    .field textarea { resize: vertical; min-height: 70px; }
-    .field input:focus, .field textarea:focus {
-      outline: none;
-      border-color: var(--blue);
-      box-shadow: 0 0 0 2px rgba(31,78,121,.1);
-    }
+
+    .field textarea { resize: vertical; min-height: 60px; }
 
     .field-row {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
     }
-    @media (max-width: 640px) {
-      .field-row { grid-template-columns: minmax(0, 1fr); }
-    }
+
+    @media (max-width: 640px) { .field-row { grid-template-columns: minmax(0, 1fr); } }
 
     form button {
       padding: 6px 14px;
@@ -203,14 +209,22 @@
     }
     form button:hover { opacity: .96; }
 
+    .btn-secondary {
+      background: rgba(31,78,121,.08) !important;
+      color: var(--blue) !important;
+      border: 1px solid rgba(148,163,184,.7) !important;
+    }
+
     .small-help { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
 
+    /* Events list */
     .events-list {
       display: flex;
       flex-direction: column;
       gap: 10px;
-      margin-top: 8px;
+      margin-top: 4px;
     }
+
     .event-card {
       border-radius: 14px;
       padding: 12px 12px 10px;
@@ -218,14 +232,17 @@
       background: #f9fafb;
       box-shadow: 0 4px 12px rgba(0,0,0,.04);
       display: grid;
+      grid-template-columns: minmax(0, 1fr);
       gap: 6px;
     }
+
     .event-title-row {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
       gap: 10px;
     }
+
     .event-title { font-size: 15px; font-weight: 600; }
     .event-date { font-size: 13px; color: var(--text-muted); white-space: nowrap; }
     .event-meta { font-size: 13px; color: var(--text-muted); }
@@ -237,6 +254,7 @@
       gap: 6px;
       margin-top: 4px;
     }
+
     .btn-chip {
       display: inline-flex;
       align-items: center;
@@ -249,15 +267,14 @@
       text-decoration: none;
       font-weight: 500;
     }
-    .btn-view { background: var(--blue); color: var(--white); }
-    .btn-map {
-      background: rgba(31,78,121,.08);
-      color: var(--blue);
-      border: 1px solid rgba(148,163,184,.7);
-    }
-    .btn-view:hover, .btn-map:hover { opacity: .96; }
 
-    .empty-text { font-size: 14px; color: var(--text-muted); margin-top: 6px; }
+    .btn-view { background: var(--blue); color: var(--white); }
+    .btn-map { background: rgba(31,78,121,.08); color: var(--blue); border: 1px solid rgba(148,163,184,.7); }
+    .btn-signup { background: var(--red); color: var(--white); }
+
+    .btn-view:hover, .btn-map:hover, .btn-signup:hover { opacity: .96; }
+
+    .empty-text { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
 
     @media (max-width: 640px) {
       header { flex-direction: column; align-items: flex-start; gap: 8px; }
@@ -272,6 +289,7 @@
     <div>
       <a href="/home" class="troop-home-link"><h2>Troop 248</h2></a>
     </div>
+
     <nav>
       <a href="/home">Home</a>
       <a href="/calendar">Calendar</a>
@@ -282,6 +300,7 @@
       <a href="/events">Events</a>
       <a href="/mail">Mail</a>
     </nav>
+
     <div id="auth-bar">
       <div id="auth-info">Signed in as …</div>
       <button id="logout-btn">Log Out</button>
@@ -292,7 +311,7 @@
     <div class="welcome-card">
       <div>
         <h3>Troop Events</h3>
-        <p>View upcoming outings and important troop activities.</p>
+        <p>View troop campouts, trips, and special activities.</p>
       </div>
       <div id="role-badge-container"><span class="badge">Viewer</span></div>
     </div>
@@ -306,12 +325,6 @@
         <div class="field">
           <label for="event-title">Title</label>
           <input id="event-title" type="text" placeholder="Fall Camporee 2026" required />
-        </div>
-
-        <div class="field">
-          <label for="event-slug">Custom Slug (optional)</label>
-          <input id="event-slug" type="text" placeholder="fall-camporee-2026" />
-          <div class="small-help">Used as the document id. Letters/numbers/dashes only.</div>
         </div>
 
         <div class="field-row">
@@ -342,33 +355,37 @@
         </div>
 
         <div class="field">
-          <label for="event-summary">Description</label>
-          <textarea id="event-summary" placeholder="Short summary and any notes." required></textarea>
+          <label for="event-signup-url">Signup Link (optional)</label>
+          <input id="event-signup-url" type="url" placeholder="https://..." />
         </div>
 
         <div class="field">
-  <label for="event-signup-url">Signup Link (optional)</label>
-  <input id="event-signup-url" type="url" placeholder="https://..." />
-</div>
+          <label for="event-summary">Short Description</label>
+          <textarea id="event-summary" placeholder="Short summary of this outing, who it's for, and any quick notes." required></textarea>
+        </div>
 
-<h3 style="margin-top:10px;">Document Links (optional)</h3>
+        <h3 style="margin-top:10px;">Document Links (optional)</h3>
+        <div id="doc-links"></div>
+        <button type="button" id="add-doc-btn" class="btn-secondary">+ Add Document Link</button>
 
-<div id="doc-links"></div>
-
-<button type="button" id="add-doc-btn" style="margin-bottom:10px;">
-  + Add Document Link
-</button>
-
+        <div style="height:10px;"></div>
         <button type="submit">Create Event</button>
+
         <div id="event-error" class="small-help" style="color:#b91c1c;"></div>
         <div id="event-success" class="small-help" style="color:#166534;"></div>
+
+        <div class="small-help">
+          Event links will look like <code>/events/event?id=your-event-id</code>
+        </div>
       </form>
 
-      <div class="small-help admin-only">Admins can create events. Viewers can view events.</div>
+      <div class="small-help admin-only">
+        Only admins can create events. Viewers can view event details and documents.
+      </div>
     </section>
 
     <section>
-      <h2>All Events</h2>
+      <h2>Events</h2>
       <div id="events-list" class="events-list"></div>
       <div id="events-empty" class="empty-text">No events yet.</div>
     </section>
@@ -383,6 +400,7 @@
       getDoc,
       collection,
       setDoc,
+      addDoc,
       onSnapshot,
       query,
       orderBy,
@@ -409,32 +427,35 @@
     const adminOnlyEls = document.getElementsByClassName("admin-only");
 
     const eventForm = document.getElementById("event-form");
-    const titleEl = document.getElementById("event-title");
-    const slugEl = document.getElementById("event-slug");
-    const startDateEl = document.getElementById("event-start-date");
-    const startTimeEl = document.getElementById("event-start-time");
-    const endDateEl = document.getElementById("event-end-date");
-    const endTimeEl = document.getElementById("event-end-time");
-    const locEl = document.getElementById("event-location");
-    const sumEl = document.getElementById("event-summary");
-    const errEl = document.getElementById("event-error");
-    const okEl = document.getElementById("event-success");
+    const eventTitleInput = document.getElementById("event-title");
+    const eventStartDateInput = document.getElementById("event-start-date");
+    const eventStartTimeInput = document.getElementById("event-start-time");
+    const eventEndDateInput = document.getElementById("event-end-date");
+    const eventEndTimeInput = document.getElementById("event-end-time");
+    const eventLocationInput = document.getElementById("event-location");
+    const eventSignupUrlInput = document.getElementById("event-signup-url");
+    const eventSummaryInput = document.getElementById("event-summary");
+    const eventErrorEl = document.getElementById("event-error");
+    const eventSuccessEl = document.getElementById("event-success");
 
-    const listEl = document.getElementById("events-list");
-    const emptyEl = document.getElementById("events-empty");
+    const eventsListEl = document.getElementById("events-list");
+    const eventsEmptyEl = document.getElementById("events-empty");
+
+    const docLinksContainer = document.getElementById("doc-links");
+    const addDocBtn = document.getElementById("add-doc-btn");
 
     let currentUser = null;
     let currentIsAdmin = false;
 
     function slugify(text) {
-      return String(text || "")
+      return text
         .toLowerCase()
         .trim()
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/^-+|-+$/g, "");
     }
 
-    function setAdminUI() {
+    function showAdminStuff() {
       for (let i = 0; i < adminOnlyEls.length; i++) {
         adminOnlyEls[i].style.display = currentIsAdmin ? "block" : "none";
       }
@@ -445,6 +466,207 @@
             ${currentIsAdmin ? "Admin" : "Viewer"}
           </span>`;
       }
+    }
+
+    function createDocRow() {
+      const wrapper = document.createElement("div");
+      wrapper.className = "field-row";
+      wrapper.style.marginBottom = "6px";
+
+      wrapper.innerHTML = `
+        <div class="field">
+          <label>Document Name</label>
+          <input type="text" class="doc-name" placeholder="Packing List" />
+        </div>
+        <div class="field">
+          <label>Document URL</label>
+          <input type="url" class="doc-url" placeholder="https://..." />
+        </div>
+      `;
+
+      docLinksContainer.appendChild(wrapper);
+    }
+
+    addDocBtn.addEventListener("click", createDocRow);
+
+    function formatDateRange(ev) {
+      if (!ev.startDate) return "";
+      const start = new Date(ev.startDate + "T" + (ev.startTime || "00:00"));
+      const end = ev.endDate ? new Date(ev.endDate + "T" + (ev.endTime || "00:00")) : null;
+
+      const fmt = (d) => d.toLocaleString("en-US", { month:"short", day:"numeric", year:"numeric" });
+      const fmtTime = (d) => d.toLocaleTimeString("en-US", { hour:"2-digit", minute:"2-digit" });
+
+      if (!end) return `${fmt(start)} • ${fmtTime(start)}`;
+      const sameDay = start.toDateString() === end.toDateString();
+      if (sameDay) return `${fmt(start)} • ${fmtTime(start)} → ${fmtTime(end)}`;
+      return `${fmt(start)} • ${fmtTime(start)} → ${fmt(end)} • ${fmtTime(end)}`;
+    }
+
+    function createEventCard(docSnap) {
+      const data = docSnap.data();
+      const eventId = docSnap.id;
+
+      const title = data.title || "Untitled Event";
+      const location = (data.location || "").trim();
+      const desc = (data.description || "").trim();
+      const signupUrl = (data.signupUrl || "").trim();
+
+      const card = document.createElement("div");
+      card.className = "event-card";
+
+      const titleRow = document.createElement("div");
+      titleRow.className = "event-title-row";
+
+      const titleEl = document.createElement("div");
+      titleEl.className = "event-title";
+      titleEl.textContent = title;
+
+      const dateEl = document.createElement("div");
+      dateEl.className = "event-date";
+      dateEl.textContent = formatDateRange(data);
+
+      titleRow.appendChild(titleEl);
+      titleRow.appendChild(dateEl);
+      card.appendChild(titleRow);
+
+      if (location) {
+        const metaEl = document.createElement("div");
+        metaEl.className = "event-meta";
+        metaEl.textContent = `Location: ${location}`;
+        card.appendChild(metaEl);
+      }
+
+      if (desc) {
+        const summaryEl = document.createElement("div");
+        summaryEl.className = "event-summary";
+        summaryEl.textContent = desc;
+        card.appendChild(summaryEl);
+      }
+
+      const linksRow = document.createElement("div");
+      linksRow.className = "event-links-row";
+
+      const viewBtn = document.createElement("a");
+      viewBtn.href = `/events/event?id=${encodeURIComponent(eventId)}`;
+      viewBtn.className = "btn-chip btn-view";
+      viewBtn.textContent = "View Event";
+      linksRow.appendChild(viewBtn);
+
+      if (location) {
+        const mapBtn = document.createElement("a");
+        mapBtn.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(location);
+        mapBtn.target = "_blank";
+        mapBtn.rel = "noopener noreferrer";
+        mapBtn.className = "btn-chip btn-map";
+        mapBtn.textContent = "Open in Google Maps";
+        linksRow.appendChild(mapBtn);
+      }
+
+      if (signupUrl) {
+        const signupBtn = document.createElement("a");
+        signupBtn.href = signupUrl;
+        signupBtn.target = "_blank";
+        signupBtn.rel = "noopener noreferrer";
+        signupBtn.className = "btn-chip btn-signup";
+        signupBtn.textContent = "Signup Link";
+        linksRow.appendChild(signupBtn);
+      }
+
+      card.appendChild(linksRow);
+      return card;
+    }
+
+    function renderEvents(docs) {
+      eventsListEl.innerHTML = "";
+      if (!docs.length) {
+        eventsEmptyEl.style.display = "block";
+        return;
+      }
+      eventsEmptyEl.style.display = "none";
+      docs.forEach(d => eventsListEl.appendChild(createEventCard(d)));
+    }
+
+    async function createEvent(e) {
+      e.preventDefault();
+      eventErrorEl.textContent = "";
+      eventSuccessEl.textContent = "";
+
+      const title = eventTitleInput.value.trim();
+      const startDate = eventStartDateInput.value;
+      const startTime = eventStartTimeInput.value;
+      const endDate = eventEndDateInput.value;
+      const endTime = eventEndTimeInput.value;
+      const location = eventLocationInput.value.trim();
+      const signupUrl = eventSignupUrlInput.value.trim();
+      const description = eventSummaryInput.value.trim();
+
+      if (!title || !startDate || !startTime || !endDate || !endTime || !location || !description) {
+        eventErrorEl.textContent = "Please fill out all required fields.";
+        return;
+      }
+
+      try {
+        const baseId = slugify(title) || "event";
+        let eventId = baseId;
+
+        // Avoid overwrite if same ID exists
+        const existsSnap = await getDoc(doc(db, "troop-events", eventId));
+        if (existsSnap.exists()) {
+          const suffix = Math.random().toString(36).slice(2, 6);
+          eventId = `${baseId}-${suffix}`;
+        }
+
+        const isoStart = `${startDate}T${startTime}`;
+        const isoEnd = `${endDate}T${endTime}`;
+
+        await setDoc(doc(db, "troop-events", eventId), {
+          title,
+          location,
+          signupUrl: signupUrl || "",
+          description,
+
+          startDate,
+          startTime,
+          endDate,
+          endTime,
+
+          startDateTime: isoStart,
+          endDateTime: isoEnd,
+
+          createdAt: serverTimestamp(),
+          createdBy: currentUser ? currentUser.uid : null
+        });
+
+        // Save document links as subcollection
+        const names = document.querySelectorAll(".doc-name");
+        const urls = document.querySelectorAll(".doc-url");
+        for (let i = 0; i < names.length; i++) {
+          const n = names[i].value.trim();
+          const u = urls[i].value.trim();
+          if (!n || !u) continue;
+
+          await addDoc(collection(db, "troop-events", eventId, "documents"), {
+            title: n,
+            url: u,
+            createdAt: serverTimestamp()
+          });
+        }
+
+        eventSuccessEl.textContent = `Event created. Link: /events/event?id=${eventId}`;
+        eventForm.reset();
+        docLinksContainer.innerHTML = "";
+      } catch (err) {
+        console.error(err);
+        eventErrorEl.textContent = err?.message || "Error creating event.";
+      }
+    }
+
+    function pageInit() {
+      if (currentIsAdmin) eventForm.addEventListener("submit", createEvent);
+
+      const q = query(collection(db, "troop-events"), orderBy("startDateTime", "asc"));
+      onSnapshot(q, (snapshot) => renderEvents(snapshot.docs));
     }
 
     async function handleAuth(user) {
@@ -458,8 +680,8 @@
 
       currentUser = user;
       currentIsAdmin = role === "admin";
-      setAdminUI();
-      initPage();
+      showAdminStuff();
+      pageInit();
     }
 
     onAuthStateChanged(auth, handleAuth);
@@ -468,176 +690,6 @@
       await signOut(auth);
       window.location.href = "/";
     });
-
-    function formatRange(d) {
-      // stored: startDate/startTime/endDate/endTime as strings
-      const sd = d.startDate || "";
-      const st = d.startTime || "";
-      const ed = d.endDate || "";
-      const et = d.endTime || "";
-
-      if (!sd) return "";
-      const start = new Date(`${sd}T${st || "00:00"}`);
-      const end = ed ? new Date(`${ed}T${et || "00:00"}`) : null;
-
-      const fmtDate = (x) => x.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-      const fmtTime = (x) => x.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
-
-      if (!end || isNaN(end.getTime())) {
-        return `${fmtDate(start)}${st ? " • " + fmtTime(start) : ""}`;
-      }
-
-      const sameDay =
-        start.getFullYear() === end.getFullYear() &&
-        start.getMonth() === end.getMonth() &&
-        start.getDate() === end.getDate();
-
-      if (sameDay) {
-        return `${fmtDate(start)} • ${fmtTime(start)} → ${fmtTime(end)}`;
-      }
-      return `${fmtDate(start)}${st ? " • " + fmtTime(start) : ""} → ${fmtDate(end)}${et ? " • " + fmtTime(end) : ""}`;
-    }
-
-    function makeCard(id, d) {
-      const title = d.title || "Untitled Event";
-      const location = d.location || "";
-      const desc = (d.description || d.summary || "").trim();
-
-      const card = document.createElement("div");
-      card.className = "event-card";
-
-      const titleRow = document.createElement("div");
-      titleRow.className = "event-title-row";
-
-      const t = document.createElement("div");
-      t.className = "event-title";
-      t.textContent = title;
-
-      const dt = document.createElement("div");
-      dt.className = "event-date";
-      dt.textContent = formatRange(d);
-
-      titleRow.appendChild(t);
-      titleRow.appendChild(dt);
-      card.appendChild(titleRow);
-
-      if (location) {
-        const meta = document.createElement("div");
-        meta.className = "event-meta";
-        meta.textContent = `Location: ${location}`;
-        card.appendChild(meta);
-      }
-
-      if (desc) {
-        const p = document.createElement("div");
-        p.className = "event-summary";
-        p.textContent = desc;
-        card.appendChild(p);
-      }
-
-      const links = document.createElement("div");
-      links.className = "event-links-row";
-
-      // ✅ THIS is the key: ALWAYS go to the real static file + query param
-      const view = document.createElement("a");
-      view.className = "btn-chip btn-view";
-      view.href = `/events/event?id=${encodeURIComponent(id)}`;
-      view.textContent = "View Event";
-      links.appendChild(view);
-
-      if (location) {
-        const maps = document.createElement("a");
-        maps.className = "btn-chip btn-map";
-        maps.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(location);
-        maps.target = "_blank";
-        maps.rel = "noopener noreferrer";
-        maps.textContent = "Open in Google Maps";
-        links.appendChild(maps);
-      }
-
-      card.appendChild(links);
-      return card;
-    }
-
-    function initPage() {
-      // List
-      const q = query(collection(db, "troop-events"), orderBy("startDateTime", "asc"));
-      onSnapshot(q, (snap) => {
-        listEl.innerHTML = "";
-        if (snap.empty) {
-          emptyEl.style.display = "block";
-          return;
-        }
-        emptyEl.style.display = "none";
-        snap.forEach((docSnap) => {
-          listEl.appendChild(makeCard(docSnap.id, docSnap.data()));
-        });
-      });
-
-      // Create
-      if (currentIsAdmin) {
-        eventForm.addEventListener("submit", async (e) => {
-          e.preventDefault();
-          errEl.textContent = "";
-          okEl.textContent = "";
-
-          const title = titleEl.value.trim();
-          const customSlug = slugify(slugEl.value);
-          const startDate = startDateEl.value;
-          const startTime = startTimeEl.value;
-          const endDate = endDateEl.value;
-          const endTime = endTimeEl.value;
-          const location = locEl.value.trim();
-          const description = sumEl.value.trim();
-
-          if (!title || !startDate || !startTime || !endDate || !endTime || !location || !description) {
-            errEl.textContent = "Please fill out all required fields.";
-            return;
-          }
-
-          let base = customSlug || slugify(title) || "event";
-          let id = base;
-
-          // ensure unique id
-          const existing = await getDoc(doc(db, "troop-events", id));
-          if (existing.exists()) {
-            const suffix = Math.random().toString(36).slice(2, 6);
-            id = `${base}-${suffix}`;
-          }
-
-          const startDateTime = `${startDate}T${startTime}`;
-          const endDateTime = `${endDate}T${endTime}`;
-
-          await setDoc(doc(db, "troop-events", id), {
-            title,
-            location,
-            description,
-
-            startDate,
-            startTime,
-            endDate,
-            endTime,
-
-            startDateTime,
-            endDateTime,
-
-            createdAt: serverTimestamp(),
-            createdBy: currentUser.uid
-          });
-
-          okEl.textContent = `Event created. Link: /events/event?id=${id}`;
-
-          titleEl.value = "";
-          slugEl.value = "";
-          startDateEl.value = "";
-          startTimeEl.value = "";
-          endDateEl.value = "";
-          endTimeEl.value = "";
-          locEl.value = "";
-          sumEl.value = "";
-        });
-      }
-    }
   </script>
 </body>
 </html>
