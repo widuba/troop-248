@@ -354,6 +354,20 @@
       .streak-card { flex-direction: column; align-items: flex-start; }
       .streak-right { width: 100%; justify-content: flex-start; }
     }
+
+    .streak-flame-img{
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  object-fit: contain;
+  box-shadow: 0 10px 24px rgba(0,0,0,.14);
+  transform: rotate(-2deg);
+}
+
+/* keep your “boom” animation working */
+.streak-card.boom .streak-flame-img{
+  animation: flameWiggle 650ms ease;
+}
   </style>
 </head>
 <body>
@@ -401,7 +415,12 @@
       </div>
 
       <div class="streak-right">
-        <div class="streak-flame" aria-hidden="true"></div>
+        <img
+  class="streak-flame-img"
+  src="/streak-fire.webp"
+  alt=""
+  aria-hidden="true"
+/>
         <div class="streak-pill" id="streak-pill">Keep it going</div>
       </div>
     </div>
