@@ -243,6 +243,77 @@
       margin-top: 8px;
     }
 
+    /* ✅ Roster search bar (same vibe as Users page search) */
+    .roster-search {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .roster-search input[type="search"]{
+      width: min(520px, 100%);
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(0,0,0,.12);
+      outline: none;
+      background: rgba(255,255,255,.85);
+      font-size: 14px;
+    }
+
+    .roster-results {
+      margin-top: 10px;
+      display: none;
+      padding: 10px;
+      border-radius: 14px;
+      border: 1px dashed rgba(148,163,184,.8);
+      background: rgba(249,250,251,.85);
+    }
+
+    .roster-result-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(209,213,219,.9);
+      background: #ffffff;
+      box-shadow: 0 4px 12px rgba(0,0,0,.04);
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      margin-bottom: 10px;
+      transition: transform .1s ease, box-shadow .1s ease, border-color .1s ease;
+    }
+
+    .roster-result-item:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px rgba(0,0,0,.06);
+      border-color: rgba(148,163,184,.9);
+    }
+
+    .roster-result-item:last-child { margin-bottom: 0; }
+
+    .roster-result-title {
+      font-weight: 900;
+      font-size: 14px;
+      margin: 0;
+    }
+
+    .roster-result-sub {
+      margin: 2px 0 0;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .roster-empty {
+      font-size: 13px;
+      color: var(--text-muted);
+      padding: 6px 2px;
+    }
+
     @media (max-width: 640px) {
       header {
         flex-direction: column;
@@ -301,8 +372,17 @@
 
     <section>
       <h2>Troop Resources</h2>
-      <div class="grid">
-        <a href="/calendar" class="feature-card-link">
+
+      <!-- ✅ NEW: Roster search bar -->
+      <div class="roster-search">
+        <input id="rosterSearch" type="search" placeholder="Roster search… (try: calendar, patrols, mail)" autocomplete="off" />
+      </div>
+
+      <!-- ✅ NEW: Search results area -->
+      <div id="rosterResults" class="roster-results" aria-live="polite"></div>
+
+      <div class="grid" id="resourceGrid">
+        <a href="/calendar" class="feature-card-link" data-title="Troop Calendar" data-keywords="calendar schedule meetings campouts service board of review">
           <div class="feature-card">
             <div class="feature-badge">Schedule</div>
             <h3 class="feature-title">Troop Calendar</h3>
@@ -312,7 +392,7 @@
           </div>
         </a>
 
-        <a href="/documents" class="feature-card-link">
+        <a href="/documents" class="feature-card-link" data-title="Troop Documents" data-keywords="documents forms packing list medical forms paperwork">
           <div class="feature-card">
             <div class="feature-badge">Forms</div>
             <h3 class="feature-title">Troop Documents</h3>
@@ -322,7 +402,7 @@
           </div>
         </a>
 
-        <a href="/scoutmaster" class="feature-card-link">
+        <a href="/scoutmaster" class="feature-card-link" data-title="Scoutmaster Blog" data-keywords="scoutmaster blog leadership updates messages">
           <div class="feature-card">
             <div class="feature-badge">Leadership</div>
             <h3 class="feature-title">Scoutmaster Blog</h3>
@@ -332,7 +412,7 @@
           </div>
         </a>
 
-        <a href="/spl" class="feature-card-link">
+        <a href="/spl" class="feature-card-link" data-title="SPL Blog" data-keywords="spl blog youth led senior patrol leader plans goals">
           <div class="feature-card">
             <div class="feature-badge">Youth Led</div>
             <h3 class="feature-title">SPL Blog</h3>
@@ -342,7 +422,7 @@
           </div>
         </a>
 
-        <a href="/useful-links" class="feature-card-link">
+        <a href="/useful-links" class="feature-card-link" data-title="Useful Links" data-keywords="useful links resources advancement camping merit badges parent info">
           <div class="feature-card">
             <div class="feature-badge">Resources</div>
             <h3 class="feature-title">Useful Links</h3>
@@ -352,7 +432,7 @@
           </div>
         </a>
 
-        <a href="/events" class="feature-card-link">
+        <a href="/events" class="feature-card-link" data-title="Events" data-keywords="events campouts service projects prepare">
           <div class="feature-card">
             <div class="feature-badge">Campouts/Service</div>
             <h3 class="feature-title">Events</h3>
@@ -362,7 +442,7 @@
           </div>
         </a>
 
-        <a href="/mail" class="feature-card-link">
+        <a href="/mail" class="feature-card-link" data-title="Mail" data-keywords="mail contact email message reach out">
           <div class="feature-card">
             <div class="feature-badge">Contact</div>
             <h3 class="feature-title">Mail</h3>
@@ -372,7 +452,7 @@
           </div>
         </a>
 
-        <a href="/roster" class="feature-card-link">
+        <a href="/roster" class="feature-card-link" data-title="Roster" data-keywords="roster users contact info troop directory">
           <div class="feature-card">
             <div class="feature-badge">Roster</div>
             <h3 class="feature-title">Roster</h3>
@@ -382,7 +462,7 @@
           </div>
         </a>
 
-        <a href="/patrols" class="feature-card-link">
+        <a href="/patrols" class="feature-card-link" data-title="Patrols" data-keywords="patrols patrol assignments scouts">
           <div class="feature-card">
             <div class="feature-badge">Patrols</div>
             <h3 class="feature-title">Patrols</h3>
@@ -392,7 +472,7 @@
           </div>
         </a>
 
-        <a href="/report" class="feature-card-link">
+        <a href="/report" class="feature-card-link" data-title="Report" data-keywords="report problems suggestions feedback">
           <div class="feature-card">
             <div class="feature-badge">Report</div>
             <h3 class="feature-title">Report</h3>
@@ -402,7 +482,7 @@
           </div>
         </a>
 
-         <a href="/accountinfo" class="feature-card-link">
+        <a href="/accountinfo" class="feature-card-link" data-title="Account Info" data-keywords="account info profile edit personal">
           <div class="feature-card">
             <div class="feature-badge">Account</div>
             <h3 class="feature-title">Account Info</h3>
@@ -450,6 +530,11 @@
     const logoutBtn = document.getElementById("logout-btn");
     const roleBadgeContainer = document.getElementById("role-badge-container");
 
+    // ✅ NEW: roster search elements
+    const rosterSearchEl = document.getElementById("rosterSearch");
+    const rosterResultsEl = document.getElementById("rosterResults");
+    const resourceGridEl = document.getElementById("resourceGrid");
+
     let currentUser = null;
     let currentIsAdmin = false;
 
@@ -495,6 +580,80 @@
     logoutBtn.addEventListener("click", async () => {
       await signOut(auth);
       window.location.href = "/";
+    });
+
+    // ✅ NEW: Roster search logic (searches the main titles + keywords)
+    function escapeHtml(str) {
+      return String(str ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function buildRosterItems() {
+      const links = Array.from(resourceGridEl.querySelectorAll("a.feature-card-link"));
+      return links.map(a => {
+        const title = a.getAttribute("data-title") || a.querySelector(".feature-title")?.textContent?.trim() || "";
+        const keywords = a.getAttribute("data-keywords") || "";
+        const href = a.getAttribute("href") || "#";
+        const badge = a.querySelector(".feature-badge")?.textContent?.trim() || "";
+        const desc = a.querySelector(".feature-text")?.textContent?.trim() || "";
+        return {
+          title,
+          keywords,
+          href,
+          badge,
+          desc,
+          _haystack: (title + " " + keywords + " " + badge + " " + desc).toLowerCase()
+        };
+      });
+    }
+
+    const rosterItems = buildRosterItems();
+
+    function renderRosterResults(query) {
+      const q = (query || "").trim().toLowerCase();
+
+      if (!q) {
+        rosterResultsEl.style.display = "none";
+        rosterResultsEl.innerHTML = "";
+        return;
+      }
+
+      const matches = rosterItems
+        .filter(item => item._haystack.includes(q))
+        .slice(0, 8); // keep it tidy
+
+      rosterResultsEl.style.display = "block";
+
+      if (matches.length === 0) {
+        rosterResultsEl.innerHTML = `<div class="roster-empty">No matches for “${escapeHtml(query)}”.</div>`;
+        return;
+      }
+
+      rosterResultsEl.innerHTML = matches.map(item => `
+        <a class="roster-result-item" href="${escapeHtml(item.href)}">
+          <div>
+            <div class="roster-result-title">${escapeHtml(item.title)}</div>
+            <div class="roster-result-sub">${escapeHtml(item.desc || item.badge || "")}</div>
+          </div>
+          <div class="feature-badge" style="margin:0;">${escapeHtml(item.badge || "Open")}</div>
+        </a>
+      `).join("");
+    }
+
+    rosterSearchEl.addEventListener("input", (e) => {
+      renderRosterResults(e.target.value);
+    });
+
+    rosterSearchEl.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        rosterSearchEl.value = "";
+        renderRosterResults("");
+        rosterSearchEl.blur();
+      }
     });
   </script>
 </body>
