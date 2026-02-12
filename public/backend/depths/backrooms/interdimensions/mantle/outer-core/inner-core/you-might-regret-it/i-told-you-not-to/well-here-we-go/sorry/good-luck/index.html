@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>CHAOS MODE</title>
+<style>
+  html,body{margin:0;height:100%;overflow:hidden;background:#000;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+  canvas{position:fixed;inset:0;width:100%;height:100%}
+  #ui{
+    position:fixed;left:16px;top:16px;z-index:10;
+    display:flex;gap:10px;align-items:center;
+    padding:10px 12px;border-radius:999px;
+    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 18px 50px rgba(0,0,0,.45);
+  }
+  button{
+    border:0;border-radius:999px;padding:12px 16px;
+    font-weight:900;letter-spacing:.08em;text-transform:uppercase;
+    cursor:pointer;user-select:none;
+    box-shadow: 0 10px 24px rgba(0,0,0,.35);
+    transition: transform .08s ease;
+  }
+  button:active{transform:translateY(1px)}
+  #go{background:linear-gradient(90deg,#22c55e,#3b82f6,#f97316,#a855f7);color:#050510}
+  #stop{background:linear-gradient(90deg,#fff,#e5e7eb);color:#050510}
+  #hint{
+    color:rgba(255,255,255,.75);
+    font-size:12px;letter-spacing:.02em;white-space:nowrap;
+    max-width: 52vw;overflow:hidden;text-overflow:ellipsis;
+  }
+  /* glitch title stamp */
+  #stamp{
+    position:fixed;right:16px;top:16px;z-index:10;
+    padding:10px 12px;border-radius:14px;
+    background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.12);
+    backdrop-filter: blur(10px);
+    color:rgba(255,255,255,.85);
+    font-weight:900;letter-spacing:.18em;text-transform:uppercase;
+    mix-blend-mode: screen;
+    text-shadow: 0 0 18px rgba(255,255,255,.25);
+  }
+  /* “intense” but smooth pulse (NOT strobe) */
+  .pulse{
+    animation:pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{opacity:.75; transform: translateZ(0) scale(1)}
+    50%{opacity:1; transform: translateZ(0) scale(1.03)}
+  }
+</style>
+</head>
+<body>
+  <canvas id="c"></canvas>
+
+  <div id="ui" class="pulse">
+    <button id="go">Start</button>
+    <button id="stop">Stop</button>
+    <div id="hint">Safe-chaos: rotating gradients + warp + particles + symbols (no rapid strobe).</div>
+  </div>
+
+  <div id="stamp" class="pulse">CHAOS</div>
+
+<script>
+(() => {
+  const canvas = document.getElementById('c');
+  const ctx = canvas.getContext('2d', { alpha: false });
+
+  let w=0,h=0,dpr=1;
+  function resize(){
+    dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+    w = Math.floor(innerWidth * dpr);
+    h = Math.floor(innerHeight * dpr);
+    canvas.width = w; canvas.height = h;
+  }
+  addEventListener('resize', resize, {passive:true});
+  resize();
+
+  // ===== Audio (quiet hard-cap, no UI slider) =====
+  let audioCtx=null, masterGain=null;
+  function initAudio(){
+    if(audioCtx) return;
+    audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = 0.03; // hard cap (quiet)
+    masterGain.connect(audioCtx.destination);
+  }
+  function blip(t){
+    if(!audioCtx) return;
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    const f = 90 + Math.random()*1600;
+    o.type = ["sine","triangle","square","sawtooth"][Math.floor(Math.random()*4)];
+    o.frequency.setValueAtTime(f, t);
+    o.frequency.exponentialRampToValueAtTime(Math.max(60, f*0.45), t+0.08);
+    g.gain.setValueAtTime(0.0, t);
+    g.gain.linearRampToValueAtTime(0.22, t+0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, t+0.10);
+    o.connect(g); g.connect(masterGain);
+    o.start(t); o.stop(t+0.12);
+  }
+
+  // ===== Chaos state =====
+  let running=false;
+  let t0=performance.now();
+  let lastBlip=0;
+  let shake=0;
+  let hue=0;
+
+  const SYMBOLS = ["★","✦","☯","⚡","☢","♞","∞","§","∆","₪","⟁","⟡","⟟","⟐","⦿","✶","✧","❖","⟠","⧫","⟰","⟱","⊕","⊗","⦻","☼","☾","⛧"];
+
+  function rnd(a,b){ return a + Math.random()*(b-a); }
+  function pick(arr){ return arr[(Math.random()*arr.length)|0]; }
+
+  // Particles
+  const P = [];
+  function spawnBurst(n, x, y){
+    for(let i=0;i<n;i++){
+      P.push({
+        x,y,
+        vx: rnd(-6,6)*dpr,
+        vy: rnd(-6,6)*dpr,
+        r: rnd(2,10)*dpr,
+        life: rnd(0.6,1.6),
+        rot: rnd(0,Math.PI*2),
+        vr: rnd(-4,4),
+        sym: pick(SYMBOLS),
+        hue: (hue + rnd(-60,60))%360
+      });
+    }
+  }
+
+  // “Glitch ribbons”
+  const R = [];
+  function spawnRibbon(){
+    const y = rnd(0,h);
+    R.push({
+      y,
+      h: rnd(6,40)*dpr,
+      vx: rnd(10,60)*dpr,
+      life: rnd(0.4,1.1),
+      hue: (hue + rnd(-90,90))%360
+    });
+  }
+
+  // Smooth pulse overlay (NOT strobe): keep below ~1–2Hz
+  function overlayPulse(time){
+    // time in seconds
+    const s = 0.5 + 0.5*Math.sin(time*2*Math.PI*0.75); // 0.75 Hz
+    const alpha = 0.10 + 0.18*s; // gentle intensity swings
+    ctx.save();
+    ctx.globalCompositeOperation = "screen";
+    const g = ctx.createRadialGradient(w*0.5,h*0.5,0,w*0.5,h*0.5,Math.max(w,h)*0.7);
+    g.addColorStop(0, `hsla(${(hue+90)%360},100%,60%,${alpha})`);
+    g.addColorStop(0.55, `hsla(${(hue+210)%360},100%,55%,${alpha*0.7})`);
+    g.addColorStop(1, `hsla(${(hue+330)%360},100%,50%,0)`);
+    ctx.fillStyle = g;
+    ctx.fillRect(0,0,w,h);
+    ctx.restore();
+  }
+
+  function background(time){
+    // Rotating multi-gradient background drawn to canvas for maximum chaos
+    hue = (hue + 0.9) % 360;
+
+    ctx.save();
+
+    // camera shake
+    const sx = (Math.random()-0.5)*shake*dpr;
+    const sy = (Math.random()-0.5)*shake*dpr;
+    ctx.translate(sx, sy);
+
+    // rotate around center
+    ctx.translate(w/2, h/2);
+    ctx.rotate(time*0.25);
+    ctx.translate(-w/2, -h/2);
+
+    // base gradient
+    const g1 = ctx.createLinearGradient(0,0,w,h);
+    g1.addColorStop(0, `hsl(${hue},100%,50%)`);
+    g1.addColorStop(0.33, `hsl(${(hue+120)%360},100%,55%)`);
+    g1.addColorStop(0.66, `hsl(${(hue+240)%360},100%,52%)`);
+    g1.addColorStop(1, `hsl(${(hue+300)%360},100%,48%)`);
+    ctx.fillStyle = g1;
+    ctx.fillRect(0,0,w,h);
+
+    // neon checker overlay (warped)
+    ctx.globalAlpha = 0.25;
+    ctx.globalCompositeOperation = "overlay";
+    const cell = 60*dpr;
+    for(let y=0;y<h;y+=cell){
+      for(let x=0;x<w;x+=cell){
+        const s = Math.sin((x+y)*0.002 + time*2.2) * 0.5 + 0.5;
+        ctx.fillStyle = `hsla(${(hue + (x+y)*0.03)%360},100%,${45+20*s}%,0.55)`;
+        ctx.fillRect(x, y, cell, cell);
+      }
+    }
+
+    ctx.restore();
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = "source-over";
+
+    overlayPulse(time);
+  }
+
+  function drawRibbons(dt){
+    for(let i=R.length-1;i>=0;i--){
+      const r = R[i];
+      r.life -= dt;
+      r.y += Math.sin((r.y*0.01) + performance.now()*0.001)*1.5*dpr;
+
+      ctx.save();
+      ctx.globalCompositeOperation = "screen";
+      ctx.globalAlpha = Math.max(0, r.life);
+      const x = ((performance.now()*0.06*dpr) % (w + 200*dpr)) - 100*dpr;
+      const grad = ctx.createLinearGradient(x, r.y, x+220*dpr, r.y+r.h);
+      grad.addColorStop(0, `hsla(${r.hue},100%,60%,0)`);
+      grad.addColorStop(0.5, `hsla(${r.hue},100%,60%,0.9)`);
+      grad.addColorStop(1, `hsla(${(r.hue+80)%360},100%,60%,0)`);
+      ctx.fillStyle = grad;
+      ctx.fillRect(x, r.y, 220*dpr, r.h);
+      ctx.restore();
+
+      if(r.life <= 0) R.splice(i,1);
+    }
+  }
+
+  function drawParticles(dt){
+    for(let i=P.length-1;i>=0;i--){
+      const p = P[i];
+      p.life -= dt;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vx *= 0.97;
+      p.vy *= 0.97;
+      p.rot += p.vr*dt;
+
+      // wrap
+      if(p.x < -100*dpr) p.x = w+100*dpr;
+      if(p.x > w+100*dpr) p.x = -100*dpr;
+      if(p.y < -100*dpr) p.y = h+100*dpr;
+      if(p.y > h+100*dpr) p.y = -100*dpr;
+
+      const a = Math.max(0, Math.min(1, p.life));
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+
+      // glow blob
+      ctx.globalCompositeOperation = "screen";
+      ctx.globalAlpha = 0.9*a;
+      const rg = ctx.createRadialGradient(0,0,0,0,0,p.r*4);
+      rg.addColorStop(0, `hsla(${p.hue},100%,65%,0.9)`);
+      rg.addColorStop(1, `hsla(${(p.hue+40)%360},100%,55%,0)`);
+      ctx.fillStyle = rg;
+      ctx.beginPath();
+      ctx.arc(0,0,p.r*3,0,Math.PI*2);
+      ctx.fill();
+
+      // symbol
+      ctx.globalAlpha = 0.9*a;
+      ctx.fillStyle = `hsla(${(p.hue+120)%360},100%,70%,${0.9*a})`;
+      ctx.font = `${Math.max(14, p.r*3)}px system-ui, sans-serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(p.sym, 0, 0);
+
+      ctx.restore();
+
+      if(p.life <= 0) P.splice(i,1);
+    }
+  }
+
+  function glitchText(time){
+    // Floating text shards, no flashing—just motion + color
+    ctx.save();
+    ctx.globalCompositeOperation = "screen";
+    ctx.globalAlpha = 0.22;
+
+    const lines = 10;
+    for(let i=0;i<lines;i++){
+      const y = (h*(i/lines)) + Math.sin(time*1.6 + i)*24*dpr;
+      const x = (Math.sin(time*0.9 + i*1.7)*0.5 + 0.5) * (w-200*dpr) + 100*dpr;
+      const jitter = Math.sin(time*6 + i)*6*dpr;
+      ctx.fillStyle = `hsla(${(hue + i*28)%360},100%,60%,0.35)`;
+      ctx.font = `${(12 + (i%3)*6)*dpr}px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace`;
+      ctx.fillText(
+        `⟟ ${pick(SYMBOLS)} ${pick(SYMBOLS)} 0x${((Math.random()*1e8)|0).toString(16)} :: CHAOS`,
+        x + jitter,
+        y
+      );
+    }
+
+    ctx.restore();
+  }
+
+  function vignette(){
+    ctx.save();
+    ctx.globalCompositeOperation = "multiply";
+    const g = ctx.createRadialGradient(w/2,h/2, Math.min(w,h)*0.18, w/2,h/2, Math.max(w,h)*0.75);
+    g.addColorStop(0, "rgba(0,0,0,0)");
+    g.addColorStop(1, "rgba(0,0,0,0.55)");
+    ctx.fillStyle = g;
+    ctx.fillRect(0,0,w,h);
+    ctx.restore();
+  }
+
+  function frame(now){
+    if(!running) return;
+
+    const time = (now - t0) / 1000;
+    const dt = Math.min(0.05, (now - (frame.last||now)) / 1000);
+    frame.last = now;
+
+    // intensity ramps smoothly (not flashing)
+    const intensity = 0.35 + 0.65*(0.5 + 0.5*Math.sin(time*0.6));
+    shake = 2 + 10*intensity;
+
+    background(time);
+
+    // spawn bursts frequently for “overload”
+    if(Math.random() < 0.35) spawnBurst(10 + (Math.random()*30|0), rnd(0,w), rnd(0,h));
+    if(Math.random() < 0.18) spawnRibbon();
+
+    drawRibbons(dt);
+    drawParticles(dt);
+    glitchText(time);
+
+    // “lens bloom” pass
+    ctx.save();
+    ctx.globalCompositeOperation = "screen";
+    ctx.globalAlpha = 0.10 + 0.10*intensity;
+    ctx.filter = "blur(10px)";
+    ctx.drawImage(canvas, 0, 0);
+    ctx.restore();
+    ctx.filter = "none";
+
+    vignette();
+
+    // quiet audio blips at a controlled rate
+    if(audioCtx && (now - lastBlip) > 90){
+      lastBlip = now;
+      blip(audioCtx.currentTime);
+    }
+
+    requestAnimationFrame(frame);
+  }
+
+  function start(){
+    initAudio();
+    audioCtx.resume().catch(()=>{});
+    running = true;
+    t0 = performance.now();
+    frame.last = 0;
+    requestAnimationFrame(frame);
+  }
+
+  function stop(){
+    running = false;
+    // reset visuals
+    document.body.style.transform = "";
+    ctx.setTransform(1,0,0,1,0,0);
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0,0,w,h);
+    P.length = 0;
+    R.length = 0;
+  }
+
+  document.getElementById('go').addEventListener('click', start);
+  document.getElementById('stop').addEventListener('click', stop);
+
+  // start with a calm frame
+  stop();
+})();
+</script>
+</body>
+</html>
