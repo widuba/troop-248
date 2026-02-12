@@ -346,6 +346,19 @@
           <textarea id="event-summary" placeholder="Short summary and any notes." required></textarea>
         </div>
 
+        <div class="field">
+  <label for="event-signup-url">Signup Link (optional)</label>
+  <input id="event-signup-url" type="url" placeholder="https://..." />
+</div>
+
+<h3 style="margin-top:10px;">Document Links (optional)</h3>
+
+<div id="doc-links"></div>
+
+<button type="button" id="add-doc-btn" style="margin-bottom:10px;">
+  + Add Document Link
+</button>
+
         <button type="submit">Create Event</button>
         <div id="event-error" class="small-help" style="color:#b91c1c;"></div>
         <div id="event-success" class="small-help" style="color:#166534;"></div>
