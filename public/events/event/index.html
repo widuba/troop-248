@@ -17,7 +17,9 @@
       --radius-pill: 999px;
       --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
     }
+
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -25,6 +27,7 @@
       color: var(--text-main);
       min-height: 100vh;
     }
+
     header {
       background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
       color: var(--white);
@@ -36,6 +39,7 @@
       top: 0;
       z-index: 10;
     }
+
     header h2 {
       margin: 0;
       font-size: 19px;
@@ -45,10 +49,24 @@
       align-items: center;
       gap: 8px;
     }
+
     header h2::before { content: "★"; font-size: 18px; }
-    .troop-home-link { text-decoration: none; color: inherit; display: inline-flex; align-items: center; }
+
+    .troop-home-link {
+      text-decoration: none;
+      color: inherit;
+      display: inline-flex;
+      align-items: center;
+    }
     .troop-home-link:hover h2 { opacity: 0.9; text-decoration: underline; }
-    nav { display: flex; gap: 12px; font-size: 13px; text-transform: uppercase; }
+
+    nav {
+      display: flex;
+      gap: 12px;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
     nav a {
       color: #1f4e79;
       font-weight: bold;
@@ -59,8 +77,16 @@
       backdrop-filter: blur(4px);
       opacity: 0.9;
     }
+
     nav a:hover { opacity: 1; background: rgba(255, 255, 255, 0.12); }
-    #auth-bar { display: flex; gap: 10px; align-items: center; font-size: 13px; }
+
+    #auth-bar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      font-size: 13px;
+    }
+
     #logout-btn {
       padding: 5px 12px;
       font-size: 13px;
@@ -70,15 +96,24 @@
       color: var(--white);
       cursor: pointer;
     }
+
     #logout-btn:hover { background: rgba(255, 255, 255, 0.2); }
 
-    main { padding: 24px 16px 40px; max-width: 960px; margin: 0 auto; }
+    main {
+      padding: 24px 16px 40px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
 
-    .breadcrumb { font-size: 13px; margin-bottom: 8px; color: var(--text-muted); }
+    .breadcrumb {
+      font-size: 13px;
+      margin-bottom: 8px;
+      color: var(--text-muted);
+    }
     .breadcrumb a { color: var(--blue); text-decoration: none; }
     .breadcrumb a:hover { text-decoration: underline; }
 
-    .card {
+    .event-header-card, section {
       background: rgba(255, 255, 255, 0.95);
       border-radius: var(--radius-lg);
       padding: 18px 18px 12px;
@@ -87,11 +122,18 @@
       border: 1px solid rgba(148, 163, 184, 0.4);
     }
 
-    .event-title-row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 6px; }
-    #event-title { font-size: 20px; font-weight: 600; margin: 0; }
-    #event-date { font-size: 13px; color: var(--text-muted); white-space: nowrap; }
+    .event-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    #event-title { font-size: 20px; font-weight: 700; margin: 0; }
+    #event-date-range { font-size: 13px; color: var(--text-muted); white-space: nowrap; }
     #event-location { font-size: 14px; color: var(--text-muted); margin-bottom: 4px; }
-    #event-desc { font-size: 14px; margin: 0; }
+    #event-summary { font-size: 14px; color: var(--text-main); margin: 0; }
 
     .badge {
       font-size: 11px;
@@ -108,14 +150,6 @@
       border: 1px solid rgba(245, 158, 11, 0.6);
     }
 
-    section {
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: var(--radius-lg);
-      padding: 18px 18px 14px;
-      margin-bottom: 18px;
-      box-shadow: var(--shadow-soft);
-      border: 1px solid rgba(148, 163, 184, 0.4);
-    }
     section h2 {
       margin-top: 0;
       font-size: 18px;
@@ -125,7 +159,7 @@
     }
     section h2::before { content: "▸"; font-size: 14px; color: var(--blue); }
 
-    .btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
     .btn-chip {
       display: inline-flex;
       align-items: center;
@@ -136,34 +170,79 @@
       border: none;
       cursor: pointer;
       text-decoration: none;
-      font-weight: 500;
+      font-weight: 600;
     }
     .btn-primary { background: var(--blue); color: var(--white); }
-    .btn-danger { background: var(--red); color: var(--white); }
     .btn-outlined { background: rgba(31,78,121,.08); color: var(--blue); border: 1px solid rgba(148,163,184,.7); }
-    .btn-chip:hover { opacity: .96; }
+    .btn-danger { background: var(--red); color: var(--white); }
 
-    .item-list { list-style: none; padding-left: 0; margin: 6px 0 0; }
+    .admin-only { display: none; }
+
+    form {
+      margin-bottom: 10px;
+      padding: 10px 10px 8px;
+      background: #f9fafb;
+      border-radius: 12px;
+      border: 1px dashed rgba(148, 163, 184, 0.8);
+    }
+    form h3 { margin: 0 0 8px; font-size: 15px; color: var(--blue); }
+
+    .field { margin-bottom: 8px; }
+    .field label {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 3px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    .field input, .field textarea {
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      background: #ffffff;
+      font-size: 14px;
+    }
+    .field textarea { resize: vertical; min-height: 70px; }
+
+    .small-help { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+    .empty-text { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
+
+    .item-list { list-style: none; padding-left: 0; margin: 6px 0 0; font-size: 14px; }
     .item { padding: 10px 0; border-bottom: 1px solid rgba(229,231,235,.9); }
     .item:last-child { border-bottom: none; }
-    .item-title { font-weight: 600; }
-    .item-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-    .item-link { color: var(--blue); text-decoration: none; }
-    .item-link:hover { text-decoration: underline; }
+    .item-title { font-weight: 800; }
+    .item-meta { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
 
-    .empty-text { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
+    .small-btn {
+      font-size: 11px;
+      padding: 2px 10px;
+      margin-top: 8px;
+      border-radius: var(--radius-pill);
+      border: none;
+      cursor: pointer;
+      background: var(--red);
+      color: var(--white);
+      font-weight: 700;
+    }
+    .small-btn:hover { opacity: .95; }
 
     @media (max-width: 640px) {
       header { flex-direction: column; align-items: flex-start; gap: 8px; }
       nav { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
       .event-title-row { flex-direction: column; align-items: flex-start; }
-      #event-date { white-space: normal; }
     }
   </style>
 </head>
+
 <body>
   <header>
-    <div><a href="/home" class="troop-home-link"><h2>Troop 248</h2></a></div>
+    <div>
+      <a href="/home" class="troop-home-link">
+        <h2>Troop 248</h2>
+      </a>
+    </div>
 
     <nav>
       <a href="/home">Home</a>
@@ -183,39 +262,70 @@
   </header>
 
   <main>
-    <div class="breadcrumb"><a href="/events">← Back to Events</a></div>
+    <div class="breadcrumb">
+      <a href="/events">← Back to Events</a>
+    </div>
 
-    <div class="card">
+    <div class="event-header-card">
       <div class="event-title-row">
-        <h1 id="event-title">Loading…</h1>
-        <div id="event-date"></div>
+        <h1 id="event-title">Loading event…</h1>
+        <div id="event-date-range"></div>
       </div>
       <div id="event-location"></div>
-      <p id="event-desc"></p>
+      <p id="event-summary"></p>
 
-      <div style="margin-top:10px; display:flex; align-items:center; justify-content:space-between; gap:10px;">
-        <div id="role-badge-container"><span class="badge">Viewer</span></div>
-        <div class="btn-row" id="top-btns"></div>
+      <div style="margin-top:10px;" id="role-badge-container">
+        <span class="badge">Viewer</span>
       </div>
 
-      <div id="not-found" class="item-meta" style="color:#b91c1c; display:none; margin-top:8px;">
-        Event not found (missing or invalid id in URL).
+      <div id="event-not-found" class="small-help" style="color:#b91c1c; display:none;">
+        Event not found. Please check the link.
       </div>
     </div>
 
     <section>
       <h2>Quick Links</h2>
-      <div class="btn-row">
-        <a id="maps-btn" class="btn-chip btn-outlined" target="_blank" rel="noopener noreferrer" style="display:none;">Open in Google Maps</a>
-        <a id="signup-btn" class="btn-chip btn-primary" target="_blank" rel="noopener noreferrer" style="display:none;">Event Signup</a>
+      <div class="btn-row" id="details-btn-row">
+        <a id="maps-btn" href="#" target="_blank" rel="noopener noreferrer"
+           class="btn-chip btn-outlined" style="display:none;">
+          Open in Google Maps
+        </a>
+        <a id="signup-btn" href="#" target="_blank" rel="noopener noreferrer"
+           class="btn-chip btn-primary" style="display:none;">
+          Event Signup
+        </a>
+        <a id="edit-btn" href="#" class="btn-chip btn-danger admin-only" style="display:none;">
+          Edit This Event
+        </a>
       </div>
-      <div id="signup-missing" class="empty-text" style="display:none;">No signup link has been added.</div>
+      <div id="signup-missing" class="small-help" style="display:none;">
+        No signup link has been added for this event yet.
+      </div>
     </section>
 
     <section>
-      <h2>Documents</h2>
-      <ul id="docs-list" class="item-list"></ul>
-      <div id="docs-empty" class="empty-text">No documents yet.</div>
+      <h2>Event Updates</h2>
+
+      <form id="update-form" class="admin-only">
+        <h3>Post Update</h3>
+
+        <div class="field">
+          <label for="update-title">Title (optional)</label>
+          <input id="update-title" type="text" placeholder="Reminder / schedule change / etc." />
+        </div>
+
+        <div class="field">
+          <label for="update-body">Message</label>
+          <textarea id="update-body" required placeholder="Write the update..."></textarea>
+        </div>
+
+        <button type="submit" class="btn-chip btn-primary">Post Update</button>
+        <div id="update-error" class="small-help" style="color:#b91c1c;"></div>
+        <div id="update-success" class="small-help" style="color:#166534;"></div>
+      </form>
+
+      <ul id="updates-list" class="item-list"></ul>
+      <div id="updates-empty" class="empty-text">No updates posted yet.</div>
     </section>
   </main>
 
@@ -227,9 +337,12 @@
       doc,
       getDoc,
       collection,
+      addDoc,
+      deleteDoc,
       onSnapshot,
       query,
-      orderBy
+      orderBy,
+      serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -242,158 +355,259 @@
       measurementId: "G-NY75GX5TBH"
     };
 
+    const EVENT_COLLECTION = "troop-events";
+
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
     const authInfoEl = document.getElementById("auth-info");
     const logoutBtn = document.getElementById("logout-btn");
-    const roleBadgeContainer = document.getElementById("role-badge-container");
 
-    const titleEl = document.getElementById("event-title");
-    const dateEl = document.getElementById("event-date");
-    const locEl = document.getElementById("event-location");
-    const descEl = document.getElementById("event-desc");
-    const notFoundEl = document.getElementById("not-found");
+    const roleBadgeContainer = document.getElementById("role-badge-container");
+    const adminOnlyEls = document.getElementsByClassName("admin-only");
+
+    const eventTitleEl = document.getElementById("event-title");
+    const eventDateRangeEl = document.getElementById("event-date-range");
+    const eventLocationEl = document.getElementById("event-location");
+    const eventSummaryEl = document.getElementById("event-summary");
+    const eventNotFoundEl = document.getElementById("event-not-found");
 
     const mapsBtn = document.getElementById("maps-btn");
     const signupBtn = document.getElementById("signup-btn");
-    const signupMissing = document.getElementById("signup-missing");
+    const signupMissingEl = document.getElementById("signup-missing");
+    const editBtn = document.getElementById("edit-btn");
 
-    const docsList = document.getElementById("docs-list");
-    const docsEmpty = document.getElementById("docs-empty");
+    const updateForm = document.getElementById("update-form");
+    const updateTitleInput = document.getElementById("update-title");
+    const updateBodyInput = document.getElementById("update-body");
+    const updateErrorEl = document.getElementById("update-error");
+    const updateSuccessEl = document.getElementById("update-success");
 
-    const topBtns = document.getElementById("top-btns");
+    const updatesList = document.getElementById("updates-list");
+    const updatesEmptyEl = document.getElementById("updates-empty");
 
-    const sp = new URLSearchParams(window.location.search);
-    const eventId = (sp.get("id") || "").trim();
+    const params = new URLSearchParams(window.location.search);
+    const eventId = (params.get("id") || "").trim();
 
     let currentUser = null;
     let currentIsAdmin = false;
 
-    function formatDateRange(ev) {
-      if (!ev.startDate) return "";
-      const start = new Date(ev.startDate + "T" + (ev.startTime || "00:00"));
-      const end = ev.endDate ? new Date(ev.endDate + "T" + (ev.endTime || "00:00")) : null;
-
-      const fmt = (d) => d.toLocaleString("en-US", { month:"short", day:"numeric", year:"numeric" });
-      const fmtTime = (d) => d.toLocaleTimeString("en-US", { hour:"2-digit", minute:"2-digit" });
-
-      if (!end) return `${fmt(start)} • ${fmtTime(start)}`;
-      const sameDay = start.toDateString() === end.toDateString();
-      if (sameDay) return `${fmt(start)} • ${fmtTime(start)} → ${fmtTime(end)}`;
-      return `${fmt(start)} • ${fmtTime(start)} → ${fmt(end)} • ${fmtTime(end)}`;
-    }
-
-    function updateHeaderUI() {
-      authInfoEl.textContent = `Signed in as ${currentUser.email}`;
+    function setAdminUI() {
+      for (let i = 0; i < adminOnlyEls.length; i++) {
+        adminOnlyEls[i].style.display = currentIsAdmin ? "block" : "none";
+      }
       roleBadgeContainer.innerHTML = `
         <span class="badge ${currentIsAdmin ? "admin" : ""}">
           ${currentIsAdmin ? "Admin" : "Viewer"}
-        </span>`;
-    }
+        </span>
+      `;
 
-    function renderDocs(docs) {
-      docsList.innerHTML = "";
-      if (!docs.length) {
-        docsEmpty.style.display = "block";
-        return;
+      if (currentIsAdmin) {
+        editBtn.style.display = "inline-flex";
+        editBtn.href = "/events-edit?id=" + encodeURIComponent(eventId);
+      } else {
+        editBtn.style.display = "none";
       }
-      docsEmpty.style.display = "none";
-
-      docs.forEach((snap) => {
-        const d = snap.data();
-        const li = document.createElement("li");
-        li.className = "item";
-        li.innerHTML = `
-          <div class="item-title">${d.title || "Document"}</div>
-          <div class="item-meta">
-            <a class="item-link" href="${d.url || "#"}" target="_blank" rel="noopener noreferrer">
-              ${d.url || ""}
-            </a>
-          </div>
-        `;
-        docsList.appendChild(li);
-      });
     }
 
-    async function loadEvent() {
+    function setNotFound() {
+      eventTitleEl.textContent = "Event not found";
+      eventDateRangeEl.textContent = "";
+      eventLocationEl.textContent = "";
+      eventSummaryEl.textContent = "";
+      eventNotFoundEl.style.display = "block";
+      mapsBtn.style.display = "none";
+      signupBtn.style.display = "none";
+      signupMissingEl.style.display = "none";
+    }
+
+    function formatDateRange(data) {
+      // supports your string fields startDate/startTime + endDate/endTime, or fallback to startDateTime/endDateTime
+      if (data.startDate) {
+        const start = new Date(data.startDate + "T" + (data.startTime || "00:00"));
+        const end = data.endDate
+          ? new Date(data.endDate + "T" + (data.endTime || "00:00"))
+          : null;
+
+        const startText = start.toLocaleString("en-US", { month:"short", day:"numeric", year:"numeric" }) +
+          (data.startTime ? (" • " + data.startTime) : "");
+        if (!end) return startText;
+
+        const endText = end.toLocaleString("en-US", { month:"short", day:"numeric", year:"numeric" }) +
+          (data.endTime ? (" • " + data.endTime) : "");
+
+        if (data.startDate === data.endDate) return startText;
+        return startText + " → " + endText;
+      }
+
+      if (data.startDateTime) {
+        const s = new Date(data.startDateTime);
+        const e = data.endDateTime ? new Date(data.endDateTime) : null;
+        const fmt = (d) => d.toLocaleString("en-US", {
+          month:"short", day:"numeric", year:"numeric", hour:"2-digit", minute:"2-digit"
+        });
+        if (!e) return fmt(s);
+        return fmt(s) + " → " + fmt(e);
+      }
+
+      return "";
+    }
+
+    async function loadEventMain() {
       if (!eventId) {
-        notFoundEl.style.display = "block";
-        titleEl.textContent = "Event not found";
-        return;
+        setNotFound();
+        return false;
       }
 
-      const snap = await getDoc(doc(db, "troop-events", eventId));
+      const ref = doc(db, EVENT_COLLECTION, eventId);
+      const snap = await getDoc(ref);
+
       if (!snap.exists()) {
-        notFoundEl.style.display = "block";
-        titleEl.textContent = "Event not found";
-        return;
+        setNotFound();
+        return false;
       }
 
-      notFoundEl.style.display = "none";
+      eventNotFoundEl.style.display = "none";
+      const data = snap.data() || {};
 
-      const data = snap.data();
-      titleEl.textContent = data.title || "Event";
-      dateEl.textContent = formatDateRange(data);
+      eventTitleEl.textContent = data.title || "Event";
+      eventDateRangeEl.textContent = formatDateRange(data);
 
-      const location = (data.location || "").trim();
-      locEl.textContent = location ? ("Location: " + location) : "";
+      const loc = (data.location || "").trim();
+      const signup = (data.signupUrl || "").trim();
+      const desc = (data.description || data.summary || "").trim();
 
-      const desc = (data.description || "").trim();
-      descEl.textContent = desc;
+      eventLocationEl.textContent = loc ? ("Location: " + loc) : "";
+      eventSummaryEl.textContent = desc;
 
-      // Maps
-      if (location) {
-        mapsBtn.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(location);
+      if (loc) {
+        mapsBtn.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(loc);
         mapsBtn.style.display = "inline-flex";
       } else {
         mapsBtn.style.display = "none";
       }
 
-      // Signup
-      const signupUrl = (data.signupUrl || "").trim();
-      if (signupUrl) {
-        signupBtn.href = signupUrl;
+      if (signup) {
+        signupBtn.href = signup;
         signupBtn.style.display = "inline-flex";
-        signupMissing.style.display = "none";
+        signupMissingEl.style.display = "none";
       } else {
         signupBtn.style.display = "none";
-        signupMissing.style.display = "block";
+        signupMissingEl.style.display = "block";
       }
 
-      // Admin button (optional, just convenient)
-      topBtns.innerHTML = "";
-      if (currentIsAdmin) {
-        const a = document.createElement("a");
-        a.className = "btn-chip btn-danger";
-        a.textContent = "Edit Event";
-        a.href = `/events-edit?id=${encodeURIComponent(eventId)}`;
-        topBtns.appendChild(a);
-      }
-
-      // Documents subcollection
-      const docsQ = query(collection(db, "troop-events", eventId, "documents"), orderBy("createdAt", "asc"));
-      onSnapshot(docsQ, (s) => renderDocs(s.docs), () => renderDocs([]));
+      return true;
     }
 
-    async function handleAuth(user) {
-      if (!user) { window.location.href = "/"; return; }
+    function renderUpdates(docs) {
+      updatesList.innerHTML = "";
+      if (!docs.length) {
+        updatesEmptyEl.style.display = "block";
+        return;
+      }
+      updatesEmptyEl.style.display = "none";
 
-      const infoSnap = await getDoc(doc(db, "accountInfo", user.uid));
-      if (!infoSnap.exists()) { window.location.href = "/under-review/"; return; }
+      docs.forEach((snap) => {
+        const d = snap.data() || {};
+        const li = document.createElement("li");
+        li.className = "item";
 
-      const role = infoSnap.data().authRole;
-      if (role !== "admin" && role !== "viewer") { window.location.href = "/under-review/"; return; }
+        const title = (d.title || "").trim();
+        const body = (d.body || "").trim();
+        const when = d.createdAt && typeof d.createdAt.toDate === "function"
+          ? d.createdAt.toDate().toLocaleString()
+          : "";
+
+        li.innerHTML = `
+          <div class="item-title">${title || "Update"}</div>
+          ${when ? `<div class="item-meta">${when}</div>` : ``}
+          <div style="margin-top:6px;">${body.replace(/\n/g, "<br>")}</div>
+        `;
+
+        if (currentIsAdmin) {
+          const del = document.createElement("button");
+          del.type = "button";
+          del.className = "small-btn";
+          del.textContent = "Delete";
+          del.onclick = async () => {
+            if (!confirm("Delete this update?")) return;
+            await deleteDoc(doc(db, EVENT_COLLECTION, eventId, "updates", snap.id));
+          };
+          li.appendChild(del);
+        }
+
+        updatesList.appendChild(li);
+      });
+    }
+
+    function initUpdatesRealtime() {
+      const qy = query(
+        collection(db, EVENT_COLLECTION, eventId, "updates"),
+        orderBy("createdAt", "desc")
+      );
+
+      onSnapshot(qy, (snap) => {
+        renderUpdates(snap.docs);
+      });
+
+      if (!currentIsAdmin) return;
+
+      updateForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        updateErrorEl.textContent = "";
+        updateSuccessEl.textContent = "";
+
+        const title = updateTitleInput.value.trim();
+        const body = updateBodyInput.value.trim();
+        if (!body) {
+          updateErrorEl.textContent = "Please write a message.";
+          return;
+        }
+
+        try {
+          await addDoc(collection(db, EVENT_COLLECTION, eventId, "updates"), {
+            title,
+            body,
+            createdAt: serverTimestamp(),
+            createdBy: currentUser ? currentUser.uid : null
+          });
+
+          updateTitleInput.value = "";
+          updateBodyInput.value = "";
+          updateSuccessEl.textContent = "Update posted.";
+        } catch (err) {
+          console.error(err);
+          updateErrorEl.textContent = err?.message || "Error posting update.";
+        }
+      });
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "/";
+        return;
+      }
 
       currentUser = user;
+      authInfoEl.textContent = "Signed in as " + (user.email || user.uid);
+
+      // role
+      const infoSnap = await getDoc(doc(db, "accountInfo", user.uid));
+      const role = (infoSnap.exists() ? (infoSnap.data()?.authRole || "") : "").toLowerCase().trim();
+      if (role !== "admin" && role !== "viewer") {
+        window.location.href = "/under-review/";
+        return;
+      }
+
       currentIsAdmin = role === "admin";
-      updateHeaderUI();
+      setAdminUI();
 
-      await loadEvent();
-    }
+      const ok = await loadEventMain();
+      if (!ok) return;
 
-    onAuthStateChanged(auth, handleAuth);
+      initUpdatesRealtime();
+    });
 
     logoutBtn.addEventListener("click", async () => {
       await signOut(auth);
