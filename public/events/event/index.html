@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Events — Troop 248</title>
+  <title>Event — Troop 248</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" type="image/png" href="/bsafavicon.ico">
   <style>
@@ -17,9 +17,7 @@
       --radius-pill: 999px;
       --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
     }
-
     * { box-sizing: border-box; }
-
     body {
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -27,7 +25,6 @@
       color: var(--text-main);
       min-height: 100vh;
     }
-
     header {
       background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
       color: var(--white);
@@ -39,7 +36,6 @@
       top: 0;
       z-index: 10;
     }
-
     header h2 {
       margin: 0;
       font-size: 19px;
@@ -49,27 +45,10 @@
       align-items: center;
       gap: 8px;
     }
-
     header h2::before { content: "★"; font-size: 18px; }
-
-    .troop-home-link {
-      text-decoration: none;
-      color: inherit;
-      display: inline-flex;
-      align-items: center;
-    }
-    .troop-home-link:hover h2 {
-      opacity: 0.9;
-      text-decoration: underline;
-    }
-
-    nav {
-      display: flex;
-      gap: 12px;
-      font-size: 13px;
-      text-transform: uppercase;
-    }
-
+    .troop-home-link { text-decoration: none; color: inherit; display: inline-flex; align-items: center; }
+    .troop-home-link:hover h2 { opacity: 0.9; text-decoration: underline; }
+    nav { display: flex; gap: 12px; font-size: 13px; text-transform: uppercase; }
     nav a {
       color: #1f4e79;
       font-weight: bold;
@@ -80,18 +59,8 @@
       backdrop-filter: blur(4px);
       opacity: 0.9;
     }
-    nav a:hover {
-      opacity: 1;
-      background: rgba(255, 255, 255, 0.12);
-    }
-
-    #auth-bar {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      font-size: 13px;
-    }
-
+    nav a:hover { opacity: 1; background: rgba(255, 255, 255, 0.12); }
+    #auth-bar { display: flex; gap: 10px; align-items: center; font-size: 13px; }
     #logout-btn {
       padding: 5px 12px;
       font-size: 13px;
@@ -103,27 +72,32 @@
     }
     #logout-btn:hover { background: rgba(255, 255, 255, 0.2); }
 
-    main {
-      padding: 24px 16px 40px;
-      max-width: 960px;
-      margin: 0 auto;
-    }
+    main { padding: 24px 16px 40px; max-width: 960px; margin: 0 auto; }
 
-    .welcome-card {
+    .card {
       background: rgba(255, 255, 255, 0.95);
       border-radius: var(--radius-lg);
-      padding: 18px 18px 8px;
-      margin-bottom: 20px;
+      padding: 18px 18px 12px;
+      margin-bottom: 18px;
       box-shadow: var(--shadow-soft);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
       border: 1px solid rgba(148, 163, 184, 0.4);
     }
 
-    .welcome-card h3 { margin: 0 0 4px; font-size: 18px; }
-    .welcome-card p { margin: 0; font-size: 14px; color: var(--text-muted); }
+    .breadcrumb { font-size: 13px; margin-bottom: 10px; color: var(--text-muted); }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+    #event-title { font-size: 20px; font-weight: 600; margin: 0; }
+    #event-when { font-size: 13px; color: var(--text-muted); white-space: nowrap; }
+    #event-location { font-size: 14px; color: var(--text-muted); margin-top: 2px; }
+    #event-desc { font-size: 14px; margin: 10px 0 0; }
 
     .badge {
       font-size: 11px;
@@ -140,156 +114,35 @@
       border: 1px solid rgba(245, 158, 11, 0.6);
     }
 
-    section {
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: var(--radius-lg);
-      padding: 18px 18px 14px;
-      margin-bottom: 18px;
-      box-shadow: var(--shadow-soft);
-      border: 1px solid rgba(148, 163, 184, 0.4);
-    }
-    section h2 {
-      margin-top: 0;
-      font-size: 18px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    section h2::before { content: "▸"; font-size: 14px; color: var(--blue); }
-
-    .admin-only { display: none; }
-
-    form {
-      margin-top: 10px;
-      padding: 10px 10px 8px;
-      background: #f9fafb;
-      border-radius: 12px;
-      border: 1px dashed rgba(148, 163, 184, 0.8);
-    }
-
-    form h3 { margin: 0 0 8px; font-size: 15px; color: var(--blue); }
-
-    .field { margin-bottom: 8px; }
-    .field label {
-      display: block;
-      font-size: 12px;
-      margin-bottom: 3px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: .05em;
-    }
-
-    .field input, .field textarea {
-      width: 100%;
-      padding: 6px 8px;
-      border-radius: 10px;
-      border: 1px solid #d1d5db;
-      background: #ffffff;
-      font-size: 14px;
-    }
-
-    .field textarea { resize: vertical; min-height: 60px; }
-
-    .field-row {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-    }
-    @media (max-width: 640px) {
-      .field-row { grid-template-columns: minmax(0, 1fr); }
-    }
-
-    form button {
-      padding: 6px 14px;
-      font-size: 13px;
-      border-radius: var(--radius-pill);
-      border: none;
-      cursor: pointer;
-      font-weight: 500;
-      background: var(--blue);
-      color: var(--white);
-    }
-    form button:hover { opacity: .96; }
-
-    .small-help { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
-
-    .events-group { margin-top: 8px; margin-bottom: 12px; }
-    .events-group-title { margin: 4px 0 6px; font-size: 15px; font-weight: 600; }
-    .empty-text { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
-
-    .events-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 4px;
-    }
-
-    .event-card {
-      border-radius: 14px;
-      padding: 12px 12px 10px;
-      border: 1px solid rgba(209,213,219,.9);
-      background: #f9fafb;
-      box-shadow: 0 4px 12px rgba(0,0,0,.04);
-      display: grid;
-      gap: 6px;
-    }
-
-    .event-title-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 10px;
-    }
-
-    .event-title { font-size: 15px; font-weight: 600; }
-    .event-date { font-size: 13px; color: var(--text-muted); white-space: nowrap; }
-    .event-meta { font-size: 13px; color: var(--text-muted); }
-    .event-summary { font-size: 13px; color: var(--text-main); }
-
-    .event-links-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 4px;
-    }
-
-    .btn-chip {
+    .btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 4px 10px;
-      font-size: 12px;
+      padding: 6px 12px;
+      font-size: 13px;
       border-radius: var(--radius-pill);
       border: none;
       cursor: pointer;
       text-decoration: none;
       font-weight: 500;
     }
+    .btn-primary { background: var(--blue); color: var(--white); }
+    .btn-outline { background: rgba(31,78,121,.08); color: var(--blue); border: 1px solid rgba(148,163,184,.7); }
+    .btn:hover { opacity: .96; }
 
-    .btn-view { background: var(--blue); color: var(--white); }
-    .btn-map {
-      background: rgba(31,78,121,.08);
-      color: var(--blue);
-      border: 1px solid rgba(148,163,184,.7);
-    }
-    .btn-edit { background: var(--red); color: var(--white); }
-
-    .btn-view:hover, .btn-map:hover, .btn-edit:hover { opacity: .96; }
+    .small-help { font-size: 12px; color: var(--text-muted); margin-top: 8px; }
 
     @media (max-width: 640px) {
       header { flex-direction: column; align-items: flex-start; gap: 8px; }
       nav { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
-      .welcome-card { flex-direction: column; align-items: flex-start; }
-      .event-title-row { flex-direction: column; align-items: flex-start; }
+      .row { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
 <body>
   <header>
-    <div>
-      <a href="/home" class="troop-home-link"><h2>Troop 248</h2></a>
-    </div>
-
+    <div><a href="/home" class="troop-home-link"><h2>Troop 248</h2></a></div>
     <nav>
       <a href="/home">Home</a>
       <a href="/calendar">Calendar</a>
@@ -300,7 +153,6 @@
       <a href="/events">Events</a>
       <a href="/mail">Mail</a>
     </nav>
-
     <div id="auth-bar">
       <div id="auth-info">Signed in as …</div>
       <button id="logout-btn">Log Out</button>
@@ -308,106 +160,34 @@
   </header>
 
   <main>
-    <div class="welcome-card">
-      <div>
-        <h3>Troop Events</h3>
-        <p>View troop campouts, trips, and special activities.</p>
+    <div class="breadcrumb"><a href="/events">← Back to Events</a></div>
+
+    <div class="card">
+      <div class="row">
+        <h1 id="event-title">Loading…</h1>
+        <div id="event-when"></div>
       </div>
-      <div id="role-badge-container"><span class="badge">Viewer</span></div>
+
+      <div id="event-location"></div>
+      <p id="event-desc"></p>
+
+      <div style="margin-top:10px; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
+        <div class="btn-row">
+          <a id="maps-btn" class="btn btn-outline" target="_blank" rel="noopener noreferrer" style="display:none;">Open in Google Maps</a>
+        </div>
+        <div id="role-badge-container"><span class="badge">Viewer</span></div>
+      </div>
+
+      <div id="not-found" class="small-help" style="color:#b91c1c; display:none;">
+        Event not found. Check the link.
+      </div>
     </div>
-
-    <section class="admin-only" id="create-section">
-      <h2>Create Event</h2>
-
-      <form id="event-form">
-        <h3>New Troop Event</h3>
-
-        <div class="field">
-          <label for="event-title">Title</label>
-          <input id="event-title" type="text" placeholder="Fall Camporee" required />
-        </div>
-
-        <div class="field-row">
-          <div class="field">
-            <label for="event-start-date">Start Date</label>
-            <input id="event-start-date" type="date" required />
-          </div>
-          <div class="field">
-            <label for="event-start-time">Start Time</label>
-            <input id="event-start-time" type="time" required />
-          </div>
-        </div>
-
-        <div class="field-row">
-          <div class="field">
-            <label for="event-end-date">End Date</label>
-            <input id="event-end-date" type="date" required />
-          </div>
-          <div class="field">
-            <label for="event-end-time">End Time</label>
-            <input id="event-end-time" type="time" required />
-          </div>
-        </div>
-
-        <div class="field">
-          <label for="event-location">Location</label>
-          <input id="event-location" type="text" placeholder="Camp XYZ, City, State" required />
-        </div>
-
-        <div class="field">
-          <label for="event-signup-url">Signup Link (optional)</label>
-          <input id="event-signup-url" type="url" placeholder="https://..." />
-        </div>
-
-        <div class="field">
-          <label for="event-summary">Short Description</label>
-          <textarea id="event-summary" placeholder="Quick summary and notes." required></textarea>
-        </div>
-
-        <button type="submit">Create Event</button>
-        <div id="event-error" class="small-help" style="color:#b91c1c;"></div>
-        <div id="event-success" class="small-help" style="color:#166534;"></div>
-        <div class="small-help">
-          New events use the collection <code>troop-events</code> and show at <code>/events/event?id=...</code>.
-        </div>
-      </form>
-    </section>
-
-    <section>
-      <h2>Events</h2>
-
-      <div class="events-group">
-        <h3 class="events-group-title">Happening Now</h3>
-        <div id="events-current" class="events-list"></div>
-        <div id="events-current-empty" class="empty-text">No events are currently happening.</div>
-      </div>
-
-      <div class="events-group">
-        <h3 class="events-group-title">Upcoming Events</h3>
-        <div id="events-upcoming" class="events-list"></div>
-        <div id="events-upcoming-empty" class="empty-text">No upcoming events.</div>
-      </div>
-
-      <div class="events-group">
-        <h3 class="events-group-title">Past Events</h3>
-        <div id="events-past" class="events-list"></div>
-        <div id="events-past-empty" class="empty-text">No past events yet.</div>
-      </div>
-    </section>
   </main>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import {
-      getFirestore,
-      doc,
-      getDoc,
-      collection,
-      setDoc,
-      onSnapshot,
-      serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
@@ -419,8 +199,6 @@
       measurementId: "G-NY75GX5TBH"
     };
 
-    const COLLECTION = "troop-events";
-
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
@@ -429,124 +207,102 @@
     const logoutBtn = document.getElementById("logout-btn");
     const roleBadgeContainer = document.getElementById("role-badge-container");
 
-    const createSection = document.getElementById("create-section");
-    const eventForm = document.getElementById("event-form");
-    const eventTitleInput = document.getElementById("event-title");
-    const eventStartDateInput = document.getElementById("event-start-date");
-    const eventStartTimeInput = document.getElementById("event-start-time");
-    const eventEndDateInput = document.getElementById("event-end-date");
-    const eventEndTimeInput = document.getElementById("event-end-time");
-    const eventLocationInput = document.getElementById("event-location");
-    const eventSignupUrlInput = document.getElementById("event-signup-url");
-    const eventSummaryInput = document.getElementById("event-summary");
-    const eventErrorEl = document.getElementById("event-error");
-    const eventSuccessEl = document.getElementById("event-success");
-
-    const eventsCurrent = document.getElementById("events-current");
-    const eventsUpcoming = document.getElementById("events-upcoming");
-    const eventsPast = document.getElementById("events-past");
-
-    const eventsCurrentEmpty = document.getElementById("events-current-empty");
-    const eventsUpcomingEmpty = document.getElementById("events-upcoming-empty");
-    const eventsPastEmpty = document.getElementById("events-past-empty");
+    const titleEl = document.getElementById("event-title");
+    const whenEl = document.getElementById("event-when");
+    const locEl = document.getElementById("event-location");
+    const descEl = document.getElementById("event-desc");
+    const notFoundEl = document.getElementById("not-found");
+    const mapsBtn = document.getElementById("maps-btn");
 
     let currentUser = null;
     let currentIsAdmin = false;
 
-    function slugify(text) {
-      return text
-        .toLowerCase()
-        .trim()
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "");
+    function getId() {
+      const sp = new URLSearchParams(window.location.search);
+      return (sp.get("id") || "").trim();
     }
 
-    function parseEventDateTime(ev, which) {
-      const dateKey = which === "start" ? "startDate" : "endDate";
-      const timeKey = which === "start" ? "startTime" : "endTime";
-
-      const d = (ev[dateKey] || "").toString().trim();
-      const t = (ev[timeKey] || "").toString().trim();
-
-      if (d) {
-        const iso = `${d}T${t || "00:00"}`;
-        const dt = new Date(iso);
-        if (!isNaN(dt.getTime())) return dt;
-      }
-
-      const legacy = which === "start" ? ev.startDateTime : ev.endDateTime;
-      if (legacy) {
-        const dt = new Date(legacy);
-        if (!isNaN(dt.getTime())) return dt;
-      }
-
-      return null;
+    function setBadge() {
+      roleBadgeContainer.innerHTML = `
+        <span class="badge ${currentIsAdmin ? "admin" : ""}">
+          ${currentIsAdmin ? "Admin" : "Viewer"}
+        </span>`;
     }
 
-    function formatDateRange(ev) {
-      const start = parseEventDateTime(ev, "start");
-      const end = parseEventDateTime(ev, "end");
+    function formatRange(d) {
+      const sd = d.startDate || "";
+      const st = d.startTime || "";
+      const ed = d.endDate || "";
+      const et = d.endTime || "";
 
-      if (!start && !end) return "";
-      const fmt = (d) =>
-        d.toLocaleString("en-US", { month: "short", day: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit" });
+      if (!sd) return "";
 
-      if (start && !end) return fmt(start);
-      if (!start && end) return fmt(end);
+      const start = new Date(`${sd}T${st || "00:00"}`);
+      const end = ed ? new Date(`${ed}T${et || "00:00"}`) : null;
+
+      const fmtDate = (x) => x.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+      const fmtTime = (x) => x.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+
+      if (!end || isNaN(end.getTime())) return `${fmtDate(start)}${st ? " • " + fmtTime(start) : ""}`;
 
       const sameDay =
         start.getFullYear() === end.getFullYear() &&
         start.getMonth() === end.getMonth() &&
         start.getDate() === end.getDate();
 
-      if (sameDay) {
-        const datePart = start.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-        const startTime = start.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
-        const endTime = end.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
-        return `${datePart} • ${startTime} → ${endTime}`;
-      }
+      if (sameDay) return `${fmtDate(start)} • ${fmtTime(start)} → ${fmtTime(end)}`;
 
-      return `${fmt(start)} → ${fmt(end)}`;
+      return `${fmtDate(start)}${st ? " • " + fmtTime(start) : ""} → ${fmtDate(end)}${et ? " • " + fmtTime(end) : ""}`;
     }
 
-    function updateAuthUI() {
-      if (!currentUser) return;
+    async function loadEvent(eventId) {
+      notFoundEl.style.display = "none";
+      mapsBtn.style.display = "none";
 
-      authInfoEl.textContent = `Signed in as ${currentUser.email || currentUser.uid}`;
-      roleBadgeContainer.innerHTML = `
-        <span class="badge ${currentIsAdmin ? "admin" : ""}">
-          ${currentIsAdmin ? "Admin" : "Viewer"}
-        </span>
-      `;
+      if (!eventId) {
+        titleEl.textContent = "Event not found";
+        notFoundEl.style.display = "block";
+        return;
+      }
 
-      createSection.style.display = currentIsAdmin ? "block" : "none";
+      const snap = await getDoc(doc(db, "troop-events", eventId));
+      if (!snap.exists()) {
+        titleEl.textContent = "Event not found";
+        notFoundEl.style.display = "block";
+        return;
+      }
+
+      const d = snap.data();
+      titleEl.textContent = d.title || "Event";
+      whenEl.textContent = formatRange(d);
+
+      const location = (d.location || "").trim();
+      locEl.textContent = location ? ("Location: " + location) : "";
+
+      const desc = (d.description || d.summary || "").trim();
+      descEl.textContent = desc;
+
+      if (location) {
+        mapsBtn.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(location);
+        mapsBtn.style.display = "inline-flex";
+      }
     }
 
     async function handleAuth(user) {
-      if (!user) {
-        window.location.href = "/";
-        return;
-      }
+      if (!user) { window.location.href = "/"; return; }
 
-      const infoRef = doc(db, "accountInfo", user.uid);
-      const infoSnap = await getDoc(infoRef);
-
-      if (!infoSnap.exists()) {
-        window.location.href = "/under-review/";
-        return;
-      }
+      const infoSnap = await getDoc(doc(db, "accountInfo", user.uid));
+      if (!infoSnap.exists()) { window.location.href = "/under-review/"; return; }
 
       const role = infoSnap.data().authRole;
-      if (role !== "admin" && role !== "viewer") {
-        window.location.href = "/under-review/";
-        return;
-      }
+      if (role !== "admin" && role !== "viewer") { window.location.href = "/under-review/"; return; }
 
       currentUser = user;
       currentIsAdmin = role === "admin";
-      updateAuthUI();
-      initEventsLive();
-      if (currentIsAdmin) initCreateForm();
+      authInfoEl.textContent = `Signed in as ${user.email}`;
+      setBadge();
+
+      await loadEvent(getId());
     }
 
     onAuthStateChanged(auth, handleAuth);
@@ -555,214 +311,6 @@
       await signOut(auth);
       window.location.href = "/";
     });
-
-    function createEventCard(docSnap) {
-      const data = docSnap.data();
-      const eventId = docSnap.id;
-
-      const title = data.title || "Untitled Event";
-      const location = (data.location || "").trim();
-      const summary = (data.summary || data.description || "").trim();
-      const dateText = formatDateRange(data);
-
-      const card = document.createElement("div");
-      card.className = "event-card";
-
-      const titleRow = document.createElement("div");
-      titleRow.className = "event-title-row";
-
-      const titleEl = document.createElement("div");
-      titleEl.className = "event-title";
-      titleEl.textContent = title;
-
-      const dateEl = document.createElement("div");
-      dateEl.className = "event-date";
-      dateEl.textContent = dateText;
-
-      titleRow.appendChild(titleEl);
-      titleRow.appendChild(dateEl);
-      card.appendChild(titleRow);
-
-      if (location) {
-        const metaEl = document.createElement("div");
-        metaEl.className = "event-meta";
-        metaEl.textContent = `Location: ${location}`;
-        card.appendChild(metaEl);
-      }
-
-      if (summary) {
-        const summaryEl = document.createElement("div");
-        summaryEl.className = "event-summary";
-        summaryEl.textContent = summary;
-        card.appendChild(summaryEl);
-      }
-
-      const linksRow = document.createElement("div");
-      linksRow.className = "event-links-row";
-
-      const viewBtn = document.createElement("a");
-      viewBtn.href = `/events/event?id=${encodeURIComponent(eventId)}`;
-      viewBtn.className = "btn-chip btn-view";
-      viewBtn.textContent = "View Event";
-      linksRow.appendChild(viewBtn);
-
-      if (location) {
-        const mapsUrl = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(location);
-        const mapBtn = document.createElement("a");
-        mapBtn.href = mapsUrl;
-        mapBtn.target = "_blank";
-        mapBtn.rel = "noopener noreferrer";
-        mapBtn.className = "btn-chip btn-map";
-        mapBtn.textContent = "Open in Google Maps";
-        linksRow.appendChild(mapBtn);
-      }
-
-      if (currentIsAdmin) {
-        const editBtn = document.createElement("a");
-        editBtn.href = `/events-edit?id=${encodeURIComponent(eventId)}`;
-        editBtn.className = "btn-chip btn-edit";
-        editBtn.textContent = "Edit";
-        linksRow.appendChild(editBtn);
-      }
-
-      card.appendChild(linksRow);
-      return card;
-    }
-
-    function renderEvents(sortedDocs) {
-      eventsCurrent.innerHTML = "";
-      eventsUpcoming.innerHTML = "";
-      eventsPast.innerHTML = "";
-
-      const now = new Date();
-
-      const currentDocs = [];
-      const upcomingDocs = [];
-      const pastDocs = [];
-
-      sortedDocs.forEach((docSnap) => {
-        const ev = docSnap.data();
-        const start = parseEventDateTime(ev, "start");
-        const end = parseEventDateTime(ev, "end");
-
-        if (start && end) {
-          if (now < start) upcomingDocs.push(docSnap);
-          else if (now > end) pastDocs.push(docSnap);
-          else currentDocs.push(docSnap);
-          return;
-        }
-
-        if (start && !end) {
-          if (now < start) upcomingDocs.push(docSnap);
-          else currentDocs.push(docSnap);
-          return;
-        }
-
-        // If date is missing, treat as upcoming so it doesn't disappear
-        upcomingDocs.push(docSnap);
-      });
-
-      eventsCurrentEmpty.style.display = currentDocs.length ? "none" : "block";
-      eventsUpcomingEmpty.style.display = upcomingDocs.length ? "none" : "block";
-      eventsPastEmpty.style.display = pastDocs.length ? "none" : "block";
-
-      currentDocs.forEach((d) => eventsCurrent.appendChild(createEventCard(d)));
-      upcomingDocs.forEach((d) => eventsUpcoming.appendChild(createEventCard(d)));
-      pastDocs.forEach((d) => eventsPast.appendChild(createEventCard(d)));
-    }
-
-    function initEventsLive() {
-      const q = collection(db, COLLECTION);
-
-      onSnapshot(q, (snapshot) => {
-        const docs = snapshot.docs.slice();
-
-        // Client-side sort (never breaks due to Firestore type issues)
-        docs.sort((a, b) => {
-          const ad = parseEventDateTime(a.data(), "start");
-          const bd = parseEventDateTime(b.data(), "start");
-          const at = ad ? ad.getTime() : Number.POSITIVE_INFINITY;
-          const bt = bd ? bd.getTime() : Number.POSITIVE_INFINITY;
-          return at - bt;
-        });
-
-        renderEvents(docs);
-      });
-    }
-
-    function initCreateForm() {
-      eventForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        eventErrorEl.textContent = "";
-        eventSuccessEl.textContent = "";
-
-        const title = eventTitleInput.value.trim();
-        const startDate = eventStartDateInput.value;
-        const startTime = eventStartTimeInput.value;
-        const endDate = eventEndDateInput.value;
-        const endTime = eventEndTimeInput.value;
-        const location = eventLocationInput.value.trim();
-        const signupUrl = eventSignupUrlInput.value.trim();
-        const summary = eventSummaryInput.value.trim();
-
-        if (!title || !startDate || !startTime || !endDate || !endTime || !location || !summary) {
-          eventErrorEl.textContent = "Please fill out all required fields.";
-          return;
-        }
-
-        try {
-          let baseSlug = slugify(title);
-          if (!baseSlug) baseSlug = "event";
-          let finalId = baseSlug;
-
-          // Ensure unique doc id
-          const existingRef = doc(db, COLLECTION, finalId);
-          const existingSnap = await getDoc(existingRef);
-          if (existingSnap.exists()) {
-            const suffix = Math.random().toString(36).slice(2, 6);
-            finalId = `${baseSlug}-${suffix}`;
-          }
-
-          const isoStart = `${startDate}T${startTime}`;
-          const isoEnd = `${endDate}T${endTime}`;
-
-          await setDoc(doc(db, COLLECTION, finalId), {
-            title,
-            location,
-            signupUrl: signupUrl || "",
-            summary,
-            description: summary,
-
-            // Canonical fields (strings)
-            startDate,
-            startTime,
-            endDate,
-            endTime,
-
-            // Sorting/compat
-            startDateTime: isoStart,
-            endDateTime: isoEnd,
-
-            createdAt: serverTimestamp(),
-            createdBy: currentUser ? currentUser.uid : null
-          });
-
-          eventSuccessEl.textContent = `Event created. Link: /events/event?id=${finalId}`;
-
-          eventTitleInput.value = "";
-          eventStartDateInput.value = "";
-          eventStartTimeInput.value = "";
-          eventEndDateInput.value = "";
-          eventEndTimeInput.value = "";
-          eventLocationInput.value = "";
-          eventSignupUrlInput.value = "";
-          eventSummaryInput.value = "";
-        } catch (err) {
-          console.error(err);
-          eventErrorEl.textContent = err?.message || "Error creating event.";
-        }
-      });
-    }
   </script>
 </body>
 </html>
