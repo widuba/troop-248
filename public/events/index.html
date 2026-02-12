@@ -22,8 +22,7 @@
 
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: #d2cab6;
       color: var(--text-main);
       min-height: 100vh;
@@ -51,10 +50,7 @@
       gap: 8px;
     }
 
-    header h2::before {
-      content: "★";
-      font-size: 18px;
-    }
+    header h2::before { content: "★"; font-size: 18px; }
 
     .troop-home-link {
       text-decoration: none;
@@ -84,7 +80,6 @@
       backdrop-filter: blur(4px);
       opacity: 0.9;
     }
-
     nav a:hover {
       opacity: 1;
       background: rgba(255, 255, 255, 0.12);
@@ -106,10 +101,7 @@
       color: var(--white);
       cursor: pointer;
     }
-
-    #logout-btn:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
+    #logout-btn:hover { background: rgba(255, 255, 255, 0.2); }
 
     main {
       padding: 24px 16px 40px;
@@ -130,16 +122,8 @@
       border: 1px solid rgba(148, 163, 184, 0.4);
     }
 
-    .welcome-card h3 {
-      margin: 0 0 4px;
-      font-size: 18px;
-    }
-
-    .welcome-card p {
-      margin: 0;
-      font-size: 14px;
-      color: var(--text-muted);
-    }
+    .welcome-card h3 { margin: 0 0 4px; font-size: 18px; }
+    .welcome-card p { margin: 0; font-size: 14px; color: var(--text-muted); }
 
     .badge {
       font-size: 11px;
@@ -150,7 +134,6 @@
       text-transform: uppercase;
       letter-spacing: 0.07em;
     }
-
     .badge.admin {
       background: rgba(240, 180, 41, 0.16);
       color: #92400e;
@@ -165,7 +148,6 @@
       box-shadow: var(--shadow-soft);
       border: 1px solid rgba(148, 163, 184, 0.4);
     }
-
     section h2 {
       margin-top: 0;
       font-size: 18px;
@@ -173,52 +155,21 @@
       align-items: center;
       gap: 8px;
     }
-
-    section h2::before {
-      content: "▸";
-      font-size: 14px;
-      color: var(--blue);
-    }
-
-    .events-group {
-      margin-top: 8px;
-      margin-bottom: 12px;
-    }
-
-    .events-group-title {
-      margin: 4px 0 6px;
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text-main);
-    }
-
-    .events-group-title span {
-      font-size: 12px;
-      font-weight: 400;
-      color: var(--text-muted);
-      margin-left: 6px;
-    }
+    section h2::before { content: "▸"; font-size: 14px; color: var(--blue); }
 
     .admin-only { display: none; }
 
     form {
-      margin-bottom: 10px;
+      margin-top: 10px;
       padding: 10px 10px 8px;
       background: #f9fafb;
       border-radius: 12px;
       border: 1px dashed rgba(148, 163, 184, 0.8);
     }
 
-    form h3 {
-      margin: 0 0 8px;
-      font-size: 15px;
-      color: var(--blue);
-    }
+    form h3 { margin: 0 0 8px; font-size: 15px; color: var(--blue); }
 
-    .field {
-      margin-bottom: 8px;
-    }
-
+    .field { margin-bottom: 8px; }
     .field label {
       display: block;
       font-size: 12px;
@@ -228,8 +179,7 @@
       letter-spacing: .05em;
     }
 
-    .field input,
-    .field textarea {
+    .field input, .field textarea {
       width: 100%;
       padding: 6px 8px;
       border-radius: 10px;
@@ -238,28 +188,15 @@
       font-size: 14px;
     }
 
-    .field textarea {
-      resize: vertical;
-      min-height: 60px;
-    }
-
-    .field input:focus,
-    .field textarea:focus {
-      outline: none;
-      border-color: var(--blue);
-      box-shadow: 0 0 0 2px rgba(31,78,121,.1);
-    }
+    .field textarea { resize: vertical; min-height: 60px; }
 
     .field-row {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
     }
-
     @media (max-width: 640px) {
-      .field-row {
-        grid-template-columns: minmax(0, 1fr);
-      }
+      .field-row { grid-template-columns: minmax(0, 1fr); }
     }
 
     form button {
@@ -272,14 +209,13 @@
       background: var(--blue);
       color: var(--white);
     }
-
     form button:hover { opacity: .96; }
 
-    .small-help {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 6px;
-    }
+    .small-help { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+
+    .events-group { margin-top: 8px; margin-bottom: 12px; }
+    .events-group-title { margin: 4px 0 6px; font-size: 15px; font-weight: 600; }
+    .empty-text { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
 
     .events-list {
       display: flex;
@@ -295,7 +231,6 @@
       background: #f9fafb;
       box-shadow: 0 4px 12px rgba(0,0,0,.04);
       display: grid;
-      grid-template-columns: minmax(0, 1fr);
       gap: 6px;
     }
 
@@ -306,26 +241,10 @@
       gap: 10px;
     }
 
-    .event-title {
-      font-size: 15px;
-      font-weight: 600;
-    }
-
-    .event-date {
-      font-size: 13px;
-      color: var(--text-muted);
-      white-space: nowrap;
-    }
-
-    .event-meta {
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    .event-summary {
-      font-size: 13px;
-      color: var(--text-main);
-    }
+    .event-title { font-size: 15px; font-weight: 600; }
+    .event-date { font-size: 13px; color: var(--text-muted); white-space: nowrap; }
+    .event-meta { font-size: 13px; color: var(--text-muted); }
+    .event-summary { font-size: 13px; color: var(--text-main); }
 
     .event-links-row {
       display: flex;
@@ -347,62 +266,28 @@
       font-weight: 500;
     }
 
-    .btn-view {
-      background: var(--blue);
-      color: var(--white);
-    }
-
+    .btn-view { background: var(--blue); color: var(--white); }
     .btn-map {
       background: rgba(31,78,121,.08);
       color: var(--blue);
       border: 1px solid rgba(148,163,184,.7);
     }
+    .btn-edit { background: var(--red); color: var(--white); }
 
-    .btn-signup {
-      background: var(--red);
-      color: var(--white);
-    }
-
-    .btn-view:hover,
-    .btn-map:hover,
-    .btn-signup:hover {
-      opacity: .96;
-    }
-
-    .empty-text {
-      font-size: 14px;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
+    .btn-view:hover, .btn-map:hover, .btn-edit:hover { opacity: .96; }
 
     @media (max-width: 640px) {
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-      }
-      nav {
-        width: 100%;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-      }
-      .welcome-card {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .event-title-row {
-        flex-direction: column;
-        align-items: flex-start;
-      }
+      header { flex-direction: column; align-items: flex-start; gap: 8px; }
+      nav { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
+      .welcome-card { flex-direction: column; align-items: flex-start; }
+      .event-title-row { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
 <body>
   <header>
     <div>
-      <a href="/home" class="troop-home-link">
-        <h2>Troop 248</h2>
-      </a>
+      <a href="/home" class="troop-home-link"><h2>Troop 248</h2></a>
     </div>
 
     <nav>
@@ -426,21 +311,20 @@
     <div class="welcome-card">
       <div>
         <h3>Troop Events</h3>
-        <p>View and manage troop campouts, trips, and special activities.</p>
+        <p>View troop campouts, trips, and special activities.</p>
       </div>
-      <div id="role-badge-container">
-        <span class="badge">Viewer</span>
-      </div>
+      <div id="role-badge-container"><span class="badge">Viewer</span></div>
     </div>
 
-    <section>
+    <section class="admin-only" id="create-section">
       <h2>Create Event</h2>
-      <form id="event-form" class="admin-only">
+
+      <form id="event-form">
         <h3>New Troop Event</h3>
 
         <div class="field">
           <label for="event-title">Title</label>
-          <input id="event-title" type="text" placeholder="Fall Camporee 2026" required />
+          <input id="event-title" type="text" placeholder="Fall Camporee" required />
         </div>
 
         <div class="field-row">
@@ -467,7 +351,7 @@
 
         <div class="field">
           <label for="event-location">Location</label>
-          <input id="event-location" type="text" placeholder="Camp Rainey Mountain, Clayton, GA" required />
+          <input id="event-location" type="text" placeholder="Camp XYZ, City, State" required />
         </div>
 
         <div class="field">
@@ -477,21 +361,16 @@
 
         <div class="field">
           <label for="event-summary">Short Description</label>
-          <textarea id="event-summary" placeholder="Short summary of this outing, who it's for, and any quick notes." required></textarea>
+          <textarea id="event-summary" placeholder="Quick summary and notes." required></textarea>
         </div>
 
         <button type="submit">Create Event</button>
         <div id="event-error" class="small-help" style="color:#b91c1c;"></div>
         <div id="event-success" class="small-help" style="color:#166534;"></div>
-
         <div class="small-help">
-          Each event gets its own unique link, like <code>/events/event?id=YOUR_EVENT_ID</code>.
+          New events use the collection <code>troop-events</code> and show at <code>/events/event?id=...</code>.
         </div>
       </form>
-
-      <div class="small-help admin-only">
-        Only admins can create or edit events. Viewers can see event details and RSVP from the event page.
-      </div>
     </section>
 
     <section>
@@ -540,6 +419,8 @@
       measurementId: "G-NY75GX5TBH"
     };
 
+    const COLLECTION = "troop-events";
+
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
@@ -547,8 +428,8 @@
     const authInfoEl = document.getElementById("auth-info");
     const logoutBtn = document.getElementById("logout-btn");
     const roleBadgeContainer = document.getElementById("role-badge-container");
-    const adminOnlyEls = document.getElementsByClassName("admin-only");
 
+    const createSection = document.getElementById("create-section");
     const eventForm = document.getElementById("event-form");
     const eventTitleInput = document.getElementById("event-title");
     const eventStartDateInput = document.getElementById("event-start-date");
@@ -580,17 +461,65 @@
         .replace(/^-+|-+$/g, "");
     }
 
-    function updateAdminUI() {
-      for (let i = 0; i < adminOnlyEls.length; i++) {
-        adminOnlyEls[i].style.display = currentIsAdmin ? "block" : "none";
+    function parseEventDateTime(ev, which) {
+      const dateKey = which === "start" ? "startDate" : "endDate";
+      const timeKey = which === "start" ? "startTime" : "endTime";
+
+      const d = (ev[dateKey] || "").toString().trim();
+      const t = (ev[timeKey] || "").toString().trim();
+
+      if (d) {
+        const iso = `${d}T${t || "00:00"}`;
+        const dt = new Date(iso);
+        if (!isNaN(dt.getTime())) return dt;
       }
-      if (currentUser) {
-        authInfoEl.textContent = `Signed in as ${currentUser.email}`;
-        roleBadgeContainer.innerHTML = `
-          <span class="badge ${currentIsAdmin ? "admin" : ""}">
-            ${currentIsAdmin ? "Admin" : "Viewer"}
-          </span>`;
+
+      const legacy = which === "start" ? ev.startDateTime : ev.endDateTime;
+      if (legacy) {
+        const dt = new Date(legacy);
+        if (!isNaN(dt.getTime())) return dt;
       }
+
+      return null;
+    }
+
+    function formatDateRange(ev) {
+      const start = parseEventDateTime(ev, "start");
+      const end = parseEventDateTime(ev, "end");
+
+      if (!start && !end) return "";
+      const fmt = (d) =>
+        d.toLocaleString("en-US", { month: "short", day: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit" });
+
+      if (start && !end) return fmt(start);
+      if (!start && end) return fmt(end);
+
+      const sameDay =
+        start.getFullYear() === end.getFullYear() &&
+        start.getMonth() === end.getMonth() &&
+        start.getDate() === end.getDate();
+
+      if (sameDay) {
+        const datePart = start.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+        const startTime = start.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+        const endTime = end.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+        return `${datePart} • ${startTime} → ${endTime}`;
+      }
+
+      return `${fmt(start)} → ${fmt(end)}`;
+    }
+
+    function updateAuthUI() {
+      if (!currentUser) return;
+
+      authInfoEl.textContent = `Signed in as ${currentUser.email || currentUser.uid}`;
+      roleBadgeContainer.innerHTML = `
+        <span class="badge ${currentIsAdmin ? "admin" : ""}">
+          ${currentIsAdmin ? "Admin" : "Viewer"}
+        </span>
+      `;
+
+      createSection.style.display = currentIsAdmin ? "block" : "none";
     }
 
     async function handleAuth(user) {
@@ -607,9 +536,7 @@
         return;
       }
 
-      const data = infoSnap.data();
-      const role = data.authRole;
-
+      const role = infoSnap.data().authRole;
       if (role !== "admin" && role !== "viewer") {
         window.location.href = "/under-review/";
         return;
@@ -617,8 +544,9 @@
 
       currentUser = user;
       currentIsAdmin = role === "admin";
-      updateAdminUI();
-      pageSpecificInit();
+      updateAuthUI();
+      initEventsLive();
+      if (currentIsAdmin) initCreateForm();
     }
 
     onAuthStateChanged(auth, handleAuth);
@@ -628,65 +556,13 @@
       window.location.href = "/";
     });
 
-    // --- Date helpers ---
-    function parseEventDateTime(ev, which) {
-      const dateKey = which === "start" ? "startDate" : "endDate";
-      const timeKey = which === "start" ? "startTime" : "endTime";
-
-      const d = (ev[dateKey] || "").trim();
-      const t = (ev[timeKey] || "").trim();
-
-      if (d) {
-        const iso = `${d}T${t || "00:00"}`;
-        const dt = new Date(iso);
-        if (!isNaN(dt.getTime())) return dt;
-      }
-
-      const dtStr = which === "start" ? ev.startDateTime : ev.endDateTime;
-      if (dtStr) {
-        const dt = new Date(dtStr);
-        if (!isNaN(dt.getTime())) return dt;
-      }
-
-      return null;
-    }
-
-    function formatDateDisplay(dateStr, timeStr) {
-      if (!dateStr) return "";
-      const date = new Date(dateStr + (timeStr ? "T" + timeStr : "T00:00"));
-      const base = date.toLocaleString("en-US", { month: "short", day: "numeric", year: "numeric" });
-      return timeStr ? `${base} • ${timeStr}` : base;
-    }
-
-    function formatDateRange(ev) {
-      if (ev.startDate) {
-        const start = formatDateDisplay(ev.startDate, ev.startTime);
-        const end = ev.endDate ? formatDateDisplay(ev.endDate, ev.endTime) : "";
-        if (!ev.endDate || ev.startDate === ev.endDate) return start;
-        return `${start} → ${end}`;
-      }
-
-      const startDt = parseEventDateTime(ev, "start");
-      const endDt = parseEventDateTime(ev, "end");
-      if (!startDt && !endDt) return "";
-
-      const fmt = (d) => d.toLocaleString("en-US", {
-        month: "short", day: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit"
-      });
-
-      if (startDt && !endDt) return fmt(startDt);
-      if (!startDt && endDt) return fmt(endDt);
-      return `${fmt(startDt)} → ${fmt(endDt)}`;
-    }
-
     function createEventCard(docSnap) {
       const data = docSnap.data();
       const eventId = docSnap.id;
 
       const title = data.title || "Untitled Event";
-      const location = data.location || "";
-      const summary = (data.description || data.summary || "").trim();
-      const signupUrl = (data.signupUrl || "").trim();
+      const location = (data.location || "").trim();
+      const summary = (data.summary || data.description || "").trim();
       const dateText = formatDateRange(data);
 
       const card = document.createElement("div");
@@ -741,176 +617,150 @@
         linksRow.appendChild(mapBtn);
       }
 
-      if (signupUrl) {
-        const signupBtn = document.createElement("a");
-        signupBtn.href = signupUrl;
-        signupBtn.target = "_blank";
-        signupBtn.rel = "noopener noreferrer";
-        signupBtn.className = "btn-chip btn-signup";
-        signupBtn.textContent = "Signup Link";
-        linksRow.appendChild(signupBtn);
+      if (currentIsAdmin) {
+        const editBtn = document.createElement("a");
+        editBtn.href = `/events-edit?id=${encodeURIComponent(eventId)}`;
+        editBtn.className = "btn-chip btn-edit";
+        editBtn.textContent = "Edit";
+        linksRow.appendChild(editBtn);
       }
 
       card.appendChild(linksRow);
       return card;
     }
 
-    function renderEvents(docs) {
+    function renderEvents(sortedDocs) {
       eventsCurrent.innerHTML = "";
       eventsUpcoming.innerHTML = "";
       eventsPast.innerHTML = "";
 
       const now = new Date();
-      const upcomingDocs = [];
+
       const currentDocs = [];
+      const upcomingDocs = [];
       const pastDocs = [];
 
-      docs.forEach((docSnap) => {
-        const data = docSnap.data();
-        const start = parseEventDateTime(data, "start");
-        const end = parseEventDateTime(data, "end");
+      sortedDocs.forEach((docSnap) => {
+        const ev = docSnap.data();
+        const start = parseEventDateTime(ev, "start");
+        const end = parseEventDateTime(ev, "end");
 
         if (start && end) {
           if (now < start) upcomingDocs.push(docSnap);
           else if (now > end) pastDocs.push(docSnap);
           else currentDocs.push(docSnap);
-        } else if (start && !end) {
+          return;
+        }
+
+        if (start && !end) {
           if (now < start) upcomingDocs.push(docSnap);
           else currentDocs.push(docSnap);
-        } else {
-          upcomingDocs.push(docSnap);
+          return;
         }
+
+        // If date is missing, treat as upcoming so it doesn't disappear
+        upcomingDocs.push(docSnap);
       });
 
-      if (currentDocs.length === 0) {
-        eventsCurrentEmpty.style.display = "block";
-      } else {
-        eventsCurrentEmpty.style.display = "none";
-        currentDocs.forEach((docSnap) => eventsCurrent.appendChild(createEventCard(docSnap)));
-      }
+      eventsCurrentEmpty.style.display = currentDocs.length ? "none" : "block";
+      eventsUpcomingEmpty.style.display = upcomingDocs.length ? "none" : "block";
+      eventsPastEmpty.style.display = pastDocs.length ? "none" : "block";
 
-      if (upcomingDocs.length === 0) {
-        eventsUpcomingEmpty.style.display = "block";
-      } else {
-        eventsUpcomingEmpty.style.display = "none";
-        upcomingDocs.forEach((docSnap) => eventsUpcoming.appendChild(createEventCard(docSnap)));
-      }
-
-      if (pastDocs.length === 0) {
-        eventsPastEmpty.style.display = "block";
-      } else {
-        eventsPastEmpty.style.display = "none";
-        pastDocs.forEach((docSnap) => eventsPast.appendChild(createEventCard(docSnap)));
-      }
+      currentDocs.forEach((d) => eventsCurrent.appendChild(createEventCard(d)));
+      upcomingDocs.forEach((d) => eventsUpcoming.appendChild(createEventCard(d)));
+      pastDocs.forEach((d) => eventsPast.appendChild(createEventCard(d)));
     }
 
-    async function createEvent(e) {
-      e.preventDefault();
-      eventErrorEl.textContent = "";
-      eventSuccessEl.textContent = "";
+    function initEventsLive() {
+      const q = collection(db, COLLECTION);
 
-      const title = eventTitleInput.value.trim();
-      const startDate = eventStartDateInput.value;
-      const startTime = eventStartTimeInput.value;
-      const endDate = eventEndDateInput.value;
-      const endTime = eventEndTimeInput.value;
-      const location = eventLocationInput.value.trim();
-      const signupUrl = eventSignupUrlInput.value.trim();
-      const summary = eventSummaryInput.value.trim();
-
-      if (!title || !startDate || !startTime || !endDate || !endTime || !location || !summary) {
-        eventErrorEl.textContent = "Please fill out all required fields.";
-        return;
-      }
-
-      try {
-        let baseSlug = slugify(title);
-        if (!baseSlug) baseSlug = "event";
-        let finalSlug = baseSlug;
-
-        const docRef = doc(db, "events", finalSlug);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-          const suffix = Math.random().toString(36).slice(2, 6);
-          finalSlug = `${baseSlug}-${suffix}`;
-        }
-
-        const isoStart = `${startDate}T${startTime}`;
-        const isoEnd = `${endDate}T${endTime}`;
-
-        await setDoc(doc(db, "events", finalSlug), {
-          title,
-          slug: finalSlug,
-
-          startDate,
-          startTime,
-          endDate,
-          endTime,
-
-          startDateTime: isoStart,
-          endDateTime: isoEnd,
-
-          location,
-          signupUrl: signupUrl || "",
-
-          summary,
-          description: summary,
-
-          createdAt: serverTimestamp(),
-          createdBy: currentUser ? currentUser.uid : null
-        });
-
-        eventSuccessEl.textContent = `Event created. Link: /events/event?id=${finalSlug}`;
-        eventErrorEl.textContent = "";
-
-        eventTitleInput.value = "";
-        eventStartDateInput.value = "";
-        eventStartTimeInput.value = "";
-        eventEndDateInput.value = "";
-        eventEndTimeInput.value = "";
-        eventLocationInput.value = "";
-        eventSignupUrlInput.value = "";
-        eventSummaryInput.value = "";
-      } catch (err) {
-        console.error(err);
-        eventErrorEl.textContent = err.message || "Error creating event.";
-        eventSuccessEl.textContent = "";
-      }
-    }
-
-    function pageSpecificInit() {
-      if (currentIsAdmin) {
-        eventForm.addEventListener("submit", createEvent);
-      }
-
-      // ✅ FIX: don't orderBy a field that older docs might not have
-      onSnapshot(collection(db, "events"), (snapshot) => {
+      onSnapshot(q, (snapshot) => {
         const docs = snapshot.docs.slice();
 
-        // Client-side sort: start date first; fall back to createdAt; then id
+        // Client-side sort (never breaks due to Firestore type issues)
         docs.sort((a, b) => {
-          const ad = a.data() || {};
-          const bd = b.data() || {};
-
-          const aStart = parseEventDateTime(ad, "start");
-          const bStart = parseEventDateTime(bd, "start");
-
-          if (aStart && bStart) return aStart - bStart;
-          if (aStart && !bStart) return -1;
-          if (!aStart && bStart) return 1;
-
-          const aCreated = ad.createdAt?.toDate ? ad.createdAt.toDate() : null;
-          const bCreated = bd.createdAt?.toDate ? bd.createdAt.toDate() : null;
-
-          if (aCreated && bCreated) return aCreated - bCreated;
-          if (aCreated && !bCreated) return -1;
-          if (!aCreated && bCreated) return 1;
-
-          return a.id.localeCompare(b.id);
+          const ad = parseEventDateTime(a.data(), "start");
+          const bd = parseEventDateTime(b.data(), "start");
+          const at = ad ? ad.getTime() : Number.POSITIVE_INFINITY;
+          const bt = bd ? bd.getTime() : Number.POSITIVE_INFINITY;
+          return at - bt;
         });
 
         renderEvents(docs);
+      });
+    }
+
+    function initCreateForm() {
+      eventForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        eventErrorEl.textContent = "";
+        eventSuccessEl.textContent = "";
+
+        const title = eventTitleInput.value.trim();
+        const startDate = eventStartDateInput.value;
+        const startTime = eventStartTimeInput.value;
+        const endDate = eventEndDateInput.value;
+        const endTime = eventEndTimeInput.value;
+        const location = eventLocationInput.value.trim();
+        const signupUrl = eventSignupUrlInput.value.trim();
+        const summary = eventSummaryInput.value.trim();
+
+        if (!title || !startDate || !startTime || !endDate || !endTime || !location || !summary) {
+          eventErrorEl.textContent = "Please fill out all required fields.";
+          return;
+        }
+
+        try {
+          let baseSlug = slugify(title);
+          if (!baseSlug) baseSlug = "event";
+          let finalId = baseSlug;
+
+          // Ensure unique doc id
+          const existingRef = doc(db, COLLECTION, finalId);
+          const existingSnap = await getDoc(existingRef);
+          if (existingSnap.exists()) {
+            const suffix = Math.random().toString(36).slice(2, 6);
+            finalId = `${baseSlug}-${suffix}`;
+          }
+
+          const isoStart = `${startDate}T${startTime}`;
+          const isoEnd = `${endDate}T${endTime}`;
+
+          await setDoc(doc(db, COLLECTION, finalId), {
+            title,
+            location,
+            signupUrl: signupUrl || "",
+            summary,
+            description: summary,
+
+            // Canonical fields (strings)
+            startDate,
+            startTime,
+            endDate,
+            endTime,
+
+            // Sorting/compat
+            startDateTime: isoStart,
+            endDateTime: isoEnd,
+
+            createdAt: serverTimestamp(),
+            createdBy: currentUser ? currentUser.uid : null
+          });
+
+          eventSuccessEl.textContent = `Event created. Link: /events/event?id=${finalId}`;
+
+          eventTitleInput.value = "";
+          eventStartDateInput.value = "";
+          eventStartTimeInput.value = "";
+          eventEndDateInput.value = "";
+          eventEndTimeInput.value = "";
+          eventLocationInput.value = "";
+          eventSignupUrlInput.value = "";
+          eventSummaryInput.value = "";
+        } catch (err) {
+          console.error(err);
+          eventErrorEl.textContent = err?.message || "Error creating event.";
+        }
       });
     }
   </script>
