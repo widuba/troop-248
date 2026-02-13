@@ -585,19 +585,11 @@
       usersGrid.style.display = "grid";
     }
 
-    function renderDetail(uid){
-      const u = allUsers.find(x => x.uid === uid);
-      if (!u) {
-        detailWrap.innerHTML = `
-          <div class="card error detail-card">
-            <div style="font-weight:900; font-size:18px;">User not found</div>
-            <div class="muted small" style="margin-top:6px;">
-              That link may be outdated. <a class="link" href="/roster/">Back to Roster</a>
-            </div>
-          </div>
-        `;
-        return;
-      }
+    const rawPhone = (u.phone || "").toString().trim();
+const telHref = rawPhone ? `tel:${rawPhone.replace(/[^\d+]/g, "")}` : ""; // keeps digits/+ only
+const phoneHtml = rawPhone
+  ? `<a class="link" href="${telHref}">${escapeHtml(rawPhone)}</a>`
+  : "—";
 
       const acct = (u.accountType || "unknown").toLowerCase();
       const acctLabel = acct ? (acct.charAt(0).toUpperCase() + acct.slice(1)) : "Unknown";
@@ -628,7 +620,7 @@
           <div class="detail-grid">
             <div class="detail-item">
               <p class="detail-label">Phone</p>
-              <p class="detail-value">${escapeHtml(u.phone || "—")}</p>
+              <p class="detail-value">${phoneHtml}</p>
             </div>
 
             <div class="detail-item">
