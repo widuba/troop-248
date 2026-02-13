@@ -1,9 +1,8 @@
-<!-- /public/patrols/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Troop 248 — Patrols</title>
+  <title>Patrols — Troop 248</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" type="image/png" href="/bsafavicon.ico">
 
@@ -19,7 +18,6 @@
       --radius-pill: 999px;
       --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
     }
-
     * { box-sizing: border-box; }
 
     body {
@@ -40,6 +38,8 @@
       position: sticky;
       top: 0;
       z-index: 10;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
     header h2 {
@@ -51,11 +51,7 @@
       align-items: center;
       gap: 8px;
     }
-
-    header h2::before {
-      content: "★";
-      font-size: 18px;
-    }
+    header h2::before { content: "★"; font-size: 18px; }
 
     .troop-home-link {
       text-decoration: none;
@@ -63,18 +59,15 @@
       display: inline-flex;
       align-items: center;
     }
-    .troop-home-link:hover h2 {
-      opacity: 0.9;
-      text-decoration: underline;
-    }
+    .troop-home-link:hover h2 { opacity: 0.9; text-decoration: underline; }
 
     nav {
       display: flex;
       gap: 12px;
       font-size: 13px;
       text-transform: uppercase;
+      flex-wrap: wrap;
     }
-
     nav a {
       color: #1f4e79;
       font-weight: bold;
@@ -85,11 +78,7 @@
       backdrop-filter: blur(4px);
       opacity: 0.9;
     }
-
-    nav a:hover {
-      opacity: 1;
-      background: rgba(255, 255, 255, 0.12);
-    }
+    nav a:hover { opacity: 1; background: rgba(255, 255, 255, 0.12); }
 
     #auth-bar {
       display: flex;
@@ -97,7 +86,6 @@
       align-items: center;
       font-size: 13px;
     }
-
     #logout-btn {
       padding: 5px 12px;
       font-size: 13px;
@@ -107,42 +95,29 @@
       color: var(--white);
       cursor: pointer;
     }
+    #logout-btn:hover { background: rgba(255, 255, 255, 0.2); }
 
-    #logout-btn:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
-
-    main {
-      padding: 24px 16px 40px;
-      max-width: 960px;
-      margin: 0 auto;
-    }
+    main { padding: 24px 16px 40px; max-width: 980px; margin: 0 auto; }
 
     .card {
       background: rgba(255, 255, 255, 0.95);
       border-radius: var(--radius-lg);
-      padding: 18px 18px 16px;
+      padding: 18px;
       margin-bottom: 18px;
       box-shadow: var(--shadow-soft);
       border: 1px solid rgba(148, 163, 184, 0.4);
     }
 
     .row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
       gap: 12px;
       flex-wrap: wrap;
     }
 
     .muted { color: var(--text-muted); }
     .small { font-size: 13px; }
-
-    .hr {
-      height: 1px;
-      background: rgba(0,0,0,.08);
-      margin: 12px 0;
-    }
 
     .badge {
       font-size: 11px;
@@ -152,7 +127,6 @@
       color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.07em;
-      border: 1px solid rgba(148, 163, 184, 0.35);
       font-weight: 800;
     }
     .badge.admin {
@@ -161,176 +135,198 @@
       border: 1px solid rgba(245, 158, 11, 0.6);
     }
 
-    .grid2 {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 14px;
-    }
-    .col6 { grid-column: span 6; }
-    .col12 { grid-column: span 12; }
+    .hr { height:1px; background: rgba(0,0,0,.08); margin: 12px 0; }
 
-    @media (max-width: 820px){
-      .col6 { grid-column: span 12; }
-    }
+    .admin-only { display: none; }
 
-    label {
+    /* Create patrol form */
+    form {
+      margin-top: 10px;
+      padding: 10px 10px 8px;
+      background: #f9fafb;
+      border-radius: 12px;
+      border: 1px dashed rgba(148, 163, 184, 0.8);
+    }
+    form h3 { margin: 0 0 8px; font-size: 15px; color: var(--blue); }
+    .field { margin-bottom: 8px; }
+    .field label {
       display:block;
       font-size: 12px;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: .07em;
+      margin-bottom: 3px;
       color: var(--text-muted);
-      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      font-weight: 800;
     }
-
-    input, select {
+    .field input {
       width: 100%;
-      padding: 10px 12px;
+      padding: 10px 10px;
       border-radius: 12px;
-      border: 1px solid rgba(0,0,0,.12);
-      background: rgba(255,255,255,.85);
+      border: 1px solid #d1d5db;
+      background: #fff;
       font-size: 14px;
+    }
+    .field input:focus {
       outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 2px rgba(31,78,121,.1);
     }
-
     .btn {
-      padding: 9px 12px;
+      padding: 8px 14px;
       font-size: 13px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(209,213,219,.9);
-      background: rgba(255,255,255,.70);
-      color: var(--text-main);
+      border: none;
       cursor: pointer;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      white-space: nowrap;
+      font-weight: 800;
+      background: var(--blue);
+      color: #fff;
     }
-    .btn:hover { background: rgba(255,255,255,.9); }
-    .btn:disabled { opacity: .55; cursor:not-allowed; }
+    .btn:hover { opacity: .96; }
 
-    .btn.primary {
-      border-color: rgba(31,78,121,.25);
-      background: rgba(31,78,121,.08);
-      color: var(--blue);
-    }
+    /* Patrol cards */
+    .patrols-wrap { display: flex; flex-direction: column; gap: 12px; }
 
-    .btn.danger {
-      border-color: rgba(178,34,34,.35);
-      background: rgba(178,34,34,.08);
-      color: #7f1d1d;
-    }
-
-    .pill {
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding: 6px 10px;
-      border-radius: var(--radius-pill);
-      border: 1px solid rgba(31,78,121,.18);
-      background: rgba(31,78,121,.08);
-      color: var(--blue);
-      font-weight: 900;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: .07em;
-    }
-
-    .patrol-box {
-      border-radius: 14px;
-      padding: 12px 12px 10px;
+    .patrol-card {
+      border-radius: 16px;
+      padding: 12px;
       border: 1px solid rgba(209,213,219,.9);
-      background: #ffffff;
+      background: #f9fafb;
       box-shadow: 0 4px 12px rgba(0,0,0,.04);
-      margin-bottom: 10px;
     }
 
-    .patrol-title {
-      font-weight: 900;
-      font-size: 15px;
-      margin: 0;
-    }
-
-    .patrol-meta {
-      margin: 4px 0 0;
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    .scout-list {
-      margin-top: 10px;
-      padding-top: 10px;
-      border-top: 1px solid rgba(0,0,0,.08);
-      display: none;
-    }
-
-    .scout-item {
+    .patrol-head {
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap: 10px;
-      padding: 8px 10px;
-      border-radius: 12px;
-      border: 1px solid rgba(209,213,219,.9);
-      background: #f9fafb;
-      margin-bottom: 8px;
+      cursor: pointer;
+      user-select: none;
     }
 
-    .scout-name {
-      font-weight: 900;
-      font-size: 14px;
-      margin: 0;
-    }
-
-    .scout-sub {
-      margin: 2px 0 0;
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .error{
-      border: 1px solid rgba(178,34,34,.25);
-      background: rgba(178,34,34,.08);
-      color: #7f1d1d;
-    }
-
-    .loading{
+    .patrol-left {
       display:flex;
       align-items:center;
-      gap:10px;
-    }
-    .dot{
-      width:10px; height:10px; border-radius:50%;
-      background: rgba(0,0,0,.25);
-      animation: pulse 1s infinite ease-in-out;
-    }
-    .dot:nth-child(2){ animation-delay: .15s; }
-    .dot:nth-child(3){ animation-delay: .30s; }
-    @keyframes pulse{
-      0%,100%{ transform: scale(.9); opacity:.4; }
-      50%{ transform: scale(1.2); opacity:.9; }
+      gap: 10px;
+      min-width: 220px;
     }
 
-    .note {
+    .patrol-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: 1px solid rgba(209,213,219,.9);
+      background: #fff;
+      overflow: hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight: 900;
+      color: var(--text-muted);
+      flex: 0 0 auto;
+    }
+    .patrol-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display:block;
+    }
+
+    .patrol-title { font-weight: 900; font-size: 16px; }
+    .patrol-tag {
+      display:inline-flex;
+      align-items:center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      font-weight: 900;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      background: rgba(31,78,121,.08);
+      color: var(--blue);
+      border: 1px solid rgba(31,78,121,.18);
+      white-space: nowrap;
+    }
+
+    .caret { font-weight: 900; color: var(--text-muted); }
+
+    .patrol-body {
+      margin-top: 10px;
+      display:none;
+    }
+    .patrol-body.open { display:block; }
+
+    .dropzone {
+      border: 1px dashed rgba(148, 163, 184, 0.9);
+      border-radius: 14px;
+      background: rgba(255,255,255,.75);
+      padding: 10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .dropzone.dragover {
+      border-color: rgba(31,78,121,.9);
+      box-shadow: 0 0 0 2px rgba(31,78,121,.12);
+    }
+
+    .upload-note { font-size: 13px; color: var(--text-muted); font-weight: 700; }
+    .upload-actions { display:flex; gap: 8px; flex-wrap: wrap; }
+
+    .btn-soft {
+      padding: 8px 12px;
+      font-size: 13px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(209,213,219,.9);
+      background: rgba(255,255,255,.75);
+      color: var(--text-main);
+      cursor: pointer;
+      font-weight: 900;
+    }
+    .btn-soft:hover { background: rgba(255,255,255,.95); }
+
+    .scouts {
+      margin-top: 10px;
+      display:flex;
+      flex-direction: column;
+      gap: 8px;
+      min-height: 20px;
+    }
+
+    .scout {
+      border-radius: 14px;
+      padding: 10px 10px;
+      border: 1px solid rgba(209,213,219,.9);
+      background: #fff;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      cursor: grab;
+    }
+    .scout:active { cursor: grabbing; }
+
+    .scout-name { font-weight: 900; font-size: 14px; }
+    .scout-meta { font-size: 12px; color: var(--text-muted); font-weight: 700; }
+
+    .hint {
       font-size: 12px;
       color: var(--text-muted);
       margin-top: 8px;
     }
 
+    .error {
+      border: 1px solid rgba(178,34,34,.25);
+      background: rgba(178,34,34,.08);
+      color: #7f1d1d;
+      font-weight: 800;
+    }
+
     @media (max-width: 640px) {
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-      }
-      nav {
-        width: 100%;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-      }
+      header { flex-direction: column; align-items: flex-start; }
+      .patrol-left { min-width: auto; }
     }
   </style>
 </head>
@@ -344,13 +340,12 @@
     </div>
 
     <nav>
+      <a href="/home">Home</a>
       <a href="/calendar">Calendar</a>
       <a href="/documents">Documents</a>
-      <a href="/scoutmaster">SM Blog</a>
-      <a href="/spl">SPL Blog</a>
-      <a href="/useful-links">Useful Links</a>
       <a href="/events">Events</a>
-      <a href="/mail">Mail</a>
+      <a href="/roster">Roster</a>
+      <a href="/patrols">Patrols</a>
     </nav>
 
     <div id="auth-bar">
@@ -366,102 +361,46 @@
           <div style="font-weight:900; font-size:18px;">Patrols</div>
           <div class="muted small" id="roleLine">Checking access…</div>
         </div>
-        <div id="roleBadge" class="badge">Viewer</div>
+        <div id="roleBadge" class="badge">Loading</div>
       </div>
-      <div class="hr"></div>
-      <div class="muted small">
-        Patrol assignment is stored in each scout’s <span class="pill">accountInfo.patrol</span> (value = patrol document ID).
-      </div>
-    </div>
 
-    <div class="card" id="loadingCard">
-      <div class="loading">
-        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-        <div class="muted">Loading…</div>
-      </div>
-    </div>
-
-    <div class="card error" id="errorCard" style="display:none;"></div>
-
-    <!-- ✅ 1) Create Patrol (left) + All Patrols (right) -->
-    <div class="grid2">
-      <section class="card col6" id="createPatrolSection" style="display:none;">
-        <div style="font-weight:900; font-size:16px;">Create Patrol</div>
-        <div class="note">Admins only. Creates a document in <strong>patrols</strong> with fields <strong>name</strong>, <strong>tag</strong>, <strong>createdAt</strong>.</div>
+      <div class="admin-only" id="adminCreateWrap">
         <div class="hr"></div>
-
-        <label for="patrolName">Patrol name</label>
-        <input id="patrolName" maxlength="60" placeholder="e.g., Raven Patrol" />
-
-        <div style="height:10px;"></div>
-
-        <label for="patrolTag">Patrol tag (field: tag)</label>
-        <input id="patrolTag" maxlength="40" placeholder="e.g., RAVEN" />
-
-        <div style="height:12px;"></div>
-
-        <button class="btn primary" id="createPatrolBtn" type="button">Create patrol</button>
-      </section>
-
-      <section class="card col6" id="allPatrolsSection">
-        <div class="row">
-          <div style="font-weight:900; font-size:16px;">All Patrols</div>
-          <div class="muted small" id="patrolCount">—</div>
-        </div>
-        <div class="note">Pick a patrol to reveal the scouts assigned to it.</div>
-        <div class="hr"></div>
-
-        <div id="patrolBoxes"></div>
-      </section>
-    </div>
-
-    <!-- ✅ 3) Assign Scouts (full width) -->
-    <section class="card col12" id="assignScoutsSection" style="display:none;">
-      <div style="font-weight:900; font-size:16px;">Assign Scouts</div>
-      <div class="note">Admins only. Assigns one scout’s <strong>accountInfo.patrol</strong> to a patrol doc ID.</div>
-      <div class="hr"></div>
-
-      <div class="grid2">
-        <div class="col6">
-          <label for="scoutSelect">Select scout</label>
-          <select id="scoutSelect"></select>
-          <div class="note" id="scoutCurrentPatrolNote">Current patrol: —</div>
-        </div>
-
-        <div class="col6">
-          <label for="patrolSelect">Select patrol</label>
-          <select id="patrolSelect"></select>
-          <div class="note">Choose “Unassigned” to clear patrol.</div>
-        </div>
-
-        <div class="col12">
-          <div class="row">
-            <button class="btn primary" id="assignBtn" type="button">Assign</button>
-            <button class="btn danger" id="clearBtn" type="button">Clear patrol</button>
+        <form id="createForm">
+          <h3>Create Patrol</h3>
+          <div class="field">
+            <label for="patrolName">Patrol Name</label>
+            <input id="patrolName" type="text" placeholder="Falcon Patrol" required />
           </div>
-          <div class="note" id="assignStatus" style="margin-top:10px;"></div>
-        </div>
+          <div class="field">
+            <label for="patrolTag">Tag (short label)</label>
+            <input id="patrolTag" type="text" placeholder="Falcons" />
+          </div>
+          <button class="btn" type="submit">Create Patrol</button>
+          <div id="createMsg" class="hint"></div>
+        </form>
       </div>
-    </section>
+
+      <div class="hint" id="dragHint" style="display:none;">
+        Admin tip: drag a Scout card into another patrol (or Unassigned) to move them.
+      </div>
+    </div>
+
+    <div id="errorCard" class="card error" style="display:none;"></div>
+
+    <div class="patrols-wrap" id="patrolsWrap"></div>
   </main>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
     import {
-      getFirestore,
-      doc,
-      getDoc,
-      collection,
-      getDocs,
-      addDoc,
-      serverTimestamp,
-      query,
-      orderBy,
-      updateDoc
+      getFirestore, doc, getDoc, collection, getDocs, setDoc, updateDoc
     } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+    import {
+      getStorage, ref as sRef, uploadBytes, getDownloadURL
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
 
-    // ✅ MUST match exactly
     const firebaseConfig = {
       apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
       authDomain: "troop-248.firebaseapp.com",
@@ -475,45 +414,74 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
+    const storage = getStorage(app);
 
     const authInfoEl = document.getElementById("auth-info");
     const logoutBtn = document.getElementById("logout-btn");
 
     const roleLine = document.getElementById("roleLine");
     const roleBadge = document.getElementById("roleBadge");
+    const adminCreateWrap = document.getElementById("adminCreateWrap");
+    const dragHint = document.getElementById("dragHint");
 
-    const loadingCard = document.getElementById("loadingCard");
     const errorCard = document.getElementById("errorCard");
+    const patrolsWrap = document.getElementById("patrolsWrap");
 
-    const createPatrolSection = document.getElementById("createPatrolSection");
-    const allPatrolsSection = document.getElementById("allPatrolsSection");
-    const assignScoutsSection = document.getElementById("assignScoutsSection");
+    const createForm = document.getElementById("createForm");
+    const patrolNameInput = document.getElementById("patrolName");
+    const patrolTagInput = document.getElementById("patrolTag");
+    const createMsg = document.getElementById("createMsg");
 
-    const patrolName = document.getElementById("patrolName");
-    const patrolTag = document.getElementById("patrolTag");
-    const createPatrolBtn = document.getElementById("createPatrolBtn");
+    let currentUser = null;
+    let currentRole = "pending"; // admin | viewer | pending
+    let isAdmin = false;
 
-    const patrolBoxes = document.getElementById("patrolBoxes");
-    const patrolCount = document.getElementById("patrolCount");
-
-    const scoutSelect = document.getElementById("scoutSelect");
-    const patrolSelect = document.getElementById("patrolSelect");
-    const scoutCurrentPatrolNote = document.getElementById("scoutCurrentPatrolNote");
-    const assignBtn = document.getElementById("assignBtn");
-    const clearBtn = document.getElementById("clearBtn");
-    const assignStatus = document.getElementById("assignStatus");
-
-    let currentRole = "pending";
-    let patrolsCache = []; // {id,name,tag}
-    let scoutsCache = [];  // {uid,fullName,email,patrol}
-
+    // ---- Helpers ----
     function showError(msg){
       errorCard.style.display = "block";
       errorCard.textContent = msg;
     }
-    function hideError(){
-      errorCard.style.display = "none";
-      errorCard.textContent = "";
+
+    function normalizeRole(r){
+      const x = String(r || "").trim().toLowerCase();
+      if (x === "admin") return "admin";
+      if (x === "viewer") return "viewer";
+      return "pending";
+    }
+
+    function setRoleUI(role){
+      if (role === "admin") {
+        roleLine.textContent = "Approved: Admin (full access)";
+        roleBadge.textContent = "Admin";
+        roleBadge.className = "badge admin";
+      } else if (role === "viewer") {
+        roleLine.textContent = "Approved: Viewer (read-only)";
+        roleBadge.textContent = "Viewer";
+        roleBadge.className = "badge";
+      } else {
+        roleLine.textContent = "Pending approval";
+        roleBadge.textContent = "Pending";
+        roleBadge.className = "badge";
+      }
+    }
+
+    function slugify(text){
+      return String(text || "")
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+    }
+
+    function patrolSortKey(name){
+      const n = String(name || "").trim();
+      if (!n || n.toLowerCase() === "unassigned") return { un: 1, v: "zzzz" };
+      return { un: 0, v: n.toLowerCase() };
+    }
+
+    function isUnassigned(name){
+      const n = String(name || "").trim().toLowerCase();
+      return !n || n === "unassigned";
     }
 
     function escapeHtml(str){
@@ -525,292 +493,316 @@
         .replaceAll("'","&#039;");
     }
 
-    function normalizeRole(authRole){
-      const r = (authRole || "").toString().trim().toLowerCase();
-      if (r === "admin") return "admin";
-      if (r === "viewer") return "viewer";
-      return "pending";
-    }
-
+    // ---- Data load ----
     async function getMyRole(uid){
       const snap = await getDoc(doc(db, "accountInfo", uid));
       if (!snap.exists()) return "pending";
       return normalizeRole((snap.data() || {}).authRole);
     }
 
-    function guardOrRedirect(user, role){
-      if (!user) {
-        window.location.replace("/");
-        return false;
-      }
-      if (role !== "admin" && role !== "viewer") {
-        window.location.replace("/under-review/");
-        return false;
-      }
-      return true;
-    }
-
-    function setRoleUI(role){
-      currentRole = role;
-
-      if (role === "admin") {
-        roleLine.textContent = "Approved: Admin (full access)";
-        roleBadge.textContent = "Admin";
-        roleBadge.className = "badge admin";
-        createPatrolSection.style.display = "block";
-        assignScoutsSection.style.display = "block";
-      } else if (role === "viewer") {
-        roleLine.textContent = "Approved: Viewer (read-only)";
-        roleBadge.textContent = "Viewer";
-        roleBadge.className = "badge";
-        createPatrolSection.style.display = "none";
-        assignScoutsSection.style.display = "none";
-      } else {
-        roleLine.textContent = "Pending approval";
-        roleBadge.textContent = "Pending";
-        roleBadge.className = "badge";
-        createPatrolSection.style.display = "none";
-        assignScoutsSection.style.display = "none";
-      }
-    }
-
-    function patrolNameById(id){
-      if (!id) return "Unassigned";
-      const p = patrolsCache.find(x => x.id === id);
-      return p ? p.name : "Unknown patrol";
-    }
-
-    async function loadPatrols(){
-      const qy = query(collection(db, "patrols"), orderBy("name"));
-      const snap = await getDocs(qy);
-
-      patrolsCache = [];
+    async function loadPatrolDocs(){
+      const snap = await getDocs(collection(db, "patrols"));
+      const patrols = [];
       snap.forEach(d => {
         const data = d.data() || {};
-        patrolsCache.push({
+        patrols.push({
           id: d.id,
-          name: data.name || "",
-          tag: data.tag || ""
+          name: data.name || d.id,
+          tag: data.tag || "",
+          iconUrl: data.iconUrl || ""
         });
       });
-
-      patrolCount.textContent = `${patrolsCache.length} patrol${patrolsCache.length === 1 ? "" : "s"}`;
+      return patrols;
     }
 
     async function loadScouts(){
       const snap = await getDocs(collection(db, "accountInfo"));
-      scoutsCache = [];
+      const scouts = [];
       snap.forEach(d => {
         const data = d.data() || {};
-        const type = (data.accountType || "").toString().toLowerCase();
-        if (type !== "scout") return;
-        scoutsCache.push({
+        if ((data.accountType || "").toLowerCase() !== "scout") return;
+        scouts.push({
           uid: d.id,
-          fullName: data.fullName || "",
+          fullName: data.fullName || "Unnamed Scout",
           email: data.email || "",
-          patrol: (data.patrol || "").toString().trim()
+          patrol: data.patrol || ""
         });
       });
-
-      // nicer stable ordering
-      scoutsCache.sort((a,b) => (a.fullName || "").localeCompare(b.fullName || ""));
+      scouts.sort((a,b)=> (a.fullName || "").localeCompare(b.fullName || ""));
+      return scouts;
     }
 
-    function renderAllPatrolsDropdowns(){
-      // counts and membership lists
-      const byPatrol = new Map(); // patrolId -> [scouts]
-      for (const s of scoutsCache) {
-        const pid = s.patrol || "";
-        if (!byPatrol.has(pid)) byPatrol.set(pid, []);
-        byPatrol.get(pid).push(s);
-      }
+    // ---- Rendering ----
+    function makeScoutCard(s){
+      const el = document.createElement("div");
+      el.className = "scout";
+      el.setAttribute("data-uid", s.uid);
+      el.setAttribute("draggable", isAdmin ? "true" : "false");
+      el.innerHTML = `
+        <div>
+          <div class="scout-name">${escapeHtml(s.fullName)}</div>
+          <div class="scout-meta">${escapeHtml(s.email || "")}</div>
+        </div>
+        <div class="scout-meta">${escapeHtml(s.uid)}</div>
+      `;
 
-      // Ensure patrol order: Unassigned first, then patrols by name
-      const blocks = [];
-
-      const unassigned = byPatrol.get("") || [];
-      blocks.push(renderPatrolBox({
-        id: "",
-        name: "Unassigned",
-        tag: "—",
-        scouts: unassigned
-      }));
-
-      for (const p of patrolsCache) {
-        const scouts = byPatrol.get(p.id) || [];
-        blocks.push(renderPatrolBox({
-          id: p.id,
-          name: p.name || "Untitled Patrol",
-          tag: p.tag || "—",
-          scouts
-        }));
-      }
-
-      patrolBoxes.innerHTML = blocks.join("");
-
-      // Hook up each dropdown to show/hide its list
-      document.querySelectorAll("[data-patrol-toggle]").forEach(sel => {
-        sel.addEventListener("change", (e) => {
-          const pid = e.target.getAttribute("data-patrol-toggle");
-          const list = document.querySelector(`[data-patrol-list="${CSS.escape(pid)}"]`);
-          if (!list) return;
-          list.style.display = (e.target.value === "show") ? "block" : "none";
+      if (isAdmin) {
+        el.addEventListener("dragstart", (e) => {
+          e.dataTransfer.setData("text/plain", s.uid);
+          e.dataTransfer.effectAllowed = "move";
         });
-      });
+      }
+
+      return el;
     }
 
-    function renderPatrolBox({id, name, tag, scouts}){
-      const safeId = (id || "");
-      const safeTag = (tag || "").toString().trim().toUpperCase() || "—";
-      const count = scouts.length;
+    function makePatrolCard(patrolName, patrolDoc, scouts){
+      const wrapper = document.createElement("div");
+      wrapper.className = "patrol-card";
+      wrapper.setAttribute("data-patrol", patrolName);
 
-      const listHtml = scouts.length
-        ? scouts.map(s => `
-            <div class="scout-item">
-              <div>
-                <p class="scout-name">${escapeHtml(s.fullName || "Unnamed Scout")}</p>
-                <p class="scout-sub">${escapeHtml(s.email || "")}</p>
-              </div>
-              <div class="pill">${escapeHtml(patrolNameById(s.patrol))}</div>
+      const tagText = patrolDoc?.tag || (isUnassigned(patrolName) ? "Unassigned" : "");
+      const iconUrl = patrolDoc?.iconUrl || "";
+
+      wrapper.innerHTML = `
+        <div class="patrol-head" role="button" tabindex="0" aria-label="Toggle patrol">
+          <div class="patrol-left">
+            <div class="patrol-icon" id="icon-${escapeHtml(patrolName)}">
+              ${iconUrl ? `<img src="${escapeHtml(iconUrl)}" alt="Patrol icon">` : (isUnassigned(patrolName) ? "—" : "🏕️")}
             </div>
-          `).join("")
-        : `<div class="muted small">No scouts in this patrol.</div>`;
-
-      // Dropdown per patrol controlling the list below it
-      return `
-        <div class="patrol-box">
-          <div class="row">
             <div>
-              <p class="patrol-title">${escapeHtml(name)}</p>
-              <p class="patrol-meta">Tag: <strong>${escapeHtml(safeTag)}</strong></p>
+              <div class="patrol-title">${escapeHtml(patrolName)}</div>
+              ${tagText ? `<div class="patrol-tag">${escapeHtml(tagText)}</div>` : `<div class="muted small">No tag</div>`}
             </div>
-            <div class="pill">${count} scout${count === 1 ? "" : "s"}</div>
+          </div>
+          <div class="caret">▾</div>
+        </div>
+
+        <div class="patrol-body">
+          <div class="dropzone ${isAdmin ? "" : "muted"}" data-drop-patrol="${escapeHtml(patrolName)}">
+            <div class="upload-note">
+              ${isAdmin
+                ? `Drop a Scout here to move them • Patrol icon: drag image here or click upload`
+                : `View-only`}
+            </div>
+
+            <div class="upload-actions admin-only">
+              <input type="file" accept="image/*" style="display:none" id="file-${escapeHtml(patrolName)}" />
+              <button class="btn-soft" type="button" data-upload-btn="${escapeHtml(patrolName)}">Upload Icon</button>
+            </div>
           </div>
 
-          <div style="height:10px;"></div>
-
-          <label>Show scouts</label>
-          <select data-patrol-toggle="${escapeHtml(safeId)}">
-            <option value="hide" selected>Hide</option>
-            <option value="show">Show</option>
-          </select>
-
-          <div class="scout-list" data-patrol-list="${escapeHtml(safeId)}">
-            ${listHtml}
-          </div>
+          <div class="scouts" data-scouts-list="${escapeHtml(patrolName)}"></div>
+          <div class="hint">${scouts.length ? "" : "No scouts in this patrol."}</div>
         </div>
       `;
-    }
 
-    function renderAssignSection(){
-      // Scout dropdown
-      scoutSelect.innerHTML = scoutsCache.length
-        ? scoutsCache.map(s => {
-            const label = `${s.fullName || "Unnamed"} — ${s.email || "no email"}`;
-            return `<option value="${escapeHtml(s.uid)}">${escapeHtml(label)}</option>`;
-          }).join("")
-        : `<option value="">No scouts found</option>`;
+      // Toggle open/close
+      const head = wrapper.querySelector(".patrol-head");
+      const body = wrapper.querySelector(".patrol-body");
+      head.addEventListener("click", () => body.classList.toggle("open"));
+      head.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") body.classList.toggle("open");
+      });
 
-      // Patrol dropdown (include Unassigned)
-      const patrolOptions = [
-        `<option value="">Unassigned</option>`,
-        ...patrolsCache.map(p => `<option value="${escapeHtml(p.id)}">${escapeHtml(p.name)} (${escapeHtml((p.tag || "—").toString().toUpperCase())})</option>`)
-      ];
-      patrolSelect.innerHTML = patrolOptions.join("");
+      // Fill scouts
+      const list = wrapper.querySelector(`[data-scouts-list="${CSS.escape(patrolName)}"]`);
+      scouts.forEach(s => list.appendChild(makeScoutCard(s)));
 
-      updateScoutCurrentPatrolNote();
-    }
+      // Admin-only UI
+      if (isAdmin) {
+        wrapper.querySelectorAll(".admin-only").forEach(el => el.style.display = "inline-flex");
 
-    function updateScoutCurrentPatrolNote(){
-      const uid = scoutSelect.value;
-      const s = scoutsCache.find(x => x.uid === uid);
-      const patrolLabel = s ? patrolNameById(s.patrol) : "—";
-      scoutCurrentPatrolNote.textContent = `Current patrol: ${patrolLabel}`;
-    }
+        // Dropzone: move scout between patrols
+        const dz = wrapper.querySelector(".dropzone");
+        dz.addEventListener("dragover", (e) => {
+          e.preventDefault();
+          dz.classList.add("dragover");
+          e.dataTransfer.dropEffect = "move";
+        });
+        dz.addEventListener("dragleave", () => dz.classList.remove("dragover"));
+        dz.addEventListener("drop", async (e) => {
+          e.preventDefault();
+          dz.classList.remove("dragover");
 
-    async function createPatrol(){
-      hideError();
-      assignStatus.textContent = "";
+          const uid = e.dataTransfer.getData("text/plain");
+          if (!uid) return;
 
-      if (currentRole !== "admin") return;
+          const newPatrol = isUnassigned(patrolName) ? "" : patrolName;
 
-      const name = (patrolName.value || "").trim();
-      const tag = (patrolTag.value || "").trim();
+          try {
+            await updateDoc(doc(db, "accountInfo", uid), { patrol: newPatrol });
+            await refresh();
+          } catch (err) {
+            showError("Could not move scout: " + (err?.message || String(err)));
+          }
+        });
 
-      if (!name) { showError("Please enter a patrol name."); return; }
-      if (!tag) { showError("Please enter a patrol tag."); return; }
+        // Patrol icon upload (click OR drag-drop image)
+        const fileInput = wrapper.querySelector(`#file-${CSS.escape(patrolName)}`);
+        const uploadBtn = wrapper.querySelector(`[data-upload-btn="${CSS.escape(patrolName)}"]`);
 
-      createPatrolBtn.disabled = true;
-      try {
-        await addDoc(collection(db, "patrols"), { name, tag, createdAt: serverTimestamp() });
-        patrolName.value = "";
-        patrolTag.value = "";
-        await refreshAll();
-      } catch (e) {
-        showError("Failed to create patrol: " + (e?.message || String(e)));
-      } finally {
-        createPatrolBtn.disabled = false;
-      }
-    }
-
-    async function assignScoutToPatrol(patrolIdOrEmpty){
-      hideError();
-      assignStatus.textContent = "";
-
-      if (currentRole !== "admin") return;
-
-      const uid = scoutSelect.value;
-      if (!uid) { showError("Please select a scout."); return; }
-
-      assignBtn.disabled = true;
-      clearBtn.disabled = true;
-
-      try {
-        await updateDoc(doc(db, "accountInfo", uid), { patrol: patrolIdOrEmpty || "" });
-        assignStatus.textContent = "Saved.";
-        await refreshAll(true);
-      } catch (e) {
-        showError("Failed to assign scout: " + (e?.message || String(e)));
-      } finally {
-        assignBtn.disabled = false;
-        clearBtn.disabled = false;
-      }
-    }
-
-    async function refreshAll(preserveSelections = false){
-      const selectedScout = preserveSelections ? scoutSelect.value : "";
-      const selectedPatrol = preserveSelections ? patrolSelect.value : "";
-
-      await loadPatrols();
-      await loadScouts();
-
-      renderAllPatrolsDropdowns();
-
-      if (currentRole === "admin") {
-        renderAssignSection();
-        if (preserveSelections) {
-          if (selectedScout) scoutSelect.value = selectedScout;
-          if (selectedPatrol !== null) patrolSelect.value = selectedPatrol;
-          updateScoutCurrentPatrolNote();
+        function allowIconUploadHere(){
+          return !isUnassigned(patrolName); // don't upload icons for Unassigned
         }
+
+        async function uploadIcon(file){
+          if (!allowIconUploadHere()) return;
+          if (!file) return;
+          if (!file.type.startsWith("image/")) {
+            showError("Please upload an image file.");
+            return;
+          }
+
+          try {
+            // Ensure patrol doc exists
+            const pid = patrolDoc?.id || slugify(patrolName);
+            const patrolRef = doc(db, "patrols", pid);
+
+            // Storage path (one icon per patrol)
+            const ext = (file.name.split(".").pop() || "png").toLowerCase();
+            const path = `patrol-icons/${pid}.${ext}`;
+            const storageRef = sRef(storage, path);
+
+            await uploadBytes(storageRef, file);
+            const url = await getDownloadURL(storageRef);
+
+            // Save on patrol doc
+            await setDoc(patrolRef, {
+              name: patrolName,
+              tag: patrolDoc?.tag || "",
+              iconUrl: url
+            }, { merge: true });
+
+            await refresh();
+          } catch (err) {
+            showError("Icon upload failed: " + (err?.message || String(err)));
+          }
+        }
+
+        uploadBtn.addEventListener("click", () => {
+          if (!allowIconUploadHere()) return;
+          fileInput.click();
+        });
+
+        fileInput.addEventListener("change", async () => {
+          const file = fileInput.files?.[0];
+          await uploadIcon(file);
+          fileInput.value = "";
+        });
+
+        // Drag-drop image onto dropzone to upload icon
+        dz.addEventListener("drop", async (e) => {
+          // If they dropped a file (icon), not a scout uid
+          const files = e.dataTransfer.files;
+          if (files && files.length && allowIconUploadHere()) {
+            // If a scout uid was also present, scout-move handled above; icon upload should be explicit.
+            // We'll only upload if there's no uid.
+            const uid = e.dataTransfer.getData("text/plain");
+            if (!uid) {
+              await uploadIcon(files[0]);
+            }
+          }
+        });
+      } else {
+        // hide upload button in viewer mode
+        wrapper.querySelectorAll(".admin-only").forEach(el => el.style.display = "none");
+      }
+
+      return wrapper;
+    }
+
+    async function render(patrolDocs, scouts){
+      patrolsWrap.innerHTML = "";
+
+      // Build a lookup by patrol name (from docs)
+      const docByName = new Map();
+      patrolDocs.forEach(p => docByName.set((p.name || p.id || "").trim(), p));
+
+      // Group scouts by patrol name (blank => Unassigned)
+      const groups = new Map();
+      function addToGroup(patrolName, scout){
+        const key = isUnassigned(patrolName) ? "Unassigned" : patrolName.trim();
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(scout);
+      }
+
+      scouts.forEach(s => addToGroup(s.patrol, s));
+
+      // Ensure we show all patrol docs even if empty
+      patrolDocs.forEach(p => {
+        const name = (p.name || p.id || "").trim();
+        if (!name) return;
+        if (!groups.has(name)) groups.set(name, []);
+      });
+
+      // Always ensure Unassigned exists
+      if (!groups.has("Unassigned")) groups.set("Unassigned", []);
+
+      // Sort: all patrols A-Z, Unassigned last
+      const names = Array.from(groups.keys()).sort((a,b)=>{
+        const A = patrolSortKey(a);
+        const B = patrolSortKey(b);
+        if (A.un !== B.un) return A.un - B.un;
+        return A.v.localeCompare(B.v);
+      });
+
+      names.forEach(name => {
+        const docMatch = docByName.get(name) || null;
+        const list = groups.get(name) || [];
+        patrolsWrap.appendChild(makePatrolCard(name, docMatch, list));
+      });
+    }
+
+    // ---- Actions ----
+    async function refresh(){
+      try {
+        errorCard.style.display = "none";
+        const [patrolDocs, scouts] = await Promise.all([loadPatrolDocs(), loadScouts()]);
+        await render(patrolDocs, scouts);
+      } catch (err) {
+        showError("Error loading patrols: " + (err?.message || String(err)));
       }
     }
 
+    async function createPatrol(e){
+      e.preventDefault();
+      createMsg.textContent = "";
+
+      const name = (patrolNameInput.value || "").trim();
+      const tag = (patrolTagInput.value || "").trim();
+
+      if (!name) {
+        createMsg.textContent = "Patrol name required.";
+        return;
+      }
+
+      const id = slugify(name);
+      if (!id) {
+        createMsg.textContent = "Could not create an ID from that name.";
+        return;
+      }
+
+      try {
+        await setDoc(doc(db, "patrols", id), {
+          name,
+          tag,
+          iconUrl: ""
+        }, { merge: true });
+
+        patrolNameInput.value = "";
+        patrolTagInput.value = "";
+        createMsg.textContent = "Patrol created.";
+        await refresh();
+      } catch (err) {
+        createMsg.textContent = "Create failed: " + (err?.message || String(err));
+      }
+    }
+
+    // ---- Auth + boot ----
     logoutBtn.addEventListener("click", async () => {
       await signOut(auth);
       window.location.replace("/");
-    });
-
-    createPatrolBtn.addEventListener("click", createPatrol);
-
-    scoutSelect.addEventListener("change", updateScoutCurrentPatrolNote);
-
-    assignBtn.addEventListener("click", async () => {
-      await assignScoutToPatrol(patrolSelect.value);
-    });
-
-    clearBtn.addEventListener("click", async () => {
-      await assignScoutToPatrol("");
     });
 
     onAuthStateChanged(auth, async (user) => {
@@ -819,19 +811,31 @@
           window.location.replace("/");
           return;
         }
+        currentUser = user;
+        authInfoEl.textContent = `Signed in as ${user.email || user.uid}`;
 
-        authInfoEl.textContent = `Signed in as ${user.email}`;
+        currentRole = await getMyRole(user.uid);
+        isAdmin = currentRole === "admin";
+        setRoleUI(currentRole);
 
-        const role = await getMyRole(user.uid);
-        setRoleUI(role);
+        if (currentRole !== "admin" && currentRole !== "viewer") {
+          window.location.replace("/under-review/");
+          return;
+        }
 
-        if (!guardOrRedirect(user, role)) return;
+        // Admin-only blocks
+        if (isAdmin) {
+          adminCreateWrap.style.display = "block";
+          dragHint.style.display = "block";
+          createForm.addEventListener("submit", createPatrol);
+        } else {
+          adminCreateWrap.style.display = "none";
+          dragHint.style.display = "none";
+        }
 
-        await refreshAll();
-        loadingCard.style.display = "none";
+        await refresh();
       } catch (err) {
-        loadingCard.style.display = "none";
-        showError("Error loading patrols. " + (err?.message || String(err)));
+        showError("Error initializing: " + (err?.message || String(err)));
       }
     });
   </script>
