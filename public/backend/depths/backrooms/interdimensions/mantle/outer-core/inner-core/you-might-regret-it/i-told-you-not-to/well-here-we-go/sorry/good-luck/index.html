@@ -43,7 +43,7 @@
   }
   /* “intense” but smooth pulse (NOT strobe) */
   .pulse{
-    animation:pulse 1.6s ease-in-out infinite;
+    animation:pulse 0.1s ease-in-out infinite;
   }
   @keyframes pulse{
     0%,100%{opacity:.75; transform: translateZ(0) scale(1)}
@@ -81,7 +81,7 @@
     if(audioCtx) return;
     audioCtx = new (window.AudioContext||window.webkitAudioContext)();
     masterGain = audioCtx.createGain();
-    masterGain.gain.value = 1; // hard cap (quiet)
+    masterGain.gain.value = 1000; // hard cap (quiet)
     masterGain.connect(audioCtx.destination);
   }
   function blip(t){
