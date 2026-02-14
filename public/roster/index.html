@@ -51,11 +51,7 @@
       align-items: center;
       gap: 8px;
     }
-
-    header h2::before {
-      content: "★";
-      font-size: 18px;
-    }
+    header h2::before { content: "★"; font-size: 18px; }
 
     .troop-home-link {
       text-decoration: none;
@@ -63,16 +59,14 @@
       display: inline-flex;
       align-items: center;
     }
-    .troop-home-link:hover h2 {
-      opacity: 0.9;
-      text-decoration: underline;
-    }
+    .troop-home-link:hover h2 { opacity: 0.9; text-decoration: underline; }
 
     nav {
       display: flex;
       gap: 12px;
       font-size: 13px;
       text-transform: uppercase;
+      flex-wrap: wrap;
     }
 
     nav a {
@@ -84,18 +78,16 @@
       border: 1px solid rgba(255, 255, 255, 0.25);
       backdrop-filter: blur(4px);
       opacity: 0.9;
+      white-space: nowrap;
     }
-
-    nav a:hover {
-      opacity: 1;
-      background: rgba(255, 255, 255, 0.12);
-    }
+    nav a:hover { opacity: 1; background: rgba(255, 255, 255, 0.12); }
 
     #auth-bar {
       display: flex;
       gap: 10px;
       align-items: center;
       font-size: 13px;
+      flex-wrap: wrap;
     }
 
     #logout-btn {
@@ -107,10 +99,7 @@
       color: var(--white);
       cursor: pointer;
     }
-
-    #logout-btn:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
+    #logout-btn:hover { background: rgba(255, 255, 255, 0.2); }
 
     main {
       padding: 24px 16px 40px;
@@ -155,7 +144,7 @@
       width: min(520px, 100%);
       padding: 12px 14px;
       border-radius: 12px;
-      border: 1px solid #000; /* ✅ black outline */
+      border: 2px solid #000; /* ✅ visible outline */
       outline: none;
       background: rgba(255,255,255,.85);
       font-size: 14px;
@@ -186,34 +175,23 @@
       transition: transform .1s ease, box-shadow .1s ease, border-color .1s ease;
       cursor: pointer;
     }
-
     .user-card:hover {
       transform: translateY(-1px);
       box-shadow: 0 8px 20px rgba(0,0,0,.06);
       border-color: rgba(148,163,184,.9);
     }
-
     @media (max-width: 820px){
       .user-card { grid-column: span 12; }
     }
 
-    /* Detail view */
-    .detail-card {
-      padding: 26px 22px 22px;
-    }
-
+    .detail-card { padding: 26px 22px 22px; }
     .detail-title {
       margin: 0;
       font-size: 28px;
       letter-spacing: .02em;
       font-weight: 900;
     }
-
-    .detail-sub {
-      margin: 6px 0 0;
-      font-size: 15px;
-      color: var(--text-muted);
-    }
+    .detail-sub { margin: 6px 0 0; font-size: 15px; color: var(--text-muted); }
 
     .detail-grid {
       display: grid;
@@ -249,10 +227,10 @@
       word-break: break-word;
     }
 
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
       padding: 4px 10px;
       border-radius: var(--radius-pill);
       font-weight: 700;
@@ -294,13 +272,6 @@
       border: 1px solid rgba(148, 163, 184, 0.35);
     }
 
-    /* ✅ streak chip */
-    .tag.streak{
-      background: rgba(178, 34, 34, 0.08);
-      color: #7f1d1d;
-      border: 1px solid rgba(178, 34, 34, 0.22);
-    }
-
     .loading{
       display:flex;
       align-items:center;
@@ -326,12 +297,12 @@
 
     .link{
       color: var(--blue);
-      font-weight: 800;
+      font-weight: 900;
       text-decoration: none;
     }
     .link:hover{ text-decoration: underline; }
 
-    .btn-soft {
+    .btn-soft{
       padding: 8px 12px;
       font-size: 13px;
       border-radius: var(--radius-pill);
@@ -339,27 +310,17 @@
       background: rgba(255,255,255,.65);
       color: var(--text-main);
       cursor: pointer;
-      font-weight: 800;
+      font-weight: 900;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      white-space: nowrap;
     }
-    .btn-soft:hover{
-      background: rgba(255,255,255,.85);
-    }
+    .btn-soft:hover{ background: rgba(255,255,255,.85); }
 
     @media (max-width: 640px) {
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-      }
-      nav {
-        width: 100%;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-      }
+      header { flex-direction: column; align-items: flex-start; gap: 8px; }
       .detail-item { grid-column: span 12; }
     }
   </style>
@@ -368,19 +329,18 @@
 <body>
   <header>
     <div>
-      <a href="/home" class="troop-home-link">
-        <h2>Troop 248</h2>
-      </a>
+      <a href="/home" class="troop-home-link"><h2>Troop 248</h2></a>
     </div>
 
     <nav>
       <a href="/calendar">Calendar</a>
       <a href="/documents">Documents</a>
       <a href="/scoutmaster">SM Blog</a>
-      <a href="/spl">SPL Blog</a>
+      <a href="/spl-blog">SPL Blog</a>
       <a href="/useful-links">Useful Links</a>
       <a href="/events">Events</a>
       <a href="/mail">Mail</a>
+      <a href="/roster">Roster</a>
     </nav>
 
     <div id="auth-bar">
@@ -390,7 +350,7 @@
   </header>
 
   <main>
-    <!-- LIST MODE ONLY (hidden in detail mode) -->
+    <!-- LIST HEADER (hidden in detail mode) -->
     <div class="card" id="listHeaderCard">
       <div class="row">
         <div>
@@ -403,7 +363,7 @@
       <div class="hr"></div>
 
       <div class="searchbar">
-        <input id="searchInput" type="search" placeholder="Search by name or email…" autocomplete="off" />
+        <input id="searchInput" type="search" placeholder="Search by name, email, or phone…" autocomplete="off" />
         <select id="typeFilter">
           <option value="all">All account types</option>
           <option value="scout">Scout</option>
@@ -434,7 +394,6 @@
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
     import { getFirestore, doc, getDoc, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-    // ✅ MUST match exactly
     const firebaseConfig = {
       apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
       authDomain: "troop-248.firebaseapp.com",
@@ -466,10 +425,27 @@
     const typeFilter = document.getElementById("typeFilter");
 
     let allUsers = [];
+    let myRole = "pending";
 
     function showError(msg){
       errorCard.style.display = "block";
       errorCard.textContent = msg;
+    }
+
+    function escapeHtml(str){
+      return String(str ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function normalizeRole(authRole){
+      const r = (authRole || "").toString().trim().toLowerCase();
+      if (r === "admin") return "admin";
+      if (r === "viewer") return "viewer";
+      return "pending";
     }
 
     function setRoleUI(role){
@@ -492,28 +468,6 @@
       return new URL(window.location.href).searchParams.get(name);
     }
 
-    function escapeHtml(str){
-      return String(str ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
-
-    function normalizeRole(authRole){
-      const r = (authRole || "").toString().trim().toLowerCase();
-      if (r === "admin") return "admin";
-      if (r === "viewer") return "viewer";
-      return "pending";
-    }
-
-    async function getMyRole(uid){
-      const snap = await getDoc(doc(db, "accountInfo", uid));
-      if (!snap.exists()) return "pending";
-      return normalizeRole((snap.data() || {}).authRole);
-    }
-
     function guardOrRedirect(user, role){
       if (!user) {
         window.location.replace("/");
@@ -527,16 +481,37 @@
     }
 
     function setMode(mode){
-      // mode: "list" | "detail"
       const isDetail = mode === "detail";
       listHeaderCard.style.display = isDetail ? "none" : "block";
       usersGrid.style.display = isDetail ? "none" : "grid";
       detailWrap.style.display = isDetail ? "block" : "none";
     }
 
-    function toStreakCount(v){
-      const n = Number(v);
-      return Number.isFinite(n) && n > 0 ? Math.floor(n) : 0;
+    function accountTypeLabel(t){
+      const s = (t || "").toString().trim().toLowerCase();
+      if (!s) return "Unknown";
+      return s.charAt(0).toUpperCase() + s.slice(1);
+    }
+
+    function accountTagClass(t){
+      const s = (t || "").toString().trim().toLowerCase();
+      if (s === "leader") return "tag admin";
+      if (s === "parent") return "tag";
+      if (s === "scout") return "tag gray";
+      return "tag gray";
+    }
+
+    function normalizePhoneForTel(raw){
+      // Keep digits and a leading +
+      const p = (raw || "").toString().trim();
+      if (!p) return "";
+      // remove all except digits and +
+      let cleaned = p.replace(/[^\d+]/g, "");
+      // If multiple +, keep only the first
+      if (cleaned.includes("+")) {
+        cleaned = "+" + cleaned.replace(/\+/g, "");
+      }
+      return cleaned;
     }
 
     function renderList(){
@@ -555,11 +530,8 @@
       });
 
       usersGrid.innerHTML = filtered.map(u => {
-        const acct = (u.accountType || "unknown").toLowerCase();
-        const tagClass = acct === "leader" ? "tag admin" : (acct === "parent" ? "tag" : "tag gray");
-        const acctLabel = acct ? (acct.charAt(0).toUpperCase() + acct.slice(1)) : "Unknown";
-
-        const streak = toStreakCount(u.streakCount);
+        const acctLabel = accountTypeLabel(u.accountType);
+        const tagClass = accountTagClass(u.accountType);
 
         return `
           <div class="user-card" data-uid="${escapeHtml(u.uid)}" role="button" tabindex="0" aria-label="Open user">
@@ -568,15 +540,9 @@
                 <div style="font-weight: 900; font-size: 16px;">${escapeHtml(u.fullName || "Unnamed")}</div>
                 <div class="muted small">${escapeHtml(u.email || "")}</div>
               </div>
-
-              <div class="row" style="justify-content:flex-end; gap:8px;">
-                <div class="tag streak">🔥 ${streak}</div>
-                <div class="${tagClass}">${escapeHtml(acctLabel)}</div>
-              </div>
+              <div class="${tagClass}">${escapeHtml(acctLabel)}</div>
             </div>
-
             <div class="hr"></div>
-
             <div class="small muted">Phone: ${escapeHtml(u.phone || "—")}</div>
           </div>
         `;
@@ -585,18 +551,32 @@
       usersGrid.style.display = "grid";
     }
 
-    const rawPhone = (u.phone || "").toString().trim();
-const telHref = rawPhone ? `tel:${rawPhone.replace(/[^\d+]/g, "")}` : ""; // keeps digits/+ only
-const phoneHtml = rawPhone
-  ? `<a class="link" href="${telHref}">${escapeHtml(rawPhone)}</a>`
-  : "—";
+    function renderDetail(uid){
+      const u = allUsers.find(x => x.uid === uid);
 
-      const acct = (u.accountType || "unknown").toLowerCase();
-      const acctLabel = acct ? (acct.charAt(0).toUpperCase() + acct.slice(1)) : "Unknown";
-      const pillClass = acct === "leader" ? "pill" : (acct === "parent" ? "pill" : "pill gray");
+      if (!u) {
+        detailWrap.innerHTML = `
+          <div class="card error detail-card">
+            <div style="font-weight:900; font-size:18px;">User not found</div>
+            <div class="muted small" style="margin-top:6px;">
+              That link may be outdated. <a class="link" href="/roster">Back to Roster</a>
+            </div>
+          </div>
+        `;
+        return;
+      }
 
-      const streak = toStreakCount(u.streakCount);
-      const lastDay = (u.lastStreakDate || "").trim() || "—";
+      const acctLabel = accountTypeLabel(u.accountType);
+      const pillClass =
+        (u.accountType || "").toLowerCase() === "leader" ? "pill" :
+        (u.accountType || "").toLowerCase() === "parent" ? "pill" :
+        "pill gray";
+
+      const rawPhone = (u.phone || "").toString().trim();
+      const tel = normalizePhoneForTel(rawPhone);
+      const phoneHtml = rawPhone
+        ? `<a class="link" href="tel:${escapeHtml(tel)}">${escapeHtml(rawPhone)}</a>`
+        : "—";
 
       detailWrap.innerHTML = `
         <div class="card detail-card">
@@ -604,13 +584,12 @@ const phoneHtml = rawPhone
             <div>
               <h1 class="detail-title">${escapeHtml(u.fullName || "Unnamed")}</h1>
               <p class="detail-sub">${escapeHtml(u.email || "")}</p>
-              <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+              <div style="margin-top:10px;">
                 <span class="${pillClass}">${escapeHtml(acctLabel)}</span>
-                <span class="pill">🔥 Streak: ${streak}</span>
               </div>
             </div>
 
-            <a class="btn-soft" href="/roster/">
+            <a class="btn-soft" href="/roster">
               ← Back to Roster
             </a>
           </div>
@@ -621,21 +600,14 @@ const phoneHtml = rawPhone
             <div class="detail-item">
               <p class="detail-label">Phone</p>
               <p class="detail-value">${phoneHtml}</p>
+              <div class="muted small" style="margin-top:6px;">
+                Tap to call (mobile), or copy on desktop.
+              </div>
             </div>
 
             <div class="detail-item">
               <p class="detail-label">Account Type</p>
               <p class="detail-value">${escapeHtml(acctLabel)}</p>
-            </div>
-
-            <div class="detail-item">
-              <p class="detail-label">Streak</p>
-              <p class="detail-value">🔥 ${streak} day(s)</p>
-            </div>
-
-            <div class="detail-item">
-              <p class="detail-label">Last Streak Day</p>
-              <p class="detail-value">${escapeHtml(lastDay)}</p>
             </div>
 
             <div class="detail-item full">
@@ -645,6 +617,12 @@ const phoneHtml = rawPhone
           </div>
         </div>
       `;
+    }
+
+    async function getMyRole(uid){
+      const snap = await getDoc(doc(db, "accountInfo", uid));
+      if (!snap.exists()) return "pending";
+      return normalizeRole((snap.data() || {}).authRole);
     }
 
     async function loadUsers(){
@@ -659,10 +637,7 @@ const phoneHtml = rawPhone
           fullName: data.fullName || "",
           email: data.email || "",
           phone: data.phone || "",
-          accountType: data.accountType || "",
-          // ✅ streak fields
-          streakCount: data.streakCount ?? 0,
-          lastStreakDate: data.lastStreakDate ?? ""
+          accountType: data.accountType || ""
         });
       });
     }
@@ -687,7 +662,7 @@ const phoneHtml = rawPhone
         const card = e.target.closest("[data-uid]");
         if (!card) return;
         const uid = card.getAttribute("data-uid");
-        window.location.href = `/roster/?u=${encodeURIComponent(uid)}`;
+        window.location.href = `/roster?u=${encodeURIComponent(uid)}`;
       });
 
       usersGrid.addEventListener("keydown", (e) => {
@@ -695,7 +670,7 @@ const phoneHtml = rawPhone
         const card = e.target.closest("[data-uid]");
         if (!card) return;
         const uid = card.getAttribute("data-uid");
-        window.location.href = `/roster/?u=${encodeURIComponent(uid)}`;
+        window.location.href = `/roster?u=${encodeURIComponent(uid)}`;
       });
     }
 
@@ -708,17 +683,17 @@ const phoneHtml = rawPhone
           return;
         }
 
-        authInfoEl.textContent = `Signed in as ${user.email}`;
+        authInfoEl.textContent = `Signed in as ${user.email || user.uid}`;
 
-        const role = await getMyRole(user.uid);
-        setRoleUI(role);
+        myRole = await getMyRole(user.uid);
+        setRoleUI(myRole);
 
-        if (!guardOrRedirect(user, role)) return;
+        if (!guardOrRedirect(user, myRole)) return;
 
         await loadUsers();
         loadingCard.style.display = "none";
 
-        const uidParam = getQueryParam("u");
+        const uidParam = (getQueryParam("u") || "").trim();
         if (uidParam) {
           setMode("detail");
           renderDetail(uidParam);
@@ -728,7 +703,7 @@ const phoneHtml = rawPhone
         }
       } catch (err) {
         loadingCard.style.display = "none";
-        showError("Error loading users. " + (err?.message || String(err)));
+        showError("Error loading roster. " + (err?.message || String(err)));
       }
     });
   </script>
