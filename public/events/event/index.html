@@ -5,6 +5,7 @@
   <title>Event — Troop 248</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" type="image/png" href="/bsafavicon.ico">
+
   <style>
     :root {
       --red: #b22222;
@@ -17,9 +18,7 @@
       --radius-pill: 999px;
       --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
     }
-
     * { box-sizing: border-box; }
-
     body {
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -38,8 +37,9 @@
       position: sticky;
       top: 0;
       z-index: 10;
+      gap: 10px;
+      flex-wrap: wrap;
     }
-
     header h2 {
       margin: 0;
       font-size: 19px;
@@ -49,15 +49,8 @@
       align-items: center;
       gap: 8px;
     }
-
     header h2::before { content: "★"; font-size: 18px; }
-
-    .troop-home-link {
-      text-decoration: none;
-      color: inherit;
-      display: inline-flex;
-      align-items: center;
-    }
+    .troop-home-link { text-decoration: none; color: inherit; display: inline-flex; align-items: center; }
     .troop-home-link:hover h2 { opacity: 0.9; text-decoration: underline; }
 
     nav {
@@ -65,8 +58,8 @@
       gap: 12px;
       font-size: 13px;
       text-transform: uppercase;
+      flex-wrap: wrap;
     }
-
     nav a {
       color: #1f4e79;
       font-weight: bold;
@@ -77,16 +70,9 @@
       backdrop-filter: blur(4px);
       opacity: 0.9;
     }
-
     nav a:hover { opacity: 1; background: rgba(255, 255, 255, 0.12); }
 
-    #auth-bar {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      font-size: 13px;
-    }
-
+    #auth-bar { display:flex; gap:10px; align-items:center; font-size:13px; }
     #logout-btn {
       padding: 5px 12px;
       font-size: 13px;
@@ -96,44 +82,35 @@
       color: var(--white);
       cursor: pointer;
     }
-
     #logout-btn:hover { background: rgba(255, 255, 255, 0.2); }
 
-    main {
-      padding: 24px 16px 40px;
-      max-width: 960px;
-      margin: 0 auto;
-    }
+    main { padding: 24px 16px 40px; max-width: 960px; margin: 0 auto; }
 
-    .breadcrumb {
-      font-size: 13px;
-      margin-bottom: 8px;
-      color: var(--text-muted);
-    }
-    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .breadcrumb { font-size: 13px; margin-bottom: 8px; color: var(--text-muted); }
+    .breadcrumb a { color: var(--blue); text-decoration:none; font-weight:900; }
     .breadcrumb a:hover { text-decoration: underline; }
 
-    .event-header-card, section {
-      background: rgba(255, 255, 255, 0.95);
+    .card, section {
+      background: rgba(255,255,255,0.95);
       border-radius: var(--radius-lg);
-      padding: 18px 18px 12px;
+      padding: 18px 18px 14px;
       margin-bottom: 18px;
       box-shadow: var(--shadow-soft);
       border: 1px solid rgba(148, 163, 184, 0.4);
     }
 
     .event-title-row {
-      display: flex;
+      display:flex;
       justify-content: space-between;
       align-items: baseline;
       gap: 10px;
-      margin-bottom: 6px;
+      flex-wrap: wrap;
     }
 
-    #event-title { font-size: 20px; font-weight: 700; margin: 0; }
+    #event-title { font-size: 22px; font-weight: 900; margin: 0; }
     #event-date-range { font-size: 13px; color: var(--text-muted); white-space: nowrap; }
-    #event-location { font-size: 14px; color: var(--text-muted); margin-bottom: 4px; }
-    #event-summary { font-size: 14px; color: var(--text-main); margin: 0; }
+    #event-location { font-size: 14px; color: var(--text-muted); margin-top: 6px; }
+    #event-summary { font-size: 14px; margin: 8px 0 0; }
 
     .badge {
       font-size: 11px;
@@ -143,6 +120,9 @@
       color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.07em;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      font-weight: 800;
+      display: inline-flex;
     }
     .badge.admin {
       background: rgba(240, 180, 41, 0.16);
@@ -157,93 +137,55 @@
       align-items: center;
       gap: 8px;
     }
-    section h2::before { content: "▸"; font-size: 14px; color: var(--blue); }
+    section h2::before { content:"▸"; font-size:14px; color: var(--blue); }
 
-    .btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+    .btn-row { display:flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
     .btn-chip {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
       padding: 6px 12px;
       font-size: 13px;
       border-radius: var(--radius-pill);
       border: none;
-      cursor: pointer;
-      text-decoration: none;
-      font-weight: 600;
+      cursor:pointer;
+      text-decoration:none;
+      font-weight: 900;
+      white-space: nowrap;
     }
     .btn-primary { background: var(--blue); color: var(--white); }
-    .btn-outlined { background: rgba(31,78,121,.08); color: var(--blue); border: 1px solid rgba(148,163,184,.7); }
+    .btn-outlined { background: rgba(31,78,121,.08); color: var(--blue); border:1px solid rgba(148,163,184,.7); }
     .btn-danger { background: var(--red); color: var(--white); }
 
-    .admin-only { display: none; }
+    .btn-chip:hover { opacity: .96; }
 
-    form {
-      margin-bottom: 10px;
-      padding: 10px 10px 8px;
-      background: #f9fafb;
-      border-radius: 12px;
-      border: 1px dashed rgba(148, 163, 184, 0.8);
-    }
-    form h3 { margin: 0 0 8px; font-size: 15px; color: var(--blue); }
-
-    .field { margin-bottom: 8px; }
-    .field label {
-      display: block;
-      font-size: 12px;
-      margin-bottom: 3px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: .05em;
-    }
-    .field input, .field textarea {
-      width: 100%;
-      padding: 6px 8px;
-      border-radius: 10px;
-      border: 1px solid #d1d5db;
-      background: #ffffff;
-      font-size: 14px;
-    }
-    .field textarea { resize: vertical; min-height: 70px; }
+    .admin-only { display:none; }
 
     .small-help { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
-    .empty-text { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
+    .empty-text { font-size: 14px; color: var(--text-muted); margin-top: 6px; }
 
-    .item-list { list-style: none; padding-left: 0; margin: 6px 0 0; font-size: 14px; }
-    .item { padding: 10px 0; border-bottom: 1px solid rgba(229,231,235,.9); }
+    .item-list { list-style:none; padding-left:0; margin: 8px 0 0; }
+    .item {
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(229,231,235,.9);
+    }
     .item:last-child { border-bottom: none; }
-    .item-title { font-weight: 800; }
+    .item-title { font-weight: 900; }
     .item-meta { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
 
-    .small-btn {
-      font-size: 11px;
-      padding: 2px 10px;
-      margin-top: 8px;
-      border-radius: var(--radius-pill);
-      border: none;
-      cursor: pointer;
-      background: var(--red);
-      color: var(--white);
-      font-weight: 700;
-    }
-    .small-btn:hover { opacity: .95; }
+    .item-link { color: var(--blue); font-weight: 900; text-decoration:none; }
+    .item-link:hover { text-decoration: underline; }
+
+    .update-body { margin-top: 8px; white-space: pre-wrap; }
 
     @media (max-width: 640px) {
-      header { flex-direction: column; align-items: flex-start; gap: 8px; }
-      nav { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
-      .event-title-row { flex-direction: column; align-items: flex-start; }
+      header { align-items:flex-start; }
     }
   </style>
 </head>
-
 <body>
   <header>
-    <div>
-      <a href="/home" class="troop-home-link">
-        <h2>Troop 248</h2>
-      </a>
-    </div>
-
+    <div><a href="/home" class="troop-home-link"><h2>Troop 248</h2></a></div>
     <nav>
       <a href="/home">Home</a>
       <a href="/calendar">Calendar</a>
@@ -254,19 +196,16 @@
       <a href="/events">Events</a>
       <a href="/mail">Mail</a>
     </nav>
-
     <div id="auth-bar">
       <div id="auth-info">Signed in as …</div>
-      <button id="logout-btn">Log Out</button>
+      <button id="logout-btn" type="button">Log Out</button>
     </div>
   </header>
 
   <main>
-    <div class="breadcrumb">
-      <a href="/events">← Back to Events</a>
-    </div>
+    <div class="breadcrumb"><a href="/events">← Back to Events</a></div>
 
-    <div class="event-header-card">
+    <div class="card">
       <div class="event-title-row">
         <h1 id="event-title">Loading event…</h1>
         <div id="event-date-range"></div>
@@ -274,76 +213,60 @@
       <div id="event-location"></div>
       <p id="event-summary"></p>
 
-      <div style="margin-top:10px;" id="role-badge-container">
-        <span class="badge">Viewer</span>
+      <div style="margin-top:10px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <div id="role-badge-container"><span class="badge">Viewer</span></div>
+        <a id="edit-btn" class="btn-chip btn-danger admin-only" href="#" style="display:none;">Edit This Event</a>
       </div>
 
       <div id="event-not-found" class="small-help" style="color:#b91c1c; display:none;">
-        Event not found. Please check the link.
+        Event not found. No event id was provided in the URL (or the event doesn't exist).
       </div>
     </div>
 
     <section>
-      <h2>Quick Links</h2>
-      <div class="btn-row" id="details-btn-row">
-        <a id="maps-btn" href="#" target="_blank" rel="noopener noreferrer"
-           class="btn-chip btn-outlined" style="display:none;">
-          Open in Google Maps
-        </a>
-        <a id="signup-btn" href="#" target="_blank" rel="noopener noreferrer"
-           class="btn-chip btn-primary" style="display:none;">
-          Event Signup
-        </a>
-        <a id="edit-btn" href="#" class="btn-chip btn-danger admin-only" style="display:none;">
-          Edit This Event
-        </a>
+      <h2>Quick Access</h2>
+      <div class="small-help">Maps + signup link, if provided.</div>
+      <div class="btn-row">
+        <a id="maps-btn" class="btn-chip btn-outlined" href="#" target="_blank" rel="noopener noreferrer" style="display:none;">Open in Google Maps</a>
+        <a id="signup-btn" class="btn-chip btn-primary" href="#" target="_blank" rel="noopener noreferrer" style="display:none;">Event Signup</a>
       </div>
-      <div id="signup-missing" class="small-help" style="display:none;">
-        No signup link has been added for this event yet.
-      </div>
+      <div id="signup-missing" class="small-help" style="display:none;">No signup link has been added for this event yet.</div>
     </section>
 
     <section>
-      <h2>Event Updates</h2>
+      <h2>Documents</h2>
+      <ul id="docs-list" class="item-list"></ul>
+      <div id="docs-empty" class="empty-text">No documents posted yet.</div>
+      <div id="docs-error" class="small-help" style="color:#b91c1c; display:none;"></div>
+    </section>
 
-      <form id="update-form" class="admin-only">
-        <h3>Post Update</h3>
-
-        <div class="field">
-          <label for="update-title">Title (optional)</label>
-          <input id="update-title" type="text" placeholder="Reminder / schedule change / etc." />
-        </div>
-
-        <div class="field">
-          <label for="update-body">Message</label>
-          <textarea id="update-body" required placeholder="Write the update..."></textarea>
-        </div>
-
-        <button type="submit" class="btn-chip btn-primary">Post Update</button>
-        <div id="update-error" class="small-help" style="color:#b91c1c;"></div>
-        <div id="update-success" class="small-help" style="color:#166534;"></div>
-      </form>
-
+    <section>
+      <h2>Updates</h2>
       <ul id="updates-list" class="item-list"></ul>
       <div id="updates-empty" class="empty-text">No updates posted yet.</div>
+      <div id="updates-error" class="small-help" style="color:#b91c1c; display:none;"></div>
+    </section>
+
+    <section>
+      <h2>Event Links</h2>
+      <ul id="links-list" class="item-list"></ul>
+      <div id="links-empty" class="empty-text">No links posted yet.</div>
+      <div id="links-error" class="small-help" style="color:#b91c1c; display:none;"></div>
     </section>
   </main>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
     import {
       getFirestore,
       doc,
       getDoc,
       collection,
-      addDoc,
-      deleteDoc,
       onSnapshot,
       query,
-      orderBy,
-      serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+      orderBy
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
@@ -355,17 +278,19 @@
       measurementId: "G-NY75GX5TBH"
     };
 
-    const EVENT_COLLECTION = "troop-events";
-
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
+
+    // ✅ single source of truth
+    const EVENTS_COLLECTION = "troop-events";
 
     const authInfoEl = document.getElementById("auth-info");
     const logoutBtn = document.getElementById("logout-btn");
 
     const roleBadgeContainer = document.getElementById("role-badge-container");
     const adminOnlyEls = document.getElementsByClassName("admin-only");
+    const editBtn = document.getElementById("edit-btn");
 
     const eventTitleEl = document.getElementById("event-title");
     const eventDateRangeEl = document.getElementById("event-date-range");
@@ -376,120 +301,136 @@
     const mapsBtn = document.getElementById("maps-btn");
     const signupBtn = document.getElementById("signup-btn");
     const signupMissingEl = document.getElementById("signup-missing");
-    const editBtn = document.getElementById("edit-btn");
 
-    const updateForm = document.getElementById("update-form");
-    const updateTitleInput = document.getElementById("update-title");
-    const updateBodyInput = document.getElementById("update-body");
-    const updateErrorEl = document.getElementById("update-error");
-    const updateSuccessEl = document.getElementById("update-success");
+    const docsList = document.getElementById("docs-list");
+    const docsEmptyEl = document.getElementById("docs-empty");
+    const docsErrorEl = document.getElementById("docs-error");
 
     const updatesList = document.getElementById("updates-list");
     const updatesEmptyEl = document.getElementById("updates-empty");
+    const updatesErrorEl = document.getElementById("updates-error");
 
-    const params = new URLSearchParams(window.location.search);
-    const eventId = (params.get("id") || "").trim();
+    const linksList = document.getElementById("links-list");
+    const linksEmptyEl = document.getElementById("links-empty");
+    const linksErrorEl = document.getElementById("links-error");
 
     let currentUser = null;
     let currentIsAdmin = false;
+    let eventId = null;
 
-    function setAdminUI() {
-      for (let i = 0; i < adminOnlyEls.length; i++) {
-        adminOnlyEls[i].style.display = currentIsAdmin ? "block" : "none";
+    function getEventIdFromUrl() {
+      const sp = new URLSearchParams(window.location.search);
+      const qpId = (sp.get("id") || sp.get("eventId") || sp.get("slug") || "").trim();
+      if (qpId) return qpId;
+
+      // fallback path parsing
+      const parts = window.location.pathname.split("/").filter(Boolean);
+      const idxEvents = parts.indexOf("events");
+      if (idxEvents !== -1 && parts[idxEvents + 1] === "event" && parts[idxEvents + 2]) {
+        return parts[idxEvents + 2];
       }
-      roleBadgeContainer.innerHTML = `
-        <span class="badge ${currentIsAdmin ? "admin" : ""}">
-          ${currentIsAdmin ? "Admin" : "Viewer"}
-        </span>
-      `;
+      return null;
+    }
 
-      if (currentIsAdmin) {
-        editBtn.style.display = "inline-flex";
-        editBtn.href = "/events-edit?id=" + encodeURIComponent(eventId);
-      } else {
-        editBtn.style.display = "none";
+    function escapeHtml(str){
+      return String(str ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function toDateFromParts(dateStr, timeStr){
+      if (!dateStr) return null;
+      const iso = dateStr + "T" + (timeStr || "00:00");
+      const d = new Date(iso);
+      return isNaN(d.getTime()) ? null : d;
+    }
+
+    function formatRange(data){
+      const s = toDateFromParts(data.startDate, data.startTime);
+      const e = toDateFromParts(data.endDate, data.endTime);
+      if (!s && !e) return "";
+
+      const dateFmt = (d) => d.toLocaleDateString("en-US", { month:"short", day:"numeric", year:"numeric" });
+      const timeFmt = (d) => d.toLocaleTimeString("en-US", { hour:"2-digit", minute:"2-digit" });
+
+      if (s && e) {
+        const sameDay =
+          s.getFullYear()===e.getFullYear() &&
+          s.getMonth()===e.getMonth() &&
+          s.getDate()===e.getDate();
+        if (sameDay) return `${dateFmt(s)} • ${timeFmt(s)} → ${timeFmt(e)}`;
+        return `${dateFmt(s)} ${timeFmt(s)} → ${dateFmt(e)} ${timeFmt(e)}`;
+      }
+      return s ? `${dateFmt(s)} • ${timeFmt(s)}` : `${dateFmt(e)} • ${timeFmt(e)}`;
+    }
+
+    function updateAdminUI() {
+      for (let i = 0; i < adminOnlyEls.length; i++) {
+        adminOnlyEls[i].style.display = currentIsAdmin ? "inline-flex" : "none";
+      }
+      if (currentUser) {
+        authInfoEl.textContent = `Signed in as ${currentUser.email}`;
+        roleBadgeContainer.innerHTML = `
+          <span class="badge ${currentIsAdmin ? "admin" : ""}">
+            ${currentIsAdmin ? "Admin" : "Viewer"}
+          </span>`;
       }
     }
 
-    function setNotFound() {
+    function setNotFoundState(msg) {
       eventTitleEl.textContent = "Event not found";
       eventDateRangeEl.textContent = "";
       eventLocationEl.textContent = "";
       eventSummaryEl.textContent = "";
       eventNotFoundEl.style.display = "block";
+      if (msg) eventNotFoundEl.textContent = msg;
+
       mapsBtn.style.display = "none";
       signupBtn.style.display = "none";
       signupMissingEl.style.display = "none";
+      editBtn.style.display = "none";
     }
 
-    function formatDateRange(data) {
-      // supports your string fields startDate/startTime + endDate/endTime, or fallback to startDateTime/endDateTime
-      if (data.startDate) {
-        const start = new Date(data.startDate + "T" + (data.startTime || "00:00"));
-        const end = data.endDate
-          ? new Date(data.endDate + "T" + (data.endTime || "00:00"))
-          : null;
-
-        const startText = start.toLocaleString("en-US", { month:"short", day:"numeric", year:"numeric" }) +
-          (data.startTime ? (" • " + data.startTime) : "");
-        if (!end) return startText;
-
-        const endText = end.toLocaleString("en-US", { month:"short", day:"numeric", year:"numeric" }) +
-          (data.endTime ? (" • " + data.endTime) : "");
-
-        if (data.startDate === data.endDate) return startText;
-        return startText + " → " + endText;
-      }
-
-      if (data.startDateTime) {
-        const s = new Date(data.startDateTime);
-        const e = data.endDateTime ? new Date(data.endDateTime) : null;
-        const fmt = (d) => d.toLocaleString("en-US", {
-          month:"short", day:"numeric", year:"numeric", hour:"2-digit", minute:"2-digit"
-        });
-        if (!e) return fmt(s);
-        return fmt(s) + " → " + fmt(e);
-      }
-
-      return "";
-    }
-
-    async function loadEventMain() {
+    async function loadEvent() {
+      eventId = getEventIdFromUrl();
       if (!eventId) {
-        setNotFound();
-        return false;
+        setNotFoundState("Event not found. No event id was provided in the URL.");
+        return null;
       }
 
-      const ref = doc(db, EVENT_COLLECTION, eventId);
+      const ref = doc(db, EVENTS_COLLECTION, eventId);
       const snap = await getDoc(ref);
 
       if (!snap.exists()) {
-        setNotFound();
-        return false;
+        setNotFoundState("Event not found. Please check the link.");
+        return null;
       }
 
       eventNotFoundEl.style.display = "none";
+
       const data = snap.data() || {};
-
       eventTitleEl.textContent = data.title || "Event";
-      eventDateRangeEl.textContent = formatDateRange(data);
+      eventDateRangeEl.textContent = formatRange(data);
 
-      const loc = (data.location || "").trim();
-      const signup = (data.signupUrl || "").trim();
+      const location = (data.location || "").trim();
+      const signupUrl = (data.signupUrl || "").trim();
       const desc = (data.description || data.summary || "").trim();
 
-      eventLocationEl.textContent = loc ? ("Location: " + loc) : "";
+      eventLocationEl.textContent = location ? ("Location: " + location) : "";
       eventSummaryEl.textContent = desc;
 
-      if (loc) {
-        mapsBtn.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(loc);
+      if (location) {
+        mapsBtn.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(location);
         mapsBtn.style.display = "inline-flex";
       } else {
         mapsBtn.style.display = "none";
       }
 
-      if (signup) {
-        signupBtn.href = signup;
+      if (signupUrl) {
+        signupBtn.href = signupUrl;
         signupBtn.style.display = "inline-flex";
         signupMissingEl.style.display = "none";
       } else {
@@ -497,10 +438,43 @@
         signupMissingEl.style.display = "block";
       }
 
-      return true;
+      if (currentIsAdmin) {
+        editBtn.href = `/events-edit?id=${encodeURIComponent(eventId)}`;
+        editBtn.style.display = "inline-flex";
+      } else {
+        editBtn.style.display = "none";
+      }
+
+      return data;
     }
 
-    function renderUpdates(docs) {
+    function renderDocs(docs){
+      docsList.innerHTML = "";
+      if (!docs.length) {
+        docsEmptyEl.style.display = "block";
+        return;
+      }
+      docsEmptyEl.style.display = "none";
+
+      docs.forEach(snap => {
+        const d = snap.data() || {};
+        const name = d.name || d.title || "Document";
+        const url = d.url || d.downloadURL || d.downloadUrl || d.fileUrl || "";
+        const desc = d.description || "";
+
+        const li = document.createElement("li");
+        li.className = "item";
+        li.innerHTML = `
+          <div class="item-title">
+            <a class="item-link" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(name)}</a>
+          </div>
+          ${desc ? `<div class="item-meta">${escapeHtml(desc)}</div>` : ``}
+        `;
+        docsList.appendChild(li);
+      });
+    }
+
+    function renderUpdates(docs){
       updatesList.innerHTML = "";
       if (!docs.length) {
         updatesEmptyEl.style.display = "block";
@@ -508,105 +482,96 @@
       }
       updatesEmptyEl.style.display = "none";
 
-      docs.forEach((snap) => {
+      docs.forEach(snap => {
         const d = snap.data() || {};
-        const li = document.createElement("li");
-        li.className = "item";
-
         const title = (d.title || "").trim();
         const body = (d.body || "").trim();
-        const when = d.createdAt && typeof d.createdAt.toDate === "function"
-          ? d.createdAt.toDate().toLocaleString()
-          : "";
+        const when = d.createdAt?.toDate ? d.createdAt.toDate().toLocaleString() : "";
 
+        const li = document.createElement("li");
+        li.className = "item";
         li.innerHTML = `
-          <div class="item-title">${title || "Update"}</div>
-          ${when ? `<div class="item-meta">${when}</div>` : ``}
-          <div style="margin-top:6px;">${body.replace(/\n/g, "<br>")}</div>
+          ${title ? `<div class="item-title">${escapeHtml(title)}</div>` : `<div class="item-title">Update</div>`}
+          <div class="item-meta">${escapeHtml(when)}</div>
+          <div class="update-body">${escapeHtml(body)}</div>
         `;
-
-        if (currentIsAdmin) {
-          const del = document.createElement("button");
-          del.type = "button";
-          del.className = "small-btn";
-          del.textContent = "Delete";
-          del.onclick = async () => {
-            if (!confirm("Delete this update?")) return;
-            await deleteDoc(doc(db, EVENT_COLLECTION, eventId, "updates", snap.id));
-          };
-          li.appendChild(del);
-        }
-
         updatesList.appendChild(li);
       });
     }
 
-    function initUpdatesRealtime() {
-      const qy = query(
-        collection(db, EVENT_COLLECTION, eventId, "updates"),
-        orderBy("createdAt", "desc")
-      );
+    function renderLinks(docs){
+      linksList.innerHTML = "";
+      if (!docs.length) {
+        linksEmptyEl.style.display = "block";
+        return;
+      }
+      linksEmptyEl.style.display = "none";
 
-      onSnapshot(qy, (snap) => {
-        renderUpdates(snap.docs);
-      });
+      docs.forEach(snap => {
+        const d = snap.data() || {};
+        const title = d.title || "Link";
+        const url = d.url || "";
+        const desc = d.description || "";
 
-      if (!currentIsAdmin) return;
-
-      updateForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        updateErrorEl.textContent = "";
-        updateSuccessEl.textContent = "";
-
-        const title = updateTitleInput.value.trim();
-        const body = updateBodyInput.value.trim();
-        if (!body) {
-          updateErrorEl.textContent = "Please write a message.";
-          return;
-        }
-
-        try {
-          await addDoc(collection(db, EVENT_COLLECTION, eventId, "updates"), {
-            title,
-            body,
-            createdAt: serverTimestamp(),
-            createdBy: currentUser ? currentUser.uid : null
-          });
-
-          updateTitleInput.value = "";
-          updateBodyInput.value = "";
-          updateSuccessEl.textContent = "Update posted.";
-        } catch (err) {
-          console.error(err);
-          updateErrorEl.textContent = err?.message || "Error posting update.";
-        }
+        const li = document.createElement("li");
+        li.className = "item";
+        li.innerHTML = `
+          <div class="item-title"><a class="item-link" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(title)}</a></div>
+          ${desc ? `<div class="item-meta">${escapeHtml(desc)}</div>` : ``}
+        `;
+        linksList.appendChild(li);
       });
     }
 
+    function initSubcollections(){
+      // Documents
+      onSnapshot(
+        collection(db, EVENTS_COLLECTION, eventId, "documents"),
+        (snap) => { docsErrorEl.style.display="none"; renderDocs(snap.docs); },
+        (err) => { console.error(err); docsErrorEl.style.display="block"; docsErrorEl.textContent = "Could not load documents (permissions/rules)."; }
+      );
+
+      // Updates (newest first)
+      const uq = query(collection(db, EVENTS_COLLECTION, eventId, "updates"), orderBy("createdAt","desc"));
+      onSnapshot(
+        uq,
+        (snap) => { updatesErrorEl.style.display="none"; renderUpdates(snap.docs); },
+        (err) => { console.error(err); updatesErrorEl.style.display="block"; updatesErrorEl.textContent = "Could not load updates (permissions/rules)."; }
+      );
+
+      // Links
+      onSnapshot(
+        collection(db, EVENTS_COLLECTION, eventId, "links"),
+        (snap) => { linksErrorEl.style.display="none"; renderLinks(snap.docs); },
+        (err) => { console.error(err); linksErrorEl.style.display="block"; linksErrorEl.textContent = "Could not load links (permissions/rules)."; }
+      );
+    }
+
     onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        window.location.href = "/";
-        return;
+      try {
+        if (!user) {
+          window.location.href = "/";
+          return;
+        }
+        currentUser = user;
+        authInfoEl.textContent = `Signed in as ${user.email}`;
+
+        // role
+        const infoSnap = await getDoc(doc(db, "accountInfo", user.uid));
+        if (!infoSnap.exists()) { window.location.href="/under-review/"; return; }
+        const role = (infoSnap.data()?.authRole || "").toString().toLowerCase();
+        if (role !== "admin" && role !== "viewer") { window.location.href="/under-review/"; return; }
+        currentIsAdmin = role === "admin";
+        updateAdminUI();
+
+        const data = await loadEvent();
+        if (!data) return;
+
+        initSubcollections();
+      } catch (err) {
+        console.error(err);
+        setNotFoundState("Error loading event.");
       }
-
-      currentUser = user;
-      authInfoEl.textContent = "Signed in as " + (user.email || user.uid);
-
-      // role
-      const infoSnap = await getDoc(doc(db, "accountInfo", user.uid));
-      const role = (infoSnap.exists() ? (infoSnap.data()?.authRole || "") : "").toLowerCase().trim();
-      if (role !== "admin" && role !== "viewer") {
-        window.location.href = "/under-review/";
-        return;
-      }
-
-      currentIsAdmin = role === "admin";
-      setAdminUI();
-
-      const ok = await loadEventMain();
-      if (!ok) return;
-
-      initUpdatesRealtime();
     });
 
     logoutBtn.addEventListener("click", async () => {
