@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Edit Event — Troop 248</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="/bsafavicon.ico">
+
+  <style>
+    :root {
+      --red: #b22222;
+      --blue: #1f4e79;
+      --tan: #f4eee3;
+      --white: #ffffff;
+      --text-main: #1f2933;
+      --text-muted: #6b7280;
+      --radius-lg: 16px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #d2cab6;
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
+      color: var(--white);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    header h2 {
+      margin: 0;
+      font-size: 19px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    header h2::before { content: "★"; font-size: 18px; }
+    .troop-home-link { text-decoration:none; color: inherit; display:inline-flex; align-items:center; }
+    .troop-home-link:hover h2 { opacity:0.9; text-decoration: underline; }
+
+    nav {
+      display:flex;
+      gap:12px;
+      font-size:13px;
+      text-transform:uppercase;
+      flex-wrap:wrap;
+    }
+    nav a {
+      color:#1f4e79;
+      font-weight:bold;
+      text-decoration:none;
+      padding:6px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255,255,255,.25);
+      backdrop-filter: blur(4px);
+      opacity:.9;
+    }
+    nav a:hover { opacity:1; background: rgba(255,255,255,.12); }
+
+    #auth-bar { display:flex; gap:10px; align-items:center; font-size:13px; }
+    #logout-btn {
+      padding: 5px 12px;
+      font-size: 13px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--white);
+      cursor: pointer;
+    }
+    #logout-btn:hover { background: rgba(255, 255, 255, 0.2); }
+
+    main { padding: 24px 16px 40px; max-width: 960px; margin: 0 auto; }
+
+    .card, section {
+      background: rgba(255,255,255,0.95);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 14px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    .row { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+
+    .badge {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(148, 163, 184, 0.2);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      font-weight: 800;
+    }
+    .badge.admin {
+      background: rgba(240, 180, 41, 0.16);
+      color: #92400e;
+      border: 1px solid rgba(245, 158, 11, 0.6);
+    }
+
+    h1 { margin:0; font-size: 20px; font-weight: 900; }
+    .muted { color: var(--text-muted); }
+    .small { font-size: 13px; }
+
+    .btn-row { display:flex; gap:8px; flex-wrap: wrap; margin-top: 10px; }
+
+    .btn {
+      padding: 8px 14px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(209,213,219,.9);
+      background: rgba(255,255,255,.70);
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .btn:hover { opacity:.96; }
+    .btn.primary { border-color: rgba(31,78,121,.25); background: rgba(31,78,121,.08); color: var(--blue); }
+    .btn.danger { border-color: rgba(178,34,34,.35); background: rgba(178,34,34,.08); color:#7f1d1d; }
+
+    section h2 {
+      margin-top: 0;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    section h2::before { content:"▸"; font-size:14px; color: var(--blue); }
+
+    .field { margin-bottom: 10px; }
+    .field label {
+      display:block;
+      font-size: 12px;
+      margin-bottom: 4px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      font-weight: 900;
+    }
+    .field input, .field textarea {
+      width: 100%;
+      padding: 7px 8px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      font-size: 14px;
+      background: #ffffff;
+      outline:none;
+    }
+    .field textarea { resize: vertical; min-height: 70px; }
+    .field input:focus, .field textarea:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 2px rgba(31,78,121,.12);
+    }
+
+    .field-row { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
+    @media (max-width: 640px){ .field-row { grid-template-columns: minmax(0,1fr); } }
+
+    .small-help { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+    #status { font-size: 13px; margin-top: 8px; }
+
+    .item-list { list-style:none; padding-left:0; margin: 10px 0 0; }
+    .item { padding: 10px 0; border-bottom: 1px solid rgba(229,231,235,.9); }
+    .item:last-child { border-bottom: none; }
+    .item-title { font-weight: 900; }
+    .item-meta { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+    .link { color: var(--blue); font-weight: 900; text-decoration:none; }
+    .link:hover { text-decoration: underline; }
+
+    .mini-delete {
+      margin-top: 8px;
+      padding: 6px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(178,34,34,.35);
+      background: rgba(178,34,34,.08);
+      color:#7f1d1d;
+      cursor:pointer;
+      font-weight: 900;
+      font-size: 12px;
+    }
+
+    .grid2 { display:grid; grid-template-columns: repeat(12, 1fr); gap: 14px; }
+    .col6 { grid-column: span 6; }
+    .col12 { grid-column: span 12; }
+    @media (max-width: 820px){ .col6 { grid-column: span 12; } }
+  </style>
+  <link rel="stylesheet" href="/modern-2026.css" />
+</head>
+<body>
+  <header>
+    <div><a href="/home" class="troop-home-link"><h2>Troop 248</h2></a></div>
+    <nav>
+      <a href="/home">Home</a>
+      <a href="/calendar">Calendar</a>
+      <a href="/documents">Documents</a>
+      <a href="/scoutmaster">SM Blog</a>
+      <a href="/spl">SPL Blog</a>
+      <a href="/useful-links">Useful Links</a>
+      <a href="/events">Events</a>
+      <a href="/mail">Mail</a>
+    </nav>
+    <div id="auth-bar">
+      <div id="auth-info">Signed in as …</div>
+      <button id="logout-btn" type="button">Log Out</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="card">
+      <div class="row">
+        <div>
+          <h1 id="page-title">Edit Event</h1>
+          <div class="muted small" id="event-id-text"></div>
+        </div>
+        <div id="role-badge-container"><span class="badge">Viewer</span></div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn danger" id="back-to-event-btn" type="button">Back to Event Page</button>
+        <button class="btn primary" id="back-to-events-btn" type="button">Back to Events List</button>
+      </div>
+
+      <div id="status" class="muted"></div>
+    </div>
+
+    <section>
+      <h2>Event Details</h2>
+      <form id="edit-form">
+        <div class="field">
+          <label for="edit-title">Title</label>
+          <input id="edit-title" type="text" required />
+        </div>
+
+        <div class="field">
+          <label for="edit-location">Location</label>
+          <input id="edit-location" type="text" />
+        </div>
+
+        <div class="field">
+          <label for="edit-signup-url">Signup URL (optional)</label>
+          <input id="edit-signup-url" type="url" placeholder="https://..." />
+        </div>
+
+        <div class="field">
+          <label for="edit-description">Description</label>
+          <textarea id="edit-description"></textarea>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="start-date">Start Date</label>
+            <input id="start-date" type="date" required />
+          </div>
+          <div class="field">
+            <label for="start-time">Start Time</label>
+            <input id="start-time" type="time" required />
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="end-date">End Date</label>
+            <input id="end-date" type="date" required />
+          </div>
+          <div class="field">
+            <label for="end-time">End Time</label>
+            <input id="end-time" type="time" required />
+          </div>
+        </div>
+
+        <button class="btn primary" type="submit">Save Changes</button>
+        <div class="small-help">Edits update the base event doc in <strong>troop-events</strong>.</div>
+      </form>
+    </section>
+
+    <div class="grid2">
+      <section class="col6">
+        <h2>Add Document Link</h2>
+        <form id="doc-form">
+          <div class="field">
+            <label for="doc-name">Name</label>
+            <input id="doc-name" type="text" placeholder="Packing List" required />
+          </div>
+          <div class="field">
+            <label for="doc-url">URL</label>
+            <input id="doc-url" type="url" placeholder="https://..." required />
+          </div>
+          <div class="field">
+            <label for="doc-desc">Description (optional)</label>
+            <input id="doc-desc" type="text" placeholder="What this is for" />
+          </div>
+          <button class="btn primary" type="submit">Add Document</button>
+        </form>
+
+        <ul id="docs-list" class="item-list"></ul>
+        <div id="docs-empty" class="muted small">No documents yet.</div>
+      </section>
+
+      <section class="col6">
+        <h2>Add Link</h2>
+        <form id="link-form">
+          <div class="field">
+            <label for="link-title">Title</label>
+            <input id="link-title" type="text" required />
+          </div>
+          <div class="field">
+            <label for="link-url">URL</label>
+            <input id="link-url" type="url" placeholder="https://..." required />
+          </div>
+          <div class="field">
+            <label for="link-desc">Description (optional)</label>
+            <input id="link-desc" type="text" />
+          </div>
+          <button class="btn primary" type="submit">Add Link</button>
+        </form>
+
+        <ul id="links-list" class="item-list"></ul>
+        <div id="links-empty" class="muted small">No links yet.</div>
+      </section>
+
+      <section class="col12">
+        <h2>Post Update</h2>
+        <form id="update-form">
+          <div class="field">
+            <label for="update-title">Title (optional)</label>
+            <input id="update-title" type="text" placeholder="Schedule change, packing reminder, etc." />
+          </div>
+          <div class="field">
+            <label for="update-body">Message</label>
+            <textarea id="update-body" required></textarea>
+          </div>
+          <button class="btn primary" type="submit">Post Update</button>
+        </form>
+
+        <ul id="updates-list" class="item-list"></ul>
+        <div id="updates-empty" class="muted small">No updates yet.</div>
+      </section>
+    </div>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      updateDoc,
+      collection,
+      addDoc,
+      deleteDoc,
+      onSnapshot,
+      query,
+      orderBy,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+      authDomain: "troop-248.firebaseapp.com",
+      projectId: "troop-248",
+      storageBucket: "troop-248.firebasestorage.app",
+      messagingSenderId: "925363875752",
+      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+      measurementId: "G-NY75GX5TBH"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const EVENTS_COLLECTION = "troop-events";
+
+    const authInfoEl = document.getElementById("auth-info");
+    const logoutBtn = document.getElementById("logout-btn");
+    const roleBadgeContainer = document.getElementById("role-badge-container");
+
+    const pageTitleEl = document.getElementById("page-title");
+    const eventIdTextEl = document.getElementById("event-id-text");
+    const statusEl = document.getElementById("status");
+
+    const backToEventBtn = document.getElementById("back-to-event-btn");
+    const backToEventsBtn = document.getElementById("back-to-events-btn");
+
+    const editForm = document.getElementById("edit-form");
+    const editTitleInput = document.getElementById("edit-title");
+    const editLocationInput = document.getElementById("edit-location");
+    const editSignupUrlInput = document.getElementById("edit-signup-url");
+    const editDescriptionInput = document.getElementById("edit-description");
+    const startDateInput = document.getElementById("start-date");
+    const startTimeInput = document.getElementById("start-time");
+    const endDateInput = document.getElementById("end-date");
+    const endTimeInput = document.getElementById("end-time");
+
+    // docs
+    const docForm = document.getElementById("doc-form");
+    const docNameInput = document.getElementById("doc-name");
+    const docUrlInput = document.getElementById("doc-url");
+    const docDescInput = document.getElementById("doc-desc");
+    const docsList = document.getElementById("docs-list");
+    const docsEmpty = document.getElementById("docs-empty");
+
+    // links
+    const linkForm = document.getElementById("link-form");
+    const linkTitleInput = document.getElementById("link-title");
+    const linkUrlInput = document.getElementById("link-url");
+    const linkDescInput = document.getElementById("link-desc");
+    const linksList = document.getElementById("links-list");
+    const linksEmpty = document.getElementById("links-empty");
+
+    // updates
+    const updateForm = document.getElementById("update-form");
+    const updateTitleInput = document.getElementById("update-title");
+    const updateBodyInput = document.getElementById("update-body");
+    const updatesList = document.getElementById("updates-list");
+    const updatesEmpty = document.getElementById("updates-empty");
+
+    const params = new URLSearchParams(window.location.search);
+    const eventId = (params.get("id") || "").trim();
+
+    let currentUser = null;
+    let eventRef = null;
+
+    function setStatus(text, color = "#6b7280") {
+      statusEl.textContent = text;
+      statusEl.style.color = color;
+      console.log("EDIT STATUS:", text);
+    }
+
+    function escapeHtml(str){
+      return String(str ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function combineDateTime(dateStr, timeStr) {
+      if (!dateStr || !timeStr) return null;
+      const iso = `${dateStr}T${timeStr}:00`;
+      const d = new Date(iso);
+      return isNaN(d.getTime()) ? null : d;
+    }
+
+    function dateToParts(d){
+      if (!d) return {d:"", t:""};
+      const iso = d.toISOString();
+      return { d: iso.slice(0,10), t: iso.slice(11,16) };
+    }
+
+    if (!eventId) {
+      pageTitleEl.textContent = "Event Not Found";
+      setStatus("No event id was provided in the URL.", "#b91c1c");
+    } else {
+      eventIdTextEl.textContent = "Event ID: " + eventId;
+      eventRef = doc(db, EVENTS_COLLECTION, eventId);
+    }
+
+    backToEventBtn.addEventListener("click", () => {
+      if (eventId) window.location.href = "/events/event?id=" + encodeURIComponent(eventId);
+      else window.location.href = "/events";
+    });
+
+    backToEventsBtn.addEventListener("click", () => window.location.href = "/events");
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "/";
+    });
+
+    function renderDocs(docs){
+      docsList.innerHTML = "";
+      if (!docs.length) { docsEmpty.style.display = "block"; return; }
+      docsEmpty.style.display = "none";
+
+      docs.forEach(snap => {
+        const d = snap.data() || {};
+        const name = d.name || d.title || "Document";
+        const url = d.url || d.downloadURL || d.downloadUrl || d.fileUrl || "";
+        const desc = d.description || "";
+
+        const li = document.createElement("li");
+        li.className = "item";
+        li.innerHTML = `
+          <div class="item-title"><a class="link" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(name)}</a></div>
+          ${desc ? `<div class="item-meta">${escapeHtml(desc)}</div>` : ``}
+        `;
+
+        const del = document.createElement("button");
+        del.className = "mini-delete";
+        del.type = "button";
+        del.textContent = "Delete";
+        del.onclick = async () => {
+          if (!confirm("Delete this document?")) return;
+          await deleteDoc(doc(db, EVENTS_COLLECTION, eventId, "documents", snap.id));
+        };
+
+        li.appendChild(del);
+        docsList.appendChild(li);
+      });
+    }
+
+    function renderLinks(docs){
+      linksList.innerHTML = "";
+      if (!docs.length) { linksEmpty.style.display = "block"; return; }
+      linksEmpty.style.display = "none";
+
+      docs.forEach(snap => {
+        const d = snap.data() || {};
+        const title = d.title || "Link";
+        const url = d.url || "";
+        const desc = d.description || "";
+
+        const li = document.createElement("li");
+        li.className = "item";
+        li.innerHTML = `
+          <div class="item-title"><a class="link" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(title)}</a></div>
+          ${desc ? `<div class="item-meta">${escapeHtml(desc)}</div>` : ``}
+        `;
+
+        const del = document.createElement("button");
+        del.className = "mini-delete";
+        del.type = "button";
+        del.textContent = "Delete";
+        del.onclick = async () => {
+          if (!confirm("Delete this link?")) return;
+          await deleteDoc(doc(db, EVENTS_COLLECTION, eventId, "links", snap.id));
+        };
+
+        li.appendChild(del);
+        linksList.appendChild(li);
+      });
+    }
+
+    function renderUpdates(docs){
+      updatesList.innerHTML = "";
+      if (!docs.length) { updatesEmpty.style.display = "block"; return; }
+      updatesEmpty.style.display = "none";
+
+      docs.forEach(snap => {
+        const d = snap.data() || {};
+        const title = (d.title || "").trim() || "Update";
+        const body = (d.body || "").trim();
+        const when = d.createdAt?.toDate ? d.createdAt.toDate().toLocaleString() : "";
+
+        const li = document.createElement("li");
+        li.className = "item";
+        li.innerHTML = `
+          <div class="item-title">${escapeHtml(title)}</div>
+          <div class="item-meta">${escapeHtml(when)}</div>
+          <div style="margin-top:8px; white-space:pre-wrap;">${escapeHtml(body)}</div>
+        `;
+
+        const del = document.createElement("button");
+        del.className = "mini-delete";
+        del.type = "button";
+        del.textContent = "Delete";
+        del.onclick = async () => {
+          if (!confirm("Delete this update?")) return;
+          await deleteDoc(doc(db, EVENTS_COLLECTION, eventId, "updates", snap.id));
+        };
+
+        li.appendChild(del);
+        updatesList.appendChild(li);
+      });
+    }
+
+    async function loadEventBase(){
+      if (!eventRef) return;
+
+      setStatus("Loading event...");
+      const snap = await getDoc(eventRef);
+      if (!snap.exists()) {
+        pageTitleEl.textContent = "Event Not Found";
+        setStatus("Event not found.", "#b91c1c");
+        return;
+      }
+
+      const data = snap.data() || {};
+
+      editTitleInput.value = data.title || "";
+      editLocationInput.value = data.location || "";
+      editSignupUrlInput.value = data.signupUrl || "";
+      editDescriptionInput.value = data.description || data.summary || "";
+
+      // date/time strings (stored in base doc)
+      startDateInput.value = data.startDate || "";
+      startTimeInput.value = data.startTime || "";
+      endDateInput.value = data.endDate || "";
+      endTimeInput.value = data.endTime || "";
+
+      pageTitleEl.textContent = "Edit Event: " + (data.title || "Untitled Event");
+      setStatus("Ready.", "#166534");
+    }
+
+    function initSubcollections(){
+      // documents
+      onSnapshot(
+        collection(db, EVENTS_COLLECTION, eventId, "documents"),
+        (snap) => renderDocs(snap.docs),
+        (err) => { console.error(err); setStatus("Docs error: " + (err?.message||err), "#b91c1c"); }
+      );
+
+      // links
+      onSnapshot(
+        collection(db, EVENTS_COLLECTION, eventId, "links"),
+        (snap) => renderLinks(snap.docs),
+        (err) => { console.error(err); setStatus("Links error: " + (err?.message||err), "#b91c1c"); }
+      );
+
+      // updates
+      const uq = query(collection(db, EVENTS_COLLECTION, eventId, "updates"), orderBy("createdAt","desc"));
+      onSnapshot(
+        uq,
+        (snap) => renderUpdates(snap.docs),
+        (err) => { console.error(err); setStatus("Updates error: " + (err?.message||err), "#b91c1c"); }
+      );
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      try {
+        if (!user) { window.location.href = "/"; return; }
+        currentUser = user;
+        authInfoEl.textContent = "Signed in as " + (user.email || user.uid);
+
+        // must be admin
+        const infoSnap = await getDoc(doc(db, "accountInfo", user.uid));
+        if (!infoSnap.exists()) { window.location.href="/under-review/"; return; }
+        const role = (infoSnap.data()?.authRole || "").toString().toLowerCase();
+        if (role !== "admin") {
+          if (eventId) window.location.href = "/events/event?id=" + encodeURIComponent(eventId);
+          else window.location.href = "/events";
+          return;
+        }
+
+        roleBadgeContainer.innerHTML = '<span class="badge admin">Admin</span>';
+
+        if (!eventRef) return;
+
+        await loadEventBase();
+        initSubcollections();
+
+      } catch (err) {
+        console.error(err);
+        setStatus("Error: " + (err?.message || String(err)), "#b91c1c");
+      }
+    });
+
+    editForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!eventRef) return;
+
+      const title = editTitleInput.value.trim();
+      const location = editLocationInput.value.trim();
+      const signupUrl = editSignupUrlInput.value.trim();
+      const description = editDescriptionInput.value.trim();
+
+      const startDate = startDateInput.value;
+      const startTime = startTimeInput.value;
+      const endDate = endDateInput.value;
+      const endTime = endTimeInput.value;
+
+      if (!title || !startDate || !startTime || !endDate || !endTime) {
+        setStatus("Title + start/end date/time are required.", "#b91c1c");
+        return;
+      }
+
+      const startDateTime = `${startDate}T${startTime}`;
+      const endDateTime = `${endDate}T${endTime}`;
+
+      try {
+        setStatus("Saving...");
+        await updateDoc(eventRef, {
+          title,
+          location,
+          signupUrl,
+          description,
+          summary: description, // keep compatible
+          startDate,
+          startTime,
+          endDate,
+          endTime,
+          startDateTime,
+          endDateTime,
+          updatedAt: serverTimestamp(),
+          updatedBy: currentUser ? currentUser.uid : null
+        });
+        setStatus("Saved.", "#166534");
+      } catch (err) {
+        console.error(err);
+        setStatus("Save failed: " + (err?.message || String(err)), "#b91c1c");
+      }
+    });
+
+    docForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!eventId) return;
+
+      const name = docNameInput.value.trim();
+      const url = docUrlInput.value.trim();
+      const desc = docDescInput.value.trim();
+
+      if (!name || !url) {
+        setStatus("Document name + URL required.", "#b91c1c");
+        return;
+      }
+
+      try {
+        await addDoc(collection(db, EVENTS_COLLECTION, eventId, "documents"), {
+          name,
+          url,
+          description: desc,
+          createdAt: serverTimestamp(),
+          createdBy: currentUser ? currentUser.uid : null
+        });
+        docNameInput.value = "";
+        docUrlInput.value = "";
+        docDescInput.value = "";
+        setStatus("Document added.", "#166534");
+      } catch (err) {
+        console.error(err);
+        setStatus("Add document failed: " + (err?.message || String(err)), "#b91c1c");
+      }
+    });
+
+    linkForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!eventId) return;
+
+      const title = linkTitleInput.value.trim();
+      const url = linkUrlInput.value.trim();
+      const desc = linkDescInput.value.trim();
+
+      if (!title || !url) {
+        setStatus("Link title + URL required.", "#b91c1c");
+        return;
+      }
+
+      try {
+        await addDoc(collection(db, EVENTS_COLLECTION, eventId, "links"), {
+          title,
+          url,
+          description: desc,
+          createdAt: serverTimestamp(),
+          createdBy: currentUser ? currentUser.uid : null
+        });
+        linkTitleInput.value = "";
+        linkUrlInput.value = "";
+        linkDescInput.value = "";
+        setStatus("Link added.", "#166534");
+      } catch (err) {
+        console.error(err);
+        setStatus("Add link failed: " + (err?.message || String(err)), "#b91c1c");
+      }
+    });
+
+    updateForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!eventId) return;
+
+      const title = updateTitleInput.value.trim();
+      const body = updateBodyInput.value.trim();
+
+      if (!body) {
+        setStatus("Update message is required.", "#b91c1c");
+        return;
+      }
+
+      try {
+        await addDoc(collection(db, EVENTS_COLLECTION, eventId, "updates"), {
+          title,
+          body,
+          createdAt: serverTimestamp(),
+          createdBy: currentUser ? currentUser.uid : null
+        });
+        updateTitleInput.value = "";
+        updateBodyInput.value = "";
+        setStatus("Update posted.", "#166534");
+      } catch (err) {
+        console.error(err);
+        setStatus("Post update failed: " + (err?.message || String(err)), "#b91c1c");
+      }
+    });
+  </script>
+</body>
+</html>

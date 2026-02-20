@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Troop 248 — Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="/bsafavicon.ico">
+  <style>
+    :root {
+      --radius-lg: 20px;
+      --radius-pill: 999px;
+      --text-main: #e6eef9;
+      --text-muted: #a8b3c7;
+      --panel-bg: rgba(13, 22, 38, 0.75);
+      --panel-border: rgba(148, 163, 184, 0.22);
+      --card-bg: rgba(21, 34, 57, 0.88);
+      --card-hover: rgba(31, 50, 81, 0.95);
+      --shadow-soft: 0 20px 50px rgba(2, 6, 23, 0.35);
+      --accent: #5ac8fa;
+      --accent-2: #7c3aed;
+      --danger: #ff4f65;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-main);
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(90, 200, 250, 0.2), transparent 40%),
+        radial-gradient(circle at 85% 20%, rgba(124, 58, 237, 0.22), transparent 42%),
+        linear-gradient(160deg, #04070f 0%, #0c1528 52%, #101d35 100%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 32px 32px;
+      mask-image: radial-gradient(circle at center, black 25%, transparent 82%);
+      z-index: -1;
+    }
+
+    body.dark-theme { color: var(--text-main); }
+    body.dark-theme .welcome-card,
+    body.dark-theme section,
+    body.dark-theme .feature-card { background: var(--card-bg); }
+
+    header {
+      backdrop-filter: blur(14px);
+      background: rgba(5, 10, 20, 0.72);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+      padding: 14px clamp(14px, 3vw, 28px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    header h2 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    header h2::before {
+      content: "⬢";
+      font-size: 15px;
+      color: var(--accent);
+    }
+
+    .troop-home-link {
+      text-decoration: none;
+      color: inherit;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    nav {
+      display: flex;
+      gap: 10px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    nav a {
+      color: #c6d3e9;
+      font-weight: 700;
+      text-decoration: none;
+      padding: 7px 11px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      background: rgba(15, 23, 42, 0.65);
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    nav a:hover {
+      border-color: rgba(90, 200, 250, 0.65);
+      color: #e8f7ff;
+      transform: translateY(-1px);
+    }
+
+    #auth-bar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      min-width: fit-content;
+    }
+
+    #logout-btn {
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 79, 101, 0.75);
+      background: rgba(255, 79, 101, 0.12);
+      color: #ffd0d7;
+      cursor: pointer;
+    }
+
+    main {
+      padding: 30px 18px 50px;
+      max-width: 1140px;
+      margin: 0 auto;
+    }
+
+    .welcome-card,
+    section {
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .welcome-card {
+      padding: clamp(20px, 3vw, 28px);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .welcome-card h3 {
+      margin: 0 0 8px;
+      font-size: clamp(22px, 2.2vw, 30px);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+
+    .welcome-card p { margin: 0; font-size: 14px; color: var(--text-muted); max-width: 70ch; }
+
+    .badge {
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(90, 200, 250, 0.16);
+      border: 1px solid rgba(90, 200, 250, 0.45);
+      color: #b5ebff;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      font-weight: 700;
+    }
+
+    .badge.admin {
+      background: rgba(253, 186, 116, 0.14);
+      color: #ffd8aa;
+      border-color: rgba(251, 146, 60, 0.6);
+    }
+
+    section {
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    section h2 {
+      margin-top: 0;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    section h2::before {
+      content: "◉";
+      font-size: 13px;
+      color: var(--accent);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .feature-card-link { text-decoration: none; color: inherit; }
+
+    .feature-card {
+      border-radius: 16px;
+      padding: 14px 14px 12px;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      background: var(--card-bg);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 8px 24px rgba(3, 8, 20, 0.35);
+      transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease, border-color 0.16s ease;
+      height: 100%;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-3px);
+      background: var(--card-hover);
+      border-color: rgba(90, 200, 250, 0.45);
+      box-shadow: 0 18px 34px rgba(2, 6, 23, 0.52);
+    }
+
+    .feature-title { font-size: 15px; font-weight: 650; margin: 0 0 4px; }
+
+    .feature-badge {
+      display: inline-block;
+      font-size: 10px;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      background: linear-gradient(120deg, rgba(90, 200, 250, 0.25), rgba(124, 58, 237, 0.2));
+      color: #d7eeff;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      margin-bottom: 6px;
+      border: 1px solid rgba(148, 163, 184, 0.26);
+    }
+
+    .feature-text { font-size: 13px; color: var(--text-muted); margin: 0; }
+    .quick-note { font-size: 12px; color: var(--text-muted); margin-top: 10px; }
+
+    .big-login-btn {
+      display: inline-block;
+      background: linear-gradient(125deg, var(--accent-2), #2563eb 55%, var(--accent));
+      color: white;
+      padding: 10px 18px;
+      border-radius: 500px;
+      font-size: 13px;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.35);
+      letter-spacing: 0.03em;
+    }
+
+    .big-login-btn:hover { filter: brightness(1.08); }
+
+    @media (max-width: 768px) {
+      header {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      nav {
+        flex: 1 1 100%;
+        justify-content: flex-start;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+
+      nav::-webkit-scrollbar { display: none; }
+
+      #auth-info { display: none; }
+
+      .welcome-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+  </style>
+  <link rel="stylesheet" href="/modern-2026.css" />
+</head>
+
+<body>
+  <header>
+    <div>
+      <a href="/" class="troop-home-link">
+        <h2>Troop 248</h2>
+      </a>
+    </div>
+
+    <nav>
+      <a href="/calendar">Calendar</a>
+      <a href="/documents">Documents</a>
+      <a href="/scoutmaster">SM Blog</a>
+      <a href="/spl">SPL Blog</a>
+      <a href="/useful-links">Useful Links</a>
+      <a href="/events">Events</a>
+      <a href="/mail">Mail</a>
+    </nav>
+
+    <div id="auth-bar">
+      <div id="auth-info">Not signed in</div>
+      <button id="logout-btn" style="display:none;">Log Out</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="welcome-card">
+      <div>
+        <h3>Welcome to Troop 248 Portal.</h3>
+        <p>
+          This private site is for Troop 248 Scouts, parents, and adult leaders.
+          Please log in to access member resources.
+        </p>
+        <p style="margin-top:10px;">
+          <a href="/login/" class="big-login-btn">
+            Log In / Sign Up
+          </a>
+        </p>
+      </div>
+      <div id="role-badge-container">
+        <span class="badge">Public</span>
+      </div>
+    </div>
+
+    <!-- Keeping your original sections/links as you had them -->
+    <section>
+      <h2>Troop Resources</h2>
+      <div class="grid">
+        <a href="/calendar" class="feature-card-link">
+          <div class="feature-card">
+            <div class="feature-badge">Schedule</div>
+            <h3 class="feature-title">Troop Calendar</h3>
+            <p class="feature-text">
+              See upcoming meetings, campouts, service projects, and board of reviews.
+            </p>
+          </div>
+        </a>
+
+        <a href="/documents" class="feature-card-link">
+          <div class="feature-card">
+            <div class="feature-badge">Forms</div>
+            <h3 class="feature-title">Troop Documents</h3>
+            <p class="feature-text">
+              Find permission slips, packing lists, medical forms, and other important paperwork.
+            </p>
+          </div>
+        </a>
+
+        <a href="/scoutmaster" class="feature-card-link">
+          <div class="feature-card">
+            <div class="feature-badge">Leadership</div>
+            <h3 class="feature-title">Scoutmaster Blog</h3>
+            <p class="feature-text">
+              Read messages and updates directly from the Scoutmaster to the troop.
+            </p>
+          </div>
+        </a>
+
+        <a href="/spl" class="feature-card-link">
+          <div class="feature-card">
+            <div class="feature-badge">Youth Led</div>
+            <h3 class="feature-title">SPL Blog</h3>
+            <p class="feature-text">
+              Hear from the Senior Patrol Leader about plans, goals, and upcoming activities.
+            </p>
+          </div>
+        </a>
+
+        <a href="/useful-links" class="feature-card-link">
+          <div class="feature-card">
+            <div class="feature-badge">Resources</div>
+            <h3 class="feature-title">Useful Links</h3>
+            <p class="feature-text">
+              Browse helpful websites for advancement, camping, merit badges, and parent info.
+            </p>
+          </div>
+        </a>
+
+        <a href="/events" class="feature-card-link">
+          <div class="feature-card">
+            <div class="feature-badge">Campouts/Service</div>
+            <h3 class="feature-title">Events</h3>
+            <p class="feature-text">
+              View and prepare for upcoming events.
+            </p>
+          </div>
+        </a>
+
+        <a href="/mail" class="feature-card-link">
+          <div class="feature-card">
+            <div class="feature-badge">Contact</div>
+            <h3 class="feature-title">Mail</h3>
+            <p class="feature-text">
+              Report any problems/suggestions for the website to the devs.
+            </p>
+          </div>
+        </a>
+
+        <a href="/report" class="feature-card-link">
+          <div class="feature-card">
+            <div class="feature-badge">Report</div>
+            <h3 class="feature-title">Report</h3>
+            <p class="feature-text">
+              Reach out to other members of the troop.
+            </p>
+          </div>
+        </a>
+      </div>
+
+      <div class="quick-note">
+        Log in to see member-only content and editing permissions.
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    // Debug bypass: add ?noredirect=1 to stop redirects
+    const params = new URLSearchParams(window.location.search);
+    const NO_REDIRECT = params.has("noredirect");
+
+    // Safe redirect helper
+    const redirectOnce = (url) => {
+      if (NO_REDIRECT) return;
+
+      const current = (window.location.pathname.replace(/\/+$/, "") || "/");
+      const target = (new URL(url, window.location.origin).pathname.replace(/\/+$/, "") || "/");
+
+      if (current === target) return;
+
+      const KEY = "__redirected_to__";
+      const last = sessionStorage.getItem(KEY);
+      if (last === target) return;
+
+      sessionStorage.setItem(KEY, target);
+      window.location.replace(url);
+    };
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+      authDomain: "troop-248.firebaseapp.com",
+      projectId: "troop-248",
+      storageBucket: "troop-248.firebasestorage.app",
+      messagingSenderId: "925363875752",
+      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+      measurementId: "G-NY75GX5TBH"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const authInfoEl = document.getElementById("auth-info");
+    const logoutBtn = document.getElementById("logout-btn");
+    const roleBadgeContainer = document.getElementById("role-badge-container");
+
+    async function handleAuth(user) {
+      // Logged OUT: stay on "/" (no redirect). Show login link.
+      if (!user) {
+        authInfoEl.textContent = "Not signed in";
+        logoutBtn.style.display = "none";
+        roleBadgeContainer.innerHTML = `<span class="badge">Public</span>`;
+        return;
+      }
+
+      // Logged IN: send to /home/ (member portal)
+      sessionStorage.removeItem("__redirected_to__");
+      redirectOnce("/home/");
+    }
+
+    onAuthStateChanged(auth, handleAuth);
+
+    // If someone hits logout from this page (rare), handle safely
+    logoutBtn.addEventListener("click", async () => {
+      try {
+        await signOut(auth);
+      } finally {
+        sessionStorage.removeItem("__redirected_to__");
+        redirectOnce("/login/");
+      }
+    });
+  </script>
+
+  <!-- Dark mode script (unchanged) -->
+  <script>
+    (function () {
+      const STORAGE_KEY = "troop248-theme";
+      const body = document.body;
+      const toggleBtn = document.getElementById("theme-toggle");
+
+      if (!toggleBtn) return;
+
+      function applyTheme(theme) {
+        const isDark = theme === "dark";
+        body.classList.toggle("dark-theme", isDark);
+        toggleBtn.textContent = isDark ? "🌙 Dark mode" : "🌞 Light mode";
+      }
+
+      const saved = localStorage.getItem(STORAGE_KEY);
+      const prefersDark = window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const initial = saved || (prefersDark ? "dark" : "light");
+
+      applyTheme(initial);
+      localStorage.setItem(STORAGE_KEY, initial);
+
+      toggleBtn.addEventListener("click", function () {
+        const newTheme = body.classList.contains("dark-theme") ? "light" : "dark";
+        applyTheme(newTheme);
+        localStorage.setItem(STORAGE_KEY, newTheme);
+      });
+    })();
+  </script>
+</body>
+</html>
