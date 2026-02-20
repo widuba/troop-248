@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Scout Messaging — Troop 248</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="/bsafavicon.ico">
+
+  <style>
+    :root {
+      --red: #b22222;
+      --blue: #1f4e79;
+      --tan: #f4eee3;
+      --white: #ffffff;
+      --text-main: #1f2933;
+      --text-muted: #6b7280;
+      --radius-lg: 16px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
+    }
+
+    * { box-sizing: border-box; }
+
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #d2cab6;
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
+      color: var(--white);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    header h2 {
+      margin: 0;
+      font-size: 19px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    header h2::before { content:"★"; font-size:18px; }
+
+    .troop-home-link { text-decoration:none; color:inherit; display:inline-flex; align-items:center; }
+    .troop-home-link:hover h2 { opacity:.9; text-decoration: underline; }
+
+    nav {
+      display:flex;
+      gap: 12px;
+      font-size: 13px;
+      text-transform: uppercase;
+      flex-wrap: wrap;
+    }
+    nav a {
+      color: #1f4e79;
+      font-weight: bold;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255,255,255,0.25);
+      backdrop-filter: blur(4px);
+      opacity: .9;
+      white-space: nowrap;
+    }
+    nav a:hover { opacity: 1; background: rgba(255,255,255,0.12); }
+
+    #auth-bar { display:flex; gap: 10px; align-items:center; font-size: 13px; flex-wrap: wrap; }
+    #logout-btn {
+      padding: 5px 12px;
+      font-size: 13px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255,255,255,0.7);
+      background: rgba(255,255,255,0.1);
+      color: var(--white);
+      cursor: pointer;
+    }
+    #logout-btn:hover { background: rgba(255,255,255,0.2); }
+
+    main{
+      padding: 24px 16px 40px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .card{
+      background: rgba(255,255,255,.95);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 16px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    .row{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .muted{ color: var(--text-muted); }
+    .small{ font-size: 13px; }
+
+    .hr{
+      height: 1px;
+      background: rgba(0,0,0,.08);
+      margin: 12px 0;
+    }
+
+    .badge{
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(148, 163, 184, 0.2);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      font-weight: 800;
+    }
+    .badge.ok{
+      background: rgba(31,78,121,.08);
+      color: var(--blue);
+      border-color: rgba(31,78,121,.18);
+    }
+    .badge.warn{
+      background: rgba(240, 180, 41, 0.16);
+      color: #92400e;
+      border-color: rgba(245, 158, 11, 0.6);
+    }
+
+    /* Messages */
+    .messages {
+      max-height: 560px;
+      overflow: auto;
+      border-radius: 14px;
+      border: 1px solid rgba(209,213,219,.9);
+      background: #ffffff;
+      padding: 10px;
+    }
+
+    .msg {
+      border: 1px solid rgba(209,213,219,.9);
+      background: #f9fafb;
+      border-radius: 14px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+    }
+
+    .msg-top{
+      display:flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .msg-name{
+      font-weight: 900;
+      font-size: 14px;
+    }
+    .msg-meta{
+      font-size: 12px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .msg-text{
+      margin: 8px 0 0;
+      font-size: 14px;
+      line-height: 1.35;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* Composer */
+    .composer textarea{
+      width: 100%;
+      min-height: 88px;
+      resize: vertical;
+      border-radius: 14px;
+      border: 1px solid rgba(0,0,0,.12);
+      padding: 10px 12px;
+      font-size: 14px;
+      outline: none;
+      background: rgba(255,255,255,.9);
+    }
+
+    .composer textarea:focus{
+      border-color: var(--blue);
+      box-shadow: 0 0 0 2px rgba(31,78,121,.12);
+    }
+
+    .btn{
+      padding: 9px 12px;
+      font-size: 13px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(209,213,219,.9);
+      background: rgba(255,255,255,.70);
+      color: var(--text-main);
+      cursor: pointer;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+    .btn.primary{
+      border-color: rgba(31,78,121,.25);
+      background: rgba(31,78,121,.08);
+      color: var(--blue);
+    }
+    .btn:disabled{ opacity:.55; cursor:not-allowed; }
+
+    .counter{
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .error{
+      border: 1px solid rgba(178,34,34,.25);
+      background: rgba(178,34,34,.08);
+      color: #7f1d1d;
+    }
+
+    @media (max-width: 640px){
+      header{ align-items:flex-start; }
+    }
+  </style>
+  <link rel="stylesheet" href="/modern-2026.css" />
+</head>
+
+<body>
+  <header>
+    <div>
+      <a href="/home" class="troop-home-link"><h2>Troop 248</h2></a>
+    </div>
+
+    <nav>
+      <a href="/home">Home</a>
+      <a href="/calendar">Calendar</a>
+      <a href="/documents">Documents</a>
+      <a href="/scoutmaster">SM Blog</a>
+      <a href="/spl">SPL Blog</a>
+      <a href="/useful-links">Useful Links</a>
+      <a href="/events">Events</a>
+      <a href="/mail">Mail</a>
+    </nav>
+
+    <div id="auth-bar">
+      <div id="auth-info">Signed in as …</div>
+      <button id="logout-btn" type="button">Log Out</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="card">
+      <div class="row">
+        <div>
+          <div style="font-weight:900; font-size:18px;">Scout Messaging</div>
+          <div class="muted small" id="accessLine">Checking access…</div>
+        </div>
+        <div class="badge" id="accessBadge">Loading</div>
+      </div>
+      <div class="hr"></div>
+      <div class="muted small">
+        Shows the <strong>last 100</strong> messages. Scouts who are <strong>Viewer</strong> or <strong>Admin</strong> can send.
+        Adults can read but cannot send.
+      </div>
+    </div>
+
+    <div class="card" id="errorCard" style="display:none;"></div>
+
+    <div class="card">
+      <div class="row" style="align-items:flex-end;">
+        <div class="muted small" id="liveStatus">Loading messages…</div>
+        <div class="counter" id="countStatus">—</div>
+      </div>
+      <div class="hr"></div>
+
+      <div class="messages" id="messagesBox" aria-live="polite"></div>
+    </div>
+
+    <div class="card composer" id="composerCard" style="display:none;">
+      <div class="row">
+        <div style="font-weight:900;">Send a message</div>
+        <div class="counter"><span id="charCount">0</span>/500</div>
+      </div>
+      <div class="hr"></div>
+
+      <textarea id="msgInput" maxlength="500" placeholder="Type your message (max 500 characters)…"></textarea>
+
+      <div class="row" style="margin-top:10px;">
+        <button class="btn primary" id="sendBtn" type="button">Send</button>
+        <div class="muted small" id="sendStatus"></div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      collection,
+      query,
+      orderBy,
+      limit,
+      onSnapshot,
+      addDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+      authDomain: "troop-248.firebaseapp.com",
+      projectId: "troop-248",
+      storageBucket: "troop-248.firebasestorage.app",
+      messagingSenderId: "925363875752",
+      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+      measurementId: "G-NY75GX5TBH"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // UI
+    const authInfoEl = document.getElementById("auth-info");
+    const logoutBtn = document.getElementById("logout-btn");
+
+    const accessLine = document.getElementById("accessLine");
+    const accessBadge = document.getElementById("accessBadge");
+    const errorCard = document.getElementById("errorCard");
+
+    const liveStatus = document.getElementById("liveStatus");
+    const countStatus = document.getElementById("countStatus");
+    const messagesBox = document.getElementById("messagesBox");
+
+    const composerCard = document.getElementById("composerCard");
+    const msgInput = document.getElementById("msgInput");
+    const charCount = document.getElementById("charCount");
+    const sendBtn = document.getElementById("sendBtn");
+    const sendStatus = document.getElementById("sendStatus");
+
+    let currentUser = null;
+    let myInfo = null;
+    let canView = false;
+    let canSend = false;
+    let unsub = null;
+
+    function showError(msg){
+      errorCard.style.display = "block";
+      errorCard.className = "card error";
+      errorCard.textContent = msg;
+    }
+    function clearError(){
+      errorCard.style.display = "none";
+      errorCard.textContent = "";
+    }
+
+    function escapeHtml(str){
+      return String(str ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function normalizeRole(authRole){
+      const r = (authRole || "").toString().trim().toLowerCase();
+      if (r === "admin") return "admin";
+      if (r === "viewer") return "viewer";
+      return "pending";
+    }
+
+    function normalizeAccountType(t){
+      const s = (t || "").toString().trim().toLowerCase();
+      if (s === "scout") return "scout";
+      if (s === "parent") return "parent";
+      if (s === "leader") return "leader";
+      return "unknown";
+    }
+
+    function setAccessUI(){
+      if (!canView) {
+        accessLine.textContent = "You do not have access to view this chat.";
+        accessBadge.textContent = "No Access";
+        accessBadge.className = "badge warn";
+        composerCard.style.display = "none";
+        return;
+      }
+
+      if (canSend) {
+        accessLine.textContent = "You can read and send messages (Scout Viewer/Admin).";
+        accessBadge.textContent = "Can Send";
+        accessBadge.className = "badge ok";
+        composerCard.style.display = "block";
+      } else {
+        accessLine.textContent = "You can read messages (Adults are read-only).";
+        accessBadge.textContent = "Read Only";
+        accessBadge.className = "badge";
+        composerCard.style.display = "none";
+      }
+    }
+
+    function formatTime(ts){
+      try {
+        if (!ts) return "";
+        const d = ts.toDate ? ts.toDate() : new Date(ts);
+        if (isNaN(d.getTime())) return "";
+        return d.toLocaleString(undefined, {
+          year: "numeric", month: "short", day: "numeric",
+          hour: "numeric", minute: "2-digit"
+        });
+      } catch {
+        return "";
+      }
+    }
+
+    function renderMessages(docs){
+      // docs are newest-first (desc). We want oldest-first display.
+      const items = [...docs].reverse();
+
+      messagesBox.innerHTML = items.map(m => {
+        const data = m.data() || {};
+        const name = (data.senderName || "Unknown").toString();
+        const text = (data.text || "").toString();
+        const when = formatTime(data.createdAt);
+
+        return `
+          <div class="msg">
+            <div class="msg-top">
+              <div class="msg-name">${escapeHtml(name)}</div>
+              <div class="msg-meta">${escapeHtml(when)}</div>
+            </div>
+            <div class="msg-text">${escapeHtml(text)}</div>
+          </div>
+        `;
+      }).join("");
+
+      countStatus.textContent = `${items.length}/100`;
+      // Auto-scroll to bottom on first load / updates
+      messagesBox.scrollTop = messagesBox.scrollHeight;
+    }
+
+    function startListening(){
+      if (unsub) { unsub(); unsub = null; }
+      if (!canView) return;
+
+      const qy = query(
+        collection(db, "scoutMessages"),
+        orderBy("createdAt", "desc"),
+        limit(100)
+      );
+
+      liveStatus.textContent = "Live.";
+      unsub = onSnapshot(qy, (snap) => {
+        clearError();
+        renderMessages(snap.docs);
+      }, (err) => {
+        showError("Error loading messages: " + (err?.message || String(err)));
+        liveStatus.textContent = "Offline.";
+      });
+    }
+
+    msgInput.addEventListener("input", () => {
+      charCount.textContent = String((msgInput.value || "").length);
+    });
+
+    async function sendMessage(){
+      if (!currentUser || !myInfo) return;
+      if (!canSend) return;
+
+      const text = (msgInput.value || "").trim();
+      if (!text) {
+        sendStatus.textContent = "Type a message first.";
+        return;
+      }
+      if (text.length > 500) {
+        sendStatus.textContent = "Message is too long (max 500).";
+        return;
+      }
+
+      sendBtn.disabled = true;
+      sendStatus.textContent = "Sending…";
+
+      try {
+        const senderName =
+          (myInfo.fullName && String(myInfo.fullName).trim()) ||
+          (currentUser.email || currentUser.uid);
+
+        await addDoc(collection(db, "scoutMessages"), {
+          text,
+          createdAt: serverTimestamp(),
+          uid: currentUser.uid,
+          senderName: senderName,
+          senderType: normalizeAccountType(myInfo.accountType)
+        });
+
+        msgInput.value = "";
+        charCount.textContent = "0";
+        sendStatus.textContent = "Sent.";
+      } catch (err) {
+        sendStatus.textContent = "Error: " + (err?.message || String(err));
+      } finally {
+        sendBtn.disabled = false;
+        setTimeout(() => { sendStatus.textContent = ""; }, 2000);
+      }
+    }
+
+    sendBtn.addEventListener("click", sendMessage);
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.replace("/");
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      try {
+        clearError();
+
+        if (!user) {
+          window.location.replace("/");
+          return;
+        }
+
+        currentUser = user;
+        authInfoEl.textContent = `Signed in as ${user.email || user.uid}`;
+
+        const infoSnap = await getDoc(doc(db, "accountInfo", user.uid));
+        if (!infoSnap.exists()) {
+          window.location.replace("/under-review/");
+          return;
+        }
+
+        myInfo = infoSnap.data() || {};
+        const role = normalizeRole(myInfo.authRole);
+        const acct = normalizeAccountType(myInfo.accountType);
+
+        // ✅ Access rules (client-side)
+        // - Adults (parent/leader): can view always, cannot send
+        // - Scouts: only viewer/admin can view + send
+        canView = (acct === "parent" || acct === "leader") || (acct === "scout" && (role === "viewer" || role === "admin"));
+        canSend = (acct === "scout" && (role === "viewer" || role === "admin"));
+
+        setAccessUI();
+        startListening();
+      } catch (err) {
+        showError("Error checking access: " + (err?.message || String(err)));
+      }
+    });
+  </script>
+</body>
+</html>

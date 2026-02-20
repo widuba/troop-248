@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Scoutmaster Blog — Troop 248</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="/bsafavicon.ico">
+  <style>
+    :root {
+      --red: #b22222;
+      --blue: #1f4e79;
+      --tan: #f4eee3;
+      --white: #ffffff;
+      --text-main: #1f2933;
+      --text-muted: #6b7280;
+      --radius-lg: 16px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: #d2cab6;
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+    /* Dark theme body */
+body.dark-theme {
+  background: #111827;
+  color: #e5e7eb;
+}
+
+/* Main cards / sections */
+body.dark-theme .welcome-card,
+body.dark-theme section {
+  background: #1f2937;
+  border-color: rgba(55,65,81,.9);
+}
+
+/* Feature cards */
+body.dark-theme .feature-card {
+  background: #111827;
+  border-color: rgba(75,85,99,.9);
+}
+
+/* Text + small labels */
+body.dark-theme .feature-text,
+body.dark-theme .quick-note {
+  color: #d1d5db;
+}
+
+body.dark-theme .badge {
+  background: rgba(55,65,81,.8);
+  color: #e5e7eb;
+}
+    header {
+      background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
+      color: var(--white);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    header h2 {
+      margin: 0;
+      font-size: 19px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    header h2::before {
+      content: "★";
+      font-size: 18px;
+    }
+    .troop-home-link {
+      text-decoration: none;
+      color: inherit;
+      display: inline-flex;
+      align-items: center;
+    }
+    .troop-home-link:hover h2 {
+      opacity: 0.9;
+      text-decoration: underline;
+    }
+    nav {
+      display: flex;
+      gap: 12px;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+    nav a {
+      color: #1f4e79;
+      font-weight: bold;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(4px);
+      opacity: 0.9;
+    }
+    nav a:hover {
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.12);
+    }
+    #auth-bar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      font-size: 13px;
+    }
+    #logout-btn {
+      padding: 5px 12px;
+      font-size: 13px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--white);
+      cursor: pointer;
+    }
+    #logout-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    main {
+      padding: 24px 16px 40px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .welcome-card {
+      background: rgba(255, 255, 255, 0.97);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 10px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+    .welcome-card h3 {
+      margin: 0 0 4px;
+      font-size: 18px;
+    }
+    .welcome-card p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .badge {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(148, 163, 184, 0.2);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+    .badge.admin {
+      background: rgba(240, 180, 41, 0.16);
+      color: #92400e;
+      border: 1px solid rgba(245, 158, 11, 0.6);
+    }
+    section {
+      background: rgba(255, 255, 255, 0.97);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 14px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+    section h2 {
+      margin-top: 0;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    section h2::before {
+      content: "▸";
+      font-size: 14px;
+      color: var(--blue);
+    }
+    .admin-only { display: none; }
+    .small-help {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+    form {
+      margin-bottom: 10px;
+      padding: 10px 10px 8px;
+      background: #f9fafb;
+      border-radius: 12px;
+      border: 1px dashed rgba(148, 163, 184, 0.8);
+    }
+    form h3 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      color: var(--blue);
+    }
+    .field {
+      margin-bottom: 8px;
+    }
+    .field label {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 3px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .field input,
+    .field textarea {
+      width: 100%;
+      padding: 7px 8px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      font-size: 14px;
+      background: #ffffff;
+    }
+    .field textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+    .field input:focus,
+    .field textarea:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 2px rgba(31,78,121,.12);
+    }
+    form button {
+      padding: 7px 14px;
+      border-radius: var(--radius-pill);
+      border: none;
+      background: var(--blue);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    form button:hover { opacity: 0.96; }
+
+    .post-list {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+    }
+    .post-item {
+      border-bottom: 1px solid rgba(229,231,235,.9);
+      padding: 10px 0;
+    }
+    .post-item:last-child {
+      border-bottom: none;
+    }
+    .post-link {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    .post-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .post-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .post-excerpt {
+  font-size: 14px;
+  margin-top: 4px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+    .empty-text {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    #status {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+  </style>
+  <link rel="stylesheet" href="/modern-2026.css" />
+</head>
+<body>
+  <header>
+    <div>
+      <a href="/home" class="troop-home-link">
+        <h2>Troop 248</h2>
+      </a>
+    </div>
+    <nav>
+      <a href="/home">Home</a>
+      <a href="/calendar">Calendar</a>
+      <a href="/documents">Documents</a>
+      <a href="/scoutmaster">SM Blog</a>
+      <a href="/spl">SPL Blog</a>
+      <a href="/useful-links">Useful Links</a>
+      <a href="/events">Events</a>
+      <a href="/mail">Mail</a>
+    </nav>
+    <div id="auth-bar">
+      <div id="auth-info">Signed in as …</div>
+      <button id="logout-btn">Log Out</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="welcome-card">
+      <div>
+        <h3>Scoutmaster Blog</h3>
+        <p>Updates, reflections, and announcements from the Scoutmaster.</p>
+      </div>
+      <div id="role-badge-container">
+        <span class="badge">Viewer</span>
+      </div>
+    </div>
+
+    <!-- Admin-only create post -->
+    <section class="admin-only">
+      <h2>New Post (Admin)</h2>
+      <form id="new-post-form">
+        <div class="field">
+          <label for="post-title-input">Title</label>
+          <input id="post-title-input" type="text" required />
+        </div>
+        <div class="field">
+          <label for="post-body-input">Post Body</label>
+          <textarea id="post-body-input" required></textarea>
+        </div>
+        <button type="submit">Publish Post</button>
+        <div class="small-help">
+          Posts will appear below in newest-first order and can be opened on their own page.
+        </div>
+      </form>
+    </section>
+
+    <!-- Posts list -->
+    <section>
+      <h2>Recent Posts</h2>
+      <ul id="posts-list" class="post-list"></ul>
+      <div id="posts-empty" class="empty-text">No posts yet.</div>
+      <div id="status"></div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      collection,
+      addDoc,
+      onSnapshot,
+      orderBy,
+      query,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+      authDomain: "troop-248.firebaseapp.com",
+      projectId: "troop-248",
+      storageBucket: "troop-248.firebasestorage.app",
+      messagingSenderId: "925363875752",
+      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+      measurementId: "G-NY75GX5TBH"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const authInfoEl = document.getElementById("auth-info");
+    const logoutBtn = document.getElementById("logout-btn");
+    const roleBadgeContainer = document.getElementById("role-badge-container");
+
+    const adminOnlyEls = document.getElementsByClassName("admin-only");
+
+    const newPostForm = document.getElementById("new-post-form");
+    const postTitleInput = document.getElementById("post-title-input");
+    const postBodyInput = document.getElementById("post-body-input");
+
+    const postsListEl = document.getElementById("posts-list");
+    const postsEmptyEl = document.getElementById("posts-empty");
+    const statusEl = document.getElementById("status");
+
+    let currentUser = null;
+    let currentIsAdmin = false;
+    let unsubscribePosts = null;
+
+    function setStatus(text, color = "#6b7280") {
+      statusEl.textContent = text;
+      statusEl.style.color = color;
+      console.log("SCOUTMASTER STATUS:", text);
+    }
+
+    function showAdminUI() {
+      for (let i = 0; i < adminOnlyEls.length; i++) {
+        adminOnlyEls[i].style.display = currentIsAdmin ? "block" : "none";
+      }
+      if (currentUser) {
+        authInfoEl.textContent = "Signed in as " + (currentUser.email || currentUser.uid);
+        roleBadgeContainer.innerHTML = `
+          <span class="badge ${currentIsAdmin ? "admin" : ""}">
+            ${currentIsAdmin ? "Admin" : "Viewer"}
+          </span>`;
+      }
+    }
+
+    async function handleAuth(user) {
+      if (!user) {
+        window.location.href = "/";
+        return;
+      }
+      currentUser = user;
+      authInfoEl.textContent = "Signed in as " + (user.email || user.uid);
+
+      const infoRef = doc(db, "accountInfo", user.uid);
+      const infoSnap = await getDoc(infoRef);
+
+      if (!infoSnap.exists()) {
+        window.location.href = "/under-review/";
+        return;
+      }
+
+      const info = infoSnap.data();
+      const role = info.authRole;
+
+      if (role !== "admin" && role !== "viewer") {
+        window.location.href = "/under-review/";
+        return;
+      }
+
+      currentIsAdmin = role === "admin";
+      showAdminUI();
+      initPostsListener();
+    }
+
+    onAuthStateChanged(auth, handleAuth);
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "/";
+    });
+
+    function renderPosts(docs) {
+      postsListEl.innerHTML = "";
+      if (docs.length === 0) {
+        postsEmptyEl.style.display = "block";
+        return;
+      }
+      postsEmptyEl.style.display = "none";
+
+      docs.forEach((snap) => {
+        const data = snap.data();
+        const li = document.createElement("li");
+        li.className = "post-item";
+
+        const id = snap.id;
+        const title = data.title || "Untitled Post";
+        const body = data.body || "";
+        const author = data.authorName || "Unknown author";
+        const createdAt = data.createdAt
+          ? data.createdAt.toDate().toLocaleString()
+          : "";
+
+        const preview = body.length > 115 ? body.slice(0, 115) + "..." : body;
+
+        li.innerHTML = `
+  <a href="/scoutmaster/post?id=${encodeURIComponent(id)}" class="post-link">
+    <div class="post-title">${title}</div>
+    <div class="post-meta">
+      By ${author}${createdAt ? " • " + createdAt : ""}
+    </div>
+    <div class="post-excerpt">${preview}</div>
+  </a>
+`;
+
+        postsListEl.appendChild(li);
+      });
+    }
+
+    function initPostsListener() {
+      if (unsubscribePosts) {
+        unsubscribePosts();
+      }
+      const qPosts = query(
+        collection(db, "scoutmasterPosts"),  // CHANGE NAME HERE IF NEEDED
+        orderBy("createdAt", "desc")
+      );
+      unsubscribePosts = onSnapshot(
+        qPosts,
+        (snapshot) => {
+          renderPosts(snapshot.docs);
+          setStatus("Posts loaded.");
+        },
+        (error) => {
+          console.error("Error listening to posts:", error);
+          setStatus("Error loading posts: " + error.message, "#b91c1c");
+        }
+      );
+    }
+
+    if (newPostForm) {
+      newPostForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (!currentIsAdmin) {
+          alert("Only admins can create posts.");
+          return;
+        }
+        const title = postTitleInput.value.trim();
+        const body = postBodyInput.value.trim();
+        if (!title || !body) {
+          alert("Please fill in both title and body.");
+          return;
+        }
+
+        try {
+          setStatus("Publishing post...");
+          // Try to grab author name from accountInfo (fallback to email)
+          let authorName = currentUser.email || currentUser.uid;
+          try {
+            const infoRef = doc(db, "accountInfo", currentUser.uid);
+            const infoSnap = await getDoc(infoRef);
+            if (infoSnap.exists()) {
+              const info = infoSnap.data();
+
+              // ✅ NEW: preferred fullName
+              if (info.fullName && String(info.fullName).trim()) {
+                authorName = String(info.fullName).trim();
+              } else if (info.firstName || info.lastName) {
+                // fallback for older accounts
+                authorName = `${info.firstName || ""} ${info.lastName || ""}`.trim() || authorName;
+              }
+            }
+          } catch (e2) {
+            console.warn("Could not resolve authorName from accountInfo:", e2);
+          }
+
+          await addDoc(collection(db, "scoutmasterPosts"), {
+            title,
+            body,
+            authorName,
+            authorUid: currentUser.uid,
+            createdAt: serverTimestamp()
+          });
+
+          postTitleInput.value = "";
+          postBodyInput.value = "";
+          setStatus("Post published.", "#166534");
+        } catch (err) {
+          console.error("Error publishing post:", err);
+          setStatus("Error publishing post: " + err.message, "#b91c1c");
+        }
+      });
+    }
+  </script>
+  <script>
+  (function () {
+    const STORAGE_KEY = "troop248-theme";
+    const body = document.body;
+    const toggleBtn = document.getElementById("theme-toggle");
+
+    if (!toggleBtn) return;
+
+    function applyTheme(theme) {
+      const isDark = theme === "dark";
+      body.classList.toggle("dark-theme", isDark);
+      toggleBtn.textContent = isDark ? "🌙 Dark mode" : "🌞 Light mode";
+    }
+
+    const saved = localStorage.getItem(STORAGE_KEY);
+    const prefersDark = window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const initial = saved || (prefersDark ? "dark" : "light");
+
+    applyTheme(initial);
+    localStorage.setItem(STORAGE_KEY, initial);
+
+    toggleBtn.addEventListener("click", function () {
+      const newTheme = body.classList.contains("dark-theme") ? "light" : "dark";
+      applyTheme(newTheme);
+      localStorage.setItem(STORAGE_KEY, newTheme);
+    });
+  })();
+</script>
+</body>
+</html>

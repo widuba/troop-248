@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>My Account — Troop 248</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" type="image/png" href="/bsafavicon.ico">
+
+<style>
+:root {
+  --red:#b22222;
+  --blue:#1f4e79;
+  --tan:#f4eee3;
+  --white:#ffffff;
+  --text-main:#1f2933;
+  --text-muted:#6b7280;
+  --radius-lg:16px;
+  --radius-pill:999px;
+  --shadow-soft:0 10px 25px rgba(0,0,0,.06);
+}
+*{box-sizing:border-box}
+
+/* DARK MODE */
+body.dark-theme{
+  background:#111827;
+  color:#e5e7eb;
+}
+body.dark-theme .welcome-card,
+body.dark-theme section{
+  background:#1f2937;
+  border-color:rgba(55,65,81,.9);
+}
+body.dark-theme form{
+  background:#111827;
+  border-color:rgba(75,85,99,.9);
+}
+body.dark-theme textarea{
+  background:#1f2937;
+  color:#e5e7eb;
+  border-color:#374151;
+}
+
+/* BODY */
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:#d2cab6;
+  color:var(--text-main);
+  min-height:100vh;
+}
+
+/* HEADER */
+header{
+  background:linear-gradient(120deg,#b22222,#ffffff,#1f4e79);
+  color:var(--white);
+  padding:14px 24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+header h2{
+  margin:0;
+  font-size:19px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+header h2::before{content:"★"}
+
+.troop-home-link{
+  text-decoration:none;
+  color:inherit;
+}
+
+nav{
+  display:flex;
+  gap:12px;
+  font-size:13px;
+  text-transform:uppercase;
+}
+nav a{
+  color:#1f4e79;
+  font-weight:bold;
+  text-decoration:none;
+  padding:6px 10px;
+  border-radius:var(--radius-pill);
+  border:1px solid rgba(255,255,255,.25);
+}
+nav a:hover{
+  background:rgba(255,255,255,.12);
+}
+
+#auth-bar{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  font-size:13px;
+}
+
+#logout-btn{
+  padding:5px 12px;
+  font-size:13px;
+  border-radius:var(--radius-pill);
+  border:1px solid rgba(255,255,255,.7);
+  background:rgba(255,255,255,.1);
+  color:var(--white);
+  cursor:pointer;
+}
+
+/* MAIN */
+main{
+  padding:24px 16px 40px;
+  max-width:960px;
+  margin:0 auto;
+}
+
+.welcome-card{
+  background:rgba(255,255,255,.95);
+  border-radius:var(--radius-lg);
+  padding:18px;
+  margin-bottom:18px;
+  box-shadow:var(--shadow-soft);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border:1px solid rgba(148,163,184,.4);
+}
+
+.welcome-card h3{
+  margin:0 0 4px;
+}
+
+.welcome-card p{
+  margin:0;
+  font-size:14px;
+  color:var(--text-muted);
+}
+
+.badge{
+  font-size:11px;
+  padding:4px 8px;
+  border-radius:var(--radius-pill);
+  background:rgba(148,163,184,.2);
+  color:var(--text-muted);
+  text-transform:uppercase;
+}
+
+.badge.admin{
+  background:rgba(240,180,41,.16);
+  color:#92400e;
+  border:1px solid rgba(245,158,11,.6);
+}
+
+section{
+  background:rgba(255,255,255,.95);
+  border-radius:var(--radius-lg);
+  padding:18px;
+  margin-bottom:18px;
+  box-shadow:var(--shadow-soft);
+  border:1px solid rgba(148,163,184,.4);
+}
+
+section h2{
+  margin-top:0;
+  font-size:18px;
+}
+section h2::before{
+  content:"▸ ";
+  color:var(--blue);
+}
+
+/* FIELDS */
+.field{
+  margin-bottom:10px;
+}
+.field label{
+  font-size:12px;
+  color:var(--text-muted);
+  text-transform:uppercase;
+  letter-spacing:.05em;
+}
+.value{
+  font-size:14px;
+  padding:4px 0;
+}
+
+textarea{
+  width:100%;
+  min-height:90px;
+  padding:8px;
+  border-radius:10px;
+  border:1px solid #d1d5db;
+  font-size:14px;
+  resize:vertical;
+}
+
+form button{
+  margin-top:8px;
+  padding:6px 14px;
+  font-size:13px;
+  border-radius:var(--radius-pill);
+  border:none;
+  cursor:pointer;
+  background:var(--blue);
+  color:white;
+}
+
+.secondary{
+  background:#555;
+  margin-left:6px;
+}
+</style>
+  <link rel="stylesheet" href="/modern-2026.css" />
+</head>
+
+<body>
+
+<header>
+  <a href="/home" class="troop-home-link">
+    <h2>Troop 248</h2>
+  </a>
+
+  <nav>
+    <a href="/home">Home</a>
+    <a href="/calendar">Calendar</a>
+    <a href="/documents">Documents</a>
+    <a href="/scoutmaster">SM Blog</a>
+    <a href="/spl">SPL Blog</a>
+    <a href="/useful-links">Useful Links</a>
+    <a href="/events">Events</a>
+    <a href="/mail">Mail</a>
+  </nav>
+
+  <div id="auth-bar">
+    <div id="auth-info">Signed in as …</div>
+    <button id="logout-btn">Log Out</button>
+  </div>
+</header>
+
+<main>
+
+<div class="welcome-card">
+  <div>
+    <h3>My Account</h3>
+    <p>Your profile and account settings</p>
+  </div>
+  <div id="role-badge"></div>
+</div>
+
+<section>
+<h2>Profile (If you would like to change anything not editable, contact dukes@troop-248.com)</h2>
+
+<div class="field">
+<label>Email</label>
+<div class="value" id="email"></div>
+</div>
+
+<div class="field">
+<label>UID</label>
+<div class="value" id="uid"></div>
+</div>
+
+<div class="field">
+<label>Full Name</label>
+<div class="value" id="fullName"></div>
+</div>
+
+<div class="field">
+<label>Phone</label>
+<div class="value" id="phone"></div>
+</div>
+
+<div class="field">
+<label>Account Type</label>
+<div class="value" id="accountType"></div>
+</div>
+
+<div class="field">
+<label>Auth Role</label>
+<div class="value" id="authRole"></div>
+</div>
+</section>
+
+<section>
+<h2>Notes</h2>
+
+<form>
+<textarea id="notes"></textarea>
+<button type="button" id="saveNotes">Save Notes</button>
+<button type="button" id="resetPass" class="secondary">Reset Password</button>
+</form>
+</section>
+
+</main>
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+  authDomain: "troop-248.firebaseapp.com",
+  projectId: "troop-248",
+  storageBucket: "troop-248.firebasestorage.app",
+  messagingSenderId: "925363875752",
+  appId: "1:925363875752:web:0b001c1a7a09fb8232f79d"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const authInfo = document.getElementById("auth-info");
+const logoutBtn = document.getElementById("logout-btn");
+const roleBadge = document.getElementById("role-badge");
+
+const emailEl = document.getElementById("email");
+const uidEl = document.getElementById("uid");
+const fullNameEl = document.getElementById("fullName");
+const phoneEl = document.getElementById("phone");
+const accountTypeEl = document.getElementById("accountType");
+const authRoleEl = document.getElementById("authRole");
+const notesEl = document.getElementById("notes");
+
+const saveBtn = document.getElementById("saveNotes");
+const resetBtn = document.getElementById("resetPass");
+
+let currentUid = null;
+
+onAuthStateChanged(auth, async (user)=>{
+  if(!user){
+    window.location.href="/";
+    return;
+  }
+
+  currentUid = user.uid;
+  authInfo.textContent = `Signed in as ${user.email}`;
+  uidEl.textContent = user.uid;
+
+  const ref = doc(db,"accountInfo",user.uid);
+  const snap = await getDoc(ref);
+
+  if(!snap.exists()){
+    alert("Account profile missing");
+    return;
+  }
+
+  const d = snap.data();
+
+  emailEl.textContent = d.email || "";
+  fullNameEl.textContent = d.fullName || "";
+  phoneEl.textContent = d.phone || "";
+  accountTypeEl.textContent = d.accountType || "";
+  authRoleEl.textContent = d.authRole || "";
+  notesEl.value = d.notes || "";
+
+  roleBadge.innerHTML = `
+    <span class="badge ${d.authRole==="admin"?"admin":""}">
+      ${d.authRole || "viewer"}
+    </span>`;
+});
+
+saveBtn.onclick = async ()=>{
+  if(!currentUid) return;
+  await updateDoc(doc(db,"accountInfo",currentUid),{
+    notes: notesEl.value
+  });
+  alert("Notes saved");
+};
+
+resetBtn.onclick = async ()=>{
+  const user = auth.currentUser;
+  if(!user) return;
+  await sendPasswordResetEmail(auth,user.email);
+  alert("Password reset email sent");
+};
+
+logoutBtn.onclick = async ()=>{
+  await signOut(auth);
+  window.location.href="/";
+};
+</script>
+
+</body>
+</html>
