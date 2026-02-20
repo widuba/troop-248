@@ -172,3 +172,28 @@ th {
 .mail-subject {
   color: var(--m26-text) !important;
 }
+
+/* Messaging (scouts/adults) thread containers/cards */
+.messages,
+#messagesBox {
+  background: rgba(16, 30, 54, 0.96) !important;
+  border-color: rgba(90, 200, 250, 0.3) !important;
+}
+
+.msg,
+#messagesBox .msg {
+  background: rgba(24, 41, 70, 0.94) !important;
+  border-color: rgba(90, 200, 250, 0.28) !important;
+}
+
+/* Documents upload area */
+#upload-dropzone,
+#upload-form,
+#add-link-form {
+  background: rgba(24, 41, 70, 0.94) !important;
+  border-color: rgba(90, 200, 250, 0.3) !important;
+}
+
+#upload-dropzone.highlight {
+  background: rgba(34, 57, 94, 0.96) !important;
+}
