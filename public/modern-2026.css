@@ -197,3 +197,29 @@ th {
 #upload-dropzone.highlight {
   background: rgba(34, 57, 94, 0.96) !important;
 }
+
+/* Useful links list surfaces */
+.topic-card {
+  background: rgba(24, 41, 70, 0.94) !important;
+  border-color: rgba(90, 200, 250, 0.28) !important;
+}
+
+.topic-header {
+  background: rgba(34, 57, 94, 0.9) !important;
+  border-bottom: 1px solid rgba(90, 200, 250, 0.22);
+}
+
+.link-list {
+  background: rgba(16, 30, 54, 0.92) !important;
+  border-top-color: rgba(90, 200, 250, 0.22) !important;
+}
+
+.link-item {
+  border-bottom-color: rgba(90, 200, 250, 0.2) !important;
+}
+
+/* Events cards */
+.event-card {
+  background: rgba(24, 41, 70, 0.94) !important;
+  border-color: rgba(90, 200, 250, 0.28) !important;
+}
