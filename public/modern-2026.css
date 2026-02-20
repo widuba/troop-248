@@ -127,3 +127,48 @@ th {
   nav { overflow-x: auto; scrollbar-width: none; }
   nav::-webkit-scrollbar { display: none; }
 }
+
+/* Readability fixes for list/detail surfaces that were too light */
+#recipients-list .user-row,
+#mail-list .mail-item,
+#messages-list .message-item,
+#messages .message-item,
+#message-list .message-item,
+.messages-list .message-item {
+  background: rgba(24, 41, 70, 0.94) !important;
+  border-color: rgba(90, 200, 250, 0.26) !important;
+}
+
+/* Messaging landing cards */
+.box {
+  background: rgba(24, 41, 70, 0.9) !important;
+  border-color: rgba(90, 200, 250, 0.24) !important;
+}
+
+/* Roster list + user detail panels */
+.user-card,
+.detail-item {
+  background: rgba(24, 41, 70, 0.94) !important;
+  border-color: rgba(90, 200, 250, 0.28) !important;
+}
+
+/* Patrol list cards */
+.patrol-box,
+.scout-item {
+  background: rgba(24, 41, 70, 0.94) !important;
+  border-color: rgba(90, 200, 250, 0.28) !important;
+}
+
+/* Home streak surface */
+.streak-card {
+  background: rgba(24, 41, 70, 0.92) !important;
+  border-color: rgba(90, 200, 250, 0.26) !important;
+}
+
+.streak-number,
+.detail-value,
+.patrol-title,
+.scout-name,
+.mail-subject {
+  color: var(--m26-text) !important;
+}
