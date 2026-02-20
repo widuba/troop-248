@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Report — Troop 248</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="/bsafavicon.ico">
+
+  <style>
+    :root {
+      --red: #b22222;
+      --blue: #1f4e79;
+      --tan: #f4eee3;
+      --white: #ffffff;
+      --text-main: #1f2933;
+      --text-muted: #6b7280;
+      --radius-lg: 16px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #d2cab6;
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
+      color: var(--white);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    header h2 {
+      margin: 0;
+      font-size: 19px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    header h2::before { content: "★"; font-size: 18px; }
+
+    .troop-home-link {
+      text-decoration: none;
+      color: inherit;
+      display: inline-flex;
+      align-items: center;
+    }
+    .troop-home-link:hover h2 { opacity: 0.9; text-decoration: underline; }
+
+    nav {
+      display: flex;
+      gap: 12px;
+      font-size: 13px;
+      text-transform: uppercase;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: #1f4e79;
+      font-weight: bold;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(4px);
+      opacity: 0.9;
+    }
+    nav a:hover { opacity: 1; background: rgba(255, 255, 255, 0.12); }
+
+    #auth-bar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      font-size: 13px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    #logout-btn {
+      padding: 5px 12px;
+      font-size: 13px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--white);
+      cursor: pointer;
+    }
+    #logout-btn:hover { background: rgba(255, 255, 255, 0.2); }
+
+    main {
+      padding: 24px 16px 40px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .welcome-card {
+      background: rgba(255, 255, 255, 0.97);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 10px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    .welcome-card h3 { margin: 0 0 4px; font-size: 18px; }
+    .welcome-card p { margin: 0; font-size: 14px; color: var(--text-muted); }
+
+    .badge {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(148, 163, 184, 0.2);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      white-space: nowrap;
+    }
+    .badge.admin {
+      background: rgba(240, 180, 41, 0.16);
+      color: #92400e;
+      border: 1px solid rgba(245, 158, 11, 0.6);
+    }
+
+    section {
+      background: rgba(255, 255, 255, 0.97);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 14px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    section h2 {
+      margin-top: 0;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    section h2::before { content: "▸"; font-size: 14px; color: var(--blue); }
+
+    .small-help { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+    .danger { color: #b91c1c; }
+    .success { color: #166534; }
+
+    form {
+      margin: 0;
+      padding: 10px 10px 8px;
+      background: #f9fafb;
+      border-radius: 12px;
+      border: 1px dashed rgba(148, 163, 184, 0.8);
+    }
+
+    .field { margin-bottom: 10px; }
+    .field label {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 3px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .field textarea, .field input {
+      width: 100%;
+      padding: 7px 8px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      font-size: 14px;
+      background: #ffffff;
+    }
+    .field textarea {
+      resize: vertical;
+      min-height: 140px;
+    }
+    .field input:focus, .field textarea:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 2px rgba(31,78,121,.12);
+    }
+
+    .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+    .btn-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 12px;
+      font-size: 13px;
+      border-radius: var(--radius-pill);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .btn-primary { background: var(--blue); color: var(--white); }
+    .btn-danger { background: var(--red); color: var(--white); }
+    .btn-outlined { background: rgba(31,78,121,.08); color: var(--blue); border: 1px solid rgba(148,163,184,.7); }
+    .btn-chip:hover { opacity: .96; }
+    .btn-chip:disabled { opacity: .55; cursor: not-allowed; }
+
+    /* Report list */
+    .item-list {
+      list-style: none;
+      padding-left: 0;
+      margin: 8px 0 0;
+      font-size: 14px;
+    }
+
+    .item {
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(229,231,235,.9);
+    }
+    .item:last-child { border-bottom: none; }
+
+    .item-title { font-weight: 700; }
+    .item-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .item-body {
+      margin-top: 8px;
+      font-size: 13px;
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+    }
+
+    .empty-text { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
+    .admin-only { display: none; }
+
+    @media (max-width: 640px) {
+      header { flex-direction: column; align-items: flex-start; gap: 8px; }
+      nav { width: 100%; }
+      #auth-bar { width: 100%; justify-content: flex-start; }
+      .welcome-card { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+  <link rel="stylesheet" href="/modern-2026.css" />
+</head>
+
+<body>
+  <header>
+    <div>
+      <a href="/home" class="troop-home-link">
+        <h2>Troop 248</h2>
+      </a>
+    </div>
+
+    <nav>
+      <a href="/home">Home</a>
+      <a href="/calendar">Calendar</a>
+      <a href="/documents">Documents</a>
+      <a href="/scoutmaster">SM Blog</a>
+      <a href="/spl">SPL Blog</a>
+      <a href="/useful-links">Useful Links</a>
+      <a href="/events">Events</a>
+      <a href="/report">Report</a>
+    </nav>
+
+    <div id="auth-bar">
+      <div id="auth-info">Signed in as …</div>
+      <button id="logout-btn">Log Out</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="welcome-card">
+      <div>
+        <h3>Report Website</h3>
+        <p>Report bugs, broken links, or other website issues.</p>
+      </div>
+      <div id="role-badge-container">
+        <span class="badge">Viewer</span>
+      </div>
+    </div>
+
+    <!-- Anyone approved can submit -->
+    <section>
+      <h2>Submit a Report</h2>
+
+      <form id="report-form">
+        <div class="field">
+          <label for="report-message">What’s wrong?</label>
+          <textarea id="report-message" placeholder="Describe the issue and how to reproduce it… (be as specific as you can)"></textarea>
+        </div>
+
+        <div class="field">
+          <label for="report-page">Page (auto)</label>
+          <input id="report-page" type="text" readonly />
+          <div class="small-help">This helps us locate the issue quickly.</div>
+        </div>
+
+        <div class="btn-row">
+          <button id="submit-btn" class="btn-chip btn-primary" type="submit">Submit</button>
+        </div>
+
+        <div id="report-error" class="small-help danger"></div>
+        <div id="report-success" class="small-help success"></div>
+      </form>
+    </section>
+
+    <!-- Admin-only list -->
+    <section class="admin-only" id="admin-section">
+      <h2>All Reports (Admin)</h2>
+      <div class="small-help">Newest first. You can delete reports after you’ve handled them.</div>
+
+      <ul id="reports-list" class="item-list"></ul>
+      <div id="reports-empty" class="empty-text">No reports yet.</div>
+      <div id="admin-status" class="small-help"></div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      collection,
+      addDoc,
+      deleteDoc,
+      onSnapshot,
+      query,
+      orderBy,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+      authDomain: "troop-248.firebaseapp.com",
+      projectId: "troop-248",
+      storageBucket: "troop-248.firebasestorage.app",
+      messagingSenderId: "925363875752",
+      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+      measurementId: "G-NY75GX5TBH"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Header
+    const authInfoEl = document.getElementById("auth-info");
+    const logoutBtn = document.getElementById("logout-btn");
+    const roleBadgeContainer = document.getElementById("role-badge-container");
+    const adminOnlyEls = document.getElementsByClassName("admin-only");
+
+    // Form
+    const reportForm = document.getElementById("report-form");
+    const reportMsgEl = document.getElementById("report-message");
+    const reportPageEl = document.getElementById("report-page");
+    const submitBtn = document.getElementById("submit-btn");
+    const reportErrEl = document.getElementById("report-error");
+    const reportOkEl = document.getElementById("report-success");
+
+    // Admin list
+    const reportsListEl = document.getElementById("reports-list");
+    const reportsEmptyEl = document.getElementById("reports-empty");
+    const adminStatusEl = document.getElementById("admin-status");
+
+    let currentUser = null;
+    let currentInfo = null;
+    let currentIsAdmin = false;
+    let unsubscribeAdmin = null;
+
+    function escapeHtml(str) {
+      return (str || "").toString()
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function formatTime(ts) {
+      if (!ts) return "";
+      try {
+        const d = ts.toDate ? ts.toDate() : new Date(ts);
+        return d.toLocaleString(undefined, {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit"
+        });
+      } catch {
+        return "";
+      }
+    }
+
+    function getDisplayName(info, user) {
+      const full = (info?.fullName || "").toString().trim();
+      if (full) return full;
+
+      const first = (info?.firstName || "").toString().trim();
+      const last = (info?.lastName || "").toString().trim();
+      const combo = `${first} ${last}`.trim();
+      if (combo) return combo;
+
+      return (info?.email || user?.email || user?.uid || "Unknown");
+    }
+
+    function setRoleBadge() {
+      roleBadgeContainer.innerHTML = `
+        <span class="badge ${currentIsAdmin ? "admin" : ""}">
+          ${currentIsAdmin ? "Admin" : "Viewer"}
+        </span>
+      `;
+    }
+
+    function setAdminUIVisible() {
+      for (let i = 0; i < adminOnlyEls.length; i++) {
+        adminOnlyEls[i].style.display = currentIsAdmin ? "block" : "none";
+      }
+    }
+
+    async function handleAuth(user) {
+      if (!user) {
+        window.location.href = "/";
+        return;
+      }
+
+      currentUser = user;
+      authInfoEl.textContent = "Signed in as " + (user.email || user.uid);
+
+      const infoSnap = await getDoc(doc(db, "accountInfo", user.uid));
+      if (!infoSnap.exists()) {
+        window.location.href = "/under-review/";
+        return;
+      }
+
+      const info = infoSnap.data() || {};
+      const role = info.authRole;
+
+      if (role !== "admin" && role !== "viewer") {
+        window.location.href = "/under-review/";
+        return;
+      }
+
+      currentInfo = info;
+      currentIsAdmin = role === "admin";
+      setRoleBadge();
+      setAdminUIVisible();
+
+      // fill page field
+      reportPageEl.value = window.location.href;
+
+      if (currentIsAdmin) startAdminReports();
+    }
+
+    onAuthStateChanged(auth, (user) => {
+      handleAuth(user).catch((e) => {
+        console.error("Auth handler error:", e);
+        window.location.href = "/home";
+      });
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "/";
+    });
+
+    // Submit report
+    reportForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      reportErrEl.textContent = "";
+      reportOkEl.textContent = "";
+
+      const message = reportMsgEl.value.trim();
+      if (!message) {
+        reportErrEl.textContent = "Please describe the issue.";
+        return;
+      }
+
+      if (!currentUser || !currentInfo) {
+        reportErrEl.textContent = "Not signed in.";
+        return;
+      }
+
+      submitBtn.disabled = true;
+
+      try {
+        const reporterName = getDisplayName(currentInfo, currentUser);
+        const reporterEmail = (currentInfo.email || currentUser.email || "").toString().trim();
+        const reporterAccountType = (currentInfo.accountType || "").toString().trim();
+
+        await addDoc(collection(db, "siteReports"), {
+          message,
+          pageUrl: window.location.href,
+          pagePath: window.location.pathname,
+          reporterUid: currentUser.uid,
+          reporterEmail,
+          reporterName,
+          reporterAccountType,
+          status: "open",
+          createdAt: serverTimestamp()
+        });
+
+        reportMsgEl.value = "";
+        reportOkEl.textContent = "Submitted. Thank you!";
+      } catch (err) {
+        console.error("Error submitting report:", err);
+        reportErrEl.textContent = err?.message || "Error submitting report.";
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+
+    // Admin reports list
+    function startAdminReports() {
+      if (unsubscribeAdmin) unsubscribeAdmin();
+
+      adminStatusEl.textContent = "Loading reports…";
+
+      const q = query(
+        collection(db, "siteReports"),
+        orderBy("createdAt", "desc")
+      );
+
+      unsubscribeAdmin = onSnapshot(
+        q,
+        (snapshot) => {
+          adminStatusEl.textContent = "";
+          renderReports(snapshot.docs);
+        },
+        (error) => {
+          console.error("Admin reports listener error:", error);
+          adminStatusEl.textContent = "Error loading reports: " + (error?.message || "Unknown error");
+          adminStatusEl.style.color = "#b91c1c";
+        }
+      );
+    }
+
+    function renderReports(docs) {
+      reportsListEl.innerHTML = "";
+
+      if (!docs || docs.length === 0) {
+        reportsEmptyEl.style.display = "block";
+        return;
+      }
+
+      reportsEmptyEl.style.display = "none";
+
+      docs.forEach((snap) => {
+        const data = snap.data() || {};
+        const id = snap.id;
+
+        const reporterName = data.reporterName || data.reporterEmail || data.reporterUid || "Unknown";
+        const reporterType = data.reporterAccountType || "";
+        const createdAt = formatTime(data.createdAt);
+        const pagePath = data.pagePath || "";
+        const pageUrl = data.pageUrl || "";
+        const message = data.message || "";
+        const status = data.status || "open";
+
+        const li = document.createElement("li");
+        li.className = "item";
+
+        li.innerHTML = `
+          <div class="item-title">${escapeHtml(status.toUpperCase())} — ${escapeHtml(pagePath || "(page unknown)")}</div>
+          <div class="item-meta">
+            Reported by ${escapeHtml(reporterName)}${reporterType ? " (" + escapeHtml(reporterType) + ")" : ""}
+            ${createdAt ? " • " + escapeHtml(createdAt) : ""}
+          </div>
+          ${pageUrl ? `<div class="item-meta">URL: ${escapeHtml(pageUrl)}</div>` : ""}
+          <div class="item-body">${escapeHtml(message)}</div>
+        `;
+
+        const btnRow = document.createElement("div");
+        btnRow.className = "btn-row";
+
+        const delBtn = document.createElement("button");
+        delBtn.className = "btn-chip btn-danger";
+        delBtn.type = "button";
+        delBtn.textContent = "Delete";
+
+        delBtn.addEventListener("click", async () => {
+          if (!confirm("Delete this report?")) return;
+          try {
+            await deleteDoc(doc(db, "siteReports", id));
+          } catch (err) {
+            console.error("Delete report error:", err);
+            alert(err?.message || "Error deleting report.");
+          }
+        });
+
+        btnRow.appendChild(delBtn);
+        li.appendChild(btnRow);
+
+        reportsListEl.appendChild(li);
+      });
+    }
+  </script>
+</body>
+</html>
