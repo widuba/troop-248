@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Advancement — Rank | Troop 248</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="/bsafavicon.ico">
+
+  <style>
+    :root {
+      --red: #b22222;
+      --blue: #1f4e79;
+      --tan: #f4eee3;
+      --white: #ffffff;
+      --text-main: #1f2933;
+      --text-muted: #6b7280;
+      --radius-lg: 16px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
+      --card: rgba(255, 255, 255, 0.95);
+      --line: rgba(148, 163, 184, 0.4);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #d2cab6;
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
+      color: var(--white);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    header h2 {
+      margin: 0;
+      font-size: 19px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    header h2::before { content: "★"; font-size: 18px; }
+
+    .troop-home-link { text-decoration:none; color:inherit; display:inline-flex; align-items:center; }
+    .troop-home-link:hover h2 { opacity:.9; text-decoration: underline; }
+
+    nav {
+      display: flex;
+      gap: 12px;
+      font-size: 13px;
+      text-transform: uppercase;
+      flex-wrap: wrap;
+    }
+    nav a {
+      color: #1f4e79;
+      font-weight: bold;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(4px);
+      opacity: 0.9;
+      white-space: nowrap;
+    }
+    nav a:hover { opacity: 1; background: rgba(255, 255, 255, 0.12); }
+
+    #auth-bar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      font-size: 13px;
+      flex-wrap: wrap;
+    }
+    #logout-btn {
+      padding: 5px 12px;
+      font-size: 13px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--white);
+      cursor: pointer;
+    }
+    #logout-btn:hover { background: rgba(255, 255, 255, 0.2); }
+
+    main { padding: 24px 16px 40px; max-width: 1100px; margin: 0 auto; }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 16px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--line);
+    }
+    .row { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+    .muted { color: var(--text-muted); }
+    .small { font-size: 13px; }
+    .hr { height:1px; background: rgba(0,0,0,.08); margin: 12px 0; }
+
+    .badge {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(148, 163, 184, 0.2);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      font-weight: 800;
+    }
+    .badge.admin {
+      background: rgba(240, 180, 41, 0.16);
+      color: #92400e;
+      border: 1px solid rgba(245, 158, 11, 0.6);
+    }
+    .badge.blocked {
+      background: rgba(178,34,34,.10);
+      color: #7f1d1d;
+      border: 1px solid rgba(178,34,34,.25);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 980px){
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    .rank-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .rank-btn {
+      text-align: left;
+      border-radius: 14px;
+      border: 1px solid rgba(209,213,219,.9);
+      background: #f9fafb;
+      padding: 12px 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,.04);
+      transition: transform .1s ease, box-shadow .1s ease, border-color .1s ease;
+    }
+    .rank-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(0,0,0,.06); border-color: rgba(148,163,184,.9); }
+    .rank-btn.active { border-color: rgba(31,78,121,.45); background: rgba(31,78,121,.06); }
+    .rank-title { font-weight: 900; margin: 0; font-size: 15px; }
+    .rank-sub { margin: 3px 0 0; font-size: 12px; color: var(--text-muted); }
+
+    .req-head {
+      display:flex;
+      align-items:flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 6px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(31,78,121,.18);
+      background: rgba(31,78,121,.08);
+      color: var(--blue);
+      font-weight: 900;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      white-space: nowrap;
+    }
+    .pill.gray {
+      background: rgba(148, 163, 184, 0.2);
+      color: var(--text-muted);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+    }
+    .pill.good {
+      background: rgba(22, 101, 52, 0.10);
+      color: #166534;
+      border: 1px solid rgba(22, 101, 52, 0.25);
+    }
+    .pill.warn {
+      background: rgba(146, 64, 14, 0.10);
+      color: #92400e;
+      border: 1px solid rgba(146, 64, 14, 0.25);
+    }
+
+    .req-list { margin-top: 12px; display:flex; flex-direction:column; gap: 10px; }
+    .req {
+      border-radius: 14px;
+      border: 1px solid rgba(209,213,219,.9);
+      background: #f9fafb;
+      padding: 12px 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,.04);
+    }
+    .req-top { display:flex; align-items:flex-start; justify-content:space-between; gap: 10px; flex-wrap:wrap; }
+    .req-title { margin:0; font-weight: 900; font-size: 14px; }
+    .req-text { margin: 6px 0 0; font-size: 13px; color: var(--text-muted); line-height: 1.35; }
+    .req-meta { margin-top: 8px; display:flex; gap: 8px; flex-wrap:wrap; align-items:center; }
+
+    .btn {
+      padding: 9px 12px;
+      font-size: 13px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(209,213,219,.9);
+      background: rgba(255,255,255,.70);
+      color: var(--text-main);
+      cursor: pointer;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+    .btn:hover { background: rgba(255,255,255,.9); }
+    .btn:disabled { opacity: .55; cursor:not-allowed; }
+    .btn.primary {
+      border-color: rgba(31,78,121,.25);
+      background: rgba(31,78,121,.08);
+      color: var(--blue);
+    }
+    .btn.danger {
+      border-color: rgba(178,34,34,.35);
+      background: rgba(178,34,34,.08);
+      color: #7f1d1d;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 70px;
+      resize: vertical;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(0,0,0,.12);
+      outline: none;
+      background: rgba(255,255,255,.85);
+      font-size: 14px;
+    }
+
+    .error{
+      border: 1px solid rgba(178,34,34,.25);
+      background: rgba(178,34,34,.08);
+      color: #7f1d1d;
+    }
+
+    .loading{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .dot{
+      width:10px; height:10px; border-radius:50%;
+      background: rgba(0,0,0,.25);
+      animation: pulse 1s infinite ease-in-out;
+    }
+    .dot:nth-child(2){ animation-delay: .15s; }
+    .dot:nth-child(3){ animation-delay: .30s; }
+    @keyframes pulse{
+      0%,100%{ transform: scale(.9); opacity:.4; }
+      50%{ transform: scale(1.2); opacity:.9; }
+    }
+
+    table { width:100%; border-collapse: collapse; font-size: 13px; }
+    th, td { text-align:left; padding: 8px 6px; border-bottom: 1px solid rgba(229,231,235,.9); vertical-align: top; }
+    th { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--text-muted); }
+
+    .link { color: var(--blue); font-weight: 900; text-decoration: none; }
+    .link:hover { text-decoration: underline; }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div>
+      <a href="/home" class="troop-home-link"><h2>Troop 248</h2></a>
+    </div>
+
+    <!-- ✅ user-specified canonical navbar -->
+    <nav>
+      <a href="/home">Home</a>
+      <a href="/calendar">Calendar</a>
+      <a href="/documents">Documents</a>
+      <a href="/scoutmaster">SM Blog</a>
+      <a href="/spl">SPL Blog</a>
+      <a href="/useful-links">Useful Links</a>
+      <a href="/events">Events</a>
+      <a href="/mail">Mail</a>
+    </nav>
+
+    <div id="auth-bar">
+      <div id="auth-info">Signed in as …</div>
+      <button id="logout-btn" type="button">Log Out</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="card" id="topCard">
+      <div class="row">
+        <div>
+          <div style="font-weight:900; font-size:18px;">Advancement — Rank</div>
+          <div class="muted small" id="subtitleLine">Checking access…</div>
+        </div>
+        <div id="roleBadge" class="badge">Loading</div>
+      </div>
+      <div class="hr"></div>
+      <div class="muted small">
+        Rank requirements source (official PDF): 
+        <a class="link" target="_blank" rel="noopener noreferrer"
+           href="https://www.scouting.org/wp-content/uploads/2025/04/3321624-Scouts-BSA-Requirements.pdf">
+          Scouts BSA Requirements
+        </a>
+         [oai_citation:2‡Scouting America](https://www.scouting.org/wp-content/uploads/2025/04/3321624-Scouts-BSA-Requirements.pdf)
+      </div>
+    </div>
+
+    <div class="card" id="loadingCard">
+      <div class="loading">
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        <div class="muted">Loading…</div>
+      </div>
+    </div>
+
+    <div class="card error" id="errorCard" style="display:none;"></div>
+
+    <!-- MAIN UI -->
+    <div class="grid" id="mainGrid" style="display:none;">
+      <div class="card">
+        <div class="row">
+          <div style="font-weight:900; font-size:16px;">Ranks</div>
+          <div class="pill gray" id="viewingPill">Viewing: —</div>
+        </div>
+        <div class="hr"></div>
+        <div class="rank-list" id="rankList"></div>
+
+        <!-- Leader-only: choose which scout you’re viewing -->
+        <div id="leaderScoutPickerWrap" style="display:none;">
+          <div class="hr"></div>
+          <div style="font-weight:900; font-size:14px;">Leader View</div>
+          <div class="muted small" style="margin-top:4px;">
+            Choose a scout to review. Parents never have access to this page.
+          </div>
+          <div style="height:10px;"></div>
+          <select id="scoutPicker"></select>
+          <div class="muted small" style="margin-top:8px;" id="scoutPickerNote"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="req-head">
+          <div>
+            <div style="font-weight:900; font-size:16px;" id="rankTitle">Select a rank…</div>
+            <div class="muted small" id="rankHint"></div>
+          </div>
+          <div class="row" style="justify-content:flex-end;">
+            <div class="pill gray" id="progressPill">0 / 0 complete</div>
+          </div>
+        </div>
+
+        <div class="req-list" id="reqList"></div>
+
+        <div class="hr"></div>
+        <div class="muted small">
+          Scouts: click <strong>Request Approval</strong> to ask a leader to approve that requirement.  
+          Leaders: approve/deny in the Pending Approvals section below.
+        </div>
+      </div>
+    </div>
+
+    <!-- LEADER-ONLY PENDING QUEUE -->
+    <div class="card" id="leaderQueueCard" style="display:none;">
+      <div class="row">
+        <div>
+          <div style="font-weight:900; font-size:16px;">Pending Approvals</div>
+          <div class="muted small">Requests submitted by scouts. Approving marks the requirement as completed.</div>
+        </div>
+        <div class="pill warn" id="pendingCountPill">0 pending</div>
+      </div>
+
+      <div class="hr"></div>
+
+      <div style="overflow:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Scout</th>
+              <th>Rank</th>
+              <th>Req</th>
+              <th>Note</th>
+              <th>Requested</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="pendingBody"></tbody>
+        </table>
+      </div>
+
+      <div class="muted small" id="pendingEmpty" style="margin-top:8px;">No pending requests.</div>
+      <div class="muted small" id="pendingMsg" style="margin-top:8px;"></div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import {
+      getFirestore,
+      doc, getDoc, setDoc, updateDoc,
+      collection, query, where, orderBy, limit,
+      addDoc, getDocs, onSnapshot,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    // ✅ your project
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+      authDomain: "troop-248.firebaseapp.com",
+      projectId: "troop-248",
+      storageBucket: "troop-248.firebasestorage.app",
+      messagingSenderId: "925363875752",
+      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+      measurementId: "G-NY75GX5TBH"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // UI
+    const authInfoEl = document.getElementById("auth-info");
+    const logoutBtn = document.getElementById("logout-btn");
+    const subtitleLine = document.getElementById("subtitleLine");
+    const roleBadge = document.getElementById("roleBadge");
+
+    const loadingCard = document.getElementById("loadingCard");
+    const errorCard = document.getElementById("errorCard");
+    const mainGrid = document.getElementById("mainGrid");
+
+    const rankListEl = document.getElementById("rankList");
+    const viewingPill = document.getElementById("viewingPill");
+    const rankTitle = document.getElementById("rankTitle");
+    const rankHint = document.getElementById("rankHint");
+    const progressPill = document.getElementById("progressPill");
+    const reqList = document.getElementById("reqList");
+
+    const leaderScoutPickerWrap = document.getElementById("leaderScoutPickerWrap");
+    const scoutPicker = document.getElementById("scoutPicker");
+    const scoutPickerNote = document.getElementById("scoutPickerNote");
+
+    const leaderQueueCard = document.getElementById("leaderQueueCard");
+    const pendingBody = document.getElementById("pendingBody");
+    const pendingEmpty = document.getElementById("pendingEmpty");
+    const pendingCountPill = document.getElementById("pendingCountPill");
+    const pendingMsg = document.getElementById("pendingMsg");
+
+    function showError(msg){
+      errorCard.style.display = "block";
+      errorCard.textContent = msg;
+    }
+
+    function escapeHtml(str){
+      return String(str ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function normalizeRole(authRole){
+      const r = (authRole || "").toString().trim().toLowerCase();
+      if (r === "admin") return "admin";
+      if (r === "viewer") return "viewer";
+      return "pending";
+    }
+
+    // --- Requirements data (short labels + official link) ---
+    // Ranks list confirmed by the official requirements PDF.  [oai_citation:3‡Scouting America](https://www.scouting.org/wp-content/uploads/2025/04/3321624-Scouts-BSA-Requirements.pdf)
+    const RANKS = [
+      {
+        id: "scout",
+        name: "Scout",
+        officialUrl: "https://www.scouting.org/wp-content/uploads/2025/04/3321624-Scouts-BSA-Requirements.pdf",
+        reqs: [
+          { id: "1a", label: "Oath/Law/Motto/Slogan from memory; explain meaning" },
+          { id: "1b", label: "Explain Scout spirit and how you show it" },
+          { id: "1c", label: "Demonstrate sign/salute/handshake; explain when used" },
+          { id: "1d", label: "Describe First Class Scout badge & what each part means" },
+          { id: "1e", label: "Outdoor Code + Leave No Trace 7 Principles; explain difference" },
+          { id: "1f", label: "Pledge of Allegiance from memory; explain meaning" },
+        ]
+      },
+      {
+        id: "tenderfoot",
+        name: "Tenderfoot",
+        officialUrl: "https://www.scouting.org/wp-content/uploads/2025/04/3321624-Scouts-BSA-Requirements.pdf",
+        reqs: [
+          { id: "1", label: "Present yourself properly; repeat Oath/Law/Motto/Slogan & Outdoor Code" },
+          { id: "2", label: "Patrol method basics + roles; patrol name/flag/yell; buddy system" },
+          { id: "3", label: "Knots/rope work basics (square knot etc.)" },
+          { id: "4", label: "First aid basics for common issues" },
+          { id: "5", label: "Fitness requirements (record + improvement)" },
+          { id: "6", label: "Outdoor skills basics (camping/gear/safety)" },
+        ]
+      },
+      {
+        id: "second_class",
+        name: "Second Class",
+        officialUrl: "https://www.scouting.org/wp-content/uploads/2025/04/3321624-Scouts-BSA-Requirements.pdf",
+        reqs: [
+          { id: "1", label: "Outdoor & camping skills (including cooking basics)" },
+          { id: "2", label: "Navigation/orienteering basics" },
+          { id: "3", label: "Service participation" },
+          { id: "4", label: "First aid skills progression" },
+          { id: "5", label: "Flag etiquette + citizenship discussion" },
+          { id: "6", label: "Aquatics basics / water safety" },
+          { id: "7", label: "Fitness / personal growth check-in" },
+        ]
+      },
+      {
+        id: "first_class",
+        name: "First Class",
+        officialUrl: "https://www.scouting.org/wp-content/uploads/2025/04/3321624-Scouts-BSA-Requirements.pdf",
+        reqs: [
+          { id: "1", label: "Advanced camping/cooking & outdoor leadership tasks" },
+          { id: "2", label: "Navigation (map/compass) and planning" },
+          { id: "3", label: "Service + duty to others" },
+          { id: "4", label: "First aid skills (expanded)" },
+          { id: "5", label: "Citizenship + leadership discussions" },
+          { id: "6", label: "Aquatics / safety skills" },
+          { id: "7", label: "Fitness / goals check-in" },
+        ]
+      },
+      {
+        id: "star",
+        name: "Star",
+        officialUrl: "https://www.scouting.org/wp-content/uploads/2025/04/3321624-Scouts-BSA-Requirements.pdf",
+        reqs: [
+          { id: "1", label: "Be active as a Scout for required period" },
+          { id: "2", label: "Demonstrate Scout spirit" },
+          { id: "3", label: "Earn required merit badges (Star set)" },
+          { id: "4", label: "Serve in a position of responsibility" },
+          { id: "5", label: "Service hours" },
+          { id: "6", label: "Scoutmaster conference" },
+          { id: "7", label: "Board of review" },
+        ]
+      },
+      {
+        id: "life",
+        name: "Life",
+        officialUrl: "https://www.scouting.org/wp-content/uploads/2025/04/3321624-Scouts-BSA-Requirements.pdf",
+        reqs: [
+          { id: "1", label: "Be active as a Scout for required period" },
+          { id: "2", label: "Demonstrate Scout spirit" },
+          { id: "3", label: "Earn required merit badges (Life set)" },
+          { id: "4", label: "Serve in a position of responsibility" },
+          { id: "5", label: "Service hours" },
+          { id: "6", label: "Teach / mentor another Scout" },
+          { id: "7", label: "Scoutmaster conference" },
+          { id: "8", label: "Board of review" },
+        ]
+      },
+      {
+        id: "eagle",
+        name: "Eagle",
+        officialUrl: "https://www.scouting.org/wp-content/uploads/2025/04/3321624-Scouts-BSA-Requirements.pdf",
+        reqs: [
+          { id: "1", label: "Be active as a Scout for required period" },
+          { id: "2", label: "Demonstrate Scout spirit" },
+          { id: "3", label: "Earn required merit badges (Eagle set)" },
+          { id: "4", label: "Serve in a position of responsibility" },
+          { id: "5", label: "Plan/develop/lead service project (Eagle project)" },
+          { id: "6", label: "Scoutmaster conference" },
+          { id: "7", label: "Board of review" },
+        ]
+      }
+    ];
+
+    // NOTE: This page links to the official PDF for exact wording and currentness.  [oai_citation:4‡Scouting America](https://www.scouting.org/wp-content/uploads/2025/04/3321624-Scouts-BSA-Requirements.pdf)
+
+    // --- State ---
+    let currentUser = null;
+    let myAuthRole = "pending";   // viewer/admin/pending (site approval)
+    let myAccountType = "";       // scout/parent/leader
+    let isLeader = false;
+
+    let viewingScoutUid = null;   // whose progress is displayed
+    let viewingScoutName = "";    // for leader UI
+
+    let activeRankId = "scout";
+    let progressDocCache = null;  // rankProgress/{uid}
+
+    // --- Access rules ---
+    async function getAccountInfo(uid){
+      const snap = await getDoc(doc(db, "accountInfo", uid));
+      if (!snap.exists()) return null;
+      return snap.data() || {};
+    }
+
+    function setHeaderUI(){
+      const roleText = (myAuthRole === "admin") ? "Admin" : (myAuthRole === "viewer" ? "Viewer" : "Pending");
+      const badgeClass = (myAuthRole === "admin") ? "badge admin" : (myAuthRole === "viewer" ? "badge" : "badge blocked");
+      roleBadge.className = badgeClass;
+      roleBadge.textContent = roleText;
+
+      if (myAuthRole !== "admin" && myAuthRole !== "viewer") {
+        subtitleLine.textContent = "Not approved yet.";
+        return;
+      }
+
+      if (myAccountType === "parent") {
+        subtitleLine.textContent = "Parents do not have access to Rank advancement.";
+      } else if (isLeader) {
+        subtitleLine.textContent = "Leader view: review scout progress + approve requests.";
+      } else {
+        subtitleLine.textContent = "Scout view: track your own rank requirements and request approvals.";
+      }
+    }
+
+    function blockPage(msg){
+      loadingCard.style.display = "none";
+      mainGrid.style.display = "none";
+      leaderQueueCard.style.display = "none";
+      showError(msg);
+    }
+
+    // --- Progress storage helpers ---
+    // rankProgress/{uid} document shape:
+    // {
+    //   uid,
+    //   updatedAt,
+    //   ranks: {
+    //     scout: { "1a": { completed:true, completedAt, approvedBy, approvedByName }, ... },
+    //     tenderfoot: { ... }
+    //   }
+    // }
+    function getReqState(rankId, reqId){
+      const ranks = (progressDocCache && progressDocCache.ranks) ? progressDocCache.ranks : {};
+      const r = ranks[rankId] || {};
+      const st = r[reqId] || null;
+      return st;
+    }
+
+    async function ensureProgressDoc(uid){
+      const ref = doc(db, "rankProgress", uid);
+      const snap = await getDoc(ref);
+      if (snap.exists()) return snap.data() || {};
+      const init = { uid, ranks: {}, createdAt: serverTimestamp(), updatedAt: serverTimestamp() };
+      await setDoc(ref, init, { merge: true });
+      const snap2 = await getDoc(ref);
+      return snap2.exists() ? (snap2.data() || {}) : init;
+    }
+
+    async function loadProgressFor(uid){
+      progressDocCache = await ensureProgressDoc(uid);
+    }
+
+    function formatTs(ts){
+      if (!ts) return "";
+      try {
+        if (typeof ts.toDate === "function") return ts.toDate().toLocaleString();
+        const d = new Date(ts);
+        return isNaN(d.getTime()) ? "" : d.toLocaleString();
+      } catch { return ""; }
+    }
+
+    // --- UI rendering ---
+    function renderRankList(){
+      rankListEl.innerHTML = RANKS.map(r => {
+        const active = r.id === activeRankId ? "active" : "";
+        return `
+          <button class="rank-btn ${active}" data-rank="${escapeHtml(r.id)}" type="button">
+            <div class="rank-title">${escapeHtml(r.name)}</div>
+            <div class="rank-sub">Click to view requirements</div>
+          </button>
+        `;
+      }).join("");
+
+      rankListEl.querySelectorAll("[data-rank]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          activeRankId = btn.getAttribute("data-rank");
+          renderRankList();
+          renderRankPanel();
+        });
+      });
+    }
+
+    function renderRankPanel(){
+      const rank = RANKS.find(r => r.id === activeRankId);
+      if (!rank) return;
+
+      viewingPill.textContent = isLeader ? `Viewing: ${viewingScoutName || viewingScoutUid || "Scout"}` : "Viewing: You";
+      rankTitle.textContent = `${rank.name} — Requirements`;
+      rankHint.innerHTML = `
+        Official requirements link:
+        <a class="link" target="_blank" rel="noopener noreferrer" href="${escapeHtml(rank.officialUrl)}">Open PDF</a>
+      `;
+
+      const reqs = rank.reqs || [];
+      let completedCount = 0;
+
+      const html = reqs.map(req => {
+        const st = getReqState(rank.id, req.id);
+        const completed = !!(st && st.completed);
+        if (completed) completedCount++;
+
+        const statusPill = completed
+          ? `<span class="pill good">Completed</span>`
+          : `<span class="pill gray">Not completed</span>`;
+
+        const approvedLine = completed
+          ? `<div class="muted small">Approved: ${escapeHtml(st.approvedByName || st.approvedBy || "Leader")} • ${escapeHtml(formatTs(st.completedAt))}</div>`
+          : "";
+
+        // Scout request UI (only scouts, only their own record)
+        const canRequest = (!isLeader && myAccountType === "scout" && viewingScoutUid === currentUser.uid && !completed);
+
+        const requestBox = canRequest ? `
+          <div class="hr"></div>
+          <div class="muted small" style="margin-bottom:6px;">Optional note to leaders (max 500 chars):</div>
+          <textarea maxlength="500" placeholder="Example: I demonstrated this at the last meeting…" data-note="${escapeHtml(rank.id)}__${escapeHtml(req.id)}"></textarea>
+          <div style="height:8px;"></div>
+          <button class="btn primary" type="button"
+            data-request="${escapeHtml(rank.id)}__${escapeHtml(req.id)}">
+            Request Approval
+          </button>
+          <div class="muted small" data-reqmsg="${escapeHtml(rank.id)}__${escapeHtml(req.id)}" style="margin-top:8px;"></div>
+        ` : "";
+
+        return `
+          <div class="req">
+            <div class="req-top">
+              <div style="min-width:220px;">
+                <p class="req-title">Requirement ${escapeHtml(req.id)}</p>
+                <p class="req-text">${escapeHtml(req.label)}</p>
+              </div>
+              ${statusPill}
+            </div>
+            <div class="req-meta">
+              ${approvedLine}
+            </div>
+            ${requestBox}
+          </div>
+        `;
+      }).join("");
+
+      reqList.innerHTML = html;
+      progressPill.textContent = `${completedCount} / ${reqs.length} complete`;
+
+      // wire request buttons
+      reqList.querySelectorAll("[data-request]").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          const key = btn.getAttribute("data-request");
+          const [rankId, reqId] = key.split("__");
+          const msgEl = reqList.querySelector(`[data-reqmsg="${CSS.escape(key)}"]`);
+          const noteEl = reqList.querySelector(`[data-note="${CSS.escape(key)}"]`);
+          const note = (noteEl?.value || "").trim();
+
+          if (!rankId || !reqId) return;
+          if (!currentUser) return;
+
+          btn.disabled = true;
+          if (msgEl) msgEl.textContent = "Sending request…";
+
+          try {
+            await addDoc(collection(db, "rankApprovalRequests"), {
+              uid: currentUser.uid,
+              scoutName: viewingScoutName || "",
+              rankId,
+              reqId,
+              note: note.slice(0, 500),
+              status: "pending",
+              createdAt: serverTimestamp()
+            });
+            if (msgEl) msgEl.textContent = "Requested. A leader will review it.";
+          } catch (e) {
+            if (msgEl) msgEl.textContent = "Error: " + (e?.message || String(e));
+          } finally {
+            btn.disabled = false;
+          }
+        });
+      });
+    }
+
+    // --- Leader: load scouts list ---
+    async function loadScoutsForPicker(){
+      const qy = query(collection(db, "accountInfo"), orderBy("fullName"));
+      const snap = await getDocs(qy);
+
+      const scouts = [];
+      snap.forEach(d => {
+        const data = d.data() || {};
+        const acct = (data.accountType || "").toString().trim().toLowerCase();
+        if (acct !== "scout") return;
+        const authRole = normalizeRole(data.authRole);
+        if (authRole !== "viewer" && authRole !== "admin") return; // only approved scouts show
+        scouts.push({
+          uid: d.id,
+          fullName: data.fullName || "",
+          email: data.email || ""
+        });
+      });
+
+      scoutPicker.innerHTML = scouts.length
+        ? scouts.map(s => {
+            const label = `${s.fullName || "Unnamed Scout"} — ${s.email || s.uid}`;
+            return `<option value="${escapeHtml(s.uid)}">${escapeHtml(label)}</option>`;
+          }).join("")
+        : `<option value="">No scouts found</option>`;
+
+      // default selection
+      if (!viewingScoutUid) {
+        viewingScoutUid = scouts.length ? scouts[0].uid : null;
+        viewingScoutName = scouts.length ? scouts[0].fullName : "";
+      }
+
+      if (viewingScoutUid) scoutPicker.value = viewingScoutUid;
+      scoutPickerNote.textContent = viewingScoutUid ? `Viewing scout UID: ${viewingScoutUid}` : "";
+
+      scoutPicker.addEventListener("change", async () => {
+        viewingScoutUid = scoutPicker.value;
+        const selectedText = scoutPicker.options[scoutPicker.selectedIndex]?.textContent || "";
+        viewingScoutName = selectedText.split(" — ")[0] || "";
+        scoutPickerNote.textContent = viewingScoutUid ? `Viewing scout UID: ${viewingScoutUid}` : "";
+
+        await loadProgressFor(viewingScoutUid);
+        renderRankPanel();
+      });
+    }
+
+    // --- Leader: pending requests queue ---
+    function reqLabel(rankId, reqId){
+      const r = RANKS.find(x => x.id === rankId);
+      const req = r?.reqs?.find(x => x.id === reqId);
+      return req?.label || "";
+    }
+    function rankName(rankId){
+      return (RANKS.find(x => x.id === rankId)?.name) || rankId;
+    }
+
+    function wirePendingQueue(){
+      const qy = query(
+        collection(db, "rankApprovalRequests"),
+        where("status", "==", "pending"),
+        orderBy("createdAt", "desc"),
+        limit(100)
+      );
+
+      onSnapshot(qy, (snap) => {
+        const docs = snap.docs || [];
+        pendingCountPill.textContent = `${docs.length} pending`;
+        pendingEmpty.style.display = docs.length ? "none" : "block";
+
+        pendingBody.innerHTML = docs.map(d => {
+          const x = d.data() || {};
+          const created = x.createdAt ? formatTs(x.createdAt) : "";
+          const note = (x.note || "").toString();
+
+          return `
+            <tr data-reqdoc="${escapeHtml(d.id)}">
+              <td>${escapeHtml(x.scoutName || x.uid || "")}</td>
+              <td>${escapeHtml(rankName(x.rankId))}</td>
+              <td>
+                <div style="font-weight:900;">${escapeHtml(x.reqId || "")}</div>
+                <div class="muted small">${escapeHtml(reqLabel(x.rankId, x.reqId))}</div>
+              </td>
+              <td>${escapeHtml(note || "")}</td>
+              <td>${escapeHtml(created)}</td>
+              <td>
+                <button class="btn primary" type="button" data-approve="${escapeHtml(d.id)}">Approve</button>
+                <button class="btn danger" type="button" data-deny="${escapeHtml(d.id)}">Deny</button>
+              </td>
+            </tr>
+          `;
+        }).join("");
+
+        pendingBody.querySelectorAll("[data-approve]").forEach(btn => {
+          btn.addEventListener("click", async () => {
+            const id = btn.getAttribute("data-approve");
+            await approveOrDeny(id, "approved");
+          });
+        });
+        pendingBody.querySelectorAll("[data-deny]").forEach(btn => {
+          btn.addEventListener("click", async () => {
+            const id = btn.getAttribute("data-deny");
+            await approveOrDeny(id, "denied");
+          });
+        });
+      });
+    }
+
+    async function approveOrDeny(requestDocId, newStatus){
+      pendingMsg.textContent = "";
+      try {
+        const reqRef = doc(db, "rankApprovalRequests", requestDocId);
+        const reqSnap = await getDoc(reqRef);
+        if (!reqSnap.exists()) {
+          pendingMsg.textContent = "That request no longer exists.";
+          return;
+        }
+        const req = reqSnap.data() || {};
+        const uid = req.uid;
+        const rankId = req.rankId;
+        const reqId = req.reqId;
+
+        // Mark request status
+        await updateDoc(reqRef, {
+          status: newStatus,
+          reviewedAt: serverTimestamp(),
+          reviewedBy: currentUser.uid,
+          reviewedByName: (currentUser.email || currentUser.uid)
+        });
+
+        if (newStatus === "approved") {
+          // Update rank progress document
+          const progressRef = doc(db, "rankProgress", uid);
+          const fieldPath = `ranks.${rankId}.${reqId}`;
+          await setDoc(progressRef, {
+            uid,
+            updatedAt: serverTimestamp(),
+            ranks: {
+              [rankId]: {
+                [reqId]: {
+                  completed: true,
+                  completedAt: serverTimestamp(),
+                  approvedBy: currentUser.uid,
+                  approvedByName: (currentUser.email || currentUser.uid)
+                }
+              }
+            }
+          }, { merge: true });
+
+          // If leader is currently viewing that scout, refresh cache
+          if (isLeader && viewingScoutUid === uid) {
+            await loadProgressFor(viewingScoutUid);
+            renderRankPanel();
+          }
+        }
+
+        pendingMsg.textContent = (newStatus === "approved") ? "Approved." : "Denied.";
+      } catch (e) {
+        pendingMsg.textContent = "Error: " + (e?.message || String(e));
+      }
+    }
+
+    // --- Main auth flow ---
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.replace("/");
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      try {
+        if (!user) {
+          window.location.replace("/");
+          return;
+        }
+        currentUser = user;
+        authInfoEl.textContent = `Signed in as ${user.email || user.uid}`;
+
+        const info = await getAccountInfo(user.uid);
+        if (!info) {
+          window.location.replace("/under-review/");
+          return;
+        }
+
+        myAuthRole = normalizeRole(info.authRole);
+        myAccountType = (info.accountType || "").toString().trim().toLowerCase();
+        isLeader = (myAccountType === "leader");
+
+        setHeaderUI();
+
+        // must be approved
+        if (myAuthRole !== "admin" && myAuthRole !== "viewer") {
+          blockPage("You are not approved to use the site yet.");
+          return;
+        }
+
+        // parents blocked completely
+        if (myAccountType === "parent") {
+          blockPage("This section is for Scouts (and Leaders for approvals). Parents do not have access.");
+          return;
+        }
+
+        // show main
+        loadingCard.style.display = "none";
+        errorCard.style.display = "none";
+        mainGrid.style.display = "grid";
+
+        // set viewing scout
+        if (isLeader) {
+          leaderScoutPickerWrap.style.display = "block";
+          leaderQueueCard.style.display = "block";
+          await loadScoutsForPicker();
+          wirePendingQueue();
+        } else {
+          leaderScoutPickerWrap.style.display = "none";
+          leaderQueueCard.style.display = "none";
+          viewingScoutUid = user.uid;
+          viewingScoutName = (info.fullName || user.email || "You");
+        }
+
+        // load progress and render
+        await loadProgressFor(viewingScoutUid);
+        renderRankList();
+        renderRankPanel();
+
+      } catch (err) {
+        loadingCard.style.display = "none";
+        showError("Error loading advancement. " + (err?.message || String(err)));
+      }
+    });
+  </script>
+</body>
+</html>
