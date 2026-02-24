@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Merit Badge — Troop 248</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/modern-2026.css" />
+
+  <style>
+    body { background: #d2cab6; margin: 0; font-family: system-ui; }
+    main { max-width: 900px; margin: 0 auto; padding: 24px 16px; }
+
+    .req {
+      background: rgba(255,255,255,0.9);
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 8px;
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .status {
+      font-size: 12px;
+      margin-top: 4px;
+      color: #6b7280;
+    }
+
+    button {
+      margin-top: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      background: #1f4e79;
+      color: white;
+      font-size: 12px;
+    }
+
+    button:hover { opacity: 0.9; }
+  </style>
+</head>
+
+<body>
+  <main>
+    <h2 id="badge-title">Merit Badge</h2>
+    <div id="requirements"></div>
+    <div id="login-msg"></div>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, collection, getDocs, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+      authDomain: "troop-248.firebaseapp.com",
+      projectId: "troop-248",
+      storageBucket: "troop-248.firebasestorage.app",
+      messagingSenderId: "925363875752",
+      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const badgeSlug = location.pathname.split("/").pop();
+    const reqContainer = document.getElementById("requirements");
+    const titleEl = document.getElementById("badge-title");
+    const loginMsg = document.getElementById("login-msg");
+
+    titleEl.textContent = badgeSlug.replace(/-/g, " ");
+
+    async function loadRequirements(user, isAdmin) {
+      reqContainer.innerHTML = "";
+
+      const catalogSnap = await getDocs(
+        collection(db, "meritBadgeCatalog", badgeSlug, "requirements")
+      );
+
+      if (catalogSnap.empty) {
+        reqContainer.innerHTML = "<p>No requirements defined yet.</p>";
+        return;
+      }
+
+      for (const reqDoc of catalogSnap.docs) {
+        const reqData = reqDoc.data();
+        const progressRef = doc(
+          db,
+          "users",
+          user.uid,
+          "meritBadges",
+          badgeSlug,
+          "requirements",
+          reqDoc.id
+        );
+
+        const progressSnap = await getDoc(progressRef);
+        const progress = progressSnap.exists()
+          ? progressSnap.data()
+          : { status: "not_started" };
+
+        const div = document.createElement("div");
+        div.className = "req";
+
+        let statusText = progress.status || "not_started";
+
+        div.innerHTML = `
+          <div>${reqData.text}</div>
+          <div class="status">Status: ${statusText}</div>
+        `;
+
+        if (progress.status === "approved") {
+          div.innerHTML += `<div class="status">Approved by ${progress.decidedByName}</div>`;
+        }
+
+        if (!isAdmin && progress.status !== "approved") {
+          const btn = document.createElement("button");
+          btn.textContent = "Request completion";
+          btn.onclick = async () => {
+            await updateDoc(progressRef, {
+              status: "requested",
+              requestedAt: serverTimestamp()
+            });
+            loadRequirements(user, isAdmin);
+          };
+          div.appendChild(btn);
+        }
+
+        if (isAdmin && progress.status === "requested") {
+          const approve = document.createElement("button");
+          approve.textContent = "Approve";
+          approve.onclick = async () => {
+            await updateDoc(progressRef, {
+              status: "approved",
+              decidedAt: serverTimestamp(),
+              decidedByUid: user.uid,
+              decidedByName: user.email
+            });
+            loadRequirements(user, isAdmin);
+          };
+          div.appendChild(approve);
+        }
+
+        reqContainer.appendChild(div);
+      }
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        loginMsg.textContent = "Log in to view progress.";
+        return;
+      }
+
+      const infoSnap = await getDoc(doc(db, "accountInfo", user.uid));
+      if (!infoSnap.exists()) return;
+
+      const { authRole, accountType } = infoSnap.data();
+      const isAdmin = authRole === "admin";
+
+      if (accountType !== "scout" && !isAdmin) {
+        loginMsg.textContent = "Scouts only.";
+        return;
+      }
+
+      loadRequirements(user, isAdmin);
+    });
+  </script>
+</body>
+</html>
