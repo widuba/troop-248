@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Merit Badges — Troop 248</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="/bsafavicon.ico">
+
+  <style>
+    :root {
+      --red: #b22222;
+      --blue: #1f4e79;
+      --tan: #f4eee3;
+      --white: #ffffff;
+      --text-main: #1f2933;
+      --text-muted: #6b7280;
+      --radius-lg: 16px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #d2cab6;
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+    header {
+      background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
+      color: var(--white);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    header h2 {
+      margin: 0;
+      font-size: 19px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    header h2::before { content: "★"; font-size: 18px; }
+    .troop-home-link { text-decoration: none; color: inherit; display: inline-flex; align-items: center; }
+    .troop-home-link:hover h2 { opacity: 0.9; text-decoration: underline; }
+    nav { display: flex; gap: 12px; font-size: 13px; text-transform: uppercase; }
+    nav a {
+      color: #1f4e79;
+      font-weight: bold;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(4px);
+      opacity: 0.9;
+    }
+    nav a:hover { opacity: 1; background: rgba(255, 255, 255, 0.12); }
+
+    #auth-bar { display: flex; gap: 10px; align-items: center; font-size: 13px; }
+    .auth-btn {
+      padding: 5px 12px;
+      font-size: 13px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--white);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+    .auth-btn:hover { background: rgba(255, 255, 255, 0.2); }
+
+    main { padding: 24px 16px 40px; max-width: 960px; margin: 0 auto; }
+
+    .welcome-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 8px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+    .welcome-card h3 { margin: 0 0 4px; font-size: 18px; }
+    .welcome-card p { margin: 0; font-size: 14px; color: var(--text-muted); }
+
+    .badge {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(148, 163, 184, 0.2);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .badge.admin {
+      background: rgba(240, 180, 41, 0.16);
+      color: #92400e;
+      border: 1px solid rgba(245, 158, 11, 0.6);
+    }
+
+    section {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 14px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+    section h2 {
+      margin-top: 0;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    section h2::before { content: "▸"; font-size: 14px; color: var(--blue); }
+
+    .small-help { font-size: 12px; color: var(--text-muted); margin-top: 6px; line-height: 1.35; }
+
+    .error {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(185, 28, 28, 0.35);
+      background: rgba(185, 28, 28, 0.08);
+      color: #991b1b;
+      display: none;
+      font-size: 13px;
+    }
+    .error.show { display: block; }
+
+    .searchRow { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:10px; }
+    .searchRow input {
+      flex: 1;
+      min-width: 220px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid #d1d5db;
+      background: #ffffff;
+      font-size: 14px;
+    }
+    .searchRow input:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 2px rgba(31,78,121,.12);
+    }
+
+    .grid {
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    @media (max-width: 640px){ .grid { grid-template-columns: 1fr; } }
+
+    .mb-card {
+      border-radius: 14px;
+      border: 1px solid rgba(31, 78, 121, 0.18);
+      background: rgba(31, 78, 121, 0.06);
+      padding: 12px;
+      display:flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .mb-card a { color: inherit; text-decoration: none; }
+    .mb-name { font-weight: 800; color: var(--blue); margin: 0; font-size: 14px; }
+    .mb-meta { margin-top: 4px; font-size: 12px; color: var(--text-muted); }
+    .pill {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(31, 78, 121, 0.22);
+      background: rgba(255,255,255,0.60);
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+  </style>
+
+  <link rel="stylesheet" href="/modern-2026.css" />
+</head>
+<body>
+  <header>
+    <div>
+      <a href="/home" class="troop-home-link"><h2>Troop 248</h2></a>
+    </div>
+    <nav>
+      <a href="/home">Home</a>
+      <a href="/calendar">Calendar</a>
+      <a href="/documents">Documents</a>
+      <a href="/scoutmaster">SM Blog</a>
+      <a href="/spl">SPL Blog</a>
+      <a href="/useful-links">Useful Links</a>
+      <a href="/events">Events</a>
+      <a href="/mail">Mail</a>
+      <a href="/advancements">Advancements</a>
+    </nav>
+    <div id="auth-bar">
+      <div id="auth-info">Not signed in</div>
+      <a id="login-link" class="auth-btn" href="/login/">Log In</a>
+      <button id="logout-btn" class="auth-btn" style="display:none;">Log Out</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="welcome-card">
+      <div>
+        <h3>Merit Badges</h3>
+        <p>Browse all merit badges. Scouts can request completion; admins can approve or deny.</p>
+      </div>
+      <div id="role-badge-container">
+        <span class="badge">Guest</span>
+      </div>
+    </div>
+
+    <section>
+      <h2>All Merit Badges</h2>
+      <div class="small-help">
+        This list comes from a local JSON file on your site (so it stays fast and doesn’t depend on external pages).
+      </div>
+
+      <div class="searchRow">
+        <input id="search" type="text" placeholder="Search merit badges (e.g., First Aid)" />
+      </div>
+
+      <div id="errBox" class="error"></div>
+      <div id="grid" class="grid"></div>
+      <div id="empty" class="small-help" style="display:none;margin-top:10px;">No matches.</div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+      authDomain: "troop-248.firebaseapp.com",
+      projectId: "troop-248",
+      storageBucket: "troop-248.firebasestorage.app",
+      messagingSenderId: "925363875752",
+      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+      measurementId: "G-NY75GX5TBH"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const authInfoEl = document.getElementById("auth-info");
+    const loginLink = document.getElementById("login-link");
+    const logoutBtn = document.getElementById("logout-btn");
+    const roleBadgeContainer = document.getElementById("role-badge-container");
+
+    const grid = document.getElementById("grid");
+    const emptyEl = document.getElementById("empty");
+    const errBox = document.getElementById("errBox");
+    const searchEl = document.getElementById("search");
+
+    function showError(msg){
+      errBox.textContent = msg;
+      errBox.classList.add("show");
+    }
+    function clearError(){
+      errBox.textContent = "";
+      errBox.classList.remove("show");
+    }
+
+    let currentUser = null;
+    let authRole = null;
+    let accountType = null;
+
+    function setGuestUI(){
+      authInfoEl.textContent = "Not signed in";
+      roleBadgeContainer.innerHTML = `<span class="badge">Guest</span>`;
+      loginLink.style.display = "";
+      logoutBtn.style.display = "none";
+    }
+
+    async function loadAccountInfo(uid){
+      const infoRef = doc(db, "accountInfo", uid);
+      const infoSnap = await getDoc(infoRef);
+      if (!infoSnap.exists()) return { authRole: null, accountType: null };
+      const d = infoSnap.data() || {};
+      return { authRole: d.authRole || null, accountType: d.accountType || null };
+    }
+
+    logoutBtn.addEventListener("click", async ()=>{
+      await signOut(auth);
+      setGuestUI();
+    });
+
+    onAuthStateChanged(auth, async (user)=>{
+      currentUser = user || null;
+
+      if (!currentUser){
+        setGuestUI();
+        return;
+      }
+
+      loginLink.style.display = "none";
+      logoutBtn.style.display = "";
+
+      const info = await loadAccountInfo(currentUser.uid);
+      authRole = info.authRole;
+      accountType = info.accountType;
+
+      authInfoEl.textContent = `Signed in as ${currentUser.email}`;
+
+      const isAdmin = authRole === "admin";
+      roleBadgeContainer.innerHTML = `
+        <span class="badge ${isAdmin ? "admin" : ""}">
+          ${isAdmin ? "Admin" : (accountType || "Viewer")}
+        </span>
+      `;
+    });
+
+    // ---- Render merit badge cards ----
+    let allBadges = [];
+
+    function render(list){
+      grid.innerHTML = "";
+      emptyEl.style.display = list.length ? "none" : "block";
+
+      for (const b of list){
+        const card = document.createElement("div");
+        card.className = "mb-card";
+
+        const left = document.createElement("div");
+        const a = document.createElement("a");
+        a.href = `/advancements/merit-badges/merit-badge/${b.slug}`;
+        a.innerHTML = `<div class="mb-name">${b.name}</div>
+                       <div class="mb-meta">Open requirements and request completion</div>`;
+        left.appendChild(a);
+
+        const right = document.createElement("div");
+        if (b.eagleRequired) {
+          const pill = document.createElement("div");
+          pill.className = "pill";
+          pill.textContent = "Eagle required";
+          right.appendChild(pill);
+        }
+
+        card.appendChild(left);
+        card.appendChild(right);
+        grid.appendChild(card);
+      }
+    }
+
+    async function loadBadges(){
+      clearError();
+      try{
+        const res = await fetch("/advancements/merit-badges/merit-badges.json", { cache: "no-store" });
+        if (!res.ok) throw new Error("Could not load merit-badges.json");
+        allBadges = await res.json();
+        render(allBadges);
+      } catch (e){
+        showError(e?.message || "Failed to load merit badge list.");
+      }
+    }
+
+    searchEl.addEventListener("input", ()=>{
+      const q = (searchEl.value || "").trim().toLowerCase();
+      if (!q) return render(allBadges);
+      render(allBadges.filter(b => (b.name || "").toLowerCase().includes(q)));
+    });
+
+    loadBadges();
+  </script>
+</body>
+</html>
