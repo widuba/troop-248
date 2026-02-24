@@ -1,200 +1,352 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>Lucky Chests — Troop 248</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" type="image/png" href="/bsafavicon.ico">
+
   <style>
     :root {
-      --bg: #111827;
-      --panel: rgba(255,255,255,0.06);
-      --panel2: rgba(255,255,255,0.04);
-      --border: rgba(255,255,255,0.14);
-      --text: rgba(255,255,255,0.92);
-      --muted: rgba(255,255,255,0.68);
-      --shadow: 0 18px 50px rgba(0,0,0,0.45);
-      --radius: 16px;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
-      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      --good: rgba(60, 230, 130, 0.95);
-      --goodBg: rgba(40, 210, 120, 0.14);
-      --goodBorder: rgba(60, 230, 130, 0.34);
+      --red: #b22222;
+      --blue: #1f4e79;
+      --tan: #f4eee3;
+      --white: #ffffff;
+      --text-main: #1f2933;
+      --text-muted: #6b7280;
+      --radius-lg: 16px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
     }
-    * { box-sizing: border-box; }
-    body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--text); }
 
-    /* Your standard navbar */
-    nav {
-      display:flex; gap:14px; flex-wrap:wrap;
-      padding: 14px 18px;
-      border-bottom: 1px solid var(--border);
-      background: rgba(0,0,0,0.25);
-      position: sticky; top: 0; z-index: 50;
-      backdrop-filter: blur(8px);
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #d2cab6;
+      color: var(--text-main);
+      min-height: 100vh;
     }
+
+    header {
+      background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
+      color: var(--white);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    header h2 {
+      margin: 0;
+      font-size: 19px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    header h2::before { content: "★"; font-size: 18px; }
+
+    .troop-home-link {
+      text-decoration: none;
+      color: inherit;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .troop-home-link:hover h2 {
+      opacity: 0.9;
+      text-decoration: underline;
+    }
+
+    nav {
+      display: flex;
+      gap: 12px;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
     nav a {
-      color: rgba(255,255,255,0.86);
-      text-decoration:none;
-      padding: 8px 10px;
-      border-radius: 999px;
-      border: 1px solid transparent;
-      background: transparent;
-      font-weight: 700;
+      color: #1f4e79;
+      font-weight: bold;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(4px);
+      opacity: 0.9;
+    }
+
+    nav a:hover {
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    #auth-bar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
       font-size: 13px;
     }
-    nav a:hover { border-color: rgba(255,255,255,0.18); background: rgba(255,255,255,0.06); }
 
-    .wrap { max-width: 1100px; margin: 0 auto; padding: 22px 18px 56px; }
-    header { display:flex; align-items:center; justify-content:space-between; gap: 14px; flex-wrap: wrap; margin-bottom: 14px; }
-    h1 { margin: 0; font-size: 16px; letter-spacing: 0.2px; }
-    .sub { margin: 6px 0 0 0; color: var(--muted); font-size: 13px; }
-
-    .pill {
-      display:flex; gap: 10px; align-items:center; flex-wrap: wrap;
-      padding: 9px 12px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.06);
-      border-radius: 999px;
-      box-shadow: 0 10px 26px rgba(0,0,0,0.25);
-    }
-    .pill strong { font-family: var(--mono); font-size: 13px; }
-    .pill span { font-size: 12px; color: var(--muted); }
-
-    button {
-      appearance: none;
-      border: 1px solid var(--border);
-      background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06));
-      color: var(--text);
-      padding: 10px 12px;
-      border-radius: 12px;
+    .auth-btn {
+      padding: 5px 12px;
+      font-size: 13px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--white);
       cursor: pointer;
-      font-weight: 800;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.28);
-      transition: transform 0.08s ease, border-color 0.12s ease;
-      user-select: none;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
     }
-    button:hover { transform: translateY(-1px); border-color: rgba(255,255,255,0.24); }
-    button:active { transform: translateY(0px); }
-    button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .auth-btn:hover { background: rgba(255, 255, 255, 0.2); }
 
-    .grid { display:grid; grid-template-columns: 1.1fr 0.9fr; gap: 16px; align-items: start; margin-top: 14px; }
-    @media (max-width: 980px){ .grid { grid-template-columns: 1fr; } }
+    main {
+      padding: 24px 16px 40px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
 
-    .card {
-      background: linear-gradient(180deg, var(--panel), var(--panel2));
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 16px;
+    .welcome-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 8px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
     }
-    .card h2 { margin: 0 0 6px 0; font-size: 14px; letter-spacing: 0.2px; }
-    .card p { margin: 0 0 12px 0; color: var(--muted); font-size: 13px; line-height: 1.4; }
 
-    .row { display:flex; align-items:center; justify-content:space-between; gap: 12px; flex-wrap: wrap; }
-    .bigCount { font-family: var(--mono); font-weight: 950; font-size: 14px; }
+    .welcome-card h3 { margin: 0 0 4px; font-size: 18px; }
+    .welcome-card p { margin: 0; font-size: 14px; color: var(--text-muted); }
 
-    .error{
-      margin-top: 10px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,120,120,0.28);
-      background: rgba(255,80,80,0.08);
-      color: rgba(255,230,230,0.95);
-      display:none;
-    }
-    .error.show{ display:block; }
-
-    /* Badges UI */
-    .badges{
-      display:grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 10px;
-    }
-    @media (max-width: 560px){ .badges{ grid-template-columns: 1fr; } }
-    .badgeRow{
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(0,0,0,0.18);
-      border-radius: 14px;
-      padding: 10px 12px;
-      display:flex;
-      flex-direction:column;
-      gap: 10px;
-    }
-    .badgeTop{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap: 10px;
-    }
-    .badgeId{
-      font-weight: 950;
-      letter-spacing: 0.3px;
-      text-transform: uppercase;
-      font-size: 12px;
-    }
-    .badgeMeta{
-      font-family: var(--mono);
+    .badge {
       font-size: 11px;
-      color: rgba(255,255,255,0.68);
-      line-height: 1.35;
-      margin-top: 2px;
-    }
-    .badgeCount{
-      font-family: var(--mono);
-      font-weight: 900;
-      font-size: 12px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.18);
-      background: rgba(255,255,255,0.06);
-      white-space: nowrap;
-      align-self:flex-start;
-    }
-    .upgradeBtn{
-      width: 100%;
-      border-radius: 12px;
-      padding: 10px 12px;
-      font-weight: 900;
-      letter-spacing: 0.2px;
-    }
-    .upgradeBtn.ready{
-      border: 1px solid var(--goodBorder);
-      background: linear-gradient(180deg, var(--goodBg), rgba(255,255,255,0.06));
-      color: rgba(240,255,247,0.98);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(148, 163, 184, 0.2);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+      justify-content: center;
     }
 
-    /* Fullscreen chest overlay */
-    .overlay{ position: fixed; inset: 0; display:none; z-index: 9999; user-select:none; -webkit-tap-highlight-color: transparent; overflow:hidden; }
-    .overlay.show{ display:block; }
-    .ov-top{ position:absolute; left: 18px; right: 18px; top: 16px; display:flex; align-items:center; justify-content:space-between; gap:12px; pointer-events:none; }
-    .ov-title{ display:flex; flex-direction:column; gap:2px; }
-    .ov-title .name{ font-weight: 900; letter-spacing: 0.3px; font-size: 14px; text-shadow: 0 12px 36px rgba(0,0,0,0.35); }
-    .ov-title .small{ font-family: var(--mono); font-size: 12px; opacity: 0.9; text-shadow: 0 12px 36px rgba(0,0,0,0.35); }
-    .ov-dots{ display:flex; gap:6px; }
-    .dot{ width:10px;height:10px;border-radius:999px; border: 1px solid rgba(255,255,255,0.35); background: rgba(255,255,255,0.15); box-shadow: 0 12px 36px rgba(0,0,0,0.35); }
-    .dot.done{ background: rgba(255,255,255,0.82); border-color: rgba(255,255,255,0.55); }
-    .ov-center{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; padding: 86px 18px 110px; text-align:center; }
-    .chest-wrap{ width:min(560px, 92vw); display:flex; flex-direction:column; gap: 14px; align-items:center; justify-content:center; }
-    .chest{
-      width:min(340px, 74vw); height:min(220px, 48vw); border-radius: 26px;
-      border: 1px solid rgba(255,255,255,0.25); box-shadow: 0 18px 60px rgba(0,0,0,0.40);
-      position:relative; overflow:hidden; transform: translateZ(0);
+    .badge.admin {
+      background: rgba(240, 180, 41, 0.16);
+      color: #92400e;
+      border: 1px solid rgba(245, 158, 11, 0.6);
+    }
+
+    section {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 14px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    section h2 {
+      margin-top: 0;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    section h2::before {
+      content: "▸";
+      font-size: 14px;
+      color: var(--blue);
+    }
+
+    .small-help {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      line-height: 1.35;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .pillbox {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      padding: 8px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      background: rgba(148, 163, 184, 0.10);
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .pillbox strong {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      color: var(--text-main);
+      font-size: 12px;
+    }
+
+    .primary-btn {
+      padding: 7px 14px;
+      border-radius: var(--radius-pill);
+      border: none;
+      background: var(--blue);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .primary-btn:hover { opacity: 0.96; }
+    .primary-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    .error {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(185, 28, 28, 0.35);
+      background: rgba(185, 28, 28, 0.08);
+      color: #991b1b;
+      display: none;
+      font-size: 13px;
+    }
+    .error.show { display: block; }
+
+    /* Badges */
+    .badges {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 8px;
+    }
+    @media (max-width: 640px) { .badges { grid-template-columns: 1fr; } }
+
+    .badge-card {
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      background: #f9fafb;
+      border-radius: 14px;
+      padding: 12px;
+    }
+    .badge-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .badge-name {
+      font-weight: 800;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--blue);
+      margin: 0;
+    }
+    .badge-meta {
+      margin-top: 3px;
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.35;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+    .badge-count {
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(31,78,121,0.10);
+      border: 1px solid rgba(31,78,121,0.18);
+      color: #1f4e79;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      white-space: nowrap;
+    }
+    .upgrade-btn {
+      margin-top: 10px;
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: var(--radius-pill);
+      border: none;
+      background: rgba(34, 197, 94, 0.16);
+      border: 1px solid rgba(34, 197, 94, 0.35);
+      color: #166534;
+      font-weight: 700;
+      cursor: pointer;
+      display: none;
+    }
+    .upgrade-btn:hover { opacity: 0.96; }
+
+    /* Fullscreen chest overlay (kept simple but “exciting”) */
+    .overlay { position: fixed; inset: 0; display: none; z-index: 9999; user-select: none; }
+    .overlay.show { display: block; }
+
+    .ov-top {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      top: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      pointer-events: none;
+      color: white;
+    }
+
+    .ov-title .name { font-weight: 900; letter-spacing: 0.05em; text-transform: uppercase; font-size: 13px; }
+    .ov-title .small { margin-top: 3px; font-size: 12px; opacity: 0.92; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+
+    .ov-dots { display: flex; gap: 6px; }
+    .dot { width: 10px; height: 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.45); background: rgba(255,255,255,0.15); }
+    .dot.done { background: rgba(255,255,255,0.85); }
+
+    .ov-center {
+      position: absolute; inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 86px 16px 110px;
+      text-align: center;
+      color: white;
+    }
+
+    .chest-wrap { width: min(560px, 92vw); display: flex; flex-direction: column; align-items: center; gap: 14px; }
+    .chest {
+      width: min(360px, 80vw);
+      height: min(230px, 50vw);
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.25);
+      box-shadow: 0 18px 60px rgba(0,0,0,0.35);
+      position: relative;
+      overflow: hidden;
     }
     .chest::before{
       content:""; position:absolute; inset:-60px;
-      background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.30), transparent 55%),
-                  radial-gradient(circle at 70% 75%, rgba(255,255,255,0.16), transparent 60%);
+      background:
+        radial-gradient(circle at 30% 20%, rgba(255,255,255,0.30), transparent 55%),
+        radial-gradient(circle at 70% 75%, rgba(255,255,255,0.16), transparent 60%);
       opacity: 0.9;
     }
-    .chest::after{
-      content:""; position:absolute; inset:0;
-      background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.08) 40%, transparent 70%);
-      transform: translateX(-60%); opacity: 0.0;
-    }
-    .shake{ animation: shake 520ms ease-in-out; }
+    .shake { animation: shake 520ms ease-in-out; }
     @keyframes shake{
       0%{ transform: translateY(0) rotate(0deg); }
       15%{ transform: translateY(-2px) rotate(-1deg); }
@@ -203,40 +355,27 @@
       75%{ transform: translateY(1px) rotate(0.7deg); }
       100%{ transform: translateY(0) rotate(0deg); }
     }
-    .sweep::after{ opacity: 1; animation: sweep 750ms ease-out; }
-    @keyframes sweep{
-      0%{ transform: translateX(-80%); opacity: 0.0; }
-      15%{ opacity: 0.9; }
-      100%{ transform: translateX(120%); opacity: 0.0; }
-    }
-    .level{ font-size: 44px; font-weight: 950; letter-spacing: 0.6px; margin: 0; text-shadow: 0 22px 70px rgba(0,0,0,0.45); }
-    .level-sub{ margin:0; font-family: var(--mono); font-size: 12px; opacity: 0.9; text-shadow: 0 22px 70px rgba(0,0,0,0.45); }
-    .ladder{ display:flex; gap: 8px; align-items:center; justify-content:center; margin-top: 8px; flex-wrap:wrap; }
-    .rung{
-      width: 40px; height: 10px; border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.35);
-      background: rgba(255,255,255,0.14);
-      opacity: 0.55;
-      box-shadow: 0 18px 50px rgba(0,0,0,0.25);
-    }
-    .rung.on{ opacity: 1; background: rgba(255,255,255,0.88); border-color: rgba(255,255,255,0.55); }
-    .rung.next-flicker{ animation: flicker 260ms ease-in-out; }
-    @keyframes flicker{ 0%{ opacity: 0.5; } 40%{ opacity: 1; } 100%{ opacity: 0.55; } }
-    .ov-bottom{ position:absolute; left: 18px; right: 18px; bottom: 18px; display:flex; align-items:center; justify-content:center; pointer-events:none; text-align:center; }
-    .tap{
-      font-weight: 800; padding: 12px 16px; border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.20);
+
+    .level { margin: 0; font-size: 44px; font-weight: 950; letter-spacing: 0.04em; text-shadow: 0 22px 70px rgba(0,0,0,0.45); }
+    .level-sub { margin: 0; font-size: 12px; opacity: 0.92; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace; }
+
+    .ladder { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+    .rung { width: 40px; height: 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.35); background: rgba(255,255,255,0.14); opacity: 0.55; }
+    .rung.on { opacity: 1; background: rgba(255,255,255,0.88); }
+
+    .toast{
+      position:absolute; left:50%; top: 58%;
+      transform: translate(-50%,-50%);
+      padding: 10px 14px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,0.22);
       background: rgba(0,0,0,0.24);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      font-size: 14px; font-weight: 900; letter-spacing: 0.02em;
+      opacity: 0; pointer-events:none;
       box-shadow: 0 18px 60px rgba(0,0,0,0.35);
       backdrop-filter: blur(8px);
-    }
-    .tap small{ display:block; font-family: var(--mono); font-weight: 700; opacity: 0.8; margin-top: 2px; }
-    .toast{
-      position:absolute; left:50%; top: 58%; transform: translate(-50%,-50%);
-      padding: 10px 14px; border-radius: 999px; border:1px solid rgba(255,255,255,0.22);
-      background: rgba(0,0,0,0.24); font-family: var(--mono); font-size: 14px; font-weight: 900;
-      letter-spacing: 0.4px; opacity: 0; pointer-events:none;
-      box-shadow: 0 18px 60px rgba(0,0,0,0.35); backdrop-filter: blur(8px);
+      color: white;
     }
     .toast.show{ animation: toastpop 780ms ease-out; }
     @keyframes toastpop{
@@ -245,35 +384,42 @@
       55%{ opacity: 1; transform: translate(-50%,-50%) scale(1.0); }
       100%{ opacity: 0; transform: translate(-50%,-50%) scale(1.0); }
     }
-    .result{
-      display:none; margin-top: 6px; padding: 12px 14px; border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.20); background: rgba(0,0,0,0.22);
-      box-shadow: 0 18px 60px rgba(0,0,0,0.35); width: min(560px, 92vw);
-      backdrop-filter: blur(10px); text-align:left;
-    }
-    .result.show{ display:block; }
-    .result h3{ margin:0 0 6px 0; font-size: 14px; font-weight: 950; }
-    .result p{ margin:0; font-family: var(--mono); font-size: 13px; color: rgba(255,255,255,0.85); }
-    .result .ok{ margin-top: 10px; pointer-events:auto; width: 100%; border-radius: 14px; }
 
-    .t1{ background: radial-gradient(900px 650px at 25% 10%, rgba(80,120,255,0.22), transparent 60%),
-                  radial-gradient(700px 500px at 110% 20%, rgba(0,255,255,0.08), transparent 50%),
-                  linear-gradient(180deg, #07102a, #060a18); }
-    .t2{ background: radial-gradient(900px 650px at 25% 10%, rgba(255,200,120,0.28), transparent 60%),
-                  radial-gradient(700px 500px at 110% 20%, rgba(255,120,0,0.14), transparent 50%),
-                  linear-gradient(180deg, #2a1306, #120806); }
-    .t3{ background: radial-gradient(900px 650px at 25% 10%, rgba(200,120,255,0.26), transparent 60%),
-                  radial-gradient(700px 500px at 110% 20%, rgba(255,80,220,0.12), transparent 50%),
-                  linear-gradient(180deg, #140a28, #070610); }
-    .t4{ background: radial-gradient(900px 650px at 25% 10%, rgba(120,220,255,0.28), transparent 60%),
-                  radial-gradient(700px 500px at 110% 20%, rgba(0,180,255,0.14), transparent 50%),
-                  linear-gradient(180deg, #061b2c, #040b14); }
-    .t5{ background: radial-gradient(900px 650px at 25% 10%, rgba(240,240,255,0.22), transparent 60%),
-                  radial-gradient(700px 500px at 110% 20%, rgba(160,190,255,0.10), transparent 50%),
-                  linear-gradient(180deg, #0f1116, #07080a); }
-    .t6{ background: radial-gradient(900px 650px at 25% 10%, rgba(255,220,120,0.30), transparent 60%),
-                  radial-gradient(700px 500px at 110% 20%, rgba(255,160,0,0.14), transparent 50%),
-                  linear-gradient(180deg, #1c1206, #090603); }
+    .result{
+      display:none;
+      margin-top: 6px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(0,0,0,0.22);
+      width: min(560px, 92vw);
+      backdrop-filter: blur(10px);
+      text-align: left;
+      color: white;
+    }
+    .result.show { display: block; }
+    .result h3 { margin: 0 0 6px 0; font-size: 14px; font-weight: 950; }
+    .result p { margin: 0; font-size: 13px; opacity: 0.92; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace; }
+    .result .ok {
+      margin-top: 10px;
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: var(--radius-pill);
+      border: none;
+      background: rgba(255,255,255,0.18);
+      color: white;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .result .ok:hover { opacity: 0.96; }
+
+    /* Level themes */
+    .t1{ background: radial-gradient(900px 650px at 25% 10%, rgba(80,120,255,0.22), transparent 60%), linear-gradient(180deg, #07102a, #060a18); }
+    .t2{ background: radial-gradient(900px 650px at 25% 10%, rgba(255,200,120,0.28), transparent 60%), linear-gradient(180deg, #2a1306, #120806); }
+    .t3{ background: radial-gradient(900px 650px at 25% 10%, rgba(200,120,255,0.26), transparent 60%), linear-gradient(180deg, #140a28, #070610); }
+    .t4{ background: radial-gradient(900px 650px at 25% 10%, rgba(120,220,255,0.28), transparent 60%), linear-gradient(180deg, #061b2c, #040b14); }
+    .t5{ background: radial-gradient(900px 650px at 25% 10%, rgba(240,240,255,0.22), transparent 60%), linear-gradient(180deg, #0f1116, #07080a); }
+    .t6{ background: radial-gradient(900px 650px at 25% 10%, rgba(255,220,120,0.30), transparent 60%), linear-gradient(180deg, #1c1206, #090603); }
 
     .skin1{ background: linear-gradient(180deg, rgba(70,120,220,0.28), rgba(10,30,70,0.24)); }
     .skin2{ background: linear-gradient(180deg, rgba(255,170,70,0.30), rgba(90,30,10,0.22)); }
@@ -282,65 +428,83 @@
     .skin5{ background: linear-gradient(180deg, rgba(240,240,255,0.26), rgba(40,45,60,0.18)); }
     .skin6{ background: linear-gradient(180deg, rgba(255,220,120,0.28), rgba(90,50,10,0.20)); }
   </style>
+
+  <link rel="stylesheet" href="/modern-2026.css" />
 </head>
+
 <body>
-
-  <!-- Keep your standard nav; add a link to /chests if you want -->
-  <nav>
-    <a href="/home">Home</a>
-    <a href="/calendar">Calendar</a>
-    <a href="/documents">Documents</a>
-    <a href="/scoutmaster">SM Blog</a>
-    <a href="/spl">SPL Blog</a>
-    <a href="/useful-links">Useful Links</a>
-    <a href="/events">Events</a>
-    <a href="/mail">Mail</a>
-    <a href="/chests">Chests</a>
-  </nav>
-
-  <div class="wrap">
-    <header>
-      <div>
-        <h1>Lucky Chests</h1>
-        <p class="sub">Open chests to collect badge cards. (No gems, no gold.)</p>
-      </div>
-      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end;">
-        <div class="pill" id="userPill" style="display:none">
-          <span id="userName">—</span>
-          <strong id="chestLabel">LUCKY CHESTS: 0</strong>
-        </div>
-        <button id="signInBtn">Sign in with Google</button>
-        <button id="signOutBtn" style="display:none">Sign out</button>
-      </div>
-    </header>
-
-    <div class="grid">
-      <section class="card">
-        <h2>Open a chest</h2>
-        <p>Click to open if you have one. Opening is fullscreen until finished.</p>
-
-        <div class="row">
-          <div class="bigCount" id="openHint">You have 0 Lucky Chests.</div>
-          <button id="openChestBtn" disabled>Open Lucky Chest</button>
-        </div>
-
-        <div class="error" id="errBox"></div>
-
-        <p class="sub" style="margin-top:12px;">
-          To “give” someone chests, set <span style="font-family:var(--mono)">users/{uid}.chests.lucky</span> in Firestore.
-        </p>
-      </section>
-
-      <aside class="card">
-        <h2>Badges</h2>
-        <p>Cards only go up; upgrading (if enabled) spends cards manually.</p>
-        <div id="badgesGrid" class="badges"></div>
-        <div class="sub" id="statusText" style="margin-top:10px;">Not signed in.</div>
-      </aside>
+  <header>
+    <div>
+      <a href="/home" class="troop-home-link">
+        <h2>Troop 248</h2>
+      </a>
     </div>
-  </div>
 
-  <!-- Fullscreen chest overlay -->
+    <nav>
+      <a href="/home">Home</a>
+      <a href="/calendar">Calendar</a>
+      <a href="/documents">Documents</a>
+      <a href="/scoutmaster">SM Blog</a>
+      <a href="/spl">SPL Blog</a>
+      <a href="/useful-links">Useful Links</a>
+      <a href="/events">Events</a>
+      <a href="/mail">Mail</a>
+      <a href="/chests">Chests</a>
+    </nav>
+
+    <div id="auth-bar">
+      <div id="auth-info">Not signed in</div>
+      <a id="login-link" class="auth-btn" href="/login/">Log In</a>
+      <button id="logout-btn" class="auth-btn" style="display:none;">Log Out</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="welcome-card">
+      <div>
+        <h3>Lucky Chests</h3>
+        <p>Open chests to collect badge cards (names later). This page can be viewed without signing in.</p>
+      </div>
+      <div id="role-badge-container">
+        <span class="badge">Guest</span>
+      </div>
+    </div>
+
+    <section>
+      <h2>Your Chests</h2>
+      <div class="row">
+        <div class="pillbox">
+          <span>Lucky Chests:</span>
+          <strong id="lucky-count">0</strong>
+        </div>
+
+        <button id="open-chest-btn" class="primary-btn" disabled>Open Lucky Chest</button>
+      </div>
+
+      <div class="small-help" id="open-help">
+        If you sign in, you can open chests and collect badge cards.
+      </div>
+
+      <div id="errBox" class="error"></div>
+
+      <div class="small-help" style="margin-top:10px;">
+        Admins can “give” chests by setting <strong>users/{uid}.chests.lucky</strong> in Firestore.
+      </div>
+    </section>
+
+    <section>
+      <h2>Badges</h2>
+      <div class="small-help">
+        Cards only go up. Upgrading is manual and uses your card requirements. (You can remove upgrades later.)
+      </div>
+      <div id="badgesGrid" class="badges"></div>
+      <div class="small-help" id="badges-help" style="margin-top:10px;">
+        Sign in to see your badge progress.
+      </div>
+    </section>
+  </main>
+
+  <!-- Fullscreen Chest Overlay -->
   <div class="overlay t1" id="overlay">
     <div class="ov-top">
       <div class="ov-title">
@@ -365,33 +529,60 @@
         </div>
       </div>
     </div>
-
-    <div class="ov-bottom">
-      <div class="tap">
-        Tap anywhere to spin
-        <small id="tapSmall">Spins left: 5</small>
-      </div>
-    </div>
   </div>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc, onSnapshot, runTransaction, serverTimestamp, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, onSnapshot, runTransaction, serverTimestamp, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    /***********************
-     * Firebase config: paste your troop project's values
-     ***********************/
     const firebaseConfig = {
-      apiKey: "PASTE",
-      authDomain: "PASTE",
-      projectId: "PASTE",
-      appId: "PASTE",
+      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+      authDomain: "troop-248.firebaseapp.com",
+      projectId: "troop-248",
+      storageBucket: "troop-248.firebasestorage.app",
+      messagingSenderId: "925363875752",
+      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+      measurementId: "G-NY75GX5TBH"
     };
 
-    /***********************
-     * Final-level probabilities
-     ***********************/
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // ====== UI ======
+    const authInfoEl = document.getElementById("auth-info");
+    const loginLink = document.getElementById("login-link");
+    const logoutBtn = document.getElementById("logout-btn");
+    const roleBadgeContainer = document.getElementById("role-badge-container");
+
+    const luckyCountEl = document.getElementById("lucky-count");
+    const openChestBtn = document.getElementById("open-chest-btn");
+    const openHelp = document.getElementById("open-help");
+    const badgesGrid = document.getElementById("badgesGrid");
+    const badgesHelp = document.getElementById("badges-help");
+    const errBox = document.getElementById("errBox");
+
+    const overlay = document.getElementById("overlay");
+    const spinLabel = document.getElementById("spinLabel");
+    const chestEl = document.getElementById("chest");
+    const levelText = document.getElementById("levelText");
+    const levelSub = document.getElementById("levelSub");
+    const ladder = document.getElementById("ladder");
+    const toast = document.getElementById("toast");
+    const dots = document.getElementById("dots");
+    const result = document.getElementById("result");
+    const resultTitle = document.getElementById("resultTitle");
+    const resultBody = document.getElementById("resultBody");
+    const resultOk = document.getElementById("resultOk");
+
+    function showError(msg) {
+      errBox.textContent = msg;
+      errBox.classList.add("show");
+      setTimeout(() => errBox.classList.remove("show"), 5200);
+    }
+
+    // ====== Game Settings ======
     const FINAL_LEVEL_WEIGHTS = [
       { level: 1, p: 0.10 },
       { level: 2, p: 0.375 },
@@ -401,9 +592,7 @@
       { level: 6, p: 0.05 }
     ];
 
-    /***********************
-     * Badge pools (you can rename later; ids stay stable)
-     ***********************/
+    // Temporary badge ids (rename later without changing ids)
     const BADGES = {
       Common:     ["a","b","c","d","e"],
       Uncommon:   ["f","g","h","i","j"],
@@ -422,63 +611,18 @@
       6: { Common: 500, Uncommon: 100, Rare: 65, Epic: 40, Legendary: 10 },
     };
 
-    /***********************
-     * Optional badge levels + manual upgrades (cards only)
-     * If you don’t want upgrading yet, set ENABLE_UPGRADES=false
-     ***********************/
-    const ENABLE_UPGRADES = true;
-
+    // Upgrades (cards only) – matches what you described
     const COMMON_STEP_COST = { 1:25, 2:50, 3:100, 4:250, 5:550, 6:800, 7:1400, 8:2000 };
     const RARITY_CARD_MULT = { Common:1.0, Uncommon:0.70, Rare:0.40, Epic:0.20, Legendary:0.05 };
-    function nextCardCost(rarity, currentLevel){
+    function nextCardCost(rarity, currentLevel) {
       const base = COMMON_STEP_COST[currentLevel];
       if (!base) return null;
       return Math.floor(base * (RARITY_CARD_MULT[rarity] ?? 1));
     }
 
-    /***********************
-     * UI
-     ***********************/
-    const signInBtn = document.getElementById("signInBtn");
-    const signOutBtn = document.getElementById("signOutBtn");
-    const userPill = document.getElementById("userPill");
-    const userName = document.getElementById("userName");
-    const chestLabel = document.getElementById("chestLabel");
-    const openHint = document.getElementById("openHint");
-    const openChestBtn = document.getElementById("openChestBtn");
-    const statusText = document.getElementById("statusText");
-    const badgesGrid = document.getElementById("badgesGrid");
-    const errBox = document.getElementById("errBox");
-
-    const overlay = document.getElementById("overlay");
-    const spinLabel = document.getElementById("spinLabel");
-    const tapSmall = document.getElementById("tapSmall");
-    const chestEl = document.getElementById("chest");
-    const levelText = document.getElementById("levelText");
-    const levelSub = document.getElementById("levelSub");
-    const ladder = document.getElementById("ladder");
-    const toast = document.getElementById("toast");
-    const dots = document.getElementById("dots");
-    const result = document.getElementById("result");
-    const resultTitle = document.getElementById("resultTitle");
-    const resultBody = document.getElementById("resultBody");
-    const resultOk = document.getElementById("resultOk");
-
-    function showError(msg){
-      errBox.textContent = msg;
-      errBox.classList.add("show");
-      setTimeout(()=> errBox.classList.remove("show"), 5200);
-    }
-
-    /***********************
-     * Firebase init
-     ***********************/
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const provider = new GoogleAuthProvider();
-
+    // ====== State ======
     let currentUser = null;
+    let currentIsAdmin = false;
     let unsubUserDoc = null;
 
     let luckyChests = 0;
@@ -493,49 +637,53 @@
     let finalLevel = 1;
     let decidedDrop = null;
 
+    // ====== Firestore helpers ======
     const userDocRef = (uid) => doc(db, "users", uid);
 
-    function ensureAllBadgesInitialized(levelsObj){
+    function ensureAllBadgesInitialized(levelsObj) {
       const out = { ...(levelsObj || {}) };
-      for (const rarity of RARITY_ORDER){
-        for (const id of BADGES[rarity]){
+      for (const rarity of RARITY_ORDER) {
+        for (const id of BADGES[rarity]) {
           if (typeof out[id] !== "number" || out[id] < 1) out[id] = 1;
         }
       }
       return out;
     }
 
-    async function ensureUserDoc(uid){
+    async function ensureUserDoc(uid) {
       const ref = userDocRef(uid);
       const snap = await getDoc(ref);
-      if (!snap.exists()){
+
+      if (!snap.exists()) {
         await setDoc(ref, {
           chests: { lucky: 0 },
           badgeCards: {},
           badgeLevels: ensureAllBadgesInitialized({}),
           createdAt: serverTimestamp()
         });
-      } else {
-        const data = snap.data() || {};
-        const updates = {};
-        if (typeof data.chests !== "object" || data.chests === null) updates.chests = { lucky: 0 };
-        else if (typeof data.chests.lucky !== "number") updates.chests = { ...data.chests, lucky: 0 };
-
-        if (typeof data.badgeCards !== "object" || data.badgeCards === null) updates.badgeCards = {};
-        if (typeof data.badgeLevels !== "object" || data.badgeLevels === null) updates.badgeLevels = ensureAllBadgesInitialized({});
-        else {
-          const merged = ensureAllBadgesInitialized(data.badgeLevels);
-          const changed = Object.keys(merged).some(k => merged[k] !== data.badgeLevels[k]);
-          if (changed) updates.badgeLevels = merged;
-        }
-
-        if (Object.keys(updates).length) await updateDoc(ref, updates);
+        return;
       }
+
+      const data = snap.data() || {};
+      const updates = {};
+
+      if (typeof data.chests !== "object" || data.chests === null) updates.chests = { lucky: 0 };
+      else if (typeof data.chests.lucky !== "number") updates.chests = { ...data.chests, lucky: 0 };
+
+      if (typeof data.badgeCards !== "object" || data.badgeCards === null) updates.badgeCards = {};
+      if (typeof data.badgeLevels !== "object" || data.badgeLevels === null) updates.badgeLevels = ensureAllBadgesInitialized({});
+      else {
+        const merged = ensureAllBadgesInitialized(data.badgeLevels);
+        const changed = Object.keys(merged).some(k => merged[k] !== data.badgeLevels[k]);
+        if (changed) updates.badgeLevels = merged;
+      }
+
+      if (Object.keys(updates).length) await updateDoc(ref, updates);
     }
 
-    function subscribeToUserDoc(uid){
+    function subscribeToUserDoc(uid) {
       if (unsubUserDoc) unsubUserDoc();
-      unsubUserDoc = onSnapshot(userDocRef(uid), (snap)=>{
+      unsubUserDoc = onSnapshot(userDocRef(uid), (snap) => {
         const data = snap.data() || {};
         luckyChests = (data.chests && typeof data.chests.lucky === "number") ? data.chests.lucky : 0;
         badgeCards = (typeof data.badgeCards === "object" && data.badgeCards) ? data.badgeCards : {};
@@ -543,84 +691,122 @@
           (typeof data.badgeLevels === "object" && data.badgeLevels) ? data.badgeLevels : {}
         );
 
-        chestLabel.textContent = `LUCKY CHESTS: ${luckyChests}`;
-        openHint.textContent = `You have ${luckyChests} Lucky Chest${luckyChests === 1 ? "" : "s"}.`;
+        luckyCountEl.textContent = String(luckyChests);
         openChestBtn.disabled = !currentUser || opening || luckyChests < 1;
+
+        openHelp.textContent =
+          luckyChests < 1
+            ? "You have no Lucky Chests right now."
+            : "Click Open to consume 1 chest and start the 5 spins.";
 
         renderBadges();
       });
     }
 
-    signInBtn.addEventListener("click", async ()=>{
-      try { await signInWithPopup(auth, provider); }
-      catch (e) { showError(e?.message || "Sign-in failed"); }
-    });
+    // ====== Auth / Role (do not force-login) ======
+    function setGuestUI() {
+      authInfoEl.textContent = "Not signed in";
+      roleBadgeContainer.innerHTML = `<span class="badge">Guest</span>`;
+      loginLink.style.display = "";
+      logoutBtn.style.display = "none";
 
-    signOutBtn.addEventListener("click", async ()=>{
-      try { await signOut(auth); }
-      catch (e) { showError(e?.message || "Sign-out failed"); }
-    });
+      luckyChests = 0;
+      badgeCards = {};
+      badgeLevels = {};
+      luckyCountEl.textContent = "0";
+      openChestBtn.disabled = true;
+      openHelp.textContent = "If you sign in, you can open chests and collect badge cards.";
+      badgesHelp.textContent = "Sign in to see your badge progress.";
+      badgesHelp.style.display = "block";
+      badgesGrid.innerHTML = "";
+      if (unsubUserDoc) unsubUserDoc();
+    }
 
-    onAuthStateChanged(auth, async (user)=>{
-      currentUser = user || null;
+    async function handleSignedInUser(user) {
+      // role gate like your other pages, but only AFTER sign-in
+      const infoRef = doc(db, "accountInfo", user.uid);
+      const infoSnap = await getDoc(infoRef);
 
-      if (!currentUser){
-        statusText.textContent = "Not signed in.";
-        signInBtn.style.display = "";
-        signOutBtn.style.display = "none";
-        userPill.style.display = "none";
-        openChestBtn.disabled = true;
-
-        luckyChests = 0;
-        badgeCards = {};
-        badgeLevels = {};
-        renderBadges();
-
-        if (unsubUserDoc) unsubUserDoc();
+      if (!infoSnap.exists()) {
+        window.location.href = "/under-review/";
         return;
       }
 
-      signInBtn.style.display = "none";
-      signOutBtn.style.display = "";
-      userPill.style.display = "";
-      userName.textContent = currentUser.displayName || currentUser.email || "Signed in";
-      statusText.textContent = "Signed in. Open chests to collect badge cards.";
+      const data = infoSnap.data();
+      const role = data.authRole;
 
-      try{
-        await ensureUserDoc(currentUser.uid);
-        subscribeToUserDoc(currentUser.uid);
-      } catch (e){
-        showError(e?.message || "Failed to load user data");
+      if (role !== "admin" && role !== "viewer") {
+        window.location.href = "/under-review/";
+        return;
+      }
+
+      currentIsAdmin = (role === "admin");
+
+      authInfoEl.textContent = `Signed in as ${user.email}`;
+      roleBadgeContainer.innerHTML = `
+        <span class="badge ${currentIsAdmin ? "admin" : ""}">
+          ${currentIsAdmin ? "Admin" : "Viewer"}
+        </span>
+      `;
+      loginLink.style.display = "none";
+      logoutBtn.style.display = "";
+
+      badgesHelp.style.display = "none";
+
+      await ensureUserDoc(user.uid);
+      subscribeToUserDoc(user.uid);
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      currentUser = user || null;
+
+      if (!currentUser) {
+        setGuestUI();
+        return;
+      }
+
+      try {
+        await handleSignedInUser(currentUser);
+      } catch (e) {
+        showError(e?.message || "Could not load your account.");
       }
     });
 
-    /***********************
-     * Badge rendering + optional upgrades
-     ***********************/
-    function allBadgeIdsInOrder(){
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      // keep page viewable after sign out
+      setGuestUI();
+    });
+
+    // ====== Badges UI ======
+    function allBadgeIdsInOrder() {
       const list = [];
-      for (const rarity of RARITY_ORDER){
+      for (const rarity of RARITY_ORDER) {
         for (const id of BADGES[rarity]) list.push({ id, rarity });
       }
       return list;
     }
-    function getLevelForBadge(id){
+    function getLevelForBadge(id) {
       const v = badgeLevels?.[id];
       return (typeof v === "number" && v >= 1) ? v : 1;
     }
-    function getCardsForBadge(id){
+    function getCardsForBadge(id) {
       const v = badgeCards?.[id];
       return (typeof v === "number" && v >= 0) ? v : 0;
     }
 
-    async function upgradeBadge(badgeId, rarity){
-      if (!currentUser) return showError("Sign in first.");
+    async function upgradeBadge(badgeId, rarity) {
+      if (!currentUser) {
+        showError("Please sign in first (use the Login button).");
+        return;
+      }
 
-      try{
-        await runTransaction(db, async (tx)=>{
+      try {
+        await runTransaction(db, async (tx) => {
           const ref = userDocRef(currentUser.uid);
           const snap = await tx.get(ref);
           const data = snap.data() || {};
+
           const bc = (typeof data.badgeCards === "object" && data.badgeCards) ? { ...data.badgeCards } : {};
           const bl = ensureAllBadgesInitialized(
             (typeof data.badgeLevels === "object" && data.badgeLevels) ? { ...data.badgeLevels } : {}
@@ -638,90 +824,87 @@
 
           tx.update(ref, { badgeCards: bc, badgeLevels: bl });
         });
-      } catch (e){
-        showError(e?.message || "Upgrade failed");
+      } catch (e) {
+        showError(e?.message || "Upgrade failed.");
       }
     }
 
-    function renderBadges(){
+    function renderBadges() {
       badgesGrid.innerHTML = "";
-      for (const { id, rarity } of allBadgeIdsInOrder()){
+
+      for (const { id, rarity } of allBadgeIdsInOrder()) {
         const lvl = getLevelForBadge(id);
         const cards = getCardsForBadge(id);
         const cost = nextCardCost(rarity, lvl);
-
         const maxed = (cost === null);
-        const canUpgrade = ENABLE_UPGRADES && !maxed && (cards >= cost);
+        const canUpgrade = !maxed && cards >= cost;
 
-        const row = document.createElement("div");
-        row.className = "badgeRow";
+        const card = document.createElement("div");
+        card.className = "badge-card";
 
         const top = document.createElement("div");
-        top.className = "badgeTop";
+        top.className = "badge-top";
 
         const left = document.createElement("div");
-        const bid = document.createElement("div");
-        bid.className = "badgeId";
-        bid.textContent = `Badge ${id}`;
+        const name = document.createElement("div");
+        name.className = "badge-name";
+        name.textContent = `Badge ${id}`;
 
         const meta = document.createElement("div");
-        meta.className = "badgeMeta";
+        meta.className = "badge-meta";
         meta.textContent = maxed
           ? `Level ${lvl} • ${rarity} • max upgrades reached`
           : `Level ${lvl} • ${rarity} • ${cards}/${cost}`;
 
-        left.appendChild(bid);
+        left.appendChild(name);
         left.appendChild(meta);
 
         const right = document.createElement("div");
-        right.className = "badgeCount";
+        right.className = "badge-count";
         right.textContent = `cards: ${cards}`;
 
         top.appendChild(left);
         top.appendChild(right);
-        row.appendChild(top);
+        card.appendChild(top);
 
-        if (ENABLE_UPGRADES && canUpgrade){
-          const btn = document.createElement("button");
-          btn.className = "upgradeBtn ready";
-          btn.textContent = `Upgrade to Level ${lvl + 1}`;
-          btn.addEventListener("click", (e)=>{ e.stopPropagation(); upgradeBadge(id, rarity); });
-          row.appendChild(btn);
-        }
+        const btn = document.createElement("button");
+        btn.className = "upgrade-btn";
+        btn.textContent = `Upgrade to Level ${lvl + 1}`;
+        btn.style.display = (currentUser && canUpgrade) ? "block" : "none";
+        btn.onclick = () => upgradeBadge(id, rarity);
+        card.appendChild(btn);
 
-        badgesGrid.appendChild(row);
+        badgesGrid.appendChild(card);
       }
     }
 
-    /***********************
-     * Chest logic
-     ***********************/
-    function weightedPickFinalLevel(){
+    // ====== Chest logic ======
+    function weightedPickFinalLevel() {
       const r = Math.random();
       let acc = 0;
-      for (const w of FINAL_LEVEL_WEIGHTS){
+      for (const w of FINAL_LEVEL_WEIGHTS) {
         acc += w.p;
         if (r <= acc) return w.level;
       }
       return 6;
     }
-    function shuffleInPlace(arr){
-      for (let i = arr.length - 1; i > 0; i--){
+    function shuffleInPlace(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [arr[i], arr[j]] = [arr[j], arr[i]];
       }
       return arr;
     }
-    function buildOutcomesForFinalLevel(level){
+    function buildOutcomesForFinalLevel(level) {
       const upsNeeded = level - 1;
       const staysNeeded = 5 - upsNeeded;
       const arr = [];
-      for (let i=0; i<upsNeeded; i++) arr.push("UP");
-      for (let i=0; i<staysNeeded; i++) arr.push("STAY");
+      for (let i = 0; i < upsNeeded; i++) arr.push("UP");
+      for (let i = 0; i < staysNeeded; i++) arr.push("STAY");
       return shuffleInPlace(arr);
     }
-    function pickUniform(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
-    function decideDropForLevel(level){
+    function pickUniform(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+    function decideDropForLevel(level) {
       const options = CARD_REWARD_TABLE[level];
       const allowedRarities = Object.keys(options);
       const rarity = pickUniform(allowedRarities);
@@ -730,65 +913,58 @@
       return { rarity, badgeId, amount };
     }
 
-    function setThemeForLevel(level){
+    function setThemeForLevel(level) {
       overlay.classList.remove("t1","t2","t3","t4","t5","t6");
-      overlay.classList.add("t"+level);
+      overlay.classList.add("t" + level);
       chestEl.classList.remove("skin1","skin2","skin3","skin4","skin5","skin6");
-      chestEl.classList.add("skin"+level);
+      chestEl.classList.add("skin" + level);
     }
-    function renderLadder(level){
+
+    function renderLadder(level) {
       ladder.innerHTML = "";
-      for (let i=1; i<=6; i++){
+      for (let i = 1; i <= 6; i++) {
         const r = document.createElement("div");
         r.className = "rung" + (i <= level ? " on" : "");
         ladder.appendChild(r);
       }
     }
-    function renderDots(doneCount){
+
+    function renderDots(doneCount) {
       dots.innerHTML = "";
-      for (let i=0; i<5; i++){
+      for (let i = 0; i < 5; i++) {
         const d = document.createElement("div");
         d.className = "dot" + (i < doneCount ? " done" : "");
         dots.appendChild(d);
       }
     }
-    function updateSpinLabels(){
+
+    function updateSpinLabels() {
       const spinNumber = Math.min(5, spinIndex + 1);
       const left = 5 - spinIndex;
       spinLabel.textContent = `Spin ${spinNumber} of 5 • Spins left: ${left}`;
-      tapSmall.textContent = `Spins left: ${left}`;
     }
-    function showToast(text){
+
+    function showToast(text) {
       toast.textContent = text;
       toast.classList.remove("show");
       void toast.offsetWidth;
       toast.classList.add("show");
     }
-    function flickerNextRung(){
-      const rungs = ladder.querySelectorAll(".rung");
-      const idx = Math.min(currentLevel, 5);
-      if (rungs[idx]) {
-        rungs[idx].classList.add("next-flicker");
-        setTimeout(()=> rungs[idx].classList.remove("next-flicker"), 280);
-      }
-    }
-    function chestSpinAnim(){
-      chestEl.classList.remove("shake","sweep");
+
+    function chestSpinAnim() {
+      chestEl.classList.remove("shake");
       void chestEl.offsetWidth;
       chestEl.classList.add("shake");
     }
-    function chestUpgradeSweep(){
-      chestEl.classList.remove("sweep");
-      void chestEl.offsetWidth;
-      chestEl.classList.add("sweep");
-    }
-    function setOverlayVisible(v){
+
+    function setOverlayVisible(v) {
       overlay.classList.toggle("show", v);
       document.body.style.overflow = v ? "hidden" : "";
     }
-    function wait(ms){ return new Promise(res => setTimeout(res, ms)); }
 
-    function resetChestSession(){
+    function wait(ms) { return new Promise(res => setTimeout(res, ms)); }
+
+    function resetChestSession() {
       opening = false;
       spinIndex = 0;
       currentLevel = 1;
@@ -797,7 +973,6 @@
       decidedDrop = null;
 
       result.classList.remove("show");
-      toast.classList.remove("show");
       levelSub.textContent = "Tap anywhere to spin";
       setThemeForLevel(1);
       renderLadder(1);
@@ -806,49 +981,53 @@
       levelText.textContent = "LEVEL 1";
     }
 
-    openChestBtn.addEventListener("click", async ()=>{
-      if (!currentUser) return showError("Sign in first.");
+    // Consume 1 chest BEFORE opening (so reloads don’t keep the same chest)
+    openChestBtn.addEventListener("click", async () => {
+      if (!currentUser) {
+        showError("Please sign in using the Login button.");
+        return;
+      }
       if (opening) return;
-      if (luckyChests < 1) return showError("No Lucky Chests available.");
+      if (luckyChests < 1) {
+        showError("No Lucky Chests available.");
+        return;
+      }
 
-      try{
+      try {
         openChestBtn.disabled = true;
 
-        // Consume exactly 1 chest before opening
-        await runTransaction(db, async (tx)=>{
+        await runTransaction(db, async (tx) => {
           const ref = userDocRef(currentUser.uid);
           const snap = await tx.get(ref);
           const data = snap.data() || {};
+
           const ch = (typeof data.chests === "object" && data.chests) ? { ...data.chests } : {};
           const lucky = (typeof ch.lucky === "number") ? ch.lucky : 0;
           if (lucky < 1) throw new Error("No Lucky Chests available.");
           ch.lucky = lucky - 1;
+
           tx.update(ref, { chests: ch });
         });
 
         startChestOpen();
-      } catch (e){
-        showError(e?.message || "Could not open chest");
+      } catch (e) {
+        showError(e?.message || "Could not open chest.");
         openChestBtn.disabled = false;
       }
     });
 
-    function startChestOpen(){
+    function startChestOpen() {
       resetChestSession();
-
       opening = true;
+
       finalLevel = weightedPickFinalLevel();
       outcomes = buildOutcomesForFinalLevel(finalLevel);
       decidedDrop = decideDropForLevel(finalLevel);
 
-      setThemeForLevel(1);
-      renderLadder(1);
-      renderDots(0);
-      updateSpinLabels();
       setOverlayVisible(true);
     }
 
-    overlay.addEventListener("click", async ()=>{
+    overlay.addEventListener("click", async () => {
       if (!opening) return;
       if (result.classList.contains("show")) return;
       if (spinIndex >= 5) return;
@@ -860,15 +1039,12 @@
       await wait(650);
 
       const outcome = outcomes[spinIndex];
-      if (outcome === "STAY"){
+      if (outcome === "STAY") {
         showToast("STAY");
-        flickerNextRung();
       } else {
         showToast("UP!");
-        await wait(150);
         currentLevel = Math.min(6, currentLevel + 1);
         setThemeForLevel(currentLevel);
-        chestUpgradeSweep();
       }
 
       spinIndex++;
@@ -876,7 +1052,7 @@
       renderLadder(currentLevel);
       levelText.textContent = `LEVEL ${currentLevel}`;
 
-      if (spinIndex < 5){
+      if (spinIndex < 5) {
         levelSub.textContent = "Tap anywhere to spin";
       } else {
         levelSub.textContent = "Complete";
@@ -886,28 +1062,30 @@
       updateSpinLabels();
     });
 
-    resultOk.addEventListener("click", ()=>{
+    resultOk.addEventListener("click", () => {
       setOverlayVisible(false);
       opening = false;
       openChestBtn.disabled = !currentUser || luckyChests < 1;
     });
 
-    async function finishChest(){
+    async function finishChest() {
       if (!decidedDrop) decidedDrop = decideDropForLevel(finalLevel);
       const { rarity, badgeId, amount } = decidedDrop;
 
-      try{
-        await runTransaction(db, async (tx)=>{
+      try {
+        await runTransaction(db, async (tx) => {
           const ref = userDocRef(currentUser.uid);
           const snap = await tx.get(ref);
           const data = snap.data() || {};
+
           const bc = (typeof data.badgeCards === "object" && data.badgeCards) ? { ...data.badgeCards } : {};
           const prev = (typeof bc[badgeId] === "number") ? bc[badgeId] : 0;
           bc[badgeId] = prev + amount;
+
           tx.update(ref, { badgeCards: bc });
         });
-      } catch (e){
-        showError(e?.message || "Failed to award badge cards");
+      } catch (e) {
+        showError(e?.message || "Failed to award badge cards.");
       }
 
       resultTitle.textContent = `Final Level: ${currentLevel}`;
@@ -915,7 +1093,7 @@
       result.classList.add("show");
     }
 
-    // initial UI
+    // init
     resetChestSession();
     renderBadges();
   </script>
