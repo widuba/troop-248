@@ -460,7 +460,7 @@
     const db = getFirestore(app);
 
     /* ========= storage location ========= */
-    const USER_COLLECTION = "users"; // change if your site uses accountInfo
+    const USER_COLLECTION = "accountInfo"; // change if your site uses accountInfo
     function rewardsRef(uid){ return doc(db, USER_COLLECTION, uid, "modules", "rewards"); }
 
     /* ========= boot ========= */
