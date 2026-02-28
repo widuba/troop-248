@@ -307,7 +307,7 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    const USER_COLLECTION = "users"; // change if needed
+    const USER_COLLECTION = "accountInfo"; // change if needed
     function rewardsRef(uid){ return doc(db, USER_COLLECTION, uid, "modules", "rewards"); }
 
     const boot = document.getElementById("boot");
