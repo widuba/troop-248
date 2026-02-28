@@ -1,1 +1,119 @@
+<!doctype html>
+<html lang="en" data-page="home">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Advancements • Rewards</title>
 
+  <style>
+    :root{
+      --bg:#070b16;
+      --panel:#0b1228;
+      --panel2:#0b1024;
+      --text:#e8eeff;
+      --muted:#aab4d6;
+      --line:rgba(255,255,255,.12);
+      --soft:rgba(255,255,255,.06);
+      --shadow:0 30px 80px rgba(0,0,0,.45);
+      --r:22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background:
+        radial-gradient(1200px 700px at 50% 30%, rgba(126,123,255,.22), transparent 60%),
+        radial-gradient(900px 600px at 55% 40%, rgba(255,79,216,.18), transparent 60%),
+        radial-gradient(900px 600px at 45% 55%, rgba(255,224,109,.14), transparent 60%),
+        var(--bg);
+      min-height:100vh;
+    }
+    .wrap{max-width:1100px; margin:0 auto; padding:18px 14px 60px;}
+    .topbar{
+      display:flex; gap:14px; align-items:center; justify-content:space-between;
+      border:1px solid var(--line); background:linear-gradient(180deg, rgba(25,38,86,.55), rgba(8,14,35,.35));
+      padding:14px; border-radius:22px; box-shadow:var(--shadow);
+    }
+    .brand{display:flex; gap:12px; align-items:center;}
+    .logoOrb{
+      width:46px; height:46px; border-radius:16px;
+      background: conic-gradient(from 180deg, rgba(109,249,255,.9), rgba(255,224,109,.9), rgba(255,79,216,.9), rgba(126,123,255,.9), rgba(109,249,255,.9));
+      box-shadow: 0 0 40px rgba(109,249,255,.14), 0 0 60px rgba(255,79,216,.10);
+      animation: spin 1.9s linear infinite;
+    }
+    @keyframes spin {to{transform:rotate(360deg)}}
+    .title{font-weight:1000; letter-spacing:.2px;}
+    .subtitle{color:var(--muted); font-weight:800; font-size:12px; margin-top:2px;}
+    .navlinks{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
+    .navlink{
+      text-decoration:none; color:var(--text); font-weight:950;
+      padding:10px 12px; border-radius:999px;
+      border:1px solid var(--line); background:var(--soft);
+      white-space:nowrap;
+    }
+    .navlink.active{
+      background: linear-gradient(90deg, rgba(109,249,255,.35), rgba(255,224,109,.30), rgba(255,79,216,.30));
+      border-color: rgba(255,255,255,.18);
+    }
+
+    .panel{
+      margin-top:14px;
+      border:1px solid var(--line);
+      border-radius:22px;
+      background: linear-gradient(180deg, rgba(25,38,86,.45), rgba(8,14,35,.40));
+      box-shadow: var(--shadow);
+      padding:18px;
+    }
+    .panelHeader h2{margin:0; font-size:20px;}
+    .panelHeader p{margin:6px 0 0 0; color:var(--muted); font-weight:800;}
+    .grid2{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:14px;}
+    @media (max-width:780px){.grid2{grid-template-columns:1fr}}
+    .card{
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:rgba(2,6,18,.35);
+      padding:14px;
+    }
+    .card h3{margin:0 0 6px 0; font-size:16px;}
+    .card p{margin:0; color:var(--muted); font-weight:800;}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logoOrb"></div>
+        <div>
+          <div class="title">Rewards</div>
+          <div class="subtitle">Advancements → Rewards</div>
+        </div>
+      </div>
+
+      <nav class="navlinks">
+        <a class="navlink active" href="/advancements/rewards/">Home</a>
+        <a class="navlink" href="/advancements/rewards/chests/">Chests</a>
+        <a class="navlink" href="/advancements/rewards/badges/">Badges</a>
+      </nav>
+    </header>
+
+    <section class="panel">
+      <div class="panelHeader">
+        <h2>Rewards Module</h2>
+        <p>Choose a section.</p>
+      </div>
+
+      <div class="grid2">
+        <a class="card" href="/advancements/rewards/chests/" style="text-decoration:none;color:inherit;">
+          <h3>Chests</h3>
+          <p>Open Lucky/Gold/Level Up chests.</p>
+        </a>
+
+        <a class="card" href="/advancements/rewards/badges/" style="text-decoration:none;color:inherit;">
+          <h3>Badges</h3>
+          <p>See badge progress and unlock visibility by rank.</p>
+        </a>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
