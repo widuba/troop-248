@@ -1,1209 +1,640 @@
-<!doctype html>
-<html lang="en" data-page="chests">
+<!-- /advancements/rewards/badges/index.html -->
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Rewards • Chests</title>
+  <meta charset="UTF-8" />
+  <title>Badges — Rewards — Troop 248</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="/bsafavicon.ico" />
+  <link rel="stylesheet" href="/modern-2026.css" />
 
   <style>
-    :root{
-      --bg:#070b16; --text:#e8eeff; --muted:#aab4d6;
-      --line:rgba(255,255,255,.12); --soft:rgba(255,255,255,.06);
-      --shadow:0 30px 80px rgba(0,0,0,.45);
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0; color:var(--text);
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      background:
-        radial-gradient(1200px 700px at 50% 30%, rgba(126,123,255,.22), transparent 60%),
-        radial-gradient(900px 600px at 55% 40%, rgba(255,79,216,.18), transparent 60%),
-        radial-gradient(900px 600px at 45% 55%, rgba(255,224,109,.14), transparent 60%),
-        var(--bg);
-      min-height:100vh;
-      overflow-x:hidden;
-    }
-    canvas#fxCanvas{position:fixed; inset:0; pointer-events:none; z-index:1;}
-    .wrap{max-width:1180px; margin:0 auto; padding:18px 14px 70px; position:relative; z-index:2;}
+    :root {
+      --red: #b22222;
+      --blue: #1f4e79;
+      --tan: #d2cab6;
+      --white: #ffffff;
+      --text-main: #1f2933;
+      --text-muted: #6b7280;
+      --radius-lg: 16px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
 
-    .topbar{
-      display:flex; gap:14px; align-items:center; justify-content:space-between;
-      border:1px solid var(--line);
-      background:linear-gradient(180deg, rgba(25,38,86,.55), rgba(8,14,35,.35));
-      padding:14px; border-radius:22px; box-shadow:var(--shadow);
-      flex-wrap:wrap;
-    }
-    .brand{display:flex; gap:12px; align-items:center;}
-    .logoOrb{
-      width:46px; height:46px; border-radius:16px;
-      background: conic-gradient(from 180deg, rgba(109,249,255,.9), rgba(255,224,109,.9), rgba(255,79,216,.9), rgba(126,123,255,.9), rgba(109,249,255,.9));
-      box-shadow: 0 0 40px rgba(109,249,255,.14), 0 0 60px rgba(255,79,216,.10);
-      animation: spin 1.9s linear infinite;
-    }
-    @keyframes spin {to{transform:rotate(360deg)}}
-    .title{font-weight:1000;}
-    .subtitle{color:var(--muted); font-weight:800; font-size:12px; margin-top:2px;}
-
-    .navlinks{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
-    .navlink{
-      text-decoration:none; color:var(--text); font-weight:950;
-      padding:10px 12px; border-radius:999px;
-      border:1px solid var(--line); background:var(--soft);
-      white-space:nowrap;
-    }
-    .navlink.active{
-      background: linear-gradient(90deg, rgba(109,249,255,.35), rgba(255,224,109,.30), rgba(255,79,216,.30));
-      border-color: rgba(255,255,255,.18);
+      /* Rewards UI blue theme */
+      --rx-blue-900:#0b1f3a;
+      --rx-blue-800:#0f2a52;
+      --rx-blue-700:#163a72;
+      --rx-line: rgba(255,255,255,.16);
+      --rx-soft: rgba(255,255,255,.08);
+      --rx-text: #ecf3ff;
+      --rx-muted: rgba(236,243,255,.78);
     }
 
-    .rightInfo{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
-    .pill{
-      padding:10px 12px; border-radius:999px;
-      border:1px solid var(--line); background:rgba(2,6,18,.35);
-      font-weight:950; display:flex; gap:8px; align-items:baseline;
-    }
-    .muted{color:var(--muted); font-weight:900; font-size:12px;}
-    .value{font-weight:1000;}
+    * { box-sizing: border-box; }
 
-    .btn{
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.08);
-      color:var(--text);
-      font-weight:950;
-      padding:10px 12px;
-      border-radius:14px;
-      cursor:pointer;
-    }
-    .btn:hover{filter:brightness(1.07)}
-    .btn-primary{
-      background: linear-gradient(90deg, rgba(109,249,255,.35), rgba(255,224,109,.30), rgba(255,79,216,.30));
-      border-color: rgba(255,255,255,.18);
-    }
-    .btn-ghost{background:rgba(255,255,255,.06)}
-    .hidden{display:none !important;}
-
-    .panel{
-      margin-top:14px;
-      border:1px solid var(--line);
-      border-radius:22px;
-      background: linear-gradient(180deg, rgba(25,38,86,.45), rgba(8,14,35,.40));
-      box-shadow: var(--shadow);
-      padding:18px;
-    }
-    .panelHeader h2{margin:0; font-size:20px;}
-    .panelHeader p{margin:6px 0 0 0; color:var(--muted); font-weight:800;}
-
-    .grid2{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:14px;}
-    @media (max-width:880px){.grid2{grid-template-columns:1fr}}
-    label{display:block; margin:10px 0 6px 0; color:var(--muted); font-weight:900; font-size:12px;}
-    input{
-      width:100%;
-      padding:12px 12px;
-      border-radius:14px;
-      border:1px solid var(--line);
-      background:rgba(2,6,18,.35);
-      color:var(--text);
-      outline:none;
-    }
-    .card{
-      border:1px solid var(--line);
-      border-radius:18px;
-      background:rgba(2,6,18,.35);
-      padding:14px;
-    }
-    .msg{margin-top:12px; color:var(--muted); font-weight:900;}
-
-    .vault{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-top:14px;}
-    @media (max-width:980px){.vault{grid-template-columns:1fr}}
-    .chestCard{
-      border:1px solid var(--line);
-      border-radius:22px;
-      background:linear-gradient(180deg, rgba(2,6,18,.38), rgba(2,6,18,.20));
-      overflow:hidden;
-      display:flex;
-      gap:12px;
-      padding:12px;
-      position:relative;
-    }
-    .chestArt{width:140px; min-width:140px; display:grid; place-items:center;}
-    .chestInfo{flex:1; display:flex; flex-direction:column; gap:8px;}
-    .chestName{font-weight:1000; font-size:18px;}
-    .chestDesc{color:var(--muted); font-weight:850; font-size:12px; line-height:1.35;}
-    .row{display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap;}
-    .countPill{padding:10px 12px; border-radius:999px; border:1px solid var(--line); background:rgba(255,255,255,.06); font-weight:950; display:flex; gap:8px; align-items:baseline;}
-
-    /* Tiny chest art */
-    .chest{width:92px; height:76px; position:relative; filter: drop-shadow(0 16px 20px rgba(0,0,0,.5));}
-    .chest .lid{position:absolute; top:0; left:0; right:0; height:34px; border-radius:16px 16px 10px 10px; background:linear-gradient(90deg,#6df9ff,#7e7bff,#ff4fd8);}
-    .chest .body{position:absolute; bottom:0; left:0; right:0; height:50px; border-radius:12px; background:linear-gradient(90deg,#7e7bff,#ff4fd8,#6df9ff);}
-    .chest .glow{position:absolute; inset:-10px; border-radius:18px; background:radial-gradient(circle at 50% 60%, rgba(109,249,255,.25), transparent 60%);}
-
-    .goldChest .lid{background:linear-gradient(90deg,#ffe06d,#ffb84f,#ffe06d);}
-    .goldChest .body{background:linear-gradient(90deg,#b87a00,#ffcf4d,#b87a00);}
-    .levelChest .lid{background:linear-gradient(90deg,#ff4fd8,#6df9ff,#ffe06d);}
-    .levelChest .body{background:linear-gradient(90deg,#3b2bff,#ff4fd8,#6df9ff);}
-
-    .levelGrid{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px;}
-    @media (max-width:980px){.levelGrid{grid-template-columns:repeat(2,1fr)}}
-    .lvlBtn{
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.06);
-      color:var(--text);
-      font-weight:950;
-      padding:10px 10px;
-      border-radius:14px;
-      cursor:pointer;
-      display:flex; justify-content:space-between; align-items:center;
-      gap:10px;
-    }
-    .hint{color:var(--muted); font-weight:850; font-size:12px;}
-
-    /* Overlay */
-    .overlay{
-      position:fixed; inset:0;
-      z-index:9998;
-      background: rgba(0,0,0,.55);
-      backdrop-filter: blur(10px);
-      display:flex; flex-direction:column;
-    }
-    .overlayTop{
-      display:flex; justify-content:space-between; align-items:center;
-      padding:16px 14px;
-      border-bottom:1px solid rgba(255,255,255,.10);
-      background: linear-gradient(180deg, rgba(2,6,18,.65), rgba(2,6,18,.25));
-    }
-    .overlayTitle{font-weight:1000; font-size:18px;}
-    .overlaySub{color:var(--muted); font-weight:900; font-size:12px; margin-top:4px;}
-    .stage{flex:1; display:grid; place-items:center; position:relative; overflow:hidden;}
-    .hud{position:absolute; bottom:16px; display:flex; gap:10px; flex-wrap:wrap; justify-content:center;}
-    .hudPill{padding:10px 12px; border-radius:999px; border:1px solid rgba(255,255,255,.12); background:rgba(2,6,18,.35); font-weight:950;}
-
-    .megaChest{
-      width:min(520px, 92vw);
-      height:min(380px, 46vh);
-      position:relative;
-      filter: drop-shadow(0 30px 50px rgba(0,0,0,.55));
-      transform: translateY(8px);
-      animation: chestShake .55s ease-in-out infinite;
-    }
-    .megaLid{
-      position:absolute; left:0; right:0; top:0;
-      height:38%;
-      border-radius: 28px 28px 18px 18px;
-      background: linear-gradient(90deg,#6df9ff,#7e7bff,#ff4fd8);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.14);
-    }
-    .megaBody{
-      position:absolute; left:0; right:0; bottom:0;
-      height:66%;
-      border-radius: 22px;
-      background: linear-gradient(90deg,#7e7bff,#ff4fd8,#6df9ff);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.14);
-    }
-    .megaCore{
-      position:absolute; inset: -12px;
-      border-radius: 40px;
-      background: radial-gradient(circle at 50% 55%, rgba(109,249,255,.24), transparent 60%);
-      opacity:.55;
-      filter: blur(0px);
-      pointer-events:none;
-    }
-    .megaShine{
-      position:absolute; inset:-18px;
-      border-radius: 44px;
-      background: conic-gradient(from 180deg, rgba(255,255,255,.0), rgba(255,255,255,.16), rgba(255,255,255,.0));
-      opacity:.45;
-      filter: blur(14px);
-      pointer-events:none;
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(900px 600px at 40% 20%, rgba(31,78,121,.18), transparent 55%),
+                  radial-gradient(800px 520px at 70% 30%, rgba(178,34,34,.10), transparent 58%),
+                  #cfc6b0;
+      color: var(--text-main);
+      min-height: 100vh;
     }
 
-    @keyframes chestShake{
-      0%{transform:translateY(8px) rotate(-.6deg)}
-      50%{transform:translateY(8px) rotate(.6deg)}
-      100%{transform:translateY(8px) rotate(-.6deg)}
-    }
-    @keyframes superSpin{to{transform:translateY(8px) rotate(360deg)}}
-    @keyframes lidPop{
-      0%{transform:translateY(0)}
-      50%{transform:translateY(-8px)}
-      100%{transform:translateY(0)}
+    header {
+      background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
+      color: var(--white);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      gap: 12px;
     }
 
-    .reveal{
+    header h2 {
+      margin: 0;
+      font-size: 19px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    header h2::before { content: "★"; font-size: 18px; }
+
+    .troop-home-link {
+      text-decoration: none;
+      color: inherit;
+      display: inline-flex;
+      align-items: center;
+    }
+    .troop-home-link:hover h2 {
+      opacity: 0.9;
+      text-decoration: underline;
+    }
+
+    nav {
+      display: flex;
+      gap: 12px;
+      font-size: 13px;
+      text-transform: uppercase;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: #1f4e79;
+      font-weight: bold;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(4px);
+      opacity: 0.9;
+      white-space: nowrap;
+    }
+
+    nav a:hover { opacity: 1; background: rgba(255, 255, 255, 0.12); }
+
+    nav a.active {
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.45);
+    }
+
+    #auth-bar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      font-size: 13px;
+      flex-wrap: wrap;
+    }
+
+    #logout-btn {
+      padding: 5px 12px;
+      font-size: 13px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--white);
+      cursor: pointer;
+    }
+    #logout-btn:hover { background: rgba(255, 255, 255, 0.2); }
+
+    main {
+      padding: 24px 16px 40px;
+      max-width: 1060px;
+      margin: 0 auto;
+    }
+
+    /* ===== Blue panels instead of white ===== */
+    .welcome-card, section {
+      background: linear-gradient(180deg, rgba(15,42,82,.96), rgba(11,31,58,.96));
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 12px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--rx-line);
+      color: var(--rx-text);
+    }
+
+    .welcome-card {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .welcome-card h3 { margin: 0 0 4px; font-size: 18px; color: var(--rx-text); }
+    .welcome-card p { margin: 0; font-size: 14px; color: var(--rx-muted); }
+
+    .badge {
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(255,255,255,.12);
+      color: var(--rx-text);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      display: inline-block;
+      border: 1px solid rgba(255,255,255,.18);
+    }
+
+    .badge.admin {
+      background: rgba(245,158,11,.18);
+      color: #fff;
+      border-color: rgba(245,158,11,.42);
+    }
+
+    .stats-row {
+      margin-top: 12px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .stat-pill {
+      padding: 7px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.10);
+      font-size: 13px;
+      display: inline-flex;
+      gap: 8px;
+      align-items: baseline;
+      color: var(--rx-text);
+    }
+    .stat-pill .k {
+      font-size: 11px;
+      color: rgba(236,243,255,.72);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      font-weight: 700;
+    }
+    .stat-pill .v { font-weight: 800; color: var(--rx-text); }
+
+    section h2 {
+      margin-top: 0;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--rx-text);
+    }
+    section h2::before { content: "▸"; font-size: 14px; color: rgba(236,243,255,.85); }
+
+    /* ===== Badges UI ===== */
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 8px;
+    }
+
+    .small-note {
+      color: var(--rx-muted);
+      font-size: 13px;
+      line-height: 1.35;
+      margin: 0;
+      font-weight: 700;
+    }
+
+    .rank-pill {
+      padding: 7px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.10);
+      font-size: 13px;
+      font-weight: 800;
+      display: inline-flex;
+      gap: 8px;
+      align-items: baseline;
+      white-space: nowrap;
+      color: var(--rx-text);
+    }
+    .rank-pill span { color: rgba(236,243,255,.72); font-size: 11px; text-transform: uppercase; letter-spacing:.05em; font-weight: 800; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    @media (max-width: 1000px) { .grid { grid-template-columns: repeat(4, 1fr); } }
+    @media (max-width: 820px)  { .grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 640px)  { .grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .card {
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: linear-gradient(180deg, rgba(22,58,114,.55), rgba(11,31,58,.88));
+      overflow: hidden;
+      position: relative;
+      min-height: 124px;
+      color: var(--rx-text);
+    }
+
+    .card::after{
+      content:"";
       position:absolute;
-      top:18px;
-      width:min(720px, 92vw);
-      border:1px solid rgba(255,255,255,.14);
-      background: linear-gradient(180deg, rgba(25,38,86,.55), rgba(8,14,35,.35));
-      border-radius: 22px;
-      padding:14px;
-      box-shadow: var(--shadow);
-      text-align:center;
-    }
-    .revealTitle{font-weight:1000; font-size:18px; margin-bottom:6px;}
-    .revealBox{color:var(--muted); font-weight:900; line-height:1.5;}
-
-    /* Boot loading overlay */
-    .boot{
-      position:fixed; inset:0; z-index:9999;
-      display:grid; place-items:center;
+      inset:-60px;
       background:
-        radial-gradient(1200px 700px at 50% 30%, rgba(126,123,255,.22), transparent 60%),
-        radial-gradient(900px 600px at 55% 40%, rgba(255,79,216,.18), transparent 60%),
-        radial-gradient(900px 600px at 45% 55%, rgba(255,224,109,.14), transparent 60%),
-        #070b16;
+        radial-gradient(circle at 25% 20%, rgba(109,249,255,.16), transparent 45%),
+        radial-gradient(circle at 70% 35%, rgba(255,224,109,.14), transparent 45%),
+        radial-gradient(circle at 45% 75%, rgba(255,79,216,.10), transparent 45%);
+      pointer-events:none;
+      opacity:.65;
     }
-    .boot.hidden{display:none}
-    .bootCard{
-      width:min(520px, 92vw);
-      padding:26px 22px;
-      border-radius: 22px;
-      border:1px solid rgba(255,255,255,.14);
-      background: linear-gradient(180deg, rgba(25,38,86,.55), rgba(8,14,35,.45));
-      box-shadow: var(--shadow);
-      text-align:center;
+
+    .cardTop, .name, .pointsRow{ position:relative; z-index:2; }
+
+    .cardTop {
+      padding: 10px 10px 8px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
     }
-    .bootOrb{
-      width:66px; height:66px; margin:0 auto 12px auto;
-      border-radius: 22px;
-      background: conic-gradient(from 180deg, rgba(109,249,255,.9), rgba(255,224,109,.9), rgba(255,79,216,.9), rgba(126,123,255,.9), rgba(109,249,255,.9));
-      box-shadow: 0 0 40px rgba(109,249,255,.18), 0 0 60px rgba(255,79,216,.14);
-      animation: bootSpin 1.2s linear infinite;
+
+    .letter {
+      font-size: 18px;
+      font-weight: 1000;
+      color: rgba(236,243,255,.95);
+      line-height: 1;
     }
-    @keyframes bootSpin{to{transform:rotate(360deg)}}
-    .bootTitle{font-weight:1000; font-size:18px;}
-    .bootSub{margin-top:6px; color:var(--muted); font-weight:900; font-size:13px;}
-    /* ===== Rewards UI: Blue theme override (keeps Troop header as-is) ===== */
 
-:root{
-  --rx-blue-900:#0b1f3a;
-  --rx-blue-800:#0f2a52;
-  --rx-blue-700:#163a72;
-  --rx-line: rgba(255,255,255,.16);
-  --rx-soft: rgba(255,255,255,.08);
-  --rx-text: #ecf3ff;
-  --rx-muted: rgba(236,243,255,.78);
-}
+    .rarityTag {
+      font-size: 10px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 3px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.18);
+      color: rgba(236,243,255,.86);
+      background: rgba(255,255,255,.10);
+      white-space: nowrap;
+      font-weight: 900;
+    }
 
-/* Make content sections/cards blue instead of white */
-.welcome-card,
-section,
-.chestCard{
-  background: linear-gradient(180deg, rgba(15,42,82,.96), rgba(11,31,58,.96)) !important;
-  border: 1px solid var(--rx-line) !important;
-  color: var(--rx-text) !important;
-}
+    .name {
+      padding: 0 10px 4px;
+      font-weight: 950;
+      font-size: 13px;
+      color: rgba(236,243,255,.95);
+    }
 
-/* Titles + paragraph readability */
-.welcome-card h3,
-section h2,
-.chestCard h4{
-  color: var(--rx-text) !important;
-}
+    .pointsRow {
+      padding: 0 10px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: rgba(236,243,255,.78);
+      font-size: 12px;
+      font-weight: 850;
+    }
 
-.welcome-card p,
-.chestCard p{
-  color: var(--rx-muted) !important;
-}
+    .barWrap {
+      flex: 1;
+      height: 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.08);
+      overflow: hidden;
+    }
+    .bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, rgba(109,249,255,.75), rgba(255,224,109,.65), rgba(255,79,216,.55));
+      transition: width .35s ease;
+    }
 
-/* The little triangle before section headings */
-section h2::before{
-  color: rgba(236,243,255,.85) !important;
-}
+    .lockedOverlay {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: rgba(5, 10, 24, 0.55);
+      backdrop-filter: blur(3px);
+      color: #fff;
+      text-align: center;
+      padding: 10px;
+      z-index: 3;
+    }
 
-/* Role badge */
-.badge{
-  background: rgba(255,255,255,.12) !important;
-  color: var(--rx-text) !important;
-  border: 1px solid rgba(255,255,255,.18) !important;
-}
-.badge.admin{
-  background: rgba(245,158,11,.18) !important;
-  color: #fff !important;
-  border-color: rgba(245,158,11,.42) !important;
-}
+    .lockTitle {
+      font-weight: 1000;
+      font-size: 12px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
 
-/* Gold/Gems/Rank pills */
-.stat-pill,
-.countPill{
-  background: rgba(255,255,255,.10) !important;
-  border: 1px solid rgba(255,255,255,.18) !important;
-  color: var(--rx-text) !important;
-}
-.stat-pill .k,
-.countPill span{
-  color: rgba(236,243,255,.72) !important;
-}
-.stat-pill .v,
-.countPill b{
-  color: var(--rx-text) !important;
-}
+    .lockSub {
+      margin-top: 4px;
+      font-size: 12px;
+      opacity: .95;
+      font-weight: 850;
+    }
 
-/* Chest cards */
-.chestCard{
-  background: linear-gradient(180deg, rgba(22,58,114,.55), rgba(11,31,58,.88)) !important;
-}
+    /* Rarity accents */
+    .rar-common   { border-left: 6px solid rgba(148,163,184,.85); }
+    .rar-uncommon { border-left: 6px solid rgba(34,197,94,.70); }
+    .rar-rare     { border-left: 6px solid rgba(59,130,246,.78); }
+    .rar-epic     { border-left: 6px solid rgba(168,85,247,.78); }
+    .rar-legend   { border-left: 6px solid rgba(245,158,11,.85); }
 
-/* Buttons */
-.openBtn{
-  background: linear-gradient(180deg, rgba(49,130,246,.98), rgba(30,64,175,.98)) !important;
-  color: #fff !important;
-  border: 1px solid rgba(255,255,255,.18) !important;
-  box-shadow: 0 10px 24px rgba(0,0,0,.18);
-}
-.openBtn:hover{ filter: brightness(1.05); }
-.openBtn:disabled{
-  background: rgba(255,255,255,.10) !important;
-  color: rgba(236,243,255,.55) !important;
-  border-color: rgba(255,255,255,.12) !important;
-}
+    @media (max-width: 640px) {
+      header { flex-direction: column; align-items: flex-start; }
+      nav { width: 100%; }
+    }
   </style>
 </head>
+
 <body>
-  <div id="boot" class="boot">
-    <div class="bootCard">
-      <div class="bootOrb"></div>
-      <div class="bootTitle">Loading…</div>
-      <div id="bootSub" class="bootSub">Checking your account</div>
+  <header>
+    <div>
+      <a href="/home" class="troop-home-link">
+        <h2>Troop 248</h2>
+      </a>
     </div>
-  </div>
 
-  <canvas id="fxCanvas"></canvas>
+    <nav>
+      <a href="/home">Home</a>
+      <a href="/calendar">Calendar</a>
+      <a href="/documents">Documents</a>
+      <a href="/scoutmaster">SM Blog</a>
+      <a href="/spl">SPL Blog</a>
+      <a href="/useful-links">Useful Links</a>
+      <a href="/events">Events</a>
+      <a href="/mail">Mail</a>
 
-  <div class="wrap">
-    <header class="topbar">
-      <div class="brand">
-        <div class="logoOrb"></div>
-        <div>
-          <div class="title">Rewards</div>
-          <div class="subtitle">Advancements → Rewards</div>
-        </div>
-      </div>
+      <a href="/advancements/rewards/">Rewards</a>
+      <a href="/advancements/rewards/chests/">Chests</a>
+      <a class="active" href="/advancements/rewards/badges/">Badges</a>
+    </nav>
 
-      <nav class="navlinks">
-        <a class="navlink" href="/advancements/rewards/">Home</a>
-        <a class="navlink active" href="/advancements/rewards/chests/">Chests</a>
-        <a class="navlink" href="/advancements/rewards/badges/">Badges</a>
-      </nav>
+    <div id="auth-bar">
+      <div id="auth-info">Signed in as …</div>
+      <button id="logout-btn">Log Out</button>
+    </div>
+  </header>
 
-      <div class="rightInfo">
-        <div class="pill"><span class="muted">Gold</span> <span id="goldValue" class="value">—</span></div>
-        <div class="pill"><span class="muted">Gems</span> <span id="gemsValue" class="value">—</span></div>
-        <div class="pill"><span class="muted">Rank</span> <span id="rankValue" class="value">—</span></div>
-        <button id="logoutBtn" class="btn btn-ghost hidden">Log out</button>
-      </div>
-    </header>
-
-    <!-- AUTH -->
-    <section id="authPanel" class="panel">
-      <div class="panelHeader">
-        <h2>Sign in</h2>
-        <p>Email/Password only (same login as your main site).</p>
-      </div>
-
-      <div class="grid2">
-        <div class="card">
-          <h3>Create account</h3>
-          <label>Email</label>
-          <input id="suEmail" type="email" autocomplete="email" placeholder="you@example.com">
-          <label>Password</label>
-          <input id="suPass" type="password" autocomplete="new-password" placeholder="••••••••">
-          <button id="signupBtn" class="btn btn-primary">Sign up</button>
-        </div>
-
-        <div class="card">
-          <h3>Log in</h3>
-          <label>Email</label>
-          <input id="liEmail" type="email" autocomplete="email" placeholder="you@example.com">
-          <label>Password</label>
-          <input id="liPass" type="password" autocomplete="current-password" placeholder="••••••••">
-          <button id="loginBtn" class="btn btn-primary">Log in</button>
-        </div>
-      </div>
-
-      <div id="authMsg" class="msg"></div>
-    </section>
-
-    <!-- CHESTS -->
-    <section id="gamePanel" class="panel hidden">
-      <div class="panelHeader">
-        <h2>Your Chest Vault</h2>
-        <p>Chests are granted by editing Firestore (for now).</p>
-      </div>
-
-      <div class="vault">
-        <div class="chestCard lucky" id="luckyCard">
-          <div class="chestArt">
-            <div class="chest luckyChest">
-              <div class="lid"></div><div class="body"></div><div class="glow"></div>
-            </div>
-          </div>
-          <div class="chestInfo">
-            <div class="chestName">Lucky Chests</div>
-            <div class="chestDesc">5 spins • 40% level-up chance • never goes down • L1→L6</div>
-            <div class="row">
-              <div class="countPill"><span class="muted">Owned</span> <span id="luckyCount" class="value">—</span></div>
-              <button id="openLuckyBtn" class="btn btn-primary">Open</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="chestCard gold" id="goldCard">
-          <div class="chestArt">
-            <div class="chest goldChest">
-              <div class="lid"></div><div class="body"></div><div class="glow"></div>
-            </div>
-          </div>
-          <div class="chestInfo">
-            <div class="chestName">Gold Chests</div>
-            <div class="chestDesc">Contains only gold • Random 5,000 → 100,000</div>
-            <div class="row">
-              <div class="countPill"><span class="muted">Owned</span> <span id="goldCount" class="value">—</span></div>
-              <button id="openGoldBtn" class="btn btn-primary">Open</button>
-            </div>
-          </div>
-        </div>
-
-            <div class="hint">Tap a variant to open it.</div>
-          </div>
-        </div>
-      </div>
-
-      <div id="gameMsg" class="msg"></div>
-    </section>
-  </div>
-
-  <!-- OVERLAY -->
-  <div id="overlay" class="overlay hidden" role="dialog" aria-modal="true">
-    <div class="overlayTop">
+  <main>
+    <div class="welcome-card">
       <div>
-        <div class="overlayTitle" id="overlayTitle">Opening…</div>
-        <div class="overlaySub" id="overlaySub">Click anywhere</div>
+        <h3>Badges</h3>
+        <p>Badges unlock by Rank. Lucky chests award points to a random unlocked badge.</p>
+
+        <div class="stats-row">
+          <div class="stat-pill"><span class="k">Gold</span> <span id="goldValue" class="v">—</span></div>
+          <div class="stat-pill"><span class="k">Gems</span> <span id="gemsValue" class="v">—</span></div>
+          <div class="stat-pill"><span class="k">Rank</span> <span id="rankValue" class="v">—</span></div>
+        </div>
       </div>
-      <button id="closeOverlayBtn" class="btn btn-ghost">Close</button>
+
+      <div id="role-badge-container">
+        <span class="badge">Viewer</span>
+      </div>
     </div>
 
-    <div class="stage" id="stage">
-      <div class="megaChest" id="megaChest">
-        <div class="megaLid"></div>
-        <div class="megaBody"></div>
-        <div class="megaCore"></div>
-        <div class="megaShine"></div>
+    <section>
+      <h2>Your Badge Collection</h2>
+
+      <div class="toolbar">
+        <p id="unlockedNote" class="small-note">Loading…</p>
+        <div class="rank-pill"><span>Viewing as</span> <span id="rankPillText" style="color:var(--rx-text); font-size:13px; font-weight:950;">—</span></div>
       </div>
 
-      <div class="hud">
-        <div class="hudPill" id="hudLeft">—</div>
-        <div class="hudPill" id="hudRight">—</div>
-      </div>
-
-      <div class="reveal hidden" id="reveal">
-        <div class="revealTitle" id="revealTitle">Reward</div>
-        <div class="revealBox" id="revealBox"></div>
-      </div>
-    </div>
-  </div>
+      <div id="badgeGrid" class="grid"></div>
+    </section>
+  </main>
 
   <script type="module">
-    /* ========= FIREBASE (paste your MAIN site config here) ========= */
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-    import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc, onSnapshot, runTransaction, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import { getFirestore, doc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
+    // ✅ Troop 248 Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
-  authDomain: "troop-248.firebaseapp.com",
-  projectId: "troop-248",
-  storageBucket: "troop-248.firebasestorage.app",
-  messagingSenderId: "925363875752",
-  appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
-  measurementId: "G-NY75GX5TBH"
+      authDomain: "troop-248.firebaseapp.com",
+      projectId: "troop-248",
+      storageBucket: "troop-248.firebasestorage.app",
+      messagingSenderId: "925363875752",
+      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+      measurementId: "G-NY75GX5TBH"
     };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    /* ========= storage location ========= */
-    const USER_COLLECTION = "accountInfo"; // change if your site uses accountInfo
-    function rewardsRef(uid){ return doc(db, USER_COLLECTION, uid, "modules", "rewards"); }
-
-    /* ========= boot ========= */
-    const boot = document.getElementById("boot");
-    const bootSub = document.getElementById("bootSub");
-    const showBoot = (t)=>{ boot.classList.remove("hidden"); if(t) bootSub.textContent=t; };
-    const hideBoot = ()=> boot.classList.add("hidden");
-    showBoot("Checking your account…");
-
-    /* ========= UI refs ========= */
-    const authPanel = document.getElementById("authPanel");
-    const gamePanel = document.getElementById("gamePanel");
-    const authMsg = document.getElementById("authMsg");
-    const gameMsg = document.getElementById("gameMsg");
-    const logoutBtn = document.getElementById("logoutBtn");
-    const suEmail = document.getElementById("suEmail");
-    const suPass = document.getElementById("suPass");
-    const liEmail = document.getElementById("liEmail");
-    const liPass = document.getElementById("liPass");
-
-    document.getElementById("signupBtn").addEventListener("click", signup);
-    document.getElementById("loginBtn").addEventListener("click", login);
-    logoutBtn.addEventListener("click", ()=>signOut(auth));
+    const authInfoEl = document.getElementById("auth-info");
+    const logoutBtn = document.getElementById("logout-btn");
+    const roleBadgeContainer = document.getElementById("role-badge-container");
 
     const goldValue = document.getElementById("goldValue");
     const gemsValue = document.getElementById("gemsValue");
     const rankValue = document.getElementById("rankValue");
 
-    const luckyCountEl = document.getElementById("luckyCount");
-    const goldCountEl = document.getElementById("goldCount");
-    const lvlEls = {
-      scout: document.getElementById("c_scout"),
-      tenderfoot: document.getElementById("c_tenderfoot"),
-      "2class": document.getElementById("c_2class"),
-      "1class": document.getElementById("c_1class"),
-      star: document.getElementById("c_star"),
-      life: document.getElementById("c_life"),
-      eagle: document.getElementById("c_eagle")
+    const rankPillText = document.getElementById("rankPillText");
+    const unlockedNote = document.getElementById("unlockedNote");
+    const badgeGrid = document.getElementById("badgeGrid");
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "/";
+    });
+
+    function formatNum(n){ return Number(n || 0).toLocaleString("en-US"); }
+
+    // ✅ matches your rules addition
+    function rewardsRef(uid){
+      return doc(db, "accountInfo", uid, "modules", "rewards");
+    }
+
+    const RARITY = {
+      Common:   { cls: "rar-common"   },
+      Uncommon: { cls: "rar-uncommon" },
+      Rare:     { cls: "rar-rare"     },
+      Epic:     { cls: "rar-epic"     },
+      Legendary:{ cls: "rar-legend"   }
     };
 
-    document.getElementById("openLuckyBtn").addEventListener("click", ()=>openLuckyFlow());
-    document.getElementById("openGoldBtn").addEventListener("click", ()=>openGoldFlow());
-    for (const btn of document.querySelectorAll(".lvlBtn")) btn.addEventListener("click", ()=>openLevelUpFlow(btn.dataset.variant));
+    // 25 badges A-Y with rarity mapping
+    const BADGES = (() => {
+      const arr = [];
+      const letters = "ABCDEFGHIJKLMNOPQRSTUVWXY".split("");
+      for (let i = 0; i < letters.length; i++) {
+        const L = letters[i];
+        let rarity = "Common";
+        if (i >= 5 && i < 10) rarity = "Uncommon";     // F-J
+        else if (i >= 10 && i < 15) rarity = "Rare";   // K-O
+        else if (i >= 15 && i < 20) rarity = "Epic";   // P-T
+        else if (i >= 20) rarity = "Legendary";        // U-Y
 
-    /* ========= Overlay ========= */
-    const overlay = document.getElementById("overlay");
-    const closeOverlayBtn = document.getElementById("closeOverlayBtn");
-    const overlayTitle = document.getElementById("overlayTitle");
-    const overlaySub2 = document.getElementById("overlaySub");
-    const stage = document.getElementById("stage");
-    const megaChest = document.getElementById("megaChest");
-    const reveal = document.getElementById("reveal");
-    const revealTitle = document.getElementById("revealTitle");
-    const revealBox = document.getElementById("revealBox");
-    const hudLeft = document.getElementById("hudLeft");
-    const hudRight = document.getElementById("hudRight");
-
-    let overlayState = { active:false, locked:false, mode:null };
-    closeOverlayBtn.addEventListener("click",(e)=>{ e.stopPropagation(); if(overlayState.locked) return; stopTriumphMusic(); hideOverlay(); });
-    overlay.addEventListener("click",(e)=>{
-      if(!overlayState.active || overlayState.locked) return;
-      if(e.target===closeOverlayBtn || closeOverlayBtn.contains(e.target)) return;
-      if(overlayState.mode==="lucky") handleLuckyClick();
-      else if(overlayState.mode==="gold") handleGoldClick();
-      else if(overlayState.mode==="levelup") handleLevelUpClick();
-    }, true);
-
-    /* ========= Badges model (A-Y) ========= */
-    const RANKS = ["No Rank","Scout","Tenderfoot","2nd Class","1st Class","Star","Life","Eagle"];
-    const BADGES = (()=> {
-      const arr=[];
-      for(let i=0;i<25;i++){
-        const id=String.fromCharCode(65+i);
-        const idx=i;
-        const rarity = idx<=4 ? "Common" : idx<=9 ? "Uncommon" : idx<=14 ? "Rare" : idx<=19 ? "Epic" : "Legendary";
-        arr.push({id, name:`Badge ${id}`, rarity});
+        arr.push({ id: L, name: `Badge ${L}`, rarity });
       }
       return arr;
     })();
 
-    function unlockedBadgesByRank(rank){
-      const allCommon=BADGES.filter(b=>b.rarity==="Common").map(b=>b.id);
-      const allUncommon=BADGES.filter(b=>b.rarity==="Uncommon").map(b=>b.id);
-      const allRare=BADGES.filter(b=>b.rarity==="Rare").map(b=>b.id);
-      const allEpic=BADGES.filter(b=>b.rarity==="Epic").map(b=>b.id);
-      const allLegendary=BADGES.filter(b=>b.rarity==="Legendary").map(b=>b.id);
+    // Rank unlock rules
+    const RANK_ORDER = ["No Rank", "Scout", "Tenderfoot", "2nd Class", "1st Class", "Star", "Life", "Eagle"];
 
-      const r=rank||"No Rank";
-      if(r==="No Rank") return allCommon;
-      if(r==="Scout") return allCommon.concat(["F","G","H"]);
-      if(r==="Tenderfoot") return allCommon.concat(allUncommon).concat(["K","L"]);
-      if(r==="2nd Class") return allCommon.concat(allUncommon).concat(allRare).concat(["P"]);
-      return allCommon.concat(allUncommon, allRare, allEpic, allLegendary);
-    }
+    function unlockedByRank(rank){
+      const r = (rank && RANK_ORDER.includes(rank)) ? rank : "No Rank";
+      const set = new Set();
+      ["A","B","C","D","E"].forEach(x => set.add(x));
+      if (r === "No Rank") return set;
 
-    function allowedRaritiesByLuckyFinalLevel(L){
-      if(L===1) return new Set(["Common"]);
-      if(L===2) return new Set(["Common","Uncommon"]);
-      if(L===3) return new Set(["Common","Uncommon","Rare"]);
-      if(L===4) return new Set(["Common","Uncommon","Rare","Epic"]);
-      return new Set(["Common","Uncommon","Rare","Epic","Legendary"]); // L5/L6
-    }
-
-    function pointsRange(finalLevel, rarity){
-      if(finalLevel===1) return [50,150];
-      if(finalLevel===2){
-        if(rarity==="Common") return [100,200];
-        if(rarity==="Uncommon") return [50,75];
+      if (r === "Scout") {
+        ["F","G","H"].forEach(x => set.add(x));
+        return set;
       }
-      if(finalLevel===3){
-        if(rarity==="Common") return [200,300];
-        if(rarity==="Uncommon") return [125,150];
-        if(rarity==="Rare") return [30,60];
+
+      if (r === "Tenderfoot") {
+        ["F","G","H","I","J"].forEach(x => set.add(x));
+        ["K","L"].forEach(x => set.add(x));
+        return set;
       }
-      if(finalLevel===4){
-        if(rarity==="Common") return [450,600];
-        if(rarity==="Uncommon") return [200,240];
-        if(rarity==="Rare") return [80,110];
-        if(rarity==="Epic") return [25,50];
+
+      if (r === "2nd Class") {
+        ["F","G","H","I","J"].forEach(x => set.add(x));
+        ["K","L","M","N","O"].forEach(x => set.add(x));
+        set.add("P");
+        return set;
       }
-      if(finalLevel===5){
-        if(rarity==="Common") return [700,900];
-        if(rarity==="Uncommon") return [260,310];
-        if(rarity==="Rare") return [120,155];
-        if(rarity==="Epic") return [55,80];
-        return [1,3]; // Legendary
-      }
-      // L6
-      if(rarity==="Common") return [1000,1250];
-      if(rarity==="Uncommon") return [350,475];
-      if(rarity==="Rare") return [175,210];
-      if(rarity==="Epic") return [90,120];
-      return [5,25];
+
+      // 1st Class and above
+      BADGES.forEach(b => set.add(b.id));
+      return set;
     }
 
-    function defaultBadgesPoints(){
-      const m={};
-      for(const b of BADGES) m[b.id]=0;
-      return m;
+    function renderBadges(pointsMap, unlockedSet){
+      badgeGrid.innerHTML = "";
+
+      BADGES.forEach(b => {
+        const pts = Number(pointsMap?.[b.id] || 0);
+        const unlocked = unlockedSet.has(b.id);
+
+        const rarityCls = RARITY[b.rarity]?.cls || "rar-common";
+        const card = document.createElement("div");
+        card.className = `card ${rarityCls}`;
+
+        // purely visual progress: points / 1000 capped
+        const pct = Math.max(0, Math.min(100, Math.round((pts / 1000) * 100)));
+
+        card.innerHTML = `
+          <div class="cardTop">
+            <div class="letter">${b.id}</div>
+            <div class="rarityTag">${b.rarity}</div>
+          </div>
+          <div class="name">${unlocked ? b.name : "Locked"}</div>
+          <div class="pointsRow">
+            <div class="barWrap"><div class="bar" style="width:${unlocked ? pct : 0}%"></div></div>
+            <div>${unlocked ? formatNum(pts) + " pts" : "—"}</div>
+          </div>
+          ${unlocked ? "" : `
+            <div class="lockedOverlay">
+              <div>
+                <div class="lockTitle">Locked</div>
+                <div class="lockSub">Reach the required rank to view</div>
+              </div>
+            </div>
+          `}
+        `;
+
+        badgeGrid.appendChild(card);
+      });
     }
 
-    function defaultRewardsDoc(email){
-      return {
-        email,
-        createdAt: serverTimestamp(),
-        gold: 0,
-        gems: 0,
-        rank: "No Rank",
-        badgesPoints: defaultBadgesPoints(),
-        chests: {
-          lucky: 0,
-          gold: 0,
-          levelUp: { scout:0, tenderfoot:0, "2class":0, "1class":0, star:0, life:0, eagle:0 }
-        },
-        history: [],
-        lastChestOpen: null
-      };
-    }
+    let unsubRewards = null;
 
-    /* ========= auth ========= */
-    async function signup(){
-      authMsg.textContent="";
-      try{
-        await createUserWithEmailAndPassword(auth, suEmail.value.trim(), suPass.value);
-        authMsg.textContent="Account created.";
-      }catch(e){ authMsg.textContent=e.message; }
-    }
-    async function login(){
-      authMsg.textContent="";
-      try{
-        await signInWithEmailAndPassword(auth, liEmail.value.trim(), liPass.value);
-        authMsg.textContent="Logged in.";
-      }catch(e){ authMsg.textContent=e.message; }
-    }
-
-    /* ========= live doc ========= */
-    let unsub=null;
-    let uid=null;
-    let docCache=null;
-
-    onAuthStateChanged(auth, async (user)=>{
-      showBoot(user ? "Loading your rewards…" : "Preparing sign-in…");
-      authMsg.textContent=""; gameMsg.textContent="";
-
-      if(unsub){ unsub(); unsub=null; }
-
-      if(!user){
-        uid=null; docCache=null;
-        authPanel.classList.remove("hidden");
-        gamePanel.classList.add("hidden");
-        logoutBtn.classList.add("hidden");
-        goldValue.textContent="—"; gemsValue.textContent="—"; rankValue.textContent="—";
-        hideBoot();
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "/";
         return;
       }
 
-      uid=user.uid;
-      logoutBtn.classList.remove("hidden");
+      // gate access based on accountInfo + role
+      const infoRef = doc(db, "accountInfo", user.uid);
+      const infoSnap = await getDoc(infoRef);
 
-      const ref = rewardsRef(uid);
-      const snap = await getDoc(ref);
-      if(!snap.exists()){
-        await setDoc(ref, defaultRewardsDoc(user.email||""), { merge:false });
-      } else {
-        // small migration: ensure new fields exist
-        const d = snap.data() || {};
-        const patch = {};
-        if(typeof d.gems !== "number") patch.gems = 0;
-        if(typeof d.rank !== "string") patch.rank = "No Rank";
-        if(!d.badgesPoints || typeof d.badgesPoints !== "object") patch.badgesPoints = defaultBadgesPoints();
-        if(!d.chests || typeof d.chests !== "object"){
-          patch.chests = { lucky:0, gold:0, levelUp:{ scout:0, tenderfoot:0, "2class":0, "1class":0, star:0, life:0, eagle:0 } };
-        } else if(!d.chests.levelUp || typeof d.chests.levelUp !== "object"){
-          patch["chests.levelUp"] = { scout:0, tenderfoot:0, "2class":0, "1class":0, star:0, life:0, eagle:0 };
-        }
-        if(Object.keys(patch).length) await setDoc(ref, patch, { merge:true });
+      if (!infoSnap.exists()) {
+        window.location.href = "/under-review/";
+        return;
       }
 
-      authPanel.classList.add("hidden");
-      gamePanel.classList.remove("hidden");
+      const info = infoSnap.data() || {};
+      const role = info.authRole;
 
-      let first=true;
-      unsub = onSnapshot(ref, (s)=>{
-        docCache = s.data();
-        render(docCache);
-        if(first){ first=false; hideBoot(); }
-      }, (err)=>{
-        authMsg.textContent = err.message;
-        hideBoot();
+      if (role !== "admin" && role !== "viewer") {
+        window.location.href = "/under-review/";
+        return;
+      }
+
+      authInfoEl.textContent = `Signed in as ${user.email || "—"}`;
+      roleBadgeContainer.innerHTML = `
+        <span class="badge ${role === "admin" ? "admin" : ""}">
+          ${role === "admin" ? "Admin" : "Viewer"}
+        </span>
+      `;
+
+      if (unsubRewards) unsubRewards();
+
+      unsubRewards = onSnapshot(rewardsRef(user.uid), (snap) => {
+        const d = snap.exists() ? snap.data() : {};
+
+        goldValue.textContent = formatNum(d.gold ?? 0);
+        gemsValue.textContent = formatNum(d.gems ?? 0);
+
+        const rank = d.rank ?? "No Rank";
+        rankValue.textContent = rank;
+        rankPillText.textContent = rank;
+
+        const points = d.badgesPoints ?? {};
+        const unlockedSet = unlockedByRank(rank);
+
+        unlockedNote.textContent = `Unlocked: ${unlockedSet.size} / 25 (based on Rank)`;
+        renderBadges(points, unlockedSet);
+      }, (err) => {
+        console.warn("Rewards snapshot error:", err);
+        goldValue.textContent = "0";
+        gemsValue.textContent = "0";
+        rankValue.textContent = "No Rank";
+        rankPillText.textContent = "No Rank";
+        unlockedNote.textContent = "Could not load rewards data.";
+        renderBadges({}, unlockedByRank("No Rank"));
       });
     });
-
-    function render(d){
-      goldValue.textContent = formatNum(d?.gold ?? 0);
-      gemsValue.textContent = formatNum(d?.gems ?? 0);
-      rankValue.textContent = d?.rank ?? "No Rank";
-
-      luckyCountEl.textContent = d?.chests?.lucky ?? 0;
-      goldCountEl.textContent = d?.chests?.gold ?? 0;
-      const lu = d?.chests?.levelUp || {};
-      for(const k of Object.keys(lvlEls)) lvlEls[k].textContent = lu[k] ?? 0;
-    }
-
-    function ensureReady(){ if(!uid || !docCache) throw new Error("Not ready yet."); }
-
-    /* ========= chest flows ========= */
-    async function openLuckyFlow(){
-      try{
-        ensureReady();
-        if((docCache.chests?.lucky ?? 0) <= 0){ gameMsg.textContent="You have no Lucky Chests."; return; }
-        startLuckyOverlay();
-      }catch(e){ gameMsg.textContent=e.message; }
-    }
-    async function openGoldFlow(){
-      try{
-        ensureReady();
-        if((docCache.chests?.gold ?? 0) <= 0){ gameMsg.textContent="You have no Gold Chests."; return; }
-        startGoldOverlay();
-      }catch(e){ gameMsg.textContent=e.message; }
-    }
-    async function openLevelUpFlow(variant){
-      try{
-        ensureReady();
-        const c = docCache.chests?.levelUp?.[variant] ?? 0;
-        if(c<=0){ gameMsg.textContent=`You have no ${variant} chest.`; return; }
-        startLevelUpOverlay(variant);
-      }catch(e){ gameMsg.textContent=e.message; }
-    }
-
-    /* ========= Lucky mechanics ========= */
-    let lucky=null;
-    function startLuckyOverlay(){
-      lucky = { spinsTotal:5, spinsLeft:5, level:1, doneSpins:false, opened:false };
-      showOverlay("Lucky Chest");
-      overlayState.mode="lucky";
-      reveal.classList.add("hidden");
-      overlaySub2.textContent="Click anywhere to use a spin.";
-      hudLeft.textContent=`Level: ${lucky.level} / 6`;
-      hudRight.textContent=`Spins: ${lucky.spinsLeft} / ${lucky.spinsTotal}`;
-      setMegaTheme("lucky", lucky.level);
-      megaChest.style.animation="chestShake .55s ease-in-out infinite";
-      burstFX({ power: 28, spread: 1.4, gravity: 0.25, life: 900, size: [2, 6] });
-    }
-
-    function handleLuckyClick(){
-      if(!lucky) return;
-
-      if(lucky.opened){ stopTriumphMusic(); hideOverlay(); return; }
-
-      if(!lucky.doneSpins){
-        lucky.spinsLeft = Math.max(0, lucky.spinsLeft-1);
-
-        let leveled=false;
-        if(lucky.level<6 && Math.random()<0.40){ lucky.level++; leveled=true; }
-
-        setMegaTheme("lucky", lucky.level);
-        hudLeft.textContent=`Level: ${lucky.level} / 6`;
-        hudRight.textContent=`Spins: ${lucky.spinsLeft} / ${lucky.spinsTotal}`;
-
-        luckySpinFX(lucky.level);
-        if(leveled) playSfx("luckyLevelUp", lucky.level);
-
-        if(lucky.spinsLeft<=0){
-          lucky.doneSpins=true;
-          overlaySub2.textContent="Spins used. Click once more to OPEN (2s spin).";
-          hudRight.textContent=`Spins: 0 / ${lucky.spinsTotal}`;
-          const lid = megaChest.querySelector(".megaLid");
-          lid.style.animation="none"; void lid.offsetWidth; lid.style.animation="lidPop .35s ease-in-out 1";
-        }
-        return;
-      }
-
-      if(lucky.doneSpins && !lucky.opened){
-        lucky.opened=true;
-        overlayState.locked=true;
-        overlaySub2.textContent="Opening…";
-
-        megaChest.style.animation="none"; void megaChest.offsetWidth;
-        megaChest.style.animation="superSpin 2s linear 1";
-        hugeOpenFX("lucky", lucky.level);
-
-        setTimeout(async ()=>{
-          try{
-            const finalLevel = lucky.level;
-            const rank = docCache?.rank ?? "No Rank";
-            const unlocked = unlockedBadgesByRank(rank);
-            const allow = allowedRaritiesByLuckyFinalLevel(finalLevel);
-
-            const eligible = unlocked
-              .map(id => BADGES.find(b=>b.id===id))
-              .filter(Boolean)
-              .filter(b => allow.has(b.rarity));
-
-            const pool = eligible.length ? eligible : BADGES.filter(b=>b.rarity==="Common");
-            const chosen = pool[Math.floor(Math.random()*pool.length)];
-            const [minP,maxP] = pointsRange(finalLevel, chosen.rarity);
-            const points = randInt(minP,maxP);
-
-            const result = { type:"lucky", finalLevel, awardedBadge: chosen.id, rarity: chosen.rarity, points, openedAt: new Date().toISOString() };
-
-            await transactLuckyAward({ badgeId: chosen.id, points, result });
-
-            revealResult(`Lucky Chest — Final Level ${finalLevel}`, [
-              `Awarded: <b>${chosen.name}</b> (${chosen.rarity})`,
-              `Points gained: <b>${formatNum(points)}</b>`,
-              `Chest consumed: <b>1 Lucky Chest</b>`
-            ].join("<br>"));
-
-            overlayState.locked=false;
-            overlaySub2.textContent="Click anywhere to close.";
-            megaChest.style.animation="chestShake .55s ease-in-out infinite";
-          }catch(e){
-            overlayState.locked=false;
-            overlaySub2.textContent="Error. Click Close.";
-            revealResult("Error", escapeHtml(e.message));
-          }
-        }, 2000);
-      }
-    }
-
-    async function transactLuckyAward({ badgeId, points, result }){
-      const ref = rewardsRef(uid);
-      await runTransaction(db, async (tx)=>{
-        const snap = await tx.get(ref);
-        if(!snap.exists()) throw new Error("Rewards doc missing.");
-        const d = snap.data();
-
-        const ch = d.chests || {};
-        if((ch.lucky ?? 0) <= 0) throw new Error("No Lucky Chests.");
-        ch.lucky = (ch.lucky ?? 0) - 1;
-
-        const bp = d.badgesPoints || {};
-        bp[badgeId] = (bp[badgeId] ?? 0) + points;
-
-        const history = Array.isArray(d.history) ? d.history.slice(-29) : [];
-        history.push(result);
-
-        tx.update(ref, { chests: ch, badgesPoints: bp, history, lastChestOpen: serverTimestamp() });
-      });
-    }
-
-    /* ========= Gold chest ========= */
-    let goldOpen=null;
-    function startGoldOverlay(){
-      goldOpen={opened:false};
-      showOverlay("Gold Chest");
-      overlayState.mode="gold";
-      reveal.classList.add("hidden");
-      overlaySub2.textContent="Click anywhere to OPEN.";
-      hudLeft.textContent="Gold Range: 5,000 → 100,000";
-      hudRight.textContent="Click to reveal";
-      setMegaTheme("gold",1);
-      megaChest.style.animation="chestShake .65s ease-in-out infinite";
-    }
-    function handleGoldClick(){
-      if(!goldOpen) return;
-      if(goldOpen.opened){ stopTriumphMusic(); hideOverlay(); return; }
-
-      goldOpen.opened=true;
-      overlayState.locked=true;
-      overlaySub2.textContent="Opening…";
-      megaChest.style.animation="none"; void megaChest.offsetWidth;
-      megaChest.style.animation="superSpin 2s linear 1";
-
-      const amount = randInt(5000, 100000);
-
-      setTimeout(async ()=>{
-        try{
-          const result = { type:"gold", gold: amount, openedAt: new Date().toISOString() };
-          await transactOpenChest({ kind:"gold", goldDelta: amount, result });
-
-          revealResult("Gold Chest Opened!", [
-            `You received: <b>${formatNum(amount)}</b> gold`,
-            `Chest consumed: <b>1 Gold Chest</b>`
-          ].join("<br>"));
-
-          overlayState.locked=false;
-          overlaySub2.textContent="Click anywhere to close.";
-          megaChest.style.animation="chestShake .65s ease-in-out infinite";
-        }catch(e){
-          overlayState.locked=false;
-          overlaySub2.textContent="Error. Click Close.";
-          revealResult("Error", escapeHtml(e.message));
-        }
-      }, 2000);
-    }
-
-    /* ========= Level Up chests ========= */
-    let levelUpOpen=null;
-    const levelUpTiers={
-      scout:{goldMin:2000,goldMax:8000,hype:1,openMs:2000,triumph:false},
-      tenderfoot:{goldMin:6000,goldMax:16000,hype:2,openMs:4000,triumph:false},
-      "2class":{goldMin:12000,goldMax:28000,hype:3,openMs:6000,triumph:false},
-      "1class":{goldMin:20000,goldMax:45000,hype:4,openMs:8000,triumph:false},
-      star:{goldMin:35000,goldMax:70000,hype:5,openMs:12000,triumph:true},
-      life:{goldMin:60000,goldMax:120000,hype:6,openMs:15000,triumph:true},
-      eagle:{goldMin:100000,goldMax:200000,hype:7,openMs:30000,triumph:true}
-    };
-    function startLevelUpOverlay(variant){
-      levelUpOpen={opened:false,variant};
-      showOverlay(`Level Up Chest — ${variant.toUpperCase()}`);
-      overlayState.mode="levelup";
-      reveal.classList.add("hidden");
-      overlaySub2.textContent="Click anywhere to OPEN (big reveal).";
-      hudLeft.textContent=`Variant: ${variant}`;
-      hudRight.textContent="Click to reveal";
-      const tier=levelUpTiers[variant]||levelUpTiers.scout;
-      setMegaTheme("levelup", tier.hype);
-      megaChest.style.animation="chestShake .45s ease-in-out infinite";
-    }
-    function handleLevelUpClick(){
-      if(!levelUpOpen) return;
-      if(levelUpOpen.opened){ stopTriumphMusic(); hideOverlay(); return; }
-      levelUpOpen.opened=true;
-      overlayState.locked=true;
-      overlaySub2.textContent="Opening…";
-
-      const tier=levelUpTiers[levelUpOpen.variant]||levelUpTiers.scout;
-      const openMs=tier.openMs||2000;
-
-      megaChest.style.animation="none"; void megaChest.offsetWidth;
-      megaChest.style.animation=`superSpin ${Math.max(2, Math.floor(openMs/1000))}s linear 1`;
-
-      if(tier.triumph) startTriumphMusic(openMs, tier.hype);
-
-      const gold = randInt(tier.goldMin, tier.goldMax);
-      const result = { type:"levelup", variant: levelUpOpen.variant, gold, otherRewards:[{type:"TBD"}], openedAt: new Date().toISOString() };
-
-      setTimeout(async ()=>{
-        try{
-          stopTriumphMusic();
-          await transactOpenChest({ kind:"levelup", variant: levelUpOpen.variant, goldDelta: gold, result });
-
-          revealResult(`Level Up Chest — ${levelUpOpen.variant.toUpperCase()}!`, [
-            `Gold gained: <b>${formatNum(gold)}</b>`,
-            `Other rewards: <b>TBD</b>`,
-            `Chest consumed: <b>1 ${levelUpOpen.variant} chest</b>`
-          ].join("<br>"));
-
-          overlayState.locked=false;
-          overlaySub2.textContent="Click anywhere to close.";
-          megaChest.style.animation="chestShake .45s ease-in-out infinite";
-        }catch(e){
-          stopTriumphMusic();
-          overlayState.locked=false;
-          overlaySub2.textContent="Error. Click Close.";
-          revealResult("Error", escapeHtml(e.message));
-        }
-      }, openMs);
-    }
-
-    async function transactOpenChest({ kind, goldDelta, result, variant }){
-      const ref = rewardsRef(uid);
-      await runTransaction(db, async (tx)=>{
-        const snap = await tx.get(ref);
-        if(!snap.exists()) throw new Error("Rewards doc missing.");
-        const d = snap.data();
-
-        const ch = d.chests || {};
-        const lu = ch.levelUp || {};
-        const curGold = d.gold ?? 0;
-
-        if(kind==="gold"){
-          if((ch.gold ?? 0) <= 0) throw new Error("No Gold Chests.");
-          ch.gold = (ch.gold ?? 0) - 1;
-        } else if(kind==="levelup"){
-          if((lu[variant] ?? 0) <= 0) throw new Error(`No ${variant} chest.`);
-          lu[variant] = (lu[variant] ?? 0) - 1;
-          ch.levelUp = lu;
-        } else throw new Error("Unknown kind.");
-
-        const newGold = Math.max(0, curGold + (goldDelta ?? 0));
-        const history = Array.isArray(d.history) ? d.history.slice(-29) : [];
-        history.push(result);
-
-        tx.update(ref, { chests: ch, gold: newGold, history, lastChestOpen: serverTimestamp() });
-      });
-    }
-
-    /* ========= overlay helpers ========= */
-    function showOverlay(title){
-      overlayState.active=true; overlayState.locked=false;
-      overlayTitle.textContent=title;
-      overlaySub2.textContent="Click anywhere";
-      overlay.classList.remove("hidden");
-      reveal.classList.add("hidden");
-      revealTitle.textContent=""; revealBox.innerHTML="";
-      megaChest.style.animation="";
-      megaChest.querySelector(".megaLid").style.animation="";
-      burstFX({ power: 24, spread: 1.4, gravity: 0.22, life: 900, size: [2, 6] });
-    }
-    function hideOverlay(){
-      overlayState.active=false; overlayState.locked=false; overlayState.mode=null;
-      lucky=null; goldOpen=null; levelUpOpen=null;
-      overlay.classList.add("hidden");
-    }
-    function revealResult(title, html){
-      revealTitle.textContent=title;
-      revealBox.innerHTML=html;
-      reveal.classList.remove("hidden");
-    }
-
-    /* ========= chest theme colors ========= */
-    function setMegaTheme(type, intensity){
-      const lid = megaChest.querySelector(".megaLid");
-      const body = megaChest.querySelector(".megaBody");
-      const core = megaChest.querySelector(".megaCore");
-      const shine = megaChest.querySelector(".megaShine");
-
-      if(type==="gold"){
-        lid.style.background="linear-gradient(90deg,#ffe06d,#ffb84f,#ffe06d)";
-        body.style.background="linear-gradient(90deg,#b87a00,#ffcf4d,#b87a00)";
-        core.style.opacity="0.55";
-        shine.style.opacity="0.45";
-        return;
-      }
-      if(type==="levelup"){
-        const op=Math.min(0.75, 0.35 + intensity*0.06);
-        lid.style.background="linear-gradient(90deg,#ff4fd8,#6df9ff,#ffe06d)";
-        body.style.background="linear-gradient(90deg,#3b2bff,#ff4fd8,#6df9ff)";
-        core.style.opacity=String(op);
-        shine.style.opacity="0.55";
-        return;
-      }
-
-      const level=Math.max(1, Math.min(6, Math.floor(intensity)));
-      const themes={
-        1:["#6df9ff","#7e7bff","#ff4fd8"],
-        2:["#ffdf9a","#ff8a2a","#ffd46a"],
-        3:["#d86cff","#7e3cff","#ff4fd8"],
-        4:["#b6f0ff","#4fb7ff","#7e7bff"],
-        5:["#f3f6fb","#b7c0cc","#7f8a99"],
-        6:["#ffe06d","#ffb84f","#ffd86a"]
-      };
-      const [a,b,c]=themes[level];
-      lid.style.background=`linear-gradient(90deg, ${a}, ${b}, ${c})`;
-      body.style.background=`linear-gradient(90deg, ${b}, ${c}, ${a})`;
-      core.style.opacity=String(Math.min(0.90, 0.30 + level*0.10));
-      shine.style.opacity=(level===5) ? "0.75" : "0.45";
-    }
-
-    /* ========= FX canvas ========= */
-    const fxCanvas=document.getElementById("fxCanvas");
-    const ctx=fxCanvas.getContext("2d");
-    function resize(){
-      const dpr=Math.max(1, window.devicePixelRatio||1);
-      fxCanvas.width=Math.floor(window.innerWidth*dpr);
-      fxCanvas.height=Math.floor(window.innerHeight*dpr);
-      fxCanvas.style.width=window.innerWidth+"px";
-      fxCanvas.style.height=window.innerHeight+"px";
-      ctx.setTransform(dpr,0,0,dpr,0,0);
-    }
-    window.addEventListener("resize", resize); resize();
-    const particles=[];
-    function burstFX({power=20,spread=1.2,gravity=0.25,life=900,size=[2,6]}){
-      const cx=window.innerWidth*0.5, cy=window.innerHeight*0.45;
-      for(let i=0;i<power;i++){
-        const a=Math.random()*Math.PI*2;
-        const v=(Math.random()*5+2)*spread;
-        particles.push({
-          x:cx+rand(-30,30), y:cy+rand(-30,30),
-          vx:Math.cos(a)*v, vy:Math.sin(a)*v - Math.random()*2,
-          g:gravity, r:rand(size[0], size[1]),
-          t:performance.now(), life: life + rand(-200,250),
-          hue:Math.random()*360, spin: rand(-0.2,0.2), rot: Math.random()*Math.PI*2
-        });
-      }
-    }
-    function luckySpinFX(level){
-      const power=10+Math.floor(Math.pow(level,1.6)*6);
-      burstFX({ power, spread: 1.1+level*0.1, gravity:0.22, life:900+level*140, size:[2,4+level] });
-    }
-    function hugeOpenFX(_, intensity){
-      burstFX({ power: 40 + intensity*30, spread: 1.9, gravity:0.2, life: 1200 + intensity*220, size:[2,6+intensity] });
-    }
-    function tick(){
-      const now=performance.now();
-      ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
-      for(let i=particles.length-1;i>=0;i--){
-        const p=particles[i];
-        const age=now-p.t;
-        const a=1-age/p.life;
-        if(a<=0){ particles.splice(i,1); continue; }
-        p.vy+=p.g; p.x+=p.vx; p.y+=p.vy; p.rot+=p.spin;
-
-        ctx.save();
-        ctx.translate(p.x,p.y);
-        ctx.rotate(p.rot);
-        ctx.globalAlpha=Math.max(0,a);
-        ctx.fillStyle=`hsla(${p.hue},95%,65%,${Math.max(0,a)})`;
-        const rr=p.r;
-        ctx.beginPath();
-        ctx.moveTo(0,-rr); ctx.lineTo(rr,0); ctx.lineTo(0,rr); ctx.lineTo(-rr,0);
-        ctx.closePath(); ctx.fill();
-        ctx.restore();
-      }
-      requestAnimationFrame(tick);
-    }
-    tick();
-
-    /* ========= Audio (simple) ========= */
-    let audioCtx=null, triumphTimer=null;
-    function getAudio(){ if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)(); if(audioCtx.state==="suspended") audioCtx.resume(); return audioCtx; }
-    function beep({freq=440,dur=0.08,type="sine",gain=0.05,detune=0}){
-      const ac=getAudio(); const o=ac.createOscillator(); const g=ac.createGain();
-      o.type=type; o.frequency.value=freq; o.detune.value=detune;
-      const now=ac.currentTime;
-      g.gain.setValueAtTime(0.0001, now);
-      g.gain.exponentialRampToValueAtTime(gain, now+0.01);
-      g.gain.exponentialRampToValueAtTime(0.0001, now+dur);
-      o.connect(g); g.connect(ac.destination);
-      o.start(now); o.stop(now+dur+0.02);
-    }
-    function playSfx(kind, intensity=1){
-      if(kind==="luckyLevelUp"){
-        const base=420+intensity*40;
-        beep({freq:base,dur:0.06,type:"triangle",gain:0.03+intensity*0.005});
-        beep({freq:base*1.25,dur:0.08,type:"sine",gain:0.02+intensity*0.004,detune:-6});
-        beep({freq:base*1.5,dur:0.1,type:"sine",gain:0.018+intensity*0.004,detune:8});
-      }
-    }
-    function startTriumphMusic(openMs, hype=5){
-      stopTriumphMusic();
-      const startAt=performance.now();
-      triumphTimer=setInterval(()=>{
-        const t=performance.now()-startAt;
-        if(t>openMs){ stopTriumphMusic(); return; }
-        const step=Math.floor(t/220)%6;
-        const arp=[440,554.37,659.25,880,659.25,554.37][step];
-        beep({freq:arp,dur:0.07,type:"triangle",gain:0.018+hype*0.002});
-      },110);
-    }
-    function stopTriumphMusic(){ if(triumphTimer) clearInterval(triumphTimer); triumphTimer=null; }
-
-    /* ========= helpers ========= */
-    function rand(min,max){ return Math.random()*(max-min)+min; }
-    function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
-    function formatNum(n){ return Number(n).toLocaleString("en-US"); }
-    function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m])); }
   </script>
 </body>
 </html>
