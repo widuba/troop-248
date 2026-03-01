@@ -1,478 +1,649 @@
-<!doctype html>
-<html lang="en" data-page="badges">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Rewards • Badges</title>
+  <meta charset="UTF-8" />
+  <title>Badges — Rewards — Troop 248</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="/bsafavicon.ico" />
+  <link rel="stylesheet" href="/modern-2026.css" />
 
-  <!-- IMPORTANT: This is the same CSS block as chests (plus badges styles) -->
   <style>
-    :root{
-      --bg:#070b16; --text:#e8eeff; --muted:#aab4d6;
-      --line:rgba(255,255,255,.12); --soft:rgba(255,255,255,.06);
-      --shadow:0 30px 80px rgba(0,0,0,.45);
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0; color:var(--text);
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      background:
-        radial-gradient(1200px 700px at 50% 30%, rgba(126,123,255,.22), transparent 60%),
-        radial-gradient(900px 600px at 55% 40%, rgba(255,79,216,.18), transparent 60%),
-        radial-gradient(900px 600px at 45% 55%, rgba(255,224,109,.14), transparent 60%),
-        var(--bg);
-      min-height:100vh;
-      overflow-x:hidden;
-    }
-    canvas#fxCanvas{position:fixed; inset:0; pointer-events:none; z-index:1;}
-    .wrap{max-width:1180px; margin:0 auto; padding:18px 14px 70px; position:relative; z-index:2;}
-
-    .topbar{
-      display:flex; gap:14px; align-items:center; justify-content:space-between;
-      border:1px solid var(--line);
-      background:linear-gradient(180deg, rgba(25,38,86,.55), rgba(8,14,35,.35));
-      padding:14px; border-radius:22px; box-shadow:var(--shadow);
-      flex-wrap:wrap;
-    }
-    .brand{display:flex; gap:12px; align-items:center;}
-    .logoOrb{
-      width:46px; height:46px; border-radius:16px;
-      background: conic-gradient(from 180deg, rgba(109,249,255,.9), rgba(255,224,109,.9), rgba(255,79,216,.9), rgba(126,123,255,.9), rgba(109,249,255,.9));
-      box-shadow: 0 0 40px rgba(109,249,255,.14), 0 0 60px rgba(255,79,216,.10);
-      animation: spin 1.9s linear infinite;
-    }
-    @keyframes spin {to{transform:rotate(360deg)}}
-    .title{font-weight:1000;}
-    .subtitle{color:var(--muted); font-weight:800; font-size:12px; margin-top:2px;}
-
-    .navlinks{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
-    .navlink{
-      text-decoration:none; color:var(--text); font-weight:950;
-      padding:10px 12px; border-radius:999px;
-      border:1px solid var(--line); background:var(--soft);
-      white-space:nowrap;
-    }
-    .navlink.active{
-      background: linear-gradient(90deg, rgba(109,249,255,.35), rgba(255,224,109,.30), rgba(255,79,216,.30));
-      border-color: rgba(255,255,255,.18);
+    :root {
+      --red: #b22222;
+      --blue: #1f4e79;
+      --tan: #d2cab6;
+      --white: #ffffff;
+      --text-main: #1f2933;
+      --text-muted: #6b7280;
+      --radius-lg: 16px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
     }
 
-    .rightInfo{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
-    .pill{
-      padding:10px 12px; border-radius:999px;
-      border:1px solid var(--line); background:rgba(2,6,18,.35);
-      font-weight:950; display:flex; gap:8px; align-items:baseline;
-    }
-    .muted{color:var(--muted); font-weight:900; font-size:12px;}
-    .value{font-weight:1000;}
+    * { box-sizing: border-box; }
 
-    .btn{
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.08);
-      color:var(--text);
-      font-weight:950;
-      padding:10px 12px;
-      border-radius:14px;
-      cursor:pointer;
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--tan);
+      color: var(--text-main);
+      min-height: 100vh;
     }
-    .btn:hover{filter:brightness(1.07)}
-    .btn-primary{
-      background: linear-gradient(90deg, rgba(109,249,255,.35), rgba(255,224,109,.30), rgba(255,79,216,.30));
-      border-color: rgba(255,255,255,.18);
-    }
-    .btn-ghost{background:rgba(255,255,255,.06)}
-    .hidden{display:none !important;}
 
-    .panel{
-      margin-top:14px;
-      border:1px solid var(--line);
-      border-radius:22px;
-      background: linear-gradient(180deg, rgba(25,38,86,.45), rgba(8,14,35,.40));
-      box-shadow: var(--shadow);
-      padding:18px;
+    header {
+      background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
+      color: var(--white);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      gap: 12px;
     }
-    .panelHeader h2{margin:0; font-size:20px;}
-    .panelHeader p{margin:6px 0 0 0; color:var(--muted); font-weight:800;}
-    .grid2{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:14px;}
-    @media (max-width:880px){.grid2{grid-template-columns:1fr}}
-    label{display:block; margin:10px 0 6px 0; color:var(--muted); font-weight:900; font-size:12px;}
-    input{
-      width:100%;
-      padding:12px 12px;
-      border-radius:14px;
-      border:1px solid var(--line);
-      background:rgba(2,6,18,.35);
-      color:var(--text);
-      outline:none;
-    }
-    .card{
-      border:1px solid var(--line);
-      border-radius:18px;
-      background:rgba(2,6,18,.35);
-      padding:14px;
-    }
-    .msg{margin-top:12px; color:var(--muted); font-weight:900;}
 
-    /* Boot loading overlay */
-    .boot{
-      position:fixed; inset:0; z-index:9999;
-      display:grid; place-items:center;
-      background:
-        radial-gradient(1200px 700px at 50% 30%, rgba(126,123,255,.22), transparent 60%),
-        radial-gradient(900px 600px at 55% 40%, rgba(255,79,216,.18), transparent 60%),
-        radial-gradient(900px 600px at 45% 55%, rgba(255,224,109,.14), transparent 60%),
-        #070b16;
+    header h2 {
+      margin: 0;
+      font-size: 19px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-    .boot.hidden{display:none}
-    .bootCard{
-      width:min(520px, 92vw);
-      padding:26px 22px;
-      border-radius: 22px;
-      border:1px solid rgba(255,255,255,.14);
-      background: linear-gradient(180deg, rgba(25,38,86,.55), rgba(8,14,35,.45));
-      box-shadow: var(--shadow);
-      text-align:center;
-    }
-    .bootOrb{
-      width:66px; height:66px; margin:0 auto 12px auto;
-      border-radius: 22px;
-      background: conic-gradient(from 180deg, rgba(109,249,255,.9), rgba(255,224,109,.9), rgba(255,79,216,.9), rgba(126,123,255,.9), rgba(109,249,255,.9));
-      box-shadow: 0 0 40px rgba(109,249,255,.18), 0 0 60px rgba(255,79,216,.14);
-      animation: bootSpin 1.2s linear infinite;
-    }
-    @keyframes bootSpin{to{transform:rotate(360deg)}}
-    .bootTitle{font-weight:1000; font-size:18px;}
-    .bootSub{margin-top:6px; color:var(--muted); font-weight:900; font-size:13px;}
 
-    /* Badges */
-    .badgeLegend{margin-top:14px; display:flex; gap:8px; flex-wrap:wrap;}
-    .tag{
-      padding:8px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(2,6,18,.45);
-      font-weight:1000;
-      font-size:12px;
+    header h2::before {
+      content: "★";
+      font-size: 18px;
     }
-    .badgeGrid{
-      margin-top:14px;
-      display:grid;
+
+    .troop-home-link {
+      text-decoration: none;
+      color: inherit;
+      display: inline-flex;
+      align-items: center;
+    }
+    .troop-home-link:hover h2 {
+      opacity: 0.9;
+      text-decoration: underline;
+    }
+
+    nav {
+      display: flex;
+      gap: 12px;
+      font-size: 13px;
+      text-transform: uppercase;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: #1f4e79;
+      font-weight: bold;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(4px);
+      opacity: 0.9;
+      white-space: nowrap;
+    }
+
+    nav a:hover {
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    nav a.active {
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.45);
+    }
+
+    #auth-bar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      font-size: 13px;
+      flex-wrap: wrap;
+    }
+
+    #logout-btn {
+      padding: 5px 12px;
+      font-size: 13px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--white);
+      cursor: pointer;
+    }
+
+    #logout-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    main {
+      padding: 24px 16px 40px;
+      max-width: 1060px;
+      margin: 0 auto;
+    }
+
+    .welcome-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 12px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      flex-wrap: wrap;
+    }
+
+    .welcome-card h3 {
+      margin: 0 0 4px;
+      font-size: 18px;
+    }
+
+    .welcome-card p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .badge {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(148, 163, 184, 0.2);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      display: inline-block;
+    }
+
+    .badge.admin {
+      background: rgba(240, 180, 41, 0.16);
+      color: #92400e;
+      border: 1px solid rgba(245, 158, 11, 0.6);
+    }
+
+    .stats-row {
+      margin-top: 12px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .stat-pill {
+      padding: 7px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      background: rgba(255, 255, 255, 0.92);
+      font-size: 13px;
+      display: inline-flex;
+      gap: 8px;
+      align-items: baseline;
+    }
+    .stat-pill .k {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    .stat-pill .v { font-weight: 700; }
+
+    section {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 12px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    section h2 {
+      margin-top: 0;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    section h2::before {
+      content: "▸";
+      font-size: 14px;
+      color: var(--blue);
+    }
+
+    /* ===== Badges UI ===== */
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 8px;
+    }
+
+    .small-note {
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.35;
+      margin: 0;
+    }
+
+    .rank-pill {
+      padding: 7px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148,163,184,.55);
+      background: rgba(255,255,255,.92);
+      font-size: 13px;
+      font-weight: 700;
+      display: inline-flex;
+      gap: 8px;
+      align-items: baseline;
+      white-space: nowrap;
+    }
+    .rank-pill span { color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing:.05em; font-weight: 700; }
+
+    .grid {
+      display: grid;
       grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap:12px;
+      gap: 12px;
+      margin-top: 12px;
     }
-    @media (max-width:980px){ .badgeGrid{grid-template-columns: repeat(3, 1fr);} }
-    @media (max-width:640px){ .badgeGrid{grid-template-columns: repeat(2, 1fr);} }
+    @media (max-width: 1000px) { .grid { grid-template-columns: repeat(4, 1fr); } }
+    @media (max-width: 820px)  { .grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 640px)  { .grid { grid-template-columns: repeat(2, 1fr); } }
 
-    .badgeCard{
-      border:1px solid rgba(255,255,255,.12);
-      border-radius:18px;
-      background: linear-gradient(180deg, rgba(25,38,86,.45), rgba(8,14,35,.40));
-      padding:12px;
-      position:relative;
-      overflow:hidden;
-      min-height:120px;
+    .card {
+      border-radius: 14px;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      background: #f9fafb;
+      overflow: hidden;
+      position: relative;
+      min-height: 122px;
     }
-    .badgeCard::before{
-      content:"";
-      position:absolute; inset:-2px;
-      background: conic-gradient(from 180deg, rgba(255,79,216,.00), rgba(109,249,255,.20), rgba(255,224,109,.20), rgba(126,123,255,.20), rgba(255,79,216,.00));
-      filter: blur(18px);
-      opacity:.35;
-      z-index:0;
+
+    .cardTop {
+      padding: 10px 10px 8px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
     }
-    .badgeInner{position:relative; z-index:1; display:flex; flex-direction:column; gap:8px;}
-    .badgeTop{display:flex; align-items:center; justify-content:space-between; gap:8px;}
-    .badgeLetter{
-      width:36px; height:36px; border-radius:12px;
-      display:grid; place-items:center;
-      font-weight:1000;
-      background: rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.12);
+
+    .letter {
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--blue);
+      line-height: 1;
     }
-    .badgeName{font-weight:1000}
-    .badgePoints{color:var(--muted); font-size:12px; font-weight:900}
-    .badgeRarity{
-      font-size:11px;
-      font-weight:1000;
-      padding:6px 8px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(2,6,18,.45);
+
+    .rarityTag {
+      font-size: 10px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 3px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,.55);
+      color: var(--text-muted);
+      background: rgba(255,255,255,.9);
+      white-space: nowrap;
     }
-    .badgeCard.locked{filter:grayscale(1); opacity:.72;}
+
+    .name {
+      padding: 0 10px 4px;
+      font-weight: 800;
+      font-size: 13px;
+      color: var(--text-main);
+    }
+
+    .pointsRow {
+      padding: 0 10px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .barWrap {
+      flex: 1;
+      height: 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,.45);
+      background: rgba(255,255,255,.7);
+      overflow: hidden;
+    }
+    .bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, rgba(31,78,121,.85), rgba(178,34,34,.75));
+      transition: width .35s ease;
+    }
+
+    .lockedOverlay {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: rgba(17, 24, 39, 0.50);
+      backdrop-filter: blur(3px);
+      color: #fff;
+      text-align: center;
+      padding: 10px;
+    }
+
+    .lockTitle {
+      font-weight: 900;
+      font-size: 12px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .lockSub {
+      margin-top: 4px;
+      font-size: 12px;
+      opacity: .95;
+    }
+
+    /* Rarity accents */
+    .rar-common   { border-left: 6px solid rgba(148,163,184,.85); }
+    .rar-uncommon { border-left: 6px solid rgba(34,197,94,.65); }
+    .rar-rare     { border-left: 6px solid rgba(59,130,246,.70); }
+    .rar-epic     { border-left: 6px solid rgba(168,85,247,.70); }
+    .rar-legend   { border-left: 6px solid rgba(245,158,11,.80); }
+
+    @media (max-width: 640px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      nav { width: 100%; }
+    }
   </style>
 </head>
+
 <body>
-  <div id="boot" class="boot">
-    <div class="bootCard">
-      <div class="bootOrb"></div>
-      <div class="bootTitle">Loading…</div>
-      <div id="bootSub" class="bootSub">Checking your account</div>
+  <header>
+    <div>
+      <a href="/home" class="troop-home-link">
+        <h2>Troop 248</h2>
+      </a>
     </div>
-  </div>
 
-  <canvas id="fxCanvas"></canvas>
+    <nav>
+      <a href="/home">Home</a>
+      <a href="/calendar">Calendar</a>
+      <a href="/documents">Documents</a>
+      <a href="/scoutmaster">SM Blog</a>
+      <a href="/spl">SPL Blog</a>
+      <a href="/useful-links">Useful Links</a>
+      <a href="/events">Events</a>
+      <a href="/mail">Mail</a>
 
-  <div class="wrap">
-    <header class="topbar">
-      <div class="brand">
-        <div class="logoOrb"></div>
-        <div>
-          <div class="title">Rewards</div>
-          <div class="subtitle">Advancements → Rewards</div>
+      <a href="/advancements/rewards/">Rewards</a>
+      <a href="/advancements/rewards/chests/">Chests</a>
+      <a class="active" href="/advancements/rewards/badges/">Badges</a>
+    </nav>
+
+    <div id="auth-bar">
+      <div id="auth-info">Signed in as …</div>
+      <button id="logout-btn">Log Out</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="welcome-card">
+      <div>
+        <h3>Badges</h3>
+        <p>Badges unlock by Rank. Lucky chests award points to a random unlocked badge.</p>
+
+        <div class="stats-row">
+          <div class="stat-pill"><span class="k">Gold</span> <span id="goldValue" class="v">—</span></div>
+          <div class="stat-pill"><span class="k">Gems</span> <span id="gemsValue" class="v">—</span></div>
+          <div class="stat-pill"><span class="k">Rank</span> <span id="rankValue" class="v">—</span></div>
         </div>
       </div>
 
-      <nav class="navlinks">
-        <a class="navlink" href="/advancements/rewards/">Home</a>
-        <a class="navlink" href="/advancements/rewards/chests/">Chests</a>
-        <a class="navlink active" href="/advancements/rewards/badges/">Badges</a>
-      </nav>
-
-      <div class="rightInfo">
-        <div class="pill"><span class="muted">Gold</span> <span id="goldValue" class="value">—</span></div>
-        <div class="pill"><span class="muted">Gems</span> <span id="gemsValue" class="value">—</span></div>
-        <div class="pill"><span class="muted">Rank</span> <span id="rankValue" class="value">—</span></div>
-        <button id="logoutBtn" class="btn btn-ghost hidden">Log out</button>
+      <div id="role-badge-container">
+        <span class="badge">Viewer</span>
       </div>
-    </header>
+    </div>
 
-    <!-- AUTH -->
-    <section id="authPanel" class="panel">
-      <div class="panelHeader">
-        <h2>Sign in</h2>
-        <p>Email/Password only.</p>
+    <section>
+      <h2>Your Badge Collection</h2>
+
+      <div class="toolbar">
+        <p id="unlockedNote" class="small-note">Loading…</p>
+        <div class="rank-pill"><span>Viewing as</span> <span id="rankPillText" style="color:var(--text-main); font-size:13px; font-weight:800;">—</span></div>
       </div>
 
-      <div class="grid2">
-        <div class="card">
-          <h3>Create account</h3>
-          <label>Email</label>
-          <input id="suEmail" type="email" autocomplete="email" placeholder="you@example.com">
-          <label>Password</label>
-          <input id="suPass" type="password" autocomplete="new-password" placeholder="••••••••">
-          <button id="signupBtn" class="btn btn-primary">Sign up</button>
-        </div>
-
-        <div class="card">
-          <h3>Log in</h3>
-          <label>Email</label>
-          <input id="liEmail" type="email" autocomplete="email" placeholder="you@example.com">
-          <label>Password</label>
-          <input id="liPass" type="password" autocomplete="current-password" placeholder="••••••••">
-          <button id="loginBtn" class="btn btn-primary">Log in</button>
-        </div>
-      </div>
-
-      <div id="authMsg" class="msg"></div>
+      <div id="badgeGrid" class="grid"></div>
     </section>
-
-    <!-- BADGES -->
-    <section id="badgesPanel" class="panel hidden">
-      <div class="panelHeader">
-        <h2>Badges</h2>
-        <p>Badges unlock by Rank. Lucky chests award points to unlocked badges.</p>
-      </div>
-
-      <div class="badgeLegend">
-        <span class="tag">Common</span>
-        <span class="tag">Uncommon</span>
-        <span class="tag">Rare</span>
-        <span class="tag">Epic</span>
-        <span class="tag">Legendary</span>
-      </div>
-
-      <div id="badgeGrid" class="badgeGrid"></div>
-      <div id="badgeMsg" class="msg"></div>
-    </section>
-  </div>
+  </main>
 
   <script type="module">
-    /* ========= FIREBASE (paste your MAIN site config here) ========= */
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-    import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import { getFirestore, doc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
+    // ✅ Troop 248 Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
-  authDomain: "troop-248.firebaseapp.com",
-  projectId: "troop-248",
-  storageBucket: "troop-248.firebasestorage.app",
-  messagingSenderId: "925363875752",
-  appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
-  measurementId: "G-NY75GX5TBH"
+      authDomain: "troop-248.firebaseapp.com",
+      projectId: "troop-248",
+      storageBucket: "troop-248.firebasestorage.app",
+      messagingSenderId: "925363875752",
+      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+      measurementId: "G-NY75GX5TBH"
     };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    const USER_COLLECTION = "accountInfo"; // change if needed
-    function rewardsRef(uid){ return doc(db, USER_COLLECTION, uid, "modules", "rewards"); }
-
-    const boot = document.getElementById("boot");
-    const bootSub = document.getElementById("bootSub");
-    const showBoot = (t)=>{ boot.classList.remove("hidden"); if(t) bootSub.textContent=t; };
-    const hideBoot = ()=> boot.classList.add("hidden");
-    showBoot("Checking your account…");
-
-    const authPanel = document.getElementById("authPanel");
-    const badgesPanel = document.getElementById("badgesPanel");
-    const authMsg = document.getElementById("authMsg");
-    const badgeMsg = document.getElementById("badgeMsg");
-    const logoutBtn = document.getElementById("logoutBtn");
-
-    const suEmail = document.getElementById("suEmail");
-    const suPass = document.getElementById("suPass");
-    const liEmail = document.getElementById("liEmail");
-    const liPass = document.getElementById("liPass");
-
-    document.getElementById("signupBtn").addEventListener("click", signup);
-    document.getElementById("loginBtn").addEventListener("click", login);
-    logoutBtn.addEventListener("click", ()=>signOut(auth));
+    const authInfoEl = document.getElementById("auth-info");
+    const logoutBtn = document.getElementById("logout-btn");
+    const roleBadgeContainer = document.getElementById("role-badge-container");
 
     const goldValue = document.getElementById("goldValue");
     const gemsValue = document.getElementById("gemsValue");
     const rankValue = document.getElementById("rankValue");
+
+    const rankPillText = document.getElementById("rankPillText");
+    const unlockedNote = document.getElementById("unlockedNote");
     const badgeGrid = document.getElementById("badgeGrid");
 
-    const BADGES = (()=> {
-      const arr=[];
-      for(let i=0;i<25;i++){
-        const id=String.fromCharCode(65+i);
-        const idx=i;
-        const rarity = idx<=4 ? "Common" : idx<=9 ? "Uncommon" : idx<=14 ? "Rare" : idx<=19 ? "Epic" : "Legendary";
-        arr.push({id, name:`Badge ${id}`, rarity});
+    function formatNum(n){ return Number(n || 0).toLocaleString("en-US"); }
+
+    // ✅ matches your rules addition
+    function rewardsRef(uid){
+      return doc(db, "accountInfo", uid, "modules", "rewards");
+    }
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "/";
+    });
+
+    const RARITY = {
+      Common:   { cls: "rar-common"   },
+      Uncommon: { cls: "rar-uncommon" },
+      Rare:     { cls: "rar-rare"     },
+      Epic:     { cls: "rar-epic"     },
+      Legendary:{ cls: "rar-legend"   }
+    };
+
+    // 25 badges A-Y with rarity mapping
+    const BADGES = (() => {
+      const arr = [];
+      const letters = "ABCDEFGHIJKLMNOPQRSTUVWXY".split("");
+      for (let i = 0; i < letters.length; i++) {
+        const L = letters[i];
+        let rarity = "Common";
+        if (i >= 5 && i < 10) rarity = "Uncommon";     // F-J
+        else if (i >= 10 && i < 15) rarity = "Rare";   // K-O
+        else if (i >= 15 && i < 20) rarity = "Epic";   // P-T
+        else if (i >= 20) rarity = "Legendary";        // U-Y
+
+        arr.push({
+          id: L,
+          name: `Badge ${L}`,
+          rarity
+        });
       }
       return arr;
     })();
 
-    function defaultBadgesPoints(){
-      const m={}; for(const b of BADGES) m[b.id]=0; return m;
+    // Rank unlock rules you described:
+    // No Rank: Common only (5)
+    // Scout: +3 Uncommon (F,G,H)
+    // Tenderfoot: all Uncommon (F-J) +2 Rare (K,L)
+    // 2nd Class: all Rare (K-O) +1 Epic (P)
+    // 1st Class+: all unlocked
+    const RANK_ORDER = ["No Rank", "Scout", "Tenderfoot", "2nd Class", "1st Class", "Star", "Life", "Eagle"];
+
+    function unlockedByRank(rank){
+      const r = (rank && RANK_ORDER.includes(rank)) ? rank : "No Rank";
+      const set = new Set();
+
+      // common always
+      ["A","B","C","D","E"].forEach(x => set.add(x));
+
+      if (r === "No Rank") return set;
+
+      if (r === "Scout") {
+        ["F","G","H"].forEach(x => set.add(x));
+        return set;
+      }
+
+      if (r === "Tenderfoot") {
+        ["F","G","H","I","J"].forEach(x => set.add(x));
+        ["K","L"].forEach(x => set.add(x));
+        return set;
+      }
+
+      if (r === "2nd Class") {
+        ["F","G","H","I","J"].forEach(x => set.add(x));
+        ["K","L","M","N","O"].forEach(x => set.add(x));
+        ["P"].forEach(x => set.add(x));
+        return set;
+      }
+
+      // 1st Class and above
+      BADGES.forEach(b => set.add(b.id));
+      return set;
     }
 
-    function defaultRewardsDoc(email){
-      return {
-        email,
-        createdAt: serverTimestamp(),
-        gold: 0,
-        gems: 0,
-        rank: "No Rank",
-        badgesPoints: defaultBadgesPoints(),
-        chests: {
-          lucky: 0,
-          gold: 0,
-          levelUp: { scout:0, tenderfoot:0, "2class":0, "1class":0, star:0, life:0, eagle:0 }
-        },
-        history: [],
-        lastChestOpen: null
-      };
+    function renderBadges(pointsMap, unlockedSet){
+      badgeGrid.innerHTML = "";
+
+      BADGES.forEach(b => {
+        const pts = Number(pointsMap?.[b.id] || 0);
+        const unlocked = unlockedSet.has(b.id);
+
+        const rarityCls = RARITY[b.rarity]?.cls || "rar-common";
+
+        const card = document.createElement("div");
+        card.className = `card ${rarityCls}`;
+
+        // Simple progress bar scale (purely visual): points / 1000 capped at 100%
+        const pct = Math.max(0, Math.min(100, Math.round((pts / 1000) * 100)));
+
+        card.innerHTML = `
+          <div class="cardTop">
+            <div class="letter">${b.id}</div>
+            <div class="rarityTag">${b.rarity}</div>
+          </div>
+          <div class="name">${unlocked ? b.name : "Locked"}</div>
+          <div class="pointsRow">
+            <div class="barWrap"><div class="bar" style="width:${unlocked ? pct : 0}%"></div></div>
+            <div>${unlocked ? formatNum(pts) + " pts" : "—"}</div>
+          </div>
+          ${unlocked ? "" : `
+            <div class="lockedOverlay">
+              <div>
+                <div class="lockTitle">Locked</div>
+                <div class="lockSub">Reach the required rank to view</div>
+              </div>
+            </div>
+          `}
+        `;
+
+        badgeGrid.appendChild(card);
+      });
     }
 
-    function unlockedBadgesByRank(rank){
-      const allCommon=BADGES.filter(b=>b.rarity==="Common").map(b=>b.id);
-      const allUncommon=BADGES.filter(b=>b.rarity==="Uncommon").map(b=>b.id);
-      const allRare=BADGES.filter(b=>b.rarity==="Rare").map(b=>b.id);
-      const allEpic=BADGES.filter(b=>b.rarity==="Epic").map(b=>b.id);
-      const allLegendary=BADGES.filter(b=>b.rarity==="Legendary").map(b=>b.id);
+    let unsubRewards = null;
 
-      const r=rank||"No Rank";
-      if(r==="No Rank") return allCommon;
-      if(r==="Scout") return allCommon.concat(["F","G","H"]);
-      if(r==="Tenderfoot") return allCommon.concat(allUncommon).concat(["K","L"]);
-      if(r==="2nd Class") return allCommon.concat(allUncommon).concat(allRare).concat(["P"]);
-      return allCommon.concat(allUncommon, allRare, allEpic, allLegendary);
-    }
-
-    async function signup(){
-      authMsg.textContent="";
-      try{ await createUserWithEmailAndPassword(auth, suEmail.value.trim(), suPass.value); authMsg.textContent="Account created."; }
-      catch(e){ authMsg.textContent=e.message; }
-    }
-    async function login(){
-      authMsg.textContent="";
-      try{ await signInWithEmailAndPassword(auth, liEmail.value.trim(), liPass.value); authMsg.textContent="Logged in."; }
-      catch(e){ authMsg.textContent=e.message; }
-    }
-
-    let unsub=null, uid=null;
-
-    onAuthStateChanged(auth, async (user)=>{
-      showBoot(user ? "Loading your badges…" : "Preparing sign-in…");
-      authMsg.textContent=""; badgeMsg.textContent="";
-      if(unsub){ unsub(); unsub=null; }
-
-      if(!user){
-        uid=null;
-        authPanel.classList.remove("hidden");
-        badgesPanel.classList.add("hidden");
-        logoutBtn.classList.add("hidden");
-        goldValue.textContent="—"; gemsValue.textContent="—"; rankValue.textContent="—";
-        hideBoot();
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "/";
         return;
       }
 
-      uid=user.uid;
-      logoutBtn.classList.remove("hidden");
+      // gate access based on accountInfo + role
+      const infoRef = doc(db, "accountInfo", user.uid);
+      const infoSnap = await getDoc(infoRef);
 
-      const ref=rewardsRef(uid);
-      const snap=await getDoc(ref);
-      if(!snap.exists()){
-        await setDoc(ref, defaultRewardsDoc(user.email||""), { merge:false });
-      } else {
-        const d=snap.data()||{};
-        const patch={};
-        if(typeof d.gems!=="number") patch.gems=0;
-        if(typeof d.rank!=="string") patch.rank="No Rank";
-        if(!d.badgesPoints || typeof d.badgesPoints!=="object") patch.badgesPoints=defaultBadgesPoints();
-        if(Object.keys(patch).length) await setDoc(ref, patch, { merge:true });
+      if (!infoSnap.exists()) {
+        window.location.href = "/under-review/";
+        return;
       }
 
-      authPanel.classList.add("hidden");
-      badgesPanel.classList.remove("hidden");
+      const info = infoSnap.data() || {};
+      const role = info.authRole;
 
-      let first=true;
-      unsub = onSnapshot(ref, (s)=>{
-        const d=s.data()||{};
-        render(d);
-        if(first){ first=false; hideBoot(); }
-      }, (err)=>{
-        authMsg.textContent=err.message;
-        hideBoot();
+      if (role !== "admin" && role !== "viewer") {
+        window.location.href = "/under-review/";
+        return;
+      }
+
+      authInfoEl.textContent = `Signed in as ${user.email || "—"}`;
+      roleBadgeContainer.innerHTML = `
+        <span class="badge ${role === "admin" ? "admin" : ""}">
+          ${role === "admin" ? "Admin" : "Viewer"}
+        </span>
+      `;
+
+      // live update counters + badges
+      if (unsubRewards) unsubRewards();
+
+      unsubRewards = onSnapshot(rewardsRef(user.uid), (snap) => {
+        const d = snap.exists() ? snap.data() : {};
+
+        const gold = d.gold ?? 0;
+        const gems = d.gems ?? 0;
+        const rank = d.rank ?? "No Rank";
+        const points = d.badgesPoints ?? {};
+
+        goldValue.textContent = formatNum(gold);
+        gemsValue.textContent = formatNum(gems);
+        rankValue.textContent = rank;
+        rankPillText.textContent = rank;
+
+        const unlockedSet = unlockedByRank(rank);
+        unlockedNote.textContent = `Unlocked: ${unlockedSet.size} / 25 (based on Rank)`;
+
+        renderBadges(points, unlockedSet);
+      }, (err) => {
+        console.warn("Rewards snapshot error:", err);
+        goldValue.textContent = "0";
+        gemsValue.textContent = "0";
+        rankValue.textContent = "No Rank";
+        rankPillText.textContent = "No Rank";
+        unlockedNote.textContent = "Could not load rewards data.";
+        renderBadges({}, unlockedByRank("No Rank"));
       });
     });
-
-    function render(d){
-      goldValue.textContent = formatNum(d?.gold ?? 0);
-      gemsValue.textContent = formatNum(d?.gems ?? 0);
-      const rank = d?.rank ?? "No Rank";
-      rankValue.textContent = rank;
-
-      const unlocked = new Set(unlockedBadgesByRank(rank));
-      const pts = d?.badgesPoints || {};
-
-      badgeGrid.innerHTML="";
-      for(const b of BADGES){
-        const isUnlocked = unlocked.has(b.id);
-        const points = pts[b.id] ?? 0;
-
-        const card=document.createElement("div");
-        card.className = "badgeCard" + (isUnlocked ? "" : " locked");
-        card.innerHTML = `
-          <div class="badgeInner">
-            <div class="badgeTop">
-              <div class="badgeLetter">${isUnlocked ? b.id : "?"}</div>
-              <div class="badgeRarity">${b.rarity}</div>
-            </div>
-            <div class="badgeName">${isUnlocked ? b.name : "???"}</div>
-            <div class="badgePoints">Points: <b>${formatNum(points)}</b></div>
-          </div>
-        `;
-        badgeGrid.appendChild(card);
-      }
-    }
-
-    function formatNum(n){ return Number(n).toLocaleString("en-US"); }
   </script>
 </body>
 </html>
