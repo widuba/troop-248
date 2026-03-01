@@ -1,3 +1,4 @@
+<!-- /advancements/rewards/badges/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,6 +19,15 @@
       --radius-lg: 16px;
       --radius-pill: 999px;
       --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
+
+      /* Rewards UI blue theme */
+      --rx-blue-900:#0b1f3a;
+      --rx-blue-800:#0f2a52;
+      --rx-blue-700:#163a72;
+      --rx-line: rgba(255,255,255,.16);
+      --rx-soft: rgba(255,255,255,.08);
+      --rx-text: #ecf3ff;
+      --rx-muted: rgba(236,243,255,.78);
     }
 
     * { box-sizing: border-box; }
@@ -25,7 +35,9 @@
     body {
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--tan);
+      background: radial-gradient(900px 600px at 40% 20%, rgba(31,78,121,.18), transparent 55%),
+                  radial-gradient(800px 520px at 70% 30%, rgba(178,34,34,.10), transparent 58%),
+                  #cfc6b0;
       color: var(--text-main);
       min-height: 100vh;
     }
@@ -53,10 +65,7 @@
       gap: 8px;
     }
 
-    header h2::before {
-      content: "★";
-      font-size: 18px;
-    }
+    header h2::before { content: "★"; font-size: 18px; }
 
     .troop-home-link {
       text-decoration: none;
@@ -89,10 +98,7 @@
       white-space: nowrap;
     }
 
-    nav a:hover {
-      opacity: 1;
-      background: rgba(255, 255, 255, 0.12);
-    }
+    nav a:hover { opacity: 1; background: rgba(255, 255, 255, 0.12); }
 
     nav a.active {
       opacity: 1;
@@ -117,10 +123,7 @@
       color: var(--white);
       cursor: pointer;
     }
-
-    #logout-btn:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
+    #logout-btn:hover { background: rgba(255, 255, 255, 0.2); }
 
     main {
       padding: 24px 16px 40px;
@@ -128,46 +131,44 @@
       margin: 0 auto;
     }
 
-    .welcome-card {
-      background: rgba(255, 255, 255, 0.95);
+    /* ===== Blue panels instead of white ===== */
+    .welcome-card, section {
+      background: linear-gradient(180deg, rgba(15,42,82,.96), rgba(11,31,58,.96));
       border-radius: var(--radius-lg);
       padding: 18px 18px 12px;
       margin-bottom: 18px;
       box-shadow: var(--shadow-soft);
+      border: 1px solid var(--rx-line);
+      color: var(--rx-text);
+    }
+
+    .welcome-card {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
       gap: 16px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
       flex-wrap: wrap;
     }
 
-    .welcome-card h3 {
-      margin: 0 0 4px;
-      font-size: 18px;
-    }
-
-    .welcome-card p {
-      margin: 0;
-      font-size: 14px;
-      color: var(--text-muted);
-    }
+    .welcome-card h3 { margin: 0 0 4px; font-size: 18px; color: var(--rx-text); }
+    .welcome-card p { margin: 0; font-size: 14px; color: var(--rx-muted); }
 
     .badge {
       font-size: 11px;
-      padding: 4px 8px;
+      padding: 6px 10px;
       border-radius: var(--radius-pill);
-      background: rgba(148, 163, 184, 0.2);
-      color: var(--text-muted);
+      background: rgba(255,255,255,.12);
+      color: var(--rx-text);
       text-transform: uppercase;
       letter-spacing: 0.07em;
       display: inline-block;
+      border: 1px solid rgba(255,255,255,.18);
     }
 
     .badge.admin {
-      background: rgba(240, 180, 41, 0.16);
-      color: #92400e;
-      border: 1px solid rgba(245, 158, 11, 0.6);
+      background: rgba(245,158,11,.18);
+      color: #fff;
+      border-color: rgba(245,158,11,.42);
     }
 
     .stats-row {
@@ -181,29 +182,22 @@
     .stat-pill {
       padding: 7px 12px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(148, 163, 184, 0.55);
-      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.10);
       font-size: 13px;
       display: inline-flex;
       gap: 8px;
       align-items: baseline;
+      color: var(--rx-text);
     }
     .stat-pill .k {
       font-size: 11px;
-      color: var(--text-muted);
+      color: rgba(236,243,255,.72);
       text-transform: uppercase;
       letter-spacing: .05em;
+      font-weight: 700;
     }
-    .stat-pill .v { font-weight: 700; }
-
-    section {
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: var(--radius-lg);
-      padding: 18px 18px 12px;
-      margin-bottom: 18px;
-      box-shadow: var(--shadow-soft);
-      border: 1px solid rgba(148, 163, 184, 0.4);
-    }
+    .stat-pill .v { font-weight: 800; color: var(--rx-text); }
 
     section h2 {
       margin-top: 0;
@@ -211,13 +205,9 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      color: var(--rx-text);
     }
-
-    section h2::before {
-      content: "▸";
-      font-size: 14px;
-      color: var(--blue);
-    }
+    section h2::before { content: "▸"; font-size: 14px; color: rgba(236,243,255,.85); }
 
     /* ===== Badges UI ===== */
     .toolbar {
@@ -230,25 +220,27 @@
     }
 
     .small-note {
-      color: var(--text-muted);
+      color: var(--rx-muted);
       font-size: 13px;
       line-height: 1.35;
       margin: 0;
+      font-weight: 700;
     }
 
     .rank-pill {
       padding: 7px 12px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(148,163,184,.55);
-      background: rgba(255,255,255,.92);
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.10);
       font-size: 13px;
-      font-weight: 700;
+      font-weight: 800;
       display: inline-flex;
       gap: 8px;
       align-items: baseline;
       white-space: nowrap;
+      color: var(--rx-text);
     }
-    .rank-pill span { color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing:.05em; font-weight: 700; }
+    .rank-pill span { color: rgba(236,243,255,.72); font-size: 11px; text-transform: uppercase; letter-spacing:.05em; font-weight: 800; }
 
     .grid {
       display: grid;
@@ -262,12 +254,27 @@
 
     .card {
       border-radius: 14px;
-      border: 1px solid rgba(148, 163, 184, 0.45);
-      background: #f9fafb;
+      border: 1px solid rgba(255,255,255,.16);
+      background: linear-gradient(180deg, rgba(22,58,114,.55), rgba(11,31,58,.88));
       overflow: hidden;
       position: relative;
-      min-height: 122px;
+      min-height: 124px;
+      color: var(--rx-text);
     }
+
+    .card::after{
+      content:"";
+      position:absolute;
+      inset:-60px;
+      background:
+        radial-gradient(circle at 25% 20%, rgba(109,249,255,.16), transparent 45%),
+        radial-gradient(circle at 70% 35%, rgba(255,224,109,.14), transparent 45%),
+        radial-gradient(circle at 45% 75%, rgba(255,79,216,.10), transparent 45%);
+      pointer-events:none;
+      opacity:.65;
+    }
+
+    .cardTop, .name, .pointsRow{ position:relative; z-index:2; }
 
     .cardTop {
       padding: 10px 10px 8px;
@@ -279,8 +286,8 @@
 
     .letter {
       font-size: 18px;
-      font-weight: 900;
-      color: var(--blue);
+      font-weight: 1000;
+      color: rgba(236,243,255,.95);
       line-height: 1;
     }
 
@@ -290,17 +297,18 @@
       text-transform: uppercase;
       padding: 3px 7px;
       border-radius: 999px;
-      border: 1px solid rgba(148,163,184,.55);
-      color: var(--text-muted);
-      background: rgba(255,255,255,.9);
+      border: 1px solid rgba(255,255,255,.18);
+      color: rgba(236,243,255,.86);
+      background: rgba(255,255,255,.10);
       white-space: nowrap;
+      font-weight: 900;
     }
 
     .name {
       padding: 0 10px 4px;
-      font-weight: 800;
+      font-weight: 950;
       font-size: 13px;
-      color: var(--text-main);
+      color: rgba(236,243,255,.95);
     }
 
     .pointsRow {
@@ -309,23 +317,23 @@
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      color: var(--text-muted);
+      color: rgba(236,243,255,.78);
       font-size: 12px;
-      font-weight: 650;
+      font-weight: 850;
     }
 
     .barWrap {
       flex: 1;
       height: 10px;
       border-radius: 999px;
-      border: 1px solid rgba(148,163,184,.45);
-      background: rgba(255,255,255,.7);
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.08);
       overflow: hidden;
     }
     .bar {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, rgba(31,78,121,.85), rgba(178,34,34,.75));
+      background: linear-gradient(90deg, rgba(109,249,255,.75), rgba(255,224,109,.65), rgba(255,79,216,.55));
       transition: width .35s ease;
     }
 
@@ -334,15 +342,16 @@
       inset: 0;
       display: grid;
       place-items: center;
-      background: rgba(17, 24, 39, 0.50);
+      background: rgba(5, 10, 24, 0.55);
       backdrop-filter: blur(3px);
       color: #fff;
       text-align: center;
       padding: 10px;
+      z-index: 3;
     }
 
     .lockTitle {
-      font-weight: 900;
+      font-weight: 1000;
       font-size: 12px;
       letter-spacing: .06em;
       text-transform: uppercase;
@@ -352,106 +361,20 @@
       margin-top: 4px;
       font-size: 12px;
       opacity: .95;
+      font-weight: 850;
     }
 
     /* Rarity accents */
     .rar-common   { border-left: 6px solid rgba(148,163,184,.85); }
-    .rar-uncommon { border-left: 6px solid rgba(34,197,94,.65); }
-    .rar-rare     { border-left: 6px solid rgba(59,130,246,.70); }
-    .rar-epic     { border-left: 6px solid rgba(168,85,247,.70); }
-    .rar-legend   { border-left: 6px solid rgba(245,158,11,.80); }
+    .rar-uncommon { border-left: 6px solid rgba(34,197,94,.70); }
+    .rar-rare     { border-left: 6px solid rgba(59,130,246,.78); }
+    .rar-epic     { border-left: 6px solid rgba(168,85,247,.78); }
+    .rar-legend   { border-left: 6px solid rgba(245,158,11,.85); }
 
     @media (max-width: 640px) {
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
+      header { flex-direction: column; align-items: flex-start; }
       nav { width: 100%; }
     }
-    /* ===== Rewards UI: Blue theme override (keeps Troop header as-is) ===== */
-
-:root{
-  --rx-blue-900:#0b1f3a;
-  --rx-blue-800:#0f2a52;
-  --rx-blue-700:#163a72;
-  --rx-line: rgba(255,255,255,.16);
-  --rx-soft: rgba(255,255,255,.08);
-  --rx-text: #ecf3ff;
-  --rx-muted: rgba(236,243,255,.78);
-}
-
-/* Make content sections/cards blue instead of white */
-.welcome-card,
-section,
-.chestCard{
-  background: linear-gradient(180deg, rgba(15,42,82,.96), rgba(11,31,58,.96)) !important;
-  border: 1px solid var(--rx-line) !important;
-  color: var(--rx-text) !important;
-}
-
-/* Titles + paragraph readability */
-.welcome-card h3,
-section h2,
-.chestCard h4{
-  color: var(--rx-text) !important;
-}
-
-.welcome-card p,
-.chestCard p{
-  color: var(--rx-muted) !important;
-}
-
-/* The little triangle before section headings */
-section h2::before{
-  color: rgba(236,243,255,.85) !important;
-}
-
-/* Role badge */
-.badge{
-  background: rgba(255,255,255,.12) !important;
-  color: var(--rx-text) !important;
-  border: 1px solid rgba(255,255,255,.18) !important;
-}
-.badge.admin{
-  background: rgba(245,158,11,.18) !important;
-  color: #fff !important;
-  border-color: rgba(245,158,11,.42) !important;
-}
-
-/* Gold/Gems/Rank pills */
-.stat-pill,
-.countPill{
-  background: rgba(255,255,255,.10) !important;
-  border: 1px solid rgba(255,255,255,.18) !important;
-  color: var(--rx-text) !important;
-}
-.stat-pill .k,
-.countPill span{
-  color: rgba(236,243,255,.72) !important;
-}
-.stat-pill .v,
-.countPill b{
-  color: var(--rx-text) !important;
-}
-
-/* Chest cards */
-.chestCard{
-  background: linear-gradient(180deg, rgba(22,58,114,.55), rgba(11,31,58,.88)) !important;
-}
-
-/* Buttons */
-.openBtn{
-  background: linear-gradient(180deg, rgba(49,130,246,.98), rgba(30,64,175,.98)) !important;
-  color: #fff !important;
-  border: 1px solid rgba(255,255,255,.18) !important;
-  box-shadow: 0 10px 24px rgba(0,0,0,.18);
-}
-.openBtn:hover{ filter: brightness(1.05); }
-.openBtn:disabled{
-  background: rgba(255,255,255,.10) !important;
-  color: rgba(236,243,255,.55) !important;
-  border-color: rgba(255,255,255,.12) !important;
-}
   </style>
 </head>
 
@@ -507,7 +430,7 @@ section h2::before{
 
       <div class="toolbar">
         <p id="unlockedNote" class="small-note">Loading…</p>
-        <div class="rank-pill"><span>Viewing as</span> <span id="rankPillText" style="color:var(--text-main); font-size:13px; font-weight:800;">—</span></div>
+        <div class="rank-pill"><span>Viewing as</span> <span id="rankPillText" style="color:var(--rx-text); font-size:13px; font-weight:950;">—</span></div>
       </div>
 
       <div id="badgeGrid" class="grid"></div>
@@ -546,17 +469,17 @@ section h2::before{
     const unlockedNote = document.getElementById("unlockedNote");
     const badgeGrid = document.getElementById("badgeGrid");
 
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "/";
+    });
+
     function formatNum(n){ return Number(n || 0).toLocaleString("en-US"); }
 
     // ✅ matches your rules addition
     function rewardsRef(uid){
       return doc(db, "accountInfo", uid, "modules", "rewards");
     }
-
-    logoutBtn.addEventListener("click", async () => {
-      await signOut(auth);
-      window.location.href = "/";
-    });
 
     const RARITY = {
       Common:   { cls: "rar-common"   },
@@ -578,30 +501,18 @@ section h2::before{
         else if (i >= 15 && i < 20) rarity = "Epic";   // P-T
         else if (i >= 20) rarity = "Legendary";        // U-Y
 
-        arr.push({
-          id: L,
-          name: `Badge ${L}`,
-          rarity
-        });
+        arr.push({ id: L, name: `Badge ${L}`, rarity });
       }
       return arr;
     })();
 
-    // Rank unlock rules you described:
-    // No Rank: Common only (5)
-    // Scout: +3 Uncommon (F,G,H)
-    // Tenderfoot: all Uncommon (F-J) +2 Rare (K,L)
-    // 2nd Class: all Rare (K-O) +1 Epic (P)
-    // 1st Class+: all unlocked
+    // Rank unlock rules
     const RANK_ORDER = ["No Rank", "Scout", "Tenderfoot", "2nd Class", "1st Class", "Star", "Life", "Eagle"];
 
     function unlockedByRank(rank){
       const r = (rank && RANK_ORDER.includes(rank)) ? rank : "No Rank";
       const set = new Set();
-
-      // common always
       ["A","B","C","D","E"].forEach(x => set.add(x));
-
       if (r === "No Rank") return set;
 
       if (r === "Scout") {
@@ -618,7 +529,7 @@ section h2::before{
       if (r === "2nd Class") {
         ["F","G","H","I","J"].forEach(x => set.add(x));
         ["K","L","M","N","O"].forEach(x => set.add(x));
-        ["P"].forEach(x => set.add(x));
+        set.add("P");
         return set;
       }
 
@@ -635,11 +546,10 @@ section h2::before{
         const unlocked = unlockedSet.has(b.id);
 
         const rarityCls = RARITY[b.rarity]?.cls || "rar-common";
-
         const card = document.createElement("div");
         card.className = `card ${rarityCls}`;
 
-        // Simple progress bar scale (purely visual): points / 1000 capped at 100%
+        // purely visual progress: points / 1000 capped
         const pct = Math.max(0, Math.min(100, Math.round((pts / 1000) * 100)));
 
         card.innerHTML = `
@@ -698,25 +608,22 @@ section h2::before{
         </span>
       `;
 
-      // live update counters + badges
       if (unsubRewards) unsubRewards();
 
       unsubRewards = onSnapshot(rewardsRef(user.uid), (snap) => {
         const d = snap.exists() ? snap.data() : {};
 
-        const gold = d.gold ?? 0;
-        const gems = d.gems ?? 0;
-        const rank = d.rank ?? "No Rank";
-        const points = d.badgesPoints ?? {};
+        goldValue.textContent = formatNum(d.gold ?? 0);
+        gemsValue.textContent = formatNum(d.gems ?? 0);
 
-        goldValue.textContent = formatNum(gold);
-        gemsValue.textContent = formatNum(gems);
+        const rank = d.rank ?? "No Rank";
         rankValue.textContent = rank;
         rankPillText.textContent = rank;
 
+        const points = d.badgesPoints ?? {};
         const unlockedSet = unlockedByRank(rank);
-        unlockedNote.textContent = `Unlocked: ${unlockedSet.size} / 25 (based on Rank)`;
 
+        unlockedNote.textContent = `Unlocked: ${unlockedSet.size} / 25 (based on Rank)`;
         renderBadges(points, unlockedSet);
       }, (err) => {
         console.warn("Rewards snapshot error:", err);
