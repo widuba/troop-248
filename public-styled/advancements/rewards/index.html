@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Rewards — Troop 248</title>
+  <title>Chests — Rewards — Troop 248</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" type="image/png" href="/bsafavicon.ico" />
   <link rel="stylesheet" href="/modern-2026.css" />
@@ -124,7 +124,7 @@
 
     main {
       padding: 24px 16px 40px;
-      max-width: 960px;
+      max-width: 1060px;
       margin: 0 auto;
     }
 
@@ -219,40 +219,336 @@
       color: var(--blue);
     }
 
-    .grid {
+    /* ===== Chests UI ===== */
+    .row {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 12px;
       margin-top: 10px;
     }
+    @media (max-width: 900px) { .row { grid-template-columns: 1fr; } }
 
-    @media (max-width: 720px) {
-      .grid { grid-template-columns: 1fr; }
-    }
-
-    .tile {
-      border-radius: 14px;
-      border: 1px solid rgba(148, 163, 184, 0.45);
+    .chestCard {
+      border-radius: 16px;
+      border: 1px solid rgba(148,163,184,.45);
       background: #f9fafb;
       padding: 14px;
-      text-decoration: none;
-      color: inherit;
-      display: block;
+      position: relative;
+      overflow: hidden;
     }
 
-    .tile:hover { filter: brightness(0.985); }
-
-    .tile h4 {
+    .chestCard h4{
       margin: 0 0 6px 0;
       color: var(--blue);
       font-size: 15px;
     }
 
-    .tile p {
+    .chestCard p{
       margin: 0;
       color: var(--text-muted);
       font-size: 13px;
       line-height: 1.35;
+    }
+
+    .countRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-top: 12px;
+    }
+
+    .countPill{
+      padding: 6px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148,163,184,.55);
+      background: rgba(255,255,255,.92);
+      font-size: 13px;
+      font-weight: 750;
+      display:inline-flex;
+      gap: 8px;
+      align-items: baseline;
+      white-space:nowrap;
+    }
+    .countPill span{ color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing:.05em; font-weight: 700; }
+
+    .openBtn{
+      padding: 7px 12px;
+      border-radius: var(--radius-pill);
+      border: none;
+      cursor:pointer;
+      font-weight: 750;
+      background: var(--blue);
+      color: var(--white);
+      font-size: 13px;
+      white-space:nowrap;
+    }
+    .openBtn:hover{ opacity:.97; }
+    .openBtn:disabled{
+      opacity:.55; cursor:not-allowed;
+    }
+
+    /* ===== Fullscreen overlay (opening) ===== */
+    .overlay{
+      position:fixed;
+      inset:0;
+      z-index:9999;
+      background: rgba(15, 23, 42, 0.78);
+      backdrop-filter: blur(6px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+    }
+    .overlay.show{ display:flex; }
+
+    .openStage{
+      width:min(980px, 96vw);
+      height:min(640px, 88vh);
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: radial-gradient(circle at 50% 30%, rgba(255,255,255,.14), rgba(255,255,255,.06) 40%, rgba(0,0,0,.20) 100%);
+      box-shadow: 0 30px 90px rgba(0,0,0,.45);
+      position: relative;
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+      user-select:none;
+      cursor: pointer;
+    }
+
+    .stageTitle{
+      position:absolute;
+      top: 14px;
+      left: 16px;
+      right: 16px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap: 10px;
+      color: #fff;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing:.08em;
+      font-size: 12px;
+      opacity:.95;
+      pointer-events:none;
+    }
+
+    .stageTitle .right{
+      display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;
+    }
+
+    .miniPill{
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.30);
+      background: rgba(255,255,255,.10);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing:.05em;
+    }
+
+    .closeX{
+      position:absolute;
+      top: 12px;
+      right: 12px;
+      width: 36px;
+      height: 36px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.30);
+      background: rgba(255,255,255,.12);
+      color:#fff;
+      font-weight: 1000;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index: 3;
+    }
+    .closeX:hover{ background: rgba(255,255,255,.20); }
+
+    /* Chest visuals */
+    .chestVisual{
+      width: 210px;
+      height: 170px;
+      border-radius: 22px;
+      border: 2px solid rgba(255,255,255,.35);
+      background: linear-gradient(135deg, rgba(31,78,121,.95), rgba(178,34,34,.85));
+      box-shadow: 0 16px 40px rgba(0,0,0,.30);
+      position: relative;
+      transform: translateZ(0);
+    }
+    .chestVisual:before{
+      content:"";
+      position:absolute;
+      inset: 12px;
+      border-radius: 16px;
+      border: 2px dashed rgba(255,255,255,.45);
+      opacity:.9;
+    }
+    .sparkle{
+      position:absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.95);
+      box-shadow: 0 0 16px rgba(255,255,255,.85);
+      opacity:.0;
+      animation: sparkle 1.1s ease-in-out infinite;
+    }
+    @keyframes sparkle{
+      0%{ transform: translateY(0) scale(.7); opacity:0; }
+      35%{ opacity:1; }
+      70%{ opacity:.0; transform: translateY(-28px) scale(1.1); }
+      100%{ opacity:0; }
+    }
+
+    .bigText{
+      color:#fff;
+      font-weight: 1000;
+      font-size: 18px;
+      text-align:center;
+      padding: 0 14px;
+      text-shadow: 0 8px 20px rgba(0,0,0,.35);
+      line-height: 1.15;
+    }
+
+    .hint{
+      color: rgba(255,255,255,.92);
+      font-weight: 800;
+      font-size: 12px;
+      opacity:.95;
+      text-transform: uppercase;
+      letter-spacing:.08em;
+    }
+
+    /* Level color themes for Lucky chest while spinning */
+    .lvl1{ background: linear-gradient(135deg, rgba(31,78,121,.95), rgba(178,34,34,.85)); }
+    .lvl2{ background: linear-gradient(135deg, rgba(255,180,80,.96), rgba(255,120,40,.86)); }
+    .lvl3{ background: linear-gradient(135deg, rgba(140,90,255,.96), rgba(90,45,200,.86)); }
+    .lvl4{ background: linear-gradient(135deg, rgba(110,195,255,.96), rgba(50,135,230,.86)); }
+    .lvl5{ background: linear-gradient(135deg, rgba(210,210,220,.96), rgba(140,140,155,.86)); }
+    .lvl6{ background: linear-gradient(135deg, rgba(255,215,70,.98), rgba(255,170,20,.90)); }
+
+    /* Spinning animation */
+    .spinAnim{ animation: chestWobble .55s ease-in-out; }
+    @keyframes chestWobble{
+      0%{ transform: scale(1) rotate(0deg); }
+      20%{ transform: scale(1.02) rotate(-2deg); }
+      50%{ transform: scale(1.06) rotate(2deg); }
+      80%{ transform: scale(1.02) rotate(-1deg); }
+      100%{ transform: scale(1) rotate(0deg); }
+    }
+
+    /* Reveal burst */
+    .burst{
+      position:absolute;
+      inset:-60px;
+      opacity:0;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,.55), transparent 55%),
+        radial-gradient(circle at 20% 30%, rgba(255,224,109,.55), transparent 45%),
+        radial-gradient(circle at 75% 35%, rgba(109,249,255,.55), transparent 45%),
+        radial-gradient(circle at 35% 70%, rgba(255,79,216,.45), transparent 45%),
+        radial-gradient(circle at 70% 75%, rgba(126,123,255,.45), transparent 45%);
+      filter: blur(2px);
+      pointer-events:none;
+    }
+    .burst.show{ animation: burst 1.0s ease-out forwards; }
+    @keyframes burst{
+      0%{ opacity:0; transform: scale(.70); }
+      40%{ opacity:1; transform: scale(1.02); }
+      100%{ opacity:0; transform: scale(1.10); }
+    }
+
+    /* Level 6 extra "explosion" vibe */
+    .supernova{
+      position:absolute;
+      inset:-140px;
+      opacity:0;
+      pointer-events:none;
+      background:
+        conic-gradient(from 0deg,
+          rgba(255,255,255,.0),
+          rgba(255,255,255,.55),
+          rgba(255,224,109,.0),
+          rgba(255,224,109,.55),
+          rgba(255,79,216,.0),
+          rgba(126,123,255,.55),
+          rgba(109,249,255,.0),
+          rgba(255,255,255,.55),
+          rgba(255,255,255,.0)
+        );
+      filter: blur(6px);
+      mix-blend-mode: screen;
+    }
+    .supernova.show{ animation: supernova 1.25s ease-out forwards; }
+    @keyframes supernova{
+      0%{ opacity:0; transform: scale(.55) rotate(0deg); }
+      35%{ opacity:1; transform: scale(.95) rotate(40deg); }
+      100%{ opacity:0; transform: scale(1.2) rotate(140deg); }
+    }
+
+    /* Confetti particles */
+    .confetti{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      overflow:hidden;
+    }
+    .confetti i{
+      position:absolute;
+      width:10px;
+      height:16px;
+      opacity:0;
+      border-radius:4px;
+      animation: fall 1.2s ease-in forwards;
+      box-shadow: 0 10px 18px rgba(0,0,0,.20);
+    }
+    @keyframes fall{
+      0%{ transform: translateY(-40px) rotate(0deg); opacity:0; }
+      15%{ opacity:1; }
+      100%{ transform: translateY(680px) rotate(360deg); opacity:0; }
+    }
+
+    /* Reward reveal card */
+    .rewardCard{
+      width: min(720px, 92vw);
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.22);
+      background: rgba(255,255,255,.12);
+      backdrop-filter: blur(10px);
+      padding: 14px 16px;
+      color:#fff;
+      box-shadow: 0 18px 60px rgba(0,0,0,.35);
+      text-align:center;
+      display:none;
+    }
+    .rewardCard.show{ display:block; }
+    .rewardBig{
+      font-weight: 1000;
+      font-size: 18px;
+      letter-spacing:.02em;
+    }
+    .rewardSub{
+      margin-top: 6px;
+      font-weight: 800;
+      font-size: 12px;
+      opacity:.94;
+      text-transform: uppercase;
+      letter-spacing:.08em;
+    }
+
+    .tinyNote{
+      margin-top: 10px;
+      color: rgba(255,255,255,.92);
+      font-size: 12px;
+      font-weight: 800;
+      opacity:.95;
     }
 
     @media (max-width: 640px) {
@@ -261,6 +557,9 @@
         align-items: flex-start;
       }
       nav { width: 100%; }
+      .openStage{
+        height: min(620px, 88vh);
+      }
     }
   </style>
 </head>
@@ -283,8 +582,8 @@
       <a href="/events">Events</a>
       <a href="/mail">Mail</a>
 
-      <a class="active" href="/advancements/rewards/">Rewards</a>
-      <a href="/advancements/rewards/chests/">Chests</a>
+      <a href="/advancements/rewards/">Rewards</a>
+      <a class="active" href="/advancements/rewards/chests/">Chests</a>
       <a href="/advancements/rewards/badges/">Badges</a>
     </nav>
 
@@ -297,8 +596,8 @@
   <main>
     <div class="welcome-card">
       <div>
-        <h3>Rewards</h3>
-        <p>Chests and badges progress, inside the Troop 248 site.</p>
+        <h3>Chests</h3>
+        <p>Lucky chests award badge points. Gold chests award gold. Level up chests are flashy (timed).</p>
 
         <div class="stats-row">
           <div class="stat-pill"><span class="k">Gold</span> <span id="goldValue" class="v">—</span></div>
@@ -313,27 +612,86 @@
     </div>
 
     <section>
-      <h2>Choose</h2>
-      <div class="grid">
-        <a class="tile" href="/advancements/rewards/chests/">
-          <h4>Chests</h4>
-          <p>Open Lucky, Gold, and Level Up chests (given via Firestore editing for now).</p>
-        </a>
+      <h2>Your Chests</h2>
+      <div class="row">
+        <div class="chestCard">
+          <h4>Lucky Chests</h4>
+          <p>Start at Level 1, 5 spins, 40% chance to level up each spin (never down), cap Level 6. Final click reveals badge points.</p>
+          <div class="countRow">
+            <div class="countPill"><span>Count</span><b id="luckyCount">—</b></div>
+            <button class="openBtn" id="openLuckyBtn">Open</button>
+          </div>
+        </div>
 
-        <a class="tile" href="/advancements/rewards/badges/">
-          <h4>Badges</h4>
-          <p>See unlocked badges by rank and points earned from Lucky chests.</p>
-        </a>
+        <div class="chestCard">
+          <h4>Gold Chests</h4>
+          <p>Contains only gold, random between 5,000 and 100,000.</p>
+          <div class="countRow">
+            <div class="countPill"><span>Count</span><b id="goldChestCount">—</b></div>
+            <button class="openBtn" id="openGoldBtn">Open</button>
+          </div>
+        </div>
+
+        <div class="chestCard">
+          <h4>Level Up Chests</h4>
+          <p>7 variants: scout, tenderfoot, 2class, 1class, star, life, eagle. Timed opening animations.</p>
+          <div class="countRow">
+            <div class="countPill"><span>Available</span><b id="levelUpTotal">—</b></div>
+            <button class="openBtn" id="openLevelUpBtn">Open</button>
+          </div>
+        </div>
       </div>
     </section>
   </main>
 
+  <!-- Fullscreen overlay -->
+  <div id="overlay" class="overlay">
+    <div id="openStage" class="openStage" title="Click anywhere on this screen to use a spin / progress the opening">
+      <button id="closeX" class="closeX" aria-label="Close">×</button>
+
+      <div class="stageTitle">
+        <div id="stageLeft">Lucky Chest</div>
+        <div class="right">
+          <div class="miniPill" id="miniA">Level: 1</div>
+          <div class="miniPill" id="miniB">Spins: 5</div>
+        </div>
+      </div>
+
+      <div id="burst" class="burst"></div>
+      <div id="supernova" class="supernova"></div>
+      <div id="confetti" class="confetti"></div>
+
+      <div id="chestVisual" class="chestVisual lvl1">
+        <i class="sparkle" style="left:18px; top:24px; animation-delay:.0s;"></i>
+        <i class="sparkle" style="left:44px; top:44px; animation-delay:.2s;"></i>
+        <i class="sparkle" style="right:26px; top:26px; animation-delay:.15s;"></i>
+        <i class="sparkle" style="right:44px; top:60px; animation-delay:.33s;"></i>
+      </div>
+
+      <div id="bigText" class="bigText">Click to Spin (5)</div>
+      <div id="hint" class="hint">Lucky Chest • 40% level-up chance</div>
+
+      <div id="rewardCard" class="rewardCard">
+        <div id="rewardBig" class="rewardBig">Reward</div>
+        <div id="rewardSub" class="rewardSub">Click to close</div>
+        <div class="tinyNote">Saved to your account.</div>
+      </div>
+    </div>
+  </div>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-    import { getFirestore, doc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      onSnapshot,
+      runTransaction,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-    // ✅ Troop 248 Firebase config (same as your calendar page)
+    // ✅ Troop 248 Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
       authDomain: "troop-248.firebaseapp.com",
@@ -356,34 +714,648 @@
     const gemsValue = document.getElementById("gemsValue");
     const rankValue = document.getElementById("rankValue");
 
-    function formatNum(n){ return Number(n || 0).toLocaleString("en-US"); }
+    const luckyCountEl = document.getElementById("luckyCount");
+    const goldChestCountEl = document.getElementById("goldChestCount");
+    const levelUpTotalEl = document.getElementById("levelUpTotal");
 
-    function rewardsRef(uid){
-      // ✅ matches your rules addition
-      return doc(db, "accountInfo", uid, "modules", "rewards");
-    }
+    const openLuckyBtn = document.getElementById("openLuckyBtn");
+    const openGoldBtn = document.getElementById("openGoldBtn");
+    const openLevelUpBtn = document.getElementById("openLevelUpBtn");
+
+    const overlay = document.getElementById("overlay");
+    const openStage = document.getElementById("openStage");
+    const closeX = document.getElementById("closeX");
+
+    const miniA = document.getElementById("miniA");
+    const miniB = document.getElementById("miniB");
+    const stageLeft = document.getElementById("stageLeft");
+
+    const chestVisual = document.getElementById("chestVisual");
+    const bigText = document.getElementById("bigText");
+    const hint = document.getElementById("hint");
+
+    const burst = document.getElementById("burst");
+    const supernova = document.getElementById("supernova");
+    const confetti = document.getElementById("confetti");
+
+    const rewardCard = document.getElementById("rewardCard");
+    const rewardBig = document.getElementById("rewardBig");
+    const rewardSub = document.getElementById("rewardSub");
 
     logoutBtn.addEventListener("click", async () => {
       await signOut(auth);
       window.location.href = "/";
     });
 
-    let unsubRewards = null;
+    function formatNum(n){ return Number(n || 0).toLocaleString("en-US"); }
 
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        window.location.href = "/";
+    // ✅ matches your rules addition
+    function rewardsRef(uid){
+      return doc(db, "accountInfo", uid, "modules", "rewards");
+    }
+
+    // Rank unlock rules (same as badges page)
+    const RANK_ORDER = ["No Rank", "Scout", "Tenderfoot", "2nd Class", "1st Class", "Star", "Life", "Eagle"];
+    function unlockedByRank(rank){
+      const r = (rank && RANK_ORDER.includes(rank)) ? rank : "No Rank";
+      const set = new Set();
+      ["A","B","C","D","E"].forEach(x => set.add(x));
+      if (r === "No Rank") return set;
+      if (r === "Scout"){ ["F","G","H"].forEach(x => set.add(x)); return set; }
+      if (r === "Tenderfoot"){ ["F","G","H","I","J"].forEach(x => set.add(x)); ["K","L"].forEach(x => set.add(x)); return set; }
+      if (r === "2nd Class"){ ["F","G","H","I","J"].forEach(x => set.add(x)); ["K","L","M","N","O"].forEach(x => set.add(x)); set.add("P"); return set; }
+      // 1st Class+
+      "ABCDEFGHIJKLMNOPQRSTUVWXY".split("").forEach(x => set.add(x));
+      return set;
+    }
+
+    function rarityOfBadge(letter){
+      const i = "ABCDEFGHIJKLMNOPQRSTUVWXY".indexOf(letter);
+      if (i < 0) return "Common";
+      if (i < 5) return "Common";         // A-E
+      if (i < 10) return "Uncommon";      // F-J
+      if (i < 15) return "Rare";          // K-O
+      if (i < 20) return "Epic";          // P-T
+      return "Legendary";                 // U-Y
+    }
+
+    function randInt(min, max){
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    // Lucky rewards table from your spec (points ranges vary by finalLevel + rarity)
+    function pointsFor(finalLevel, rarity){
+      if (finalLevel === 1) return randInt(50,150); // always common in selection logic
+      if (finalLevel === 2){
+        if (rarity === "Common") return randInt(100,200);
+        if (rarity === "Uncommon") return randInt(50,75);
+      }
+      if (finalLevel === 3){
+        if (rarity === "Common") return randInt(200,300);
+        if (rarity === "Uncommon") return randInt(125,150);
+        if (rarity === "Rare") return randInt(30,60);
+      }
+      if (finalLevel === 4){
+        if (rarity === "Common") return randInt(450,600);
+        if (rarity === "Uncommon") return randInt(200,240);
+        if (rarity === "Rare") return randInt(80,110);
+        if (rarity === "Epic") return randInt(25,50);
+      }
+      if (finalLevel === 5){
+        if (rarity === "Common") return randInt(700,900);
+        if (rarity === "Uncommon") return randInt(260,310);
+        if (rarity === "Rare") return randInt(120,155);
+        if (rarity === "Epic") return randInt(55,80);
+        if (rarity === "Legendary") return randInt(1,3);
+      }
+      if (finalLevel === 6){
+        if (rarity === "Common") return randInt(1000,1250);
+        if (rarity === "Uncommon") return randInt(350,475);
+        if (rarity === "Rare") return randInt(175,210);
+        if (rarity === "Epic") return randInt(90,120);
+        if (rarity === "Legendary") return randInt(5,25);
+      }
+      return randInt(50,150);
+    }
+
+    // Choose which rarity buckets are eligible by finalLevel
+    function eligibleRarities(finalLevel){
+      if (finalLevel === 1) return ["Common"];
+      if (finalLevel === 2) return ["Common","Uncommon"];
+      if (finalLevel === 3) return ["Common","Uncommon","Rare"];
+      if (finalLevel === 4) return ["Common","Uncommon","Rare","Epic"];
+      if (finalLevel === 5) return ["Common","Uncommon","Rare","Epic","Legendary"];
+      if (finalLevel === 6) return ["Common","Uncommon","Rare","Epic","Legendary"];
+      return ["Common"];
+    }
+
+    function filterUnlockedByRarity(unlockedSet, rarity){
+      const arr = [];
+      unlockedSet.forEach(letter => {
+        if (rarityOfBadge(letter) === rarity) arr.push(letter);
+      });
+      return arr;
+    }
+
+    function pickRandom(arr){
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    // Level up chest durations you specified
+    const LEVELUP_SECONDS = {
+      scout: 2,
+      tenderfoot: 4,
+      "2class": 6,
+      "1class": 8,
+      star: 12,
+      life: 15,
+      eagle: 30
+    };
+
+    // =========================
+    // Overlay state machine
+    // =========================
+    const state = {
+      mode: null,           // 'lucky' | 'gold' | 'levelup'
+      lucky: null,          // {level, spinsLeft, doneSpins, revealing, revealed, finalLevel}
+      gold: null,           // {revealing, revealed, amount}
+      levelup: null,        // {variant, seconds, startMs, revealed, revealing, goldAmount}
+      // cached from firestore snapshot
+      currentRank: "No Rank",
+      unlockedSet: unlockedByRank("No Rank"),
+    };
+
+    function showOverlay(){ overlay.classList.add("show"); }
+    function hideOverlay(){
+      overlay.classList.remove("show");
+      // reset visuals
+      rewardCard.classList.remove("show");
+      burst.classList.remove("show");
+      supernova.classList.remove("show");
+      confetti.innerHTML = "";
+      chestVisual.classList.remove("spinAnim");
+      chestVisual.className = "chestVisual lvl1";
+      bigText.textContent = "";
+      hint.textContent = "";
+      miniA.textContent = "";
+      miniB.textContent = "";
+      stageLeft.textContent = "";
+      state.mode = null;
+      state.lucky = null;
+      state.gold = null;
+      state.levelup = null;
+    }
+
+    closeX.addEventListener("click", (e)=>{ e.stopPropagation(); hideOverlay(); });
+
+    function triggerBurst(level){
+      burst.classList.remove("show");
+      void burst.offsetWidth;
+      burst.classList.add("show");
+
+      if (level >= 6){
+        supernova.classList.remove("show");
+        void supernova.offsetWidth;
+        supernova.classList.add("show");
+      }
+    }
+
+    function spawnConfetti(count){
+      confetti.innerHTML = "";
+      for (let i=0;i<count;i++){
+        const p = document.createElement("i");
+        const left = Math.random()*100;
+        const delay = Math.random()*0.15;
+        const dur = 0.9 + Math.random()*0.6;
+        const hue = Math.floor(Math.random()*360);
+        p.style.left = left + "%";
+        p.style.top = (-20 - Math.random()*50) + "px";
+        p.style.animationDelay = delay + "s";
+        p.style.animationDuration = dur + "s";
+        p.style.background = `hsl(${hue} 90% 55%)`;
+        confetti.appendChild(p);
+      }
+    }
+
+    function setLuckyTheme(level){
+      chestVisual.className = "chestVisual " + (level===1?"lvl1":level===2?"lvl2":level===3?"lvl3":level===4?"lvl4":level===5?"lvl5":"lvl6");
+    }
+
+    function wobble(){
+      chestVisual.classList.remove("spinAnim");
+      void chestVisual.offsetWidth;
+      chestVisual.classList.add("spinAnim");
+    }
+
+    // =========================
+    // Firestore transactions
+    // =========================
+    async function transactOpenGold(uid){
+      const ref = rewardsRef(uid);
+      return runTransaction(db, async (tx) => {
+        const snap = await tx.get(ref);
+        if (!snap.exists()) throw new Error("Rewards doc missing");
+        const d = snap.data();
+
+        const ch = d.chests || {};
+        const goldChests = Number(ch.gold || 0);
+        if (goldChests <= 0) throw new Error("No gold chests");
+
+        const amount = randInt(5000, 100000);
+
+        const nextGold = Number(d.gold || 0) + amount;
+        const nextCh = {
+          ...ch,
+          gold: goldChests - 1
+        };
+
+        const history = Array.isArray(d.history) ? d.history.slice(0, 60) : [];
+        history.unshift({
+          type: "gold",
+          gold: amount,
+          openedAt: new Date().toISOString()
+        });
+
+        tx.update(ref, {
+          gold: nextGold,
+          chests: nextCh,
+          history,
+          lastChestOpen: serverTimestamp()
+        });
+
+        return { amount };
+      });
+    }
+
+    async function transactOpenLevelUp(uid, variant){
+      const ref = rewardsRef(uid);
+      return runTransaction(db, async (tx) => {
+        const snap = await tx.get(ref);
+        if (!snap.exists()) throw new Error("Rewards doc missing");
+        const d = snap.data();
+
+        const ch = d.chests || {};
+        const lu = (ch.levelUp || {});
+        const cur = Number(lu[variant] || 0);
+        if (cur <= 0) throw new Error("No level up chests of this type");
+
+        // Gold reward placeholder range (you said other rewards later)
+        // Keep it fun: higher variants yield higher minimum
+        const baseMin = { scout: 2500, tenderfoot: 4000, "2class": 7000, "1class": 10000, star: 25000, life: 40000, eagle: 100000 }[variant] || 2500;
+        const baseMax = { scout: 9000, tenderfoot: 14000, "2class": 25000, "1class": 35000, star: 75000, life: 120000, eagle: 200000 }[variant] || 9000;
+        const goldAmt = randInt(baseMin, baseMax);
+
+        const nextGold = Number(d.gold || 0) + goldAmt;
+
+        const nextLU = { ...lu, [variant]: cur - 1 };
+        const nextCh = { ...ch, levelUp: nextLU };
+
+        const history = Array.isArray(d.history) ? d.history.slice(0, 60) : [];
+        history.unshift({
+          type: "levelup",
+          variant,
+          gold: goldAmt,
+          otherRewards: [{ type:"TBD", note:"Other rewards will be defined later." }],
+          openedAt: new Date().toISOString()
+        });
+
+        tx.update(ref, {
+          gold: nextGold,
+          chests: nextCh,
+          history,
+          lastChestOpen: serverTimestamp()
+        });
+
+        return { goldAmt };
+      });
+    }
+
+    async function transactOpenLuckyAndAward(uid, finalLevel){
+      const ref = rewardsRef(uid);
+      return runTransaction(db, async (tx) => {
+        const snap = await tx.get(ref);
+        if (!snap.exists()) throw new Error("Rewards doc missing");
+        const d = snap.data();
+
+        const ch = d.chests || {};
+        const luckyChests = Number(ch.lucky || 0);
+        if (luckyChests <= 0) throw new Error("No lucky chests");
+
+        const rank = (d.rank || "No Rank");
+        const unlockedSet = unlockedByRank(rank);
+
+        // Build eligible pool based on finalLevel & unlocked badges
+        const eligR = eligibleRarities(finalLevel);
+
+        // For level 1, must choose common
+        // For others: pick random rarity that has at least one unlocked badge
+        let rarityPick = null;
+        let pool = [];
+        for (let tries=0; tries<12; tries++){
+          const cand = pickRandom(eligR);
+          const p = filterUnlockedByRarity(unlockedSet, cand);
+          if (p.length > 0){
+            rarityPick = cand;
+            pool = p;
+            break;
+          }
+        }
+        // Fallback: just choose any unlocked
+        if (!rarityPick || pool.length === 0){
+          pool = Array.from(unlockedSet);
+          rarityPick = rarityOfBadge(pool[0] || "A");
+        }
+
+        const badge = pickRandom(pool) || "A";
+        const rarity = rarityOfBadge(badge);
+
+        const pts = pointsFor(finalLevel, rarity);
+        const badgesPoints = (d.badgesPoints || {});
+        const nextPoints = Number(badgesPoints[badge] || 0) + pts;
+
+        const nextBadges = { ...badgesPoints, [badge]: nextPoints };
+        const nextCh = { ...ch, lucky: luckyChests - 1 };
+
+        const history = Array.isArray(d.history) ? d.history.slice(0, 60) : [];
+        history.unshift({
+          type: "lucky",
+          finalLevel,
+          awardedBadge: badge,
+          rarity,
+          points: pts,
+          openedAt: new Date().toISOString()
+        });
+
+        tx.update(ref, {
+          badgesPoints: nextBadges,
+          chests: nextCh,
+          history,
+          lastChestOpen: serverTimestamp()
+        });
+
+        return { badge, rarity, pts, finalLevel };
+      });
+    }
+
+    // =========================
+    // UI: open flows
+    // =========================
+    function openLuckyFlow(){
+      state.mode = "lucky";
+      state.lucky = { level: 1, spinsLeft: 5, doneSpins: false, revealing: false, revealed: false, finalLevel: 1 };
+      stageLeft.textContent = "Lucky Chest";
+      miniA.textContent = "Level: 1";
+      miniB.textContent = "Spins: 5";
+      setLuckyTheme(1);
+      rewardCard.classList.remove("show");
+      bigText.textContent = "Click to Spin (5)";
+      hint.textContent = "Lucky Chest • 40% level-up chance • Never goes down";
+      showOverlay();
+    }
+
+    function openGoldFlow(){
+      state.mode = "gold";
+      state.gold = { revealing:false, revealed:false, amount:0 };
+      stageLeft.textContent = "Gold Chest";
+      miniA.textContent = "Gold Chest";
+      miniB.textContent = "Click to Open";
+      chestVisual.className = "chestVisual lvl6";
+      bigText.textContent = "Click to Open";
+      hint.textContent = "Gold Chest • 5,000 – 100,000";
+      rewardCard.classList.remove("show");
+      showOverlay();
+    }
+
+    function openLevelUpFlow(variant){
+      state.mode = "levelup";
+      const sec = LEVELUP_SECONDS[variant] ?? 2;
+      state.levelup = { variant, seconds: sec, startMs: 0, revealed:false, revealing:false, goldAmount:0 };
+      stageLeft.textContent = `Level Up Chest • ${variant}`;
+      miniA.textContent = `Variant: ${variant}`;
+      miniB.textContent = `Time: ${sec}s`;
+      chestVisual.className = "chestVisual lvl3";
+      bigText.textContent = "Click to Begin";
+      hint.textContent = "Level Up Chest • Big celebration";
+      rewardCard.classList.remove("show");
+      showOverlay();
+    }
+
+    // =========================
+    // Overlay click handling
+    // =========================
+    openStage.addEventListener("click", async () => {
+      // prevent clicks when closing button pressed
+      if (!state.mode) return;
+
+      if (state.mode === "lucky") return handleLuckyClick();
+      if (state.mode === "gold") return handleGoldClick();
+      if (state.mode === "levelup") return handleLevelUpClick();
+    });
+
+    async function handleGoldClick(){
+      if (!state.gold) return;
+      if (state.gold.revealed){
+        hideOverlay();
+        return;
+      }
+      if (state.gold.revealing) return;
+
+      state.gold.revealing = true;
+      bigText.textContent = "Opening…";
+      miniB.textContent = "Opening…";
+      wobble();
+      triggerBurst(6);
+      spawnConfetti(28);
+
+      try{
+        const uid = auth.currentUser?.uid;
+        const res = await transactOpenGold(uid);
+        state.gold.amount = res.amount;
+        state.gold.revealed = true;
+        rewardBig.textContent = `+${formatNum(res.amount)} Gold`;
+        rewardSub.textContent = "Click to close";
+        rewardCard.classList.add("show");
+        bigText.textContent = "Gold Received!";
+        miniB.textContent = "Done";
+      }catch(e){
+        alert(e.message || "Could not open gold chest.");
+        hideOverlay();
+      }finally{
+        state.gold.revealing = false;
+      }
+    }
+
+    async function handleLevelUpClick(){
+      if (!state.levelup) return;
+      if (state.levelup.revealed){
+        hideOverlay();
+        return;
+      }
+      if (state.levelup.revealing) return;
+
+      state.levelup.revealing = true;
+      const { variant, seconds } = state.levelup;
+
+      bigText.textContent = "Celebration starting…";
+      hint.textContent = "Clicking now will NOT skip. Enjoy the show 😄";
+      miniB.textContent = `Time: ${seconds}s`;
+
+      // Build a growing celebration for longer chests
+      const start = Date.now();
+      state.levelup.startMs = start;
+
+      // Visual ramp: more confetti + repeated bursts
+      const baseConf = Math.min(40, 10 + seconds * 2);
+      spawnConfetti(baseConf);
+      triggerBurst(6);
+
+      // repeat bursts every ~1.5s, stronger for longer chests
+      const burstTimer = setInterval(() => {
+        triggerBurst(6);
+        spawnConfetti(Math.min(60, 12 + Math.floor(Math.random() * (10 + seconds))));
+      }, 1500);
+
+      // countdown UI
+      const tick = setInterval(() => {
+        const left = Math.max(0, seconds - ((Date.now() - start) / 1000));
+        miniB.textContent = `Time: ${left.toFixed(0)}s`;
+      }, 250);
+
+      try{
+        // wait full time
+        await new Promise(r => setTimeout(r, seconds * 1000));
+
+        clearInterval(burstTimer);
+        clearInterval(tick);
+
+        wobble();
+        triggerBurst(6);
+        spawnConfetti(Math.min(90, 30 + seconds * 2));
+
+        const uid = auth.currentUser?.uid;
+        const res = await transactOpenLevelUp(uid, variant);
+        state.levelup.goldAmount = res.goldAmt;
+        state.levelup.revealed = true;
+
+        rewardBig.textContent = `Level Up Chest: ${variant.toUpperCase()} • +${formatNum(res.goldAmt)} Gold`;
+        rewardSub.textContent = "Click to close";
+        rewardCard.classList.add("show");
+
+        bigText.textContent = "Triumphant!";
+        miniB.textContent = "Done";
+
+      }catch(e){
+        alert(e.message || "Could not open level up chest.");
+        hideOverlay();
+      }finally{
+        state.levelup.revealing = false;
+      }
+    }
+
+    async function handleLuckyClick(){
+      if (!state.lucky) return;
+
+      // if already revealed, close
+      if (state.lucky.revealed){
+        hideOverlay();
         return;
       }
 
-      // gate access based on accountInfo + role
+      // After spins done, next click triggers 2s reveal animation & awards
+      if (state.lucky.doneSpins){
+        if (state.lucky.revealing) return;
+
+        state.lucky.revealing = true;
+        bigText.textContent = "Opening…";
+        hint.textContent = "Spinning for reward…";
+        miniB.textContent = "Opening…";
+        wobble();
+        triggerBurst(state.lucky.level);
+        spawnConfetti(18 + state.lucky.level * 6);
+
+        // 2s animation before we award
+        setTimeout(async () => {
+          try{
+            const uid = auth.currentUser?.uid;
+            const finalLevel = state.lucky.level;
+
+            const res = await transactOpenLuckyAndAward(uid, finalLevel);
+            state.lucky.revealed = true;
+
+            rewardBig.textContent = `Lucky Chest (Level ${res.finalLevel}) → Badge ${res.badge} • +${formatNum(res.pts)} pts`;
+            rewardSub.textContent = `Rarity: ${res.rarity} • Click to close`;
+            rewardCard.classList.add("show");
+
+            bigText.textContent = "Reward Granted!";
+            miniB.textContent = "Done";
+          }catch(e){
+            alert(e.message || "Could not open lucky chest.");
+            hideOverlay();
+          }finally{
+            state.lucky.revealing = false;
+          }
+        }, 2000);
+
+        return;
+      }
+
+      // Spins phase: click spends a spin
+      state.lucky.spinsLeft--;
+      const before = state.lucky.level;
+
+      let leveled = false;
+      if (state.lucky.level < 6 && Math.random() < 0.40){
+        state.lucky.level++;
+        leveled = true;
+      }
+
+      // Update UI
+      miniA.textContent = `Level: ${state.lucky.level}`;
+      miniB.textContent = `Spins: ${Math.max(0, state.lucky.spinsLeft)}`;
+      setLuckyTheme(state.lucky.level);
+      wobble();
+
+      // More fireworks at higher levels, especially when leveling up
+      if (leveled){
+        triggerBurst(state.lucky.level);
+        spawnConfetti(10 + state.lucky.level * 8);
+      } else {
+        // still some sparkle
+        if (state.lucky.level >= 4) spawnConfetti(6 + state.lucky.level * 4);
+      }
+
+      // Text
+      if (state.lucky.spinsLeft > 0){
+        bigText.textContent = leveled
+          ? `LEVEL UP! Now Level ${state.lucky.level} • Click to Spin (${state.lucky.spinsLeft})`
+          : `No level up… Level ${state.lucky.level} • Click to Spin (${state.lucky.spinsLeft})`;
+      } else {
+        state.lucky.doneSpins = true;
+        bigText.textContent = `Spins finished at Level ${state.lucky.level}. Click once more to OPEN.`;
+        hint.textContent = "Final click will reveal reward after 2 seconds.";
+        miniB.textContent = "Spins: 0";
+      }
+    }
+
+    // =========================
+    // Buttons (open from dashboard)
+    // =========================
+    openLuckyBtn.addEventListener("click", () => openLuckyFlow());
+    openGoldBtn.addEventListener("click", () => openGoldFlow());
+    openLevelUpBtn.addEventListener("click", () => {
+      // pick the best available variant in order: eagle -> ... -> scout
+      // (you can change this rule later)
+      const order = ["eagle","life","star","1class","2class","tenderfoot","scout"];
+      const d = lastRewards || {};
+      const ch = d.chests || {};
+      const lu = ch.levelUp || {};
+      const pick = order.find(v => Number(lu[v] || 0) > 0);
+      if (!pick){
+        alert("No level up chests available.");
+        return;
+      }
+      openLevelUpFlow(pick);
+    });
+
+    // =========================
+    // Live data binding
+    // =========================
+    let unsubRewards = null;
+    let lastRewards = null;
+
+    function sumLevelUp(lu){
+      const keys = ["scout","tenderfoot","2class","1class","star","life","eagle"];
+      return keys.reduce((a,k)=> a + Number(lu?.[k] || 0), 0);
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) { window.location.href = "/"; return; }
+
+      // gate by accountInfo role
       const infoRef = doc(db, "accountInfo", user.uid);
       const infoSnap = await getDoc(infoRef);
 
-      if (!infoSnap.exists()) {
-        window.location.href = "/under-review/";
-        return;
-      }
+      if (!infoSnap.exists()) { window.location.href = "/under-review/"; return; }
 
       const info = infoSnap.data() || {};
       const role = info.authRole;
@@ -400,20 +1372,49 @@
         </span>
       `;
 
-      // live update counters from rewards doc
       if (unsubRewards) unsubRewards();
 
       unsubRewards = onSnapshot(rewardsRef(user.uid), (snap) => {
         const d = snap.exists() ? snap.data() : {};
-        goldValue.textContent = formatNum(d.gold ?? 0);
-        gemsValue.textContent = formatNum(d.gems ?? 0);
-        rankValue.textContent = d.rank ?? "No Rank";
+        lastRewards = d;
+
+        const gold = d.gold ?? 0;
+        const gems = d.gems ?? 0;
+        const rank = d.rank ?? "No Rank";
+
+        goldValue.textContent = formatNum(gold);
+        gemsValue.textContent = formatNum(gems);
+        rankValue.textContent = rank;
+
+        const ch = d.chests || {};
+        const lucky = Number(ch.lucky || 0);
+        const goldCh = Number(ch.gold || 0);
+        const luTotal = sumLevelUp(ch.levelUp || {});
+
+        luckyCountEl.textContent = formatNum(lucky);
+        goldChestCountEl.textContent = formatNum(goldCh);
+        levelUpTotalEl.textContent = formatNum(luTotal);
+
+        openLuckyBtn.disabled = lucky <= 0;
+        openGoldBtn.disabled = goldCh <= 0;
+        openLevelUpBtn.disabled = luTotal <= 0;
+
+        // update cached unlocks for lucky chest awards
+        state.currentRank = rank;
+        state.unlockedSet = unlockedByRank(rank);
       }, (err) => {
-        // if rewards doc is missing or blocked, show safe defaults
+        console.warn("Rewards snapshot error:", err);
         goldValue.textContent = "0";
         gemsValue.textContent = "0";
         rankValue.textContent = "No Rank";
-        console.warn("Rewards snapshot error:", err);
+
+        luckyCountEl.textContent = "0";
+        goldChestCountEl.textContent = "0";
+        levelUpTotalEl.textContent = "0";
+
+        openLuckyBtn.disabled = true;
+        openGoldBtn.disabled = true;
+        openLevelUpBtn.disabled = true;
       });
     });
   </script>
