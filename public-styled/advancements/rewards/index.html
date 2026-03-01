@@ -560,6 +560,97 @@
       .openStage{
         height: min(620px, 88vh);
       }
+      /* ===== Rewards UI: Blue theme override (keeps Troop header as-is) ===== */
+
+:root{
+  --rx-blue-900:#0b1f3a;
+  --rx-blue-800:#0f2a52;
+  --rx-blue-700:#163a72;
+  --rx-line: rgba(255,255,255,.16);
+  --rx-soft: rgba(255,255,255,.08);
+  --rx-text: #ecf3ff;
+  --rx-muted: rgba(236,243,255,.78);
+}
+
+/* Make content sections/cards blue instead of white */
+.welcome-card,
+section,
+.chestCard{
+  background: linear-gradient(180deg, rgba(15,42,82,.96), rgba(11,31,58,.96)) !important;
+  border: 1px solid var(--rx-line) !important;
+  color: var(--rx-text) !important;
+}
+
+/* Titles + paragraph readability */
+.welcome-card h3,
+section h2,
+.chestCard h4{
+  color: var(--rx-text) !important;
+}
+
+.welcome-card p,
+.chestCard p{
+  color: var(--rx-muted) !important;
+}
+
+/* The little triangle before section headings */
+section h2::before{
+  color: rgba(236,243,255,.85) !important;
+}
+
+/* Role badge */
+.badge{
+  background: rgba(255,255,255,.12) !important;
+  color: var(--rx-text) !important;
+  border: 1px solid rgba(255,255,255,.18) !important;
+}
+.badge.admin{
+  background: rgba(245,158,11,.18) !important;
+  color: #fff !important;
+  border-color: rgba(245,158,11,.42) !important;
+}
+
+/* Gold/Gems/Rank pills */
+.stat-pill,
+.countPill{
+  background: rgba(255,255,255,.10) !important;
+  border: 1px solid rgba(255,255,255,.18) !important;
+  color: var(--rx-text) !important;
+}
+.stat-pill .k,
+.countPill span{
+  color: rgba(236,243,255,.72) !important;
+}
+.stat-pill .v,
+.countPill b{
+  color: var(--rx-text) !important;
+}
+
+/* Chest cards */
+.chestCard{
+  background: linear-gradient(180deg, rgba(22,58,114,.55), rgba(11,31,58,.88)) !important;
+}
+
+/* Buttons */
+.openBtn{
+  background: linear-gradient(180deg, rgba(49,130,246,.98), rgba(30,64,175,.98)) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,255,255,.18) !important;
+  box-shadow: 0 10px 24px rgba(0,0,0,.18);
+}
+.openBtn:hover{ filter: brightness(1.05); }
+.openBtn:disabled{
+  background: rgba(255,255,255,.10) !important;
+  color: rgba(236,243,255,.55) !important;
+  border-color: rgba(255,255,255,.12) !important;
+}
+
+/* Optional: make the tan page background slightly darker so blue pops */
+body{
+  background: radial-gradient(900px 600px at 40% 20%, rgba(31,78,121,.18), transparent 55%),
+              radial-gradient(800px 520px at 70% 30%, rgba(178,34,34,.10), transparent 58%),
+              #cfc6b0 !important;
+}
     }
   </style>
 </head>
