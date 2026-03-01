@@ -1,119 +1,421 @@
-<!doctype html>
-<html lang="en" data-page="home">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Advancements • Rewards</title>
+  <meta charset="UTF-8" />
+  <title>Rewards — Troop 248</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="/bsafavicon.ico" />
+  <link rel="stylesheet" href="/modern-2026.css" />
 
   <style>
-    :root{
-      --bg:#070b16;
-      --panel:#0b1228;
-      --panel2:#0b1024;
-      --text:#e8eeff;
-      --muted:#aab4d6;
-      --line:rgba(255,255,255,.12);
-      --soft:rgba(255,255,255,.06);
-      --shadow:0 30px 80px rgba(0,0,0,.45);
-      --r:22px;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0; color:var(--text);
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      background:
-        radial-gradient(1200px 700px at 50% 30%, rgba(126,123,255,.22), transparent 60%),
-        radial-gradient(900px 600px at 55% 40%, rgba(255,79,216,.18), transparent 60%),
-        radial-gradient(900px 600px at 45% 55%, rgba(255,224,109,.14), transparent 60%),
-        var(--bg);
-      min-height:100vh;
-    }
-    .wrap{max-width:1100px; margin:0 auto; padding:18px 14px 60px;}
-    .topbar{
-      display:flex; gap:14px; align-items:center; justify-content:space-between;
-      border:1px solid var(--line); background:linear-gradient(180deg, rgba(25,38,86,.55), rgba(8,14,35,.35));
-      padding:14px; border-radius:22px; box-shadow:var(--shadow);
-    }
-    .brand{display:flex; gap:12px; align-items:center;}
-    .logoOrb{
-      width:46px; height:46px; border-radius:16px;
-      background: conic-gradient(from 180deg, rgba(109,249,255,.9), rgba(255,224,109,.9), rgba(255,79,216,.9), rgba(126,123,255,.9), rgba(109,249,255,.9));
-      box-shadow: 0 0 40px rgba(109,249,255,.14), 0 0 60px rgba(255,79,216,.10);
-      animation: spin 1.9s linear infinite;
-    }
-    @keyframes spin {to{transform:rotate(360deg)}}
-    .title{font-weight:1000; letter-spacing:.2px;}
-    .subtitle{color:var(--muted); font-weight:800; font-size:12px; margin-top:2px;}
-    .navlinks{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
-    .navlink{
-      text-decoration:none; color:var(--text); font-weight:950;
-      padding:10px 12px; border-radius:999px;
-      border:1px solid var(--line); background:var(--soft);
-      white-space:nowrap;
-    }
-    .navlink.active{
-      background: linear-gradient(90deg, rgba(109,249,255,.35), rgba(255,224,109,.30), rgba(255,79,216,.30));
-      border-color: rgba(255,255,255,.18);
+    :root {
+      --red: #b22222;
+      --blue: #1f4e79;
+      --tan: #d2cab6;
+      --white: #ffffff;
+      --text-main: #1f2933;
+      --text-muted: #6b7280;
+      --radius-lg: 16px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
     }
 
-    .panel{
-      margin-top:14px;
-      border:1px solid var(--line);
-      border-radius:22px;
-      background: linear-gradient(180deg, rgba(25,38,86,.45), rgba(8,14,35,.40));
-      box-shadow: var(--shadow);
-      padding:18px;
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--tan);
+      color: var(--text-main);
+      min-height: 100vh;
     }
-    .panelHeader h2{margin:0; font-size:20px;}
-    .panelHeader p{margin:6px 0 0 0; color:var(--muted); font-weight:800;}
-    .grid2{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:14px;}
-    @media (max-width:780px){.grid2{grid-template-columns:1fr}}
-    .card{
-      border:1px solid var(--line);
-      border-radius:18px;
-      background:rgba(2,6,18,.35);
-      padding:14px;
+
+    header {
+      background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
+      color: var(--white);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      gap: 12px;
     }
-    .card h3{margin:0 0 6px 0; font-size:16px;}
-    .card p{margin:0; color:var(--muted); font-weight:800;}
+
+    header h2 {
+      margin: 0;
+      font-size: 19px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    header h2::before {
+      content: "★";
+      font-size: 18px;
+    }
+
+    .troop-home-link {
+      text-decoration: none;
+      color: inherit;
+      display: inline-flex;
+      align-items: center;
+    }
+    .troop-home-link:hover h2 {
+      opacity: 0.9;
+      text-decoration: underline;
+    }
+
+    nav {
+      display: flex;
+      gap: 12px;
+      font-size: 13px;
+      text-transform: uppercase;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: #1f4e79;
+      font-weight: bold;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(4px);
+      opacity: 0.9;
+      white-space: nowrap;
+    }
+
+    nav a:hover {
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    nav a.active {
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.45);
+    }
+
+    #auth-bar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      font-size: 13px;
+      flex-wrap: wrap;
+    }
+
+    #logout-btn {
+      padding: 5px 12px;
+      font-size: 13px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--white);
+      cursor: pointer;
+    }
+
+    #logout-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    main {
+      padding: 24px 16px 40px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .welcome-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 12px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      flex-wrap: wrap;
+    }
+
+    .welcome-card h3 {
+      margin: 0 0 4px;
+      font-size: 18px;
+    }
+
+    .welcome-card p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .badge {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(148, 163, 184, 0.2);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      display: inline-block;
+    }
+
+    .badge.admin {
+      background: rgba(240, 180, 41, 0.16);
+      color: #92400e;
+      border: 1px solid rgba(245, 158, 11, 0.6);
+    }
+
+    .stats-row {
+      margin-top: 12px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .stat-pill {
+      padding: 7px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      background: rgba(255, 255, 255, 0.92);
+      font-size: 13px;
+      display: inline-flex;
+      gap: 8px;
+      align-items: baseline;
+    }
+    .stat-pill .k {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    .stat-pill .v { font-weight: 700; }
+
+    section {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 12px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    section h2 {
+      margin-top: 0;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    section h2::before {
+      content: "▸";
+      font-size: 14px;
+      color: var(--blue);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 720px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    .tile {
+      border-radius: 14px;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      background: #f9fafb;
+      padding: 14px;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .tile:hover { filter: brightness(0.985); }
+
+    .tile h4 {
+      margin: 0 0 6px 0;
+      color: var(--blue);
+      font-size: 15px;
+    }
+
+    .tile p {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    @media (max-width: 640px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      nav { width: 100%; }
+    }
   </style>
 </head>
+
 <body>
-  <div class="wrap">
-    <header class="topbar">
-      <div class="brand">
-        <div class="logoOrb"></div>
-        <div>
-          <div class="title">Rewards</div>
-          <div class="subtitle">Advancements → Rewards</div>
+  <header>
+    <div>
+      <a href="/home" class="troop-home-link">
+        <h2>Troop 248</h2>
+      </a>
+    </div>
+
+    <nav>
+      <a href="/home">Home</a>
+      <a href="/calendar">Calendar</a>
+      <a href="/documents">Documents</a>
+      <a href="/scoutmaster">SM Blog</a>
+      <a href="/spl">SPL Blog</a>
+      <a href="/useful-links">Useful Links</a>
+      <a href="/events">Events</a>
+      <a href="/mail">Mail</a>
+
+      <a class="active" href="/advancements/rewards/">Rewards</a>
+      <a href="/advancements/rewards/chests/">Chests</a>
+      <a href="/advancements/rewards/badges/">Badges</a>
+    </nav>
+
+    <div id="auth-bar">
+      <div id="auth-info">Signed in as …</div>
+      <button id="logout-btn">Log Out</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="welcome-card">
+      <div>
+        <h3>Rewards</h3>
+        <p>Chests and badges progress, inside the Troop 248 site.</p>
+
+        <div class="stats-row">
+          <div class="stat-pill"><span class="k">Gold</span> <span id="goldValue" class="v">—</span></div>
+          <div class="stat-pill"><span class="k">Gems</span> <span id="gemsValue" class="v">—</span></div>
+          <div class="stat-pill"><span class="k">Rank</span> <span id="rankValue" class="v">—</span></div>
         </div>
       </div>
 
-      <nav class="navlinks">
-        <a class="navlink active" href="/advancements/rewards/">Home</a>
-        <a class="navlink" href="/advancements/rewards/chests/">Chests</a>
-        <a class="navlink" href="/advancements/rewards/badges/">Badges</a>
-      </nav>
-    </header>
-
-    <section class="panel">
-      <div class="panelHeader">
-        <h2>Rewards Module</h2>
-        <p>Choose a section.</p>
+      <div id="role-badge-container">
+        <span class="badge">Viewer</span>
       </div>
+    </div>
 
-      <div class="grid2">
-        <a class="card" href="/advancements/rewards/chests/" style="text-decoration:none;color:inherit;">
-          <h3>Chests</h3>
-          <p>Open Lucky/Gold/Level Up chests.</p>
+    <section>
+      <h2>Choose</h2>
+      <div class="grid">
+        <a class="tile" href="/advancements/rewards/chests/">
+          <h4>Chests</h4>
+          <p>Open Lucky, Gold, and Level Up chests (given via Firestore editing for now).</p>
         </a>
 
-        <a class="card" href="/advancements/rewards/badges/" style="text-decoration:none;color:inherit;">
-          <h3>Badges</h3>
-          <p>See badge progress and unlock visibility by rank.</p>
+        <a class="tile" href="/advancements/rewards/badges/">
+          <h4>Badges</h4>
+          <p>See unlocked badges by rank and points earned from Lucky chests.</p>
         </a>
       </div>
     </section>
-  </div>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import { getFirestore, doc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+    // ✅ Troop 248 Firebase config (same as your calendar page)
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+      authDomain: "troop-248.firebaseapp.com",
+      projectId: "troop-248",
+      storageBucket: "troop-248.firebasestorage.app",
+      messagingSenderId: "925363875752",
+      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+      measurementId: "G-NY75GX5TBH"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const authInfoEl = document.getElementById("auth-info");
+    const logoutBtn = document.getElementById("logout-btn");
+    const roleBadgeContainer = document.getElementById("role-badge-container");
+
+    const goldValue = document.getElementById("goldValue");
+    const gemsValue = document.getElementById("gemsValue");
+    const rankValue = document.getElementById("rankValue");
+
+    function formatNum(n){ return Number(n || 0).toLocaleString("en-US"); }
+
+    function rewardsRef(uid){
+      // ✅ matches your rules addition
+      return doc(db, "accountInfo", uid, "modules", "rewards");
+    }
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "/";
+    });
+
+    let unsubRewards = null;
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "/";
+        return;
+      }
+
+      // gate access based on accountInfo + role
+      const infoRef = doc(db, "accountInfo", user.uid);
+      const infoSnap = await getDoc(infoRef);
+
+      if (!infoSnap.exists()) {
+        window.location.href = "/under-review/";
+        return;
+      }
+
+      const info = infoSnap.data() || {};
+      const role = info.authRole;
+
+      if (role !== "admin" && role !== "viewer") {
+        window.location.href = "/under-review/";
+        return;
+      }
+
+      authInfoEl.textContent = `Signed in as ${user.email || "—"}`;
+      roleBadgeContainer.innerHTML = `
+        <span class="badge ${role === "admin" ? "admin" : ""}">
+          ${role === "admin" ? "Admin" : "Viewer"}
+        </span>
+      `;
+
+      // live update counters from rewards doc
+      if (unsubRewards) unsubRewards();
+
+      unsubRewards = onSnapshot(rewardsRef(user.uid), (snap) => {
+        const d = snap.exists() ? snap.data() : {};
+        goldValue.textContent = formatNum(d.gold ?? 0);
+        gemsValue.textContent = formatNum(d.gems ?? 0);
+        rankValue.textContent = d.rank ?? "No Rank";
+      }, (err) => {
+        // if rewards doc is missing or blocked, show safe defaults
+        goldValue.textContent = "0";
+        gemsValue.textContent = "0";
+        rankValue.textContent = "No Rank";
+        console.warn("Rewards snapshot error:", err);
+      });
+    });
+  </script>
 </body>
 </html>
