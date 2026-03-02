@@ -640,7 +640,7 @@
       return "Legendary";
     }
 
-    const GEM_MULT = { Common:1, Uncommon:5, Rare:20, Epic:50, Legendary:100 };
+    const GEM_MULT = { Common:1, Uncommon:5, Rare:15, Epic:45, Legendary:125 };
 
     function pointsFor(finalLevel, rarity){
       if (finalLevel === 1) return randInt(50,150);
@@ -775,8 +775,8 @@
         const cur = Number(lu[variant] || 0);
         if (cur <= 0) throw new Error("No level up chests of this type");
 
-        const baseMin = { scout: 2500, tenderfoot: 4000, "2class": 7000, "1class": 10000, star: 25000, life: 40000, eagle: 100000 }[variant] || 2500;
-        const baseMax = { scout: 9000, tenderfoot: 14000, "2class": 25000, "1class": 35000, star: 75000, life: 120000, eagle: 200000 }[variant] || 9000;
+        const baseMin = { scout: 40000, tenderfoot: 40000, "2class": 60000, "1class": 80000, star: 100000, life: 120000, eagle: 500000 }[variant] || 2500;
+        const baseMax = { scout: 80000, tenderfoot: 120000, "2class": 160000, "1class": 200000, star: 240000, life: 280000, eagle: 2500000 }[variant] || 9000;
         const goldAmt = randInt(baseMin, baseMax);
 
         const nextGold = Number(d.gold || 0) + goldAmt;
