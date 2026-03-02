@@ -667,11 +667,11 @@
         if (rarity === "Legendary") return randInt(1,3);
       }
       if (finalLevel === 6){
-        if (rarity === "Common") return randInt(1000,1250);
-        if (rarity === "Uncommon") return randInt(350,475);
-        if (rarity === "Rare") return randInt(175,210);
-        if (rarity === "Epic") return randInt(90,120);
-        if (rarity === "Legendary") return randInt(5,25);
+        if (rarity === "Common") return randInt(1200,1550);
+        if (rarity === "Uncommon") return randInt(575,850);
+        if (rarity === "Rare") return randInt(255,355);
+        if (rarity === "Epic") return randInt(140,200);
+        if (rarity === "Legendary") return randInt(8,22);
       }
       return randInt(50,150);
     }
@@ -692,7 +692,7 @@
       return arr;
     }
 
-    const LEVELUP_SECONDS = { scout:2, tenderfoot:4, "2class":6, "1class":8, star:12, life:15, eagle:30 };
+    const LEVELUP_SECONDS = { scout:2, tenderfoot:4, "2class":6, "1class":8, star:10, life:12, eagle:15 };
 
     const state = { mode:null, lucky:null, gold:null, levelup:null, unlockedSet: unlockedByRank("No Rank") };
 
@@ -751,7 +751,7 @@
         const goldChests = Number(ch.gold || 0);
         if (goldChests <= 0) throw new Error("No gold chests");
 
-        const amount = randInt(5000, 100000);
+        const amount = randInt(15000, 100000);
         const nextGold = Number(d.gold || 0) + amount;
         const nextCh = { ...ch, gold: goldChests - 1 };
 
@@ -1064,7 +1064,7 @@
       state.lucky.spinsLeft--;
 
       let leveled = false;
-      if (state.lucky.level < 6 && Math.random() < 0.40){
+      if (state.lucky.level < 6 && Math.random() < 0.4573){
         state.lucky.level++;
         leveled = true;
       }
