@@ -738,6 +738,28 @@
 
     function rewardsRef(uid){ return doc(db, "accountInfo", uid, "modules", "rewards"); }
 
+    function defaultRewardsDoc() {
+  return {
+    gold: 0,
+    gems: 0,
+    rank: "No Rank",
+    chests: { lucky: 0, gold: 0, levelUp: 0 }, // ✅ new simple format
+    badgesPoints: {},
+    badgesLevel: {}, // badges default to level 1 if missing
+    history: [],
+    createdAt: serverTimestamp()
+  };
+}
+
+async function ensureRewardsDoc(uid) {
+  const ref = rewardsRef(uid);
+  const snap = await getDoc(ref);
+  if (snap.exists()) return;
+
+  // Create with defaults; safe to call even if multiple tabs load
+  await setDoc(ref, defaultRewardsDoc(), { merge: true });
+}
+
     // ===== Badge rarity mapping A-Y =====
     const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXY".split("");
     function rarityOfBadge(letter){
@@ -1501,6 +1523,8 @@
       `;
 
       if (unsubRewards) unsubRewards();
+
+      await ensureRewardsDoc(user.uid);
 
       unsubRewards = onSnapshot(rewardsRef(user.uid), (snap) => {
         const d = snap.exists() ? (snap.data() || {}) : {};
