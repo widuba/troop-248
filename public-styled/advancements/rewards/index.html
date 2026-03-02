@@ -1024,7 +1024,7 @@ section h2::before{
         const goldChests = Number(ch.gold || 0);
         if (goldChests <= 0) throw new Error("No gold chests");
 
-        const amount = randInt(5000, 100000);
+        const amount = randInt(5000, 50000);
 
         const nextGold = Number(d.gold || 0) + amount;
         const nextCh = {
