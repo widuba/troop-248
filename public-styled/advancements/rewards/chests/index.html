@@ -670,7 +670,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-    import { getFirestore, doc, getDoc, onSnapshot, runTransaction, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, onSnapshot, runTransaction, serverTimestamp, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
     // ✅ Your Troop site Firebase (as in your calendar page)
     const firebaseConfig = {
@@ -748,6 +748,54 @@
     history: [],
     createdAt: serverTimestamp()
   };
+}
+
+async function ensureRewardsDoc(uid) {
+  const ref = rewardsRef(uid);
+  const snap = await getDoc(ref);
+
+  // Create if missing
+  if (!snap.exists()) {
+    await setDoc(ref, defaultRewardsDocForCreate(), { merge: true });
+    console.log("[rewards] created defaults");
+    return;
+  }
+
+  // Patch ONLY missing fields (without clobbering chest counts)
+  const d = snap.data() || {};
+  const patch = {};
+
+  // Top-level defaults
+  if (d.gold === undefined) patch.gold = 0;
+  if (d.gems === undefined) patch.gems = 0;
+  if (d.rank === undefined) patch.rank = "No Rank";
+  if (d.badgesPoints === undefined) patch.badgesPoints = {};
+  if (d.badgesLevel === undefined) patch.badgesLevel = {};
+  if (d.history === undefined) patch.history = [];
+
+  // Chest subfields via dot paths (won't overwrite the whole chests map)
+  const ch = d.chests || {};
+  if (d.chests === undefined) {
+    // If chests map is missing entirely, add it safely as subfields
+    patch["chests.lucky"] = 0;
+    patch["chests.gold"] = 0;
+    patch["chests.levelUp"] = 0;
+  } else {
+    if (ch.lucky === undefined) patch["chests.lucky"] = 0;
+    if (ch.gold === undefined) patch["chests.gold"] = 0;
+
+    // Only set levelUp if neither the number nor legacy map exists
+    const hasLevelUpNumber = (typeof ch.levelUp === "number");
+    const hasLegacyMap = (ch.levelUp && typeof ch.levelUp === "object" && !Array.isArray(ch.levelUp));
+    if (!hasLevelUpNumber && !hasLegacyMap) patch["chests.levelUp"] = 0;
+  }
+
+  if (Object.keys(patch).length > 0) {
+    await updateDoc(ref, patch);
+    console.log("[rewards] patched missing fields only", patch);
+  } else {
+    console.log("[rewards] ok");
+  }
 }
 
 // This patch is safe to apply every page load (it only adds missing fields).
