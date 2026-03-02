@@ -1178,7 +1178,7 @@ function defaultRewardsPatchForExisting() {
 
       ctx.save();
       ctx.translate(cx, cy);
-      ctx.rotate(angleRad);
+      ctx.rotate(angleRad - Math.PI / 2);
 
       for (let i=0;i<n;i++){
         const start = i*slice;
