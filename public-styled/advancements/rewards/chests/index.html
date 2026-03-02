@@ -14,15 +14,11 @@
       --blue: #1f4e79;
       --tan: #d2cab6;
       --white: #ffffff;
-      --text-main: #1f2933;
-      --text-muted: #6b7280;
       --radius-lg: 16px;
       --radius-pill: 999px;
       --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
 
       --rx-blue-900:#0b1f3a;
-      --rx-blue-800:#0f2a52;
-      --rx-blue-700:#163a72;
       --rx-line: rgba(255,255,255,.16);
       --rx-text: #ecf3ff;
       --rx-muted: rgba(236,243,255,.78);
@@ -36,7 +32,6 @@
       background: radial-gradient(900px 600px at 40% 20%, rgba(31,78,121,.18), transparent 55%),
                   radial-gradient(800px 520px at 70% 30%, rgba(178,34,34,.10), transparent 58%),
                   #cfc6b0;
-      color: var(--text-main);
       min-height: 100vh;
     }
 
@@ -52,7 +47,6 @@
       z-index: 10;
       gap: 12px;
     }
-
     header h2 {
       margin: 0;
       font-size: 19px;
@@ -64,13 +58,8 @@
     }
     header h2::before { content: "★"; font-size: 18px; }
 
-    .troop-home-link {
-      text-decoration: none;
-      color: inherit;
-      display: inline-flex;
-      align-items: center;
-    }
-    .troop-home-link:hover h2 { opacity: 0.9; text-decoration: underline; }
+    .troop-home-link { text-decoration:none; color:inherit; display:inline-flex; align-items:center; }
+    .troop-home-link:hover h2 { opacity: .9; text-decoration: underline; }
 
     nav {
       display: flex;
@@ -79,7 +68,6 @@
       text-transform: uppercase;
       flex-wrap: wrap;
     }
-
     nav a {
       color: #1f4e79;
       font-weight: bold;
@@ -91,14 +79,14 @@
       opacity: 0.9;
       white-space: nowrap;
     }
-    nav a:hover { opacity: 1; background: rgba(255, 255, 255, 0.12); }
+    nav a:hover { opacity: 1; background: rgba(255,255,255,.12); }
     nav a.active {
       opacity: 1;
-      background: rgba(255, 255, 255, 0.18);
-      border-color: rgba(255, 255, 255, 0.45);
+      background: rgba(255,255,255,.18);
+      border-color: rgba(255,255,255,.45);
     }
 
-    #auth-bar { display: flex; gap: 10px; align-items: center; font-size: 13px; flex-wrap: wrap; }
+    #auth-bar { display:flex; gap:10px; align-items:center; font-size:13px; flex-wrap:wrap; }
     #logout-btn {
       padding: 5px 12px;
       font-size: 13px;
@@ -108,7 +96,7 @@
       color: var(--white);
       cursor: pointer;
     }
-    #logout-btn:hover { background: rgba(255, 255, 255, 0.2); }
+    #logout-btn:hover { background: rgba(255,255,255,.2); }
 
     main { padding: 24px 16px 40px; max-width: 1060px; margin: 0 auto; }
 
@@ -122,28 +110,11 @@
       color: var(--rx-text);
     }
 
-    .welcome-card {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
+    .welcome-card { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+    .welcome-card h3 { margin:0 0 4px; font-size:18px; color:var(--rx-text); }
+    .welcome-card p { margin:0; font-size:14px; color:var(--rx-muted); }
 
-    .welcome-card h3 { margin: 0 0 4px; font-size: 18px; color: var(--rx-text); }
-    .welcome-card p { margin: 0; font-size: 14px; color: var(--rx-muted); }
-
-    section h2 {
-      margin-top: 0;
-      font-size: 18px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--rx-text);
-    }
-    section h2::before { content: "▸"; font-size: 14px; color: rgba(236,243,255,.85); }
-
-    .badge {
+    .badgeTag {
       font-size: 11px;
       padding: 6px 10px;
       border-radius: var(--radius-pill);
@@ -154,20 +125,12 @@
       display: inline-block;
       border: 1px solid rgba(255,255,255,.18);
     }
-    .badge.admin {
+    .badgeTag.admin {
       background: rgba(245,158,11,.18);
-      color: #fff;
       border-color: rgba(245,158,11,.42);
     }
 
-    .stats-row {
-      margin-top: 12px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
+    .stats-row { margin-top:12px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
     .stat-pill, .countPill {
       padding: 7px 12px;
       border-radius: var(--radius-pill);
@@ -186,14 +149,17 @@
       letter-spacing: .05em;
       font-weight: 800;
     }
-    .stat-pill .v, .countPill b { font-weight: 900; color: var(--rx-text); }
+    .stat-pill .v, .countPill b { font-weight: 950; color: var(--rx-text); }
 
-    .row {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 10px;
+    section h2 {
+      margin-top: 0;
+      font-size: 18px;
+      display:flex; align-items:center; gap:8px;
+      color: var(--rx-text);
     }
+    section h2::before { content:"▸"; font-size:14px; color: rgba(236,243,255,.85); }
+
+    .row { display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap:12px; margin-top: 10px; }
     @media (max-width: 900px) { .row { grid-template-columns: 1fr; } }
 
     .chestCard {
@@ -202,7 +168,6 @@
       overflow: hidden;
       background: linear-gradient(180deg, rgba(22,58,114,.55), rgba(11,31,58,.88));
     }
-
     .chestCard::after{
       content:"";
       position:absolute;
@@ -215,37 +180,17 @@
       opacity:.65;
     }
     .chestCard *{ position:relative; z-index:2; }
+    .chestCard h4{ margin:0 0 6px; color: var(--rx-text); font-size: 15px; font-weight:1000; }
+    .chestCard p{ margin:0; color: var(--rx-muted); font-size: 13px; line-height:1.35; font-weight:700; }
 
-    .chestCard h4{
-      margin: 0 0 6px 0;
-      color: var(--rx-text);
-      font-size: 15px;
-      font-weight: 1000;
-    }
-
-    .chestCard p{
-      margin: 0;
-      color: var(--rx-muted);
-      font-size: 13px;
-      line-height: 1.35;
-      font-weight: 700;
-    }
-
-    .countRow{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-top: 12px;
-      flex-wrap: wrap;
-    }
+    .countRow { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:12px; flex-wrap:wrap; }
 
     .openBtn{
       padding: 7px 12px;
       border-radius: var(--radius-pill);
       border: 1px solid rgba(255,255,255,.18);
       cursor:pointer;
-      font-weight: 900;
+      font-weight: 950;
       background: linear-gradient(180deg, rgba(49,130,246,.98), rgba(30,64,175,.98));
       color: #fff;
       font-size: 13px;
@@ -314,11 +259,7 @@
       opacity:.95;
       pointer-events:none;
     }
-
-    .stageTitle .right{
-      display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;
-    }
-
+    .stageTitle .right{ display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
     .miniPill{
       padding: 6px 10px;
       border-radius: 999px;
@@ -392,7 +333,6 @@
       text-shadow: 0 8px 20px rgba(0,0,0,.35);
       line-height: 1.15;
     }
-
     .hint{
       color: rgba(255,255,255,.92);
       font-weight: 850;
@@ -489,7 +429,7 @@
     }
 
     .rewardCard{
-      width: min(720px, 92vw);
+      width: min(760px, 92vw);
       border-radius: 18px;
       border: 1px solid rgba(255,255,255,.22);
       background: rgba(255,255,255,.12);
@@ -511,15 +451,8 @@
       letter-spacing:.08em;
     }
 
-    .tinyNote{
-      margin-top: 10px;
-      color: rgba(255,255,255,.92);
-      font-size: 12px;
-      font-weight: 850;
-      opacity:.95;
-    }
+    .tinyNote{ margin-top: 10px; color: rgba(255,255,255,.92); font-size: 12px; font-weight: 850; opacity:.95; }
 
-    @media (max-width: 900px) { .row { grid-template-columns: 1fr; } }
     @media (max-width: 640px) {
       header { flex-direction: column; align-items: flex-start; }
       nav { width: 100%; }
@@ -531,9 +464,7 @@
 <body>
   <header>
     <div>
-      <a href="/home" class="troop-home-link">
-        <h2>Troop 248</h2>
-      </a>
+      <a href="/home" class="troop-home-link"><h2>Troop 248</h2></a>
     </div>
 
     <nav>
@@ -561,7 +492,7 @@
     <div class="welcome-card">
       <div>
         <h3>Chests</h3>
-        <p>Lucky chests award badge points. Gold chests award gold. Level up chests are timed & flashy.</p>
+        <p>Lucky chests award badge points. If the selected badge is Level 8, the points convert to gems.</p>
 
         <div class="stats-row">
           <div class="stat-pill"><span class="k">Gold</span> <span id="goldValue" class="v">—</span></div>
@@ -570,9 +501,7 @@
         </div>
       </div>
 
-      <div id="role-badge-container">
-        <span class="badge">Viewer</span>
-      </div>
+      <div id="role-badge-container"><span class="badgeTag">Viewer</span></div>
     </div>
 
     <section>
@@ -580,7 +509,7 @@
       <div class="row">
         <div class="chestCard">
           <h4>Lucky Chests</h4>
-          <p>Start at Level 1, 5 spins, 40% chance to level up each spin (never down), cap Level 6. Final click reveals badge points.</p>
+          <p>Start at Level 1, 5 spins, 40% chance to level up each spin (never down), cap Level 6. Final click reveals reward.</p>
           <div class="countRow">
             <div class="countPill"><span>Count</span><b id="luckyCount">—</b></div>
             <button class="openBtn" id="openLuckyBtn">Open</button>
@@ -609,7 +538,7 @@
   </main>
 
   <div id="overlay" class="overlay">
-    <div id="openStage" class="openStage" title="Click anywhere on this screen to use a spin / progress the opening">
+    <div id="openStage" class="openStage">
       <button id="closeX" class="closeX" aria-label="Close">×</button>
 
       <div class="stageTitle">
@@ -645,14 +574,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-    import {
-      getFirestore,
-      doc,
-      getDoc,
-      onSnapshot,
-      runTransaction,
-      serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, onSnapshot, runTransaction, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
@@ -704,30 +626,23 @@
     const rewardBig = document.getElementById("rewardBig");
     const rewardSub = document.getElementById("rewardSub");
 
-    logoutBtn.addEventListener("click", async () => {
-      await signOut(auth);
-      window.location.href = "/";
-    });
+    logoutBtn.addEventListener("click", async () => { await signOut(auth); window.location.href = "/"; });
 
     function formatNum(n){ return Number(n || 0).toLocaleString("en-US"); }
     function randInt(min, max){ return Math.floor(Math.random() * (max - min + 1)) + min; }
     function pickRandom(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
 
-    function rewardsRef(uid){
-      return doc(db, "accountInfo", uid, "modules", "rewards");
-    }
+    function rewardsRef(uid){ return doc(db, "accountInfo", uid, "modules", "rewards"); }
 
     const RANK_ORDER = ["No Rank", "Scout", "Tenderfoot", "2nd Class", "1st Class", "Star", "Life", "Eagle"];
-
     function unlockedByRank(rank){
       const r = (rank && RANK_ORDER.includes(rank)) ? rank : "No Rank";
-      const set = new Set();
-      ["A","B","C","D","E"].forEach(x => set.add(x));
+      const set = new Set(["A","B","C","D","E"]);
       if (r === "No Rank") return set;
-      if (r === "Scout"){ ["F","G","H"].forEach(x => set.add(x)); return set; }
-      if (r === "Tenderfoot"){ ["F","G","H","I","J"].forEach(x => set.add(x)); ["K","L"].forEach(x => set.add(x)); return set; }
-      if (r === "2nd Class"){ ["F","G","H","I","J"].forEach(x => set.add(x)); ["K","L","M","N","O"].forEach(x => set.add(x)); set.add("P"); return set; }
-      "ABCDEFGHIJKLMNOPQRSTUVWXY".split("").forEach(x => set.add(x));
+      if (r === "Scout"){ ["F","G","H"].forEach(x=>set.add(x)); return set; }
+      if (r === "Tenderfoot"){ ["F","G","H","I","J"].forEach(x=>set.add(x)); ["K","L"].forEach(x=>set.add(x)); return set; }
+      if (r === "2nd Class"){ ["F","G","H","I","J"].forEach(x=>set.add(x)); ["K","L","M","N","O"].forEach(x=>set.add(x)); set.add("P"); return set; }
+      "ABCDEFGHIJKLMNOPQRSTUVWXY".split("").forEach(x=>set.add(x));
       return set;
     }
 
@@ -741,27 +656,25 @@
       return "Legendary";
     }
 
+    const GEM_MULT = { Common:1, Uncommon:5, Rare:20, Epic:50, Legendary:100 };
+
     function pointsFor(finalLevel, rarity){
       if (finalLevel === 1) return randInt(50,150);
-
       if (finalLevel === 2){
         if (rarity === "Common") return randInt(100,200);
         if (rarity === "Uncommon") return randInt(50,75);
       }
-
       if (finalLevel === 3){
         if (rarity === "Common") return randInt(200,300);
         if (rarity === "Uncommon") return randInt(125,150);
         if (rarity === "Rare") return randInt(30,60);
       }
-
       if (finalLevel === 4){
         if (rarity === "Common") return randInt(450,600);
         if (rarity === "Uncommon") return randInt(200,240);
         if (rarity === "Rare") return randInt(80,110);
         if (rarity === "Epic") return randInt(25,50);
       }
-
       if (finalLevel === 5){
         if (rarity === "Common") return randInt(700,900);
         if (rarity === "Uncommon") return randInt(260,310);
@@ -769,7 +682,6 @@
         if (rarity === "Epic") return randInt(55,80);
         if (rarity === "Legendary") return randInt(1,3);
       }
-
       if (finalLevel === 6){
         if (rarity === "Common") return randInt(1000,1250);
         if (rarity === "Uncommon") return randInt(350,475);
@@ -777,7 +689,6 @@
         if (rarity === "Epic") return randInt(90,120);
         if (rarity === "Legendary") return randInt(5,25);
       }
-
       return randInt(50,150);
     }
 
@@ -793,29 +704,13 @@
 
     function filterUnlockedByRarity(unlockedSet, rarity){
       const arr = [];
-      unlockedSet.forEach(letter => {
-        if (rarityOfBadge(letter) === rarity) arr.push(letter);
-      });
+      unlockedSet.forEach(letter => { if (rarityOfBadge(letter) === rarity) arr.push(letter); });
       return arr;
     }
 
-    const LEVELUP_SECONDS = {
-      scout: 2,
-      tenderfoot: 4,
-      "2class": 6,
-      "1class": 8,
-      star: 12,
-      life: 15,
-      eagle: 30
-    };
+    const LEVELUP_SECONDS = { scout:2, tenderfoot:4, "2class":6, "1class":8, star:12, life:15, eagle:30 };
 
-    const state = {
-      mode: null,
-      lucky: null,
-      gold: null,
-      levelup: null,
-      unlockedSet: unlockedByRank("No Rank")
-    };
+    const state = { mode:null, lucky:null, gold:null, levelup:null, unlockedSet: unlockedByRank("No Rank") };
 
     function showOverlay(){ overlay.classList.add("show"); }
     function hideOverlay(){
@@ -831,19 +726,14 @@
       miniA.textContent = "";
       miniB.textContent = "";
       stageLeft.textContent = "";
-      state.mode = null;
-      state.lucky = null;
-      state.gold = null;
-      state.levelup = null;
+      state.mode = null; state.lucky = null; state.gold = null; state.levelup = null;
     }
-
     closeX.addEventListener("click", (e)=>{ e.stopPropagation(); hideOverlay(); });
 
     function triggerBurst(level){
       burst.classList.remove("show"); void burst.offsetWidth; burst.classList.add("show");
       if (level >= 6){ supernova.classList.remove("show"); void supernova.offsetWidth; supernova.classList.add("show"); }
     }
-
     function spawnConfetti(count){
       confetti.innerHTML = "";
       for (let i=0;i<count;i++){
@@ -860,7 +750,6 @@
     function setLuckyTheme(level){
       chestVisual.className = "chestVisual " + (level===1?"lvl1":level===2?"lvl2":level===3?"lvl3":level===4?"lvl4":level===5?"lvl5":"lvl6");
     }
-
     function wobble(){
       chestVisual.classList.remove("spinAnim");
       void chestVisual.offsetWidth;
@@ -879,7 +768,6 @@
         if (goldChests <= 0) throw new Error("No gold chests");
 
         const amount = randInt(5000, 100000);
-
         const nextGold = Number(d.gold || 0) + amount;
         const nextCh = { ...ch, gold: goldChests - 1 };
 
@@ -925,6 +813,7 @@
       });
     }
 
+    // Lucky: if awarded badge is Level 8, convert points to gems with multiplier and DO NOT add points.
     async function transactOpenLuckyAndAward(uid, finalLevel){
       const ref = rewardsRef(uid);
       return runTransaction(db, async (tx) => {
@@ -955,20 +844,58 @@
 
         const badge = pickRandom(pool) || "A";
         const rarity = rarityOfBadge(badge);
-
         const pts = pointsFor(finalLevel, rarity);
-        const badgesPoints = (d.badgesPoints || {});
-        const nextPoints = Number(badgesPoints[badge] || 0) + pts;
 
-        const nextBadges = { ...badgesPoints, [badge]: nextPoints };
+        const badgesLevel = d.badgesLevel || {};
+        const curLevel = Number(badgesLevel?.[badge] ?? 1);
+        const isMax = curLevel >= 8;
+
+        const badgesPoints = (d.badgesPoints || {});
+        let nextBadgesPoints = badgesPoints;
+
+        const curGems = Number(d.gems || 0);
+        let gemsGained = 0;
+        let nextGems = curGems;
+
+        if (isMax){
+          gemsGained = pts * (GEM_MULT[rarity] ?? 1);
+          nextGems = curGems + gemsGained;
+          // Points are converted; do not add to points total when at Level 8.
+        } else {
+          const nextPoints = Number(badgesPoints[badge] || 0) + pts;
+          nextBadgesPoints = { ...badgesPoints, [badge]: nextPoints };
+        }
+
         const nextCh = { ...ch, lucky: luckyChests - 1 };
 
         const history = Array.isArray(d.history) ? d.history.slice(0, 60) : [];
-        history.unshift({ type: "lucky", finalLevel, awardedBadge: badge, rarity, points: pts, openedAt: new Date().toISOString() });
+        history.unshift({
+          type: "lucky",
+          finalLevel,
+          awardedBadge: badge,
+          rarity,
+          points: pts,
+          badgeLevelAtAward: curLevel,
+          convertedToGems: isMax,
+          gemsGained,
+          openedAt: new Date().toISOString()
+        });
 
-        tx.update(ref, { badgesPoints: nextBadges, chests: nextCh, history, lastChestOpen: serverTimestamp() });
+        const update = {
+          chests: nextCh,
+          history,
+          lastChestOpen: serverTimestamp()
+        };
 
-        return { badge, rarity, pts, finalLevel };
+        if (isMax){
+          update.gems = nextGems;
+        } else {
+          update.badgesPoints = nextBadgesPoints;
+        }
+
+        tx.update(ref, update);
+
+        return { badge, rarity, pts, finalLevel, badgeLevel: curLevel, converted: isMax, gemsGained };
       });
     }
 
@@ -1064,7 +991,6 @@
       miniB.textContent = `Time: ${seconds}s`;
 
       const start = Date.now();
-
       spawnConfetti(Math.min(40, 10 + seconds * 2));
       triggerBurst(6);
 
@@ -1080,7 +1006,6 @@
 
       try{
         await new Promise(r => setTimeout(r, seconds * 1000));
-
         clearInterval(burstTimer);
         clearInterval(tick);
 
@@ -1099,7 +1024,6 @@
 
         bigText.textContent = "Triumphant!";
         miniB.textContent = "Done";
-
       }catch(e){
         alert(e.message || "Could not open level up chest.");
         hideOverlay();
@@ -1131,10 +1055,15 @@
             const res = await transactOpenLuckyAndAward(uid, finalLevel);
             state.lucky.revealed = true;
 
-            rewardBig.textContent = `Lucky Chest (Level ${res.finalLevel}) → Badge ${res.badge} • +${formatNum(res.pts)} pts`;
-            rewardSub.textContent = `Rarity: ${res.rarity} • Click to close`;
-            rewardCard.classList.add("show");
+            if (res.converted){
+              rewardBig.textContent = `Lucky (Level ${res.finalLevel}) → Badge ${res.badge} (Lv ${res.badgeLevel}) MAX • +${formatNum(res.gemsGained)} GEMS`;
+              rewardSub.textContent = `Converted from ${formatNum(res.pts)} ${res.rarity} points • Click to close`;
+            } else {
+              rewardBig.textContent = `Lucky (Level ${res.finalLevel}) → Badge ${res.badge} • +${formatNum(res.pts)} pts`;
+              rewardSub.textContent = `Rarity: ${res.rarity} • Click to close`;
+            }
 
+            rewardCard.classList.add("show");
             bigText.textContent = "Reward Granted!";
             miniB.textContent = "Done";
           }catch(e){
@@ -1180,18 +1109,13 @@
       }
     }
 
-    function openLuckyIfPossible(){
-      if (openLuckyBtn.disabled) return;
-      openLuckyFlow();
-    }
-    function openGoldIfPossible(){
-      if (openGoldBtn.disabled) return;
-      openGoldFlow();
-    }
+    function openLuckyIfPossible(){ if (!openLuckyBtn.disabled) openLuckyFlow(); }
+    function openGoldIfPossible(){ if (!openGoldBtn.disabled) openGoldFlow(); }
 
     openLuckyBtn.addEventListener("click", openLuckyIfPossible);
     openGoldBtn.addEventListener("click", openGoldIfPossible);
 
+    let lastRewards = null;
     openLevelUpBtn.addEventListener("click", () => {
       const order = ["eagle","life","star","1class","2class","tenderfoot","scout"];
       const d = lastRewards || {};
@@ -1202,13 +1126,12 @@
       openLevelUpFlow(pick);
     });
 
-    let unsubRewards = null;
-    let lastRewards = null;
-
     function sumLevelUp(lu){
       const keys = ["scout","tenderfoot","2class","1class","star","life","eagle"];
       return keys.reduce((a,k)=> a + Number(lu?.[k] || 0), 0);
     }
+
+    let unsubRewards = null;
 
     onAuthStateChanged(auth, async (user) => {
       if (!user) { window.location.href = "/"; return; }
@@ -1228,7 +1151,7 @@
 
       authInfoEl.textContent = `Signed in as ${user.email || "—"}`;
       roleBadgeContainer.innerHTML = `
-        <span class="badge ${role === "admin" ? "admin" : ""}">
+        <span class="badgeTag ${role === "admin" ? "admin" : ""}">
           ${role === "admin" ? "Admin" : "Viewer"}
         </span>
       `;
@@ -1236,14 +1159,15 @@
       if (unsubRewards) unsubRewards();
 
       unsubRewards = onSnapshot(rewardsRef(user.uid), (snap) => {
-        const d = snap.exists() ? snap.data() : {};
+        const d = snap.exists() ? (snap.data() || {}) : {};
         lastRewards = d;
 
         goldValue.textContent = formatNum(d.gold ?? 0);
         gemsValue.textContent = formatNum(d.gems ?? 0);
+        rankValue.textContent = (d.rank ?? "No Rank");
 
-        const rank = d.rank ?? "No Rank";
-        rankValue.textContent = rank;
+        const rank = (d.rank ?? "No Rank");
+        state.unlockedSet = unlockedByRank(rank);
 
         const ch = d.chests || {};
         const lucky = Number(ch.lucky || 0);
@@ -1257,8 +1181,6 @@
         openLuckyBtn.disabled = lucky <= 0;
         openGoldBtn.disabled = goldCh <= 0;
         openLevelUpBtn.disabled = luTotal <= 0;
-
-        state.unlockedSet = unlockedByRank(rank);
       }, (err) => {
         console.warn("Rewards snapshot error:", err);
         goldValue.textContent = "0";
