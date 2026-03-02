@@ -811,26 +811,6 @@ function defaultRewardsPatchForExisting() {
   };
 }
 
-async function ensureRewardsDoc(uid) {
-  const ref = rewardsRef(uid);
-  try {
-    const snap = await getDoc(ref);
-
-    if (!snap.exists()) {
-      await setDoc(ref, defaultRewardsDocForCreate(), { merge: true });
-      console.log("[rewards] created defaults");
-      return;
-    }
-
-    // ✅ If doc exists but fields were deleted, this restores them (without clobbering existing values).
-    await setDoc(ref, defaultRewardsPatchForExisting(), { merge: true });
-    console.log("[rewards] patched defaults (doc existed)");
-  } catch (e) {
-    console.error("[rewards] ensure failed:", e);
-    alert("ensureRewardsDoc failed: " + (e?.message || e));
-  }
-}
-
     // ===== Badge rarity mapping A-Y =====
     const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXY".split("");
     function rarityOfBadge(letter){
