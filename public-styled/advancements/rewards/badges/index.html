@@ -14,8 +14,6 @@
       --blue: #1f4e79;
       --tan: #d2cab6;
       --white: #ffffff;
-      --text-main: #1f2933;
-      --text-muted: #6b7280;
       --radius-lg: 16px;
       --radius-pill: 999px;
       --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
@@ -26,6 +24,15 @@
       --rx-line: rgba(255,255,255,.16);
       --rx-text: #ecf3ff;
       --rx-muted: rgba(236,243,255,.78);
+
+      --btn-disabled-bg: rgba(255,255,255,.10);
+      --btn-disabled-text: rgba(236,243,255,.55);
+      --btn-disabled-br: rgba(255,255,255,.14);
+
+      --btn-green-bg: #00d26a;     /* rich saturated green */
+      --btn-green-bg2:#00b85e;
+      --btn-green-text:#072617;
+      --btn-green-br: rgba(255,255,255,.22);
     }
 
     * { box-sizing: border-box; }
@@ -36,7 +43,6 @@
       background: radial-gradient(900px 600px at 40% 20%, rgba(31,78,121,.18), transparent 55%),
                   radial-gradient(800px 520px at 70% 30%, rgba(178,34,34,.10), transparent 58%),
                   #cfc6b0;
-      color: var(--text-main);
       min-height: 100vh;
     }
 
@@ -52,7 +58,6 @@
       z-index: 10;
       gap: 12px;
     }
-
     header h2 {
       margin: 0;
       font-size: 19px;
@@ -64,13 +69,8 @@
     }
     header h2::before { content: "★"; font-size: 18px; }
 
-    .troop-home-link {
-      text-decoration: none;
-      color: inherit;
-      display: inline-flex;
-      align-items: center;
-    }
-    .troop-home-link:hover h2 { opacity: 0.9; text-decoration: underline; }
+    .troop-home-link { text-decoration:none; color:inherit; display:inline-flex; align-items:center; }
+    .troop-home-link:hover h2 { opacity: .9; text-decoration: underline; }
 
     nav {
       display: flex;
@@ -79,7 +79,6 @@
       text-transform: uppercase;
       flex-wrap: wrap;
     }
-
     nav a {
       color: #1f4e79;
       font-weight: bold;
@@ -91,14 +90,14 @@
       opacity: 0.9;
       white-space: nowrap;
     }
-    nav a:hover { opacity: 1; background: rgba(255, 255, 255, 0.12); }
+    nav a:hover { opacity: 1; background: rgba(255,255,255,.12); }
     nav a.active {
       opacity: 1;
-      background: rgba(255, 255, 255, 0.18);
-      border-color: rgba(255, 255, 255, 0.45);
+      background: rgba(255,255,255,.18);
+      border-color: rgba(255,255,255,.45);
     }
 
-    #auth-bar { display: flex; gap: 10px; align-items: center; font-size: 13px; flex-wrap: wrap; }
+    #auth-bar { display:flex; gap:10px; align-items:center; font-size:13px; flex-wrap:wrap; }
     #logout-btn {
       padding: 5px 12px;
       font-size: 13px;
@@ -108,9 +107,9 @@
       color: var(--white);
       cursor: pointer;
     }
-    #logout-btn:hover { background: rgba(255, 255, 255, 0.2); }
+    #logout-btn:hover { background: rgba(255,255,255,.2); }
 
-    main { padding: 24px 16px 40px; max-width: 1060px; margin: 0 auto; }
+    main { padding: 24px 16px 40px; max-width: 1120px; margin: 0 auto; }
 
     .welcome-card, section {
       background: linear-gradient(180deg, rgba(15,42,82,.96), rgba(11,31,58,.96));
@@ -123,17 +122,13 @@
     }
 
     .welcome-card {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 16px;
-      flex-wrap: wrap;
+      display:flex; align-items:flex-start; justify-content:space-between;
+      gap: 16px; flex-wrap: wrap;
     }
+    .welcome-card h3 { margin:0 0 4px; font-size:18px; color:var(--rx-text); }
+    .welcome-card p { margin:0; font-size:14px; color:var(--rx-muted); }
 
-    .welcome-card h3 { margin: 0 0 4px; font-size: 18px; color: var(--rx-text); }
-    .welcome-card p { margin: 0; font-size: 14px; color: var(--rx-muted); }
-
-    .badge {
+    .badgeTag {
       font-size: 11px;
       padding: 6px 10px;
       border-radius: var(--radius-pill);
@@ -144,20 +139,18 @@
       display: inline-block;
       border: 1px solid rgba(255,255,255,.18);
     }
-    .badge.admin {
+    .badgeTag.admin {
       background: rgba(245,158,11,.18);
-      color: #fff;
       border-color: rgba(245,158,11,.42);
     }
 
     .stats-row {
       margin-top: 12px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items: center;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
     }
-
     .stat-pill {
       padding: 7px 12px;
       border-radius: var(--radius-pill);
@@ -174,76 +167,76 @@
       color: rgba(236,243,255,.72);
       text-transform: uppercase;
       letter-spacing: .05em;
-      font-weight: 700;
+      font-weight: 800;
     }
-    .stat-pill .v { font-weight: 800; color: var(--rx-text); }
+    .stat-pill .v { font-weight: 950; color: var(--rx-text); }
 
     section h2 {
       margin-top: 0;
       font-size: 18px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      display:flex; align-items:center; gap:8px;
       color: var(--rx-text);
     }
-    section h2::before { content: "▸"; font-size: 14px; color: rgba(236,243,255,.85); }
+    section h2::before { content:"▸"; font-size:14px; color: rgba(236,243,255,.85); }
 
     .toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-      justify-content: space-between;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
       margin-top: 8px;
     }
-
     .small-note {
       color: var(--rx-muted);
       font-size: 13px;
       line-height: 1.35;
       margin: 0;
-      font-weight: 700;
+      font-weight: 800;
     }
-
     .rank-pill {
       padding: 7px 12px;
       border-radius: var(--radius-pill);
       border: 1px solid rgba(255,255,255,.18);
       background: rgba(255,255,255,.10);
       font-size: 13px;
-      font-weight: 800;
+      font-weight: 950;
       display: inline-flex;
       gap: 8px;
       align-items: baseline;
       white-space: nowrap;
       color: var(--rx-text);
     }
-    .rank-pill span { color: rgba(236,243,255,.72); font-size: 11px; text-transform: uppercase; letter-spacing:.05em; font-weight: 800; }
+    .rank-pill span {
+      color: rgba(236,243,255,.72);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing:.05em;
+      font-weight: 900;
+    }
 
     .grid {
-      display: grid;
+      display:grid;
       grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 12px;
       margin-top: 12px;
     }
-    @media (max-width: 1000px) { .grid { grid-template-columns: repeat(4, 1fr); } }
-    @media (max-width: 820px)  { .grid { grid-template-columns: repeat(3, 1fr); } }
-    @media (max-width: 640px)  { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 1000px){ .grid{ grid-template-columns: repeat(4, 1fr); } }
+    @media (max-width: 820px){ .grid{ grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 640px){ .grid{ grid-template-columns: repeat(2, 1fr); } }
 
     .card {
       border-radius: 14px;
       border: 1px solid rgba(255,255,255,.16);
       background: linear-gradient(180deg, rgba(22,58,114,.55), rgba(11,31,58,.88));
-      overflow: hidden;
-      position: relative;
-      min-height: 124px;
+      overflow:hidden;
+      position:relative;
+      min-height: 178px;
       color: var(--rx-text);
     }
-
     .card::after{
       content:"";
-      position:absolute;
-      inset:-60px;
+      position:absolute; inset:-60px;
       background:
         radial-gradient(circle at 25% 20%, rgba(109,249,255,.16), transparent 45%),
         radial-gradient(circle at 70% 35%, rgba(255,224,109,.14), transparent 45%),
@@ -251,24 +244,21 @@
       pointer-events:none;
       opacity:.65;
     }
-
-    .cardTop, .name, .pointsRow{ position:relative; z-index:2; }
+    .cardTop, .name, .rows, .lockedOverlay { position:relative; z-index:2; }
 
     .cardTop {
-      padding: 10px 10px 8px;
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
+      padding: 10px 10px 6px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
       gap: 8px;
     }
-
     .letter {
       font-size: 18px;
       font-weight: 1000;
-      color: rgba(236,243,255,.95);
       line-height: 1;
+      color: rgba(236,243,255,.95);
     }
-
     .rarityTag {
       font-size: 10px;
       letter-spacing: .06em;
@@ -282,71 +272,98 @@
       font-weight: 900;
     }
 
-    .name {
-      padding: 0 10px 4px;
-      font-weight: 950;
-      font-size: 13px;
-      color: rgba(236,243,255,.95);
-    }
+    .name { padding: 0 10px 4px; font-weight: 950; font-size: 13px; color: rgba(236,243,255,.95); }
 
-    .pointsRow {
-      padding: 0 10px 10px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      color: rgba(236,243,255,.78);
-      font-size: 12px;
+    .rows { padding: 0 10px 10px; display:flex; flex-direction:column; gap: 8px; }
+
+    .kvRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      font-size:12px;
+      color: rgba(236,243,255,.82);
       font-weight: 850;
     }
+    .kvRow b{ color: rgba(236,243,255,.96); font-weight: 1000; }
 
     .barWrap {
-      flex: 1;
+      width:100%;
       height: 10px;
       border-radius: 999px;
       border: 1px solid rgba(255,255,255,.14);
       background: rgba(255,255,255,.08);
-      overflow: hidden;
+      overflow:hidden;
     }
     .bar {
-      height: 100%;
-      width: 0%;
+      height:100%;
+      width:0%;
       background: linear-gradient(90deg, rgba(109,249,255,.75), rgba(255,224,109,.65), rgba(255,79,216,.55));
       transition: width .35s ease;
     }
 
+    .upgradeBtn{
+      width: 100%;
+      padding: 9px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--btn-disabled-br);
+      background: var(--btn-disabled-bg);
+      color: var(--btn-disabled-text);
+      font-weight: 1000;
+      font-size: 12px;
+      cursor: not-allowed;
+      box-shadow: none;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .upgradeBtn.ready{
+      background: linear-gradient(180deg, var(--btn-green-bg), var(--btn-green-bg2));
+      color: var(--btn-green-text);
+      border-color: var(--btn-green-br);
+      cursor: pointer;
+      box-shadow: 0 14px 30px rgba(0, 210, 106, .25);
+    }
+    .upgradeBtn.ready:hover{ filter: brightness(1.05); }
+
     .lockedOverlay {
-      position: absolute;
-      inset: 0;
-      display: grid;
-      place-items: center;
+      position:absolute; inset:0;
+      display:grid; place-items:center;
       background: rgba(5, 10, 24, 0.55);
       backdrop-filter: blur(3px);
-      color: #fff;
-      text-align: center;
+      color:#fff;
+      text-align:center;
       padding: 10px;
       z-index: 3;
     }
-
-    .lockTitle {
-      font-weight: 1000;
-      font-size: 12px;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-    }
-
-    .lockSub {
-      margin-top: 4px;
-      font-size: 12px;
-      opacity: .95;
-      font-weight: 850;
-    }
+    .lockTitle { font-weight: 1000; font-size: 12px; letter-spacing:.06em; text-transform: uppercase; }
+    .lockSub { margin-top: 4px; font-size: 12px; opacity: .95; font-weight: 850; }
 
     .rar-common   { border-left: 6px solid rgba(148,163,184,.85); }
     .rar-uncommon { border-left: 6px solid rgba(34,197,94,.70); }
     .rar-rare     { border-left: 6px solid rgba(59,130,246,.78); }
     .rar-epic     { border-left: 6px solid rgba(168,85,247,.78); }
     .rar-legend   { border-left: 6px solid rgba(245,158,11,.85); }
+
+    .toast{
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 18px;
+      z-index: 99999;
+      background: rgba(11,31,58,.92);
+      border: 1px solid rgba(255,255,255,.18);
+      color: rgba(236,243,255,.95);
+      padding: 10px 12px;
+      border-radius: 999px;
+      box-shadow: 0 18px 60px rgba(0,0,0,.35);
+      font-weight: 900;
+      font-size: 13px;
+      display:none;
+      max-width: min(680px, 92vw);
+      text-align:center;
+    }
+    .toast.show{ display:block; }
 
     @media (max-width: 640px) {
       header { flex-direction: column; align-items: flex-start; }
@@ -358,9 +375,7 @@
 <body>
   <header>
     <div>
-      <a href="/home" class="troop-home-link">
-        <h2>Troop 248</h2>
-      </a>
+      <a href="/home" class="troop-home-link"><h2>Troop 248</h2></a>
     </div>
 
     <nav>
@@ -388,7 +403,7 @@
     <div class="welcome-card">
       <div>
         <h3>Badges</h3>
-        <p>Badges unlock by Rank. Lucky chests award points to a random unlocked badge.</p>
+        <p>Badges unlock by Rank. Lucky chests award points. Upgrade badges (one level at a time) using gold.</p>
 
         <div class="stats-row">
           <div class="stat-pill"><span class="k">Gold</span> <span id="goldValue" class="v">—</span></div>
@@ -398,7 +413,7 @@
       </div>
 
       <div id="role-badge-container">
-        <span class="badge">Viewer</span>
+        <span class="badgeTag">Viewer</span>
       </div>
     </div>
 
@@ -414,10 +429,12 @@
     </section>
   </main>
 
+  <div id="toast" class="toast">…</div>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-    import { getFirestore, doc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, onSnapshot, runTransaction, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
@@ -444,11 +461,19 @@
     const rankPillText = document.getElementById("rankPillText");
     const unlockedNote = document.getElementById("unlockedNote");
     const badgeGrid = document.getElementById("badgeGrid");
+    const toast = document.getElementById("toast");
 
     logoutBtn.addEventListener("click", async () => {
       await signOut(auth);
       window.location.href = "/";
     });
+
+    function showToast(msg){
+      toast.textContent = msg;
+      toast.classList.add("show");
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(()=>toast.classList.remove("show"), 2200);
+    }
 
     function formatNum(n){ return Number(n || 0).toLocaleString("en-US"); }
 
@@ -487,10 +512,7 @@
       ["A","B","C","D","E"].forEach(x => set.add(x));
       if (r === "No Rank") return set;
 
-      if (r === "Scout") {
-        ["F","G","H"].forEach(x => set.add(x));
-        return set;
-      }
+      if (r === "Scout") { ["F","G","H"].forEach(x => set.add(x)); return set; }
 
       if (r === "Tenderfoot") {
         ["F","G","H","I","J"].forEach(x => set.add(x));
@@ -509,29 +531,182 @@
       return set;
     }
 
-    function renderBadges(pointsMap, unlockedSet){
+    // Total-points thresholds to reach each target level (2..8)
+    const THRESHOLDS = {
+      Common:    {2:200, 3:450, 4:850, 5:1500, 6:2500, 7:4000, 8:6500},
+      Uncommon:  {2:120, 3:275, 4:520, 5:900,  6:1500, 7:2400, 8:3900},
+      Rare:      {2:60,  3:140, 4:270, 5:480,  6:820,  7:1350, 8:2200},
+      Epic:      {2:9,   3:20,  4:38,  5:68,   6:113,  7:185,  8:300},
+      Legendary: {2:5,   3:12,  4:22,  5:38,   6:60,   7:90,   8:130},
+    };
+
+    // Gold cost to upgrade from L -> L+1 (same for all rarities)
+    const UPGRADE_COST = {
+      1: 2000,
+      2: 6000,
+      3: 18000,
+      4: 54000,
+      5: 162000,
+      6: 486000,
+      7: 2000000, // L7 -> L8
+    };
+
+    function getNextThreshold(rarity, level){
+      const next = level + 1;
+      if (level >= 8) return null;
+      return THRESHOLDS[rarity]?.[next] ?? null;
+    }
+
+    function getUpgradeCost(level){
+      return UPGRADE_COST[level] ?? null;
+    }
+
+    function getLevelMapValue(map, key, fallback){
+      const v = map?.[key];
+      if (v === undefined || v === null) return fallback;
+      const n = Number(v);
+      return Number.isFinite(n) ? n : fallback;
+    }
+
+    async function upgradeBadge(uid, badgeId, rarity){
+      const ref = rewardsRef(uid);
+
+      try{
+        await runTransaction(db, async (tx) => {
+          const snap = await tx.get(ref);
+
+          // If doc doesn't exist, create a minimal one so the UI won't brick.
+          if (!snap.exists()){
+            tx.set(ref, {
+              gold: 0,
+              gems: 0,
+              rank: "No Rank",
+              chests: { lucky: 0, gold: 0, levelUp: { scout:0, tenderfoot:0, "2class":0, "1class":0, star:0, life:0, eagle:0 } },
+              badgesPoints: {},
+              badgesLevel: {},
+              history: [],
+              createdAt: serverTimestamp()
+            });
+            throw new Error("Rewards data was missing. Created it—refresh and try again.");
+          }
+
+          const d = snap.data() || {};
+          const gold = Number(d.gold || 0);
+          const pointsMap = d.badgesPoints || {};
+          const levelMap = d.badgesLevel || {};
+
+          const curLevel = getLevelMapValue(levelMap, badgeId, 1);
+          if (curLevel >= 8) throw new Error("This badge is already max level.");
+
+          const nextThreshold = getNextThreshold(rarity, curLevel);
+          const cost = getUpgradeCost(curLevel);
+          if (nextThreshold == null || cost == null) throw new Error("Upgrade config error.");
+
+          const totalPts = getLevelMapValue(pointsMap, badgeId, 0);
+
+          if (totalPts < nextThreshold) {
+            throw new Error(`Not enough points. Need ${formatNum(nextThreshold)} total.`);
+          }
+          if (gold < cost) {
+            throw new Error(`Not enough gold. Need ${formatNum(cost)} gold.`);
+          }
+
+          const nextLevelMap = { ...levelMap, [badgeId]: curLevel + 1 };
+
+          const history = Array.isArray(d.history) ? d.history.slice(0, 60) : [];
+          history.unshift({
+            type: "badgeUpgrade",
+            badge: badgeId,
+            rarity,
+            fromLevel: curLevel,
+            toLevel: curLevel + 1,
+            costGold: cost,
+            at: new Date().toISOString()
+          });
+
+          tx.update(ref, {
+            gold: gold - cost,
+            badgesLevel: nextLevelMap,
+            history,
+            lastBadgeUpgrade: serverTimestamp()
+          });
+        });
+
+        showToast(`Upgraded Badge ${badgeId}!`);
+      }catch(e){
+        showToast(e.message || "Upgrade failed.");
+      }
+    }
+
+    function renderBadges(rewards, unlockedSet){
+      const pointsMap = rewards.badgesPoints || {};
+      const levelMap = rewards.badgesLevel || {};
+      const gold = Number(rewards.gold || 0);
+
       badgeGrid.innerHTML = "";
 
       BADGES.forEach(b => {
-        const pts = Number(pointsMap?.[b.id] || 0);
         const unlocked = unlockedSet.has(b.id);
-
         const rarityCls = RARITY[b.rarity]?.cls || "rar-common";
+
+        const totalPts = getLevelMapValue(pointsMap, b.id, 0);
+        const level = Math.max(1, Math.min(8, getLevelMapValue(levelMap, b.id, 1)));
+
+        const nextTh = getNextThreshold(b.rarity, level);
+        const cost = getUpgradeCost(level);
+
+        const eligibleByPoints = (level < 8) && (nextTh != null) && (totalPts >= nextTh);
+        const eligibleByGold = (level < 8) && (cost != null) && (gold >= cost);
+        const eligible = unlocked && eligibleByPoints && eligibleByGold;
+
+        const pct = (level >= 8 || !nextTh) ? 100 : Math.max(0, Math.min(100, Math.round((totalPts / nextTh) * 100)));
+        const progressText = (level >= 8)
+          ? `MAX (Level 8)`
+          : `${formatNum(totalPts)} / ${formatNum(nextTh)} points`;
+
+        const btnText = (level >= 8)
+          ? `MAX LEVEL • Lv 8`
+          : `UPGRADE • Lv ${level} → ${level+1} • ${formatNum(cost)} GOLD`;
+
         const card = document.createElement("div");
         card.className = `card ${rarityCls}`;
-
-        const pct = Math.max(0, Math.min(100, Math.round((pts / 1000) * 100)));
 
         card.innerHTML = `
           <div class="cardTop">
             <div class="letter">${b.id}</div>
             <div class="rarityTag">${b.rarity}</div>
           </div>
+
           <div class="name">${unlocked ? b.name : "Locked"}</div>
-          <div class="pointsRow">
+
+          <div class="rows">
+            <div class="kvRow">
+              <span>Level</span>
+              <b>${level}${level >= 8 ? " (MAX)" : ""}</b>
+            </div>
+
+            <div class="kvRow">
+              <span>Progress</span>
+              <b>${progressText}</b>
+            </div>
+
             <div class="barWrap"><div class="bar" style="width:${unlocked ? pct : 0}%"></div></div>
-            <div>${unlocked ? formatNum(pts) + " pts" : "—"}</div>
+
+            <button class="upgradeBtn ${eligible ? "ready" : ""}" ${eligible ? "" : "disabled"} data-badge="${b.id}">
+              ${btnText}
+            </button>
+
+            <div class="kvRow" style="opacity:.9;">
+              <span>Status</span>
+              <b>${
+                !unlocked ? "Locked" :
+                level >= 8 ? "Overflow → Gems" :
+                eligible ? "Ready!" :
+                (eligibleByPoints ? "Need Gold" : "Need Points")
+              }</b>
+            </div>
           </div>
+
           ${unlocked ? "" : `
             <div class="lockedOverlay">
               <div>
@@ -542,6 +717,16 @@
           `}
         `;
 
+        const btn = card.querySelector("button.upgradeBtn");
+        if (btn && unlocked && level < 8){
+          btn.addEventListener("click", async (e) => {
+            e.stopPropagation();
+            const uid = auth.currentUser?.uid;
+            if (!uid) return showToast("Not signed in.");
+            await upgradeBadge(uid, b.id, b.rarity);
+          });
+        }
+
         badgeGrid.appendChild(card);
       });
     }
@@ -549,18 +734,12 @@
     let unsubRewards = null;
 
     onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        window.location.href = "/";
-        return;
-      }
+      if (!user) { window.location.href = "/"; return; }
 
       const infoRef = doc(db, "accountInfo", user.uid);
       const infoSnap = await getDoc(infoRef);
 
-      if (!infoSnap.exists()) {
-        window.location.href = "/under-review/";
-        return;
-      }
+      if (!infoSnap.exists()) { window.location.href = "/under-review/"; return; }
 
       const info = infoSnap.data() || {};
       const role = info.authRole;
@@ -572,7 +751,7 @@
 
       authInfoEl.textContent = `Signed in as ${user.email || "—"}`;
       roleBadgeContainer.innerHTML = `
-        <span class="badge ${role === "admin" ? "admin" : ""}">
+        <span class="badgeTag ${role === "admin" ? "admin" : ""}">
           ${role === "admin" ? "Admin" : "Viewer"}
         </span>
       `;
@@ -580,7 +759,7 @@
       if (unsubRewards) unsubRewards();
 
       unsubRewards = onSnapshot(rewardsRef(user.uid), (snap) => {
-        const d = snap.exists() ? snap.data() : {};
+        const d = snap.exists() ? (snap.data() || {}) : {};
 
         goldValue.textContent = formatNum(d.gold ?? 0);
         gemsValue.textContent = formatNum(d.gems ?? 0);
@@ -589,19 +768,13 @@
         rankValue.textContent = rank;
         rankPillText.textContent = rank;
 
-        const points = d.badgesPoints ?? {};
         const unlockedSet = unlockedByRank(rank);
-
         unlockedNote.textContent = `Unlocked: ${unlockedSet.size} / 25 (based on Rank)`;
-        renderBadges(points, unlockedSet);
+
+        renderBadges(d, unlockedSet);
       }, (err) => {
         console.warn("Rewards snapshot error:", err);
-        goldValue.textContent = "0";
-        gemsValue.textContent = "0";
-        rankValue.textContent = "No Rank";
-        rankPillText.textContent = "No Rank";
-        unlockedNote.textContent = "Could not load rewards data.";
-        renderBadges({}, unlockedByRank("No Rank"));
+        showToast("Could not load rewards data.");
       });
     });
   </script>
