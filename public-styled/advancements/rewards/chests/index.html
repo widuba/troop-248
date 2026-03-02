@@ -738,26 +738,50 @@
 
     function rewardsRef(uid){ return doc(db, "accountInfo", uid, "modules", "rewards"); }
 
-    function defaultRewardsDoc() {
+    function defaultRewardsDocForCreate() {
   return {
     gold: 0,
     gems: 0,
     rank: "No Rank",
-    chests: { lucky: 0, gold: 0, levelUp: 0 }, // ✅ new simple format
+    chests: { lucky: 0, gold: 0, levelUp: 0 },
     badgesPoints: {},
-    badgesLevel: {}, // badges default to level 1 if missing
+    badgesLevel: {},
     history: [],
     createdAt: serverTimestamp()
   };
 }
 
+// This patch is safe to apply every page load (it only adds missing fields).
+function defaultRewardsPatchForExisting() {
+  return {
+    gold: 0,
+    gems: 0,
+    rank: "No Rank",
+    chests: { lucky: 0, gold: 0, levelUp: 0 },
+    badgesPoints: {},
+    badgesLevel: {},
+    history: []
+  };
+}
+
 async function ensureRewardsDoc(uid) {
   const ref = rewardsRef(uid);
-  const snap = await getDoc(ref);
-  if (snap.exists()) return;
+  try {
+    const snap = await getDoc(ref);
 
-  // Create with defaults; safe to call even if multiple tabs load
-  await setDoc(ref, defaultRewardsDoc(), { merge: true });
+    if (!snap.exists()) {
+      await setDoc(ref, defaultRewardsDocForCreate(), { merge: true });
+      console.log("[rewards] created defaults");
+      return;
+    }
+
+    // ✅ If doc exists but fields were deleted, this restores them (without clobbering existing values).
+    await setDoc(ref, defaultRewardsPatchForExisting(), { merge: true });
+    console.log("[rewards] patched defaults (doc existed)");
+  } catch (e) {
+    console.error("[rewards] ensure failed:", e);
+    alert("ensureRewardsDoc failed: " + (e?.message || e));
+  }
 }
 
     // ===== Badge rarity mapping A-Y =====
@@ -1525,8 +1549,7 @@ async function ensureRewardsDoc(uid) {
       if (unsubRewards) unsubRewards();
 
       await ensureRewardsDoc(user.uid);
-
-      unsubRewards = onSnapshot(rewardsRef(user.uid), (snap) => {
+        unsubRewards = onSnapshot(rewardsRef(user.uid), (snap) => {
         const d = snap.exists() ? (snap.data() || {}) : {};
         state.lastRewards = d;
 
