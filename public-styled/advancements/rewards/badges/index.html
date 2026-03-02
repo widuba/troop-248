@@ -20,12 +20,10 @@
       --radius-pill: 999px;
       --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
 
-      /* Rewards UI blue theme */
       --rx-blue-900:#0b1f3a;
       --rx-blue-800:#0f2a52;
       --rx-blue-700:#163a72;
       --rx-line: rgba(255,255,255,.16);
-      --rx-soft: rgba(255,255,255,.08);
       --rx-text: #ecf3ff;
       --rx-muted: rgba(236,243,255,.78);
     }
@@ -64,7 +62,6 @@
       align-items: center;
       gap: 8px;
     }
-
     header h2::before { content: "★"; font-size: 18px; }
 
     .troop-home-link {
@@ -73,10 +70,7 @@
       display: inline-flex;
       align-items: center;
     }
-    .troop-home-link:hover h2 {
-      opacity: 0.9;
-      text-decoration: underline;
-    }
+    .troop-home-link:hover h2 { opacity: 0.9; text-decoration: underline; }
 
     nav {
       display: flex;
@@ -97,23 +91,14 @@
       opacity: 0.9;
       white-space: nowrap;
     }
-
     nav a:hover { opacity: 1; background: rgba(255, 255, 255, 0.12); }
-
     nav a.active {
       opacity: 1;
       background: rgba(255, 255, 255, 0.18);
       border-color: rgba(255, 255, 255, 0.45);
     }
 
-    #auth-bar {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      font-size: 13px;
-      flex-wrap: wrap;
-    }
-
+    #auth-bar { display: flex; gap: 10px; align-items: center; font-size: 13px; flex-wrap: wrap; }
     #logout-btn {
       padding: 5px 12px;
       font-size: 13px;
@@ -125,13 +110,8 @@
     }
     #logout-btn:hover { background: rgba(255, 255, 255, 0.2); }
 
-    main {
-      padding: 24px 16px 40px;
-      max-width: 1060px;
-      margin: 0 auto;
-    }
+    main { padding: 24px 16px 40px; max-width: 1060px; margin: 0 auto; }
 
-    /* ===== Blue panels instead of white ===== */
     .welcome-card, section {
       background: linear-gradient(180deg, rgba(15,42,82,.96), rgba(11,31,58,.96));
       border-radius: var(--radius-lg);
@@ -164,7 +144,6 @@
       display: inline-block;
       border: 1px solid rgba(255,255,255,.18);
     }
-
     .badge.admin {
       background: rgba(245,158,11,.18);
       color: #fff;
@@ -209,7 +188,6 @@
     }
     section h2::before { content: "▸"; font-size: 14px; color: rgba(236,243,255,.85); }
 
-    /* ===== Badges UI ===== */
     .toolbar {
       display: flex;
       flex-wrap: wrap;
@@ -364,7 +342,6 @@
       font-weight: 850;
     }
 
-    /* Rarity accents */
     .rar-common   { border-left: 6px solid rgba(148,163,184,.85); }
     .rar-uncommon { border-left: 6px solid rgba(34,197,94,.70); }
     .rar-rare     { border-left: 6px solid rgba(59,130,246,.78); }
@@ -442,7 +419,6 @@
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
     import { getFirestore, doc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-    // ✅ Troop 248 Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
       authDomain: "troop-248.firebaseapp.com",
@@ -476,7 +452,6 @@
 
     function formatNum(n){ return Number(n || 0).toLocaleString("en-US"); }
 
-    // ✅ matches your rules addition
     function rewardsRef(uid){
       return doc(db, "accountInfo", uid, "modules", "rewards");
     }
@@ -489,24 +464,21 @@
       Legendary:{ cls: "rar-legend"   }
     };
 
-    // 25 badges A-Y with rarity mapping
     const BADGES = (() => {
       const arr = [];
       const letters = "ABCDEFGHIJKLMNOPQRSTUVWXY".split("");
       for (let i = 0; i < letters.length; i++) {
         const L = letters[i];
         let rarity = "Common";
-        if (i >= 5 && i < 10) rarity = "Uncommon";     // F-J
-        else if (i >= 10 && i < 15) rarity = "Rare";   // K-O
-        else if (i >= 15 && i < 20) rarity = "Epic";   // P-T
-        else if (i >= 20) rarity = "Legendary";        // U-Y
-
+        if (i >= 5 && i < 10) rarity = "Uncommon";
+        else if (i >= 10 && i < 15) rarity = "Rare";
+        else if (i >= 15 && i < 20) rarity = "Epic";
+        else if (i >= 20) rarity = "Legendary";
         arr.push({ id: L, name: `Badge ${L}`, rarity });
       }
       return arr;
     })();
 
-    // Rank unlock rules
     const RANK_ORDER = ["No Rank", "Scout", "Tenderfoot", "2nd Class", "1st Class", "Star", "Life", "Eagle"];
 
     function unlockedByRank(rank){
@@ -533,7 +505,6 @@
         return set;
       }
 
-      // 1st Class and above
       BADGES.forEach(b => set.add(b.id));
       return set;
     }
@@ -549,7 +520,6 @@
         const card = document.createElement("div");
         card.className = `card ${rarityCls}`;
 
-        // purely visual progress: points / 1000 capped
         const pct = Math.max(0, Math.min(100, Math.round((pts / 1000) * 100)));
 
         card.innerHTML = `
@@ -584,7 +554,6 @@
         return;
       }
 
-      // gate access based on accountInfo + role
       const infoRef = doc(db, "accountInfo", user.uid);
       const infoSnap = await getDoc(infoRef);
 
