@@ -306,9 +306,9 @@
       width: 100%;
       padding: 9px 10px;
       border-radius: 999px;
-      border: 1px solid var(--btn-disabled-br);
-      background: var(--btn-disabled-bg);
-      color: var(--btn-disabled-text);
+      border: 1px solid rgba(255,255,255,.18);
+      background: #3a4252;
+      color: rgba(255,255,255,.65);
       font-weight: 1000;
       font-size: 12px;
       cursor: not-allowed;
@@ -318,11 +318,16 @@
     }
 
     .upgradeBtn.ready{
-      background: linear-gradient(180deg, var(--btn-green-bg), var(--btn-green-bg2));
-      color: var(--btn-green-text);
-      border-color: var(--btn-green-br);
+      background: linear-gradient(180deg, #00ff88, #00cc66) !important;
+      color: #052e1a !important;
+      border: 1px solid rgba(255,255,255,.35) !important;
       cursor: pointer;
-      box-shadow: 0 14px 30px rgba(0, 210, 106, .25);
+      box-shadow:
+        0 0 12px rgba(0,255,140,.6)
+        0 0 28px rgba(0,255,140,.35)
+        0 14px 30px rgba(0,255,140,.25);
+      position: relative;
+      overflow: hidden;
     }
     .upgradeBtn.ready:hover{ filter: brightness(1.05); }
 
