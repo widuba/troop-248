@@ -22,85 +22,87 @@
       --rx-line: rgba(255,255,255,.16);
       --rx-text: #ecf3ff;
       --rx-muted: rgba(236,243,255,.78);
+
+      --btn-blue1: rgba(49,130,246,.98);
+      --btn-blue2: rgba(30,64,175,.98);
     }
 
     * { box-sizing: border-box; }
 
-    body {
-      margin: 0;
+    body{
+      margin:0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: radial-gradient(900px 600px at 40% 20%, rgba(31,78,121,.18), transparent 55%),
                   radial-gradient(800px 520px at 70% 30%, rgba(178,34,34,.10), transparent 58%),
                   #cfc6b0;
-      min-height: 100vh;
+      min-height:100vh;
     }
 
-    header {
+    header{
       background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
       color: var(--white);
       padding: 14px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
       position: sticky;
       top: 0;
       z-index: 10;
       gap: 12px;
     }
-    header h2 {
-      margin: 0;
-      font-size: 19px;
-      letter-spacing: 0.08em;
+    header h2{
+      margin:0;
+      font-size:19px;
+      letter-spacing:.08em;
       text-transform: uppercase;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      display:flex;
+      align-items:center;
+      gap:8px;
     }
-    header h2::before { content: "★"; font-size: 18px; }
+    header h2::before{ content:"★"; font-size:18px; }
+    .troop-home-link{ text-decoration:none; color:inherit; display:inline-flex; align-items:center; }
+    .troop-home-link:hover h2{ opacity:.9; text-decoration: underline; }
 
-    .troop-home-link { text-decoration:none; color:inherit; display:inline-flex; align-items:center; }
-    .troop-home-link:hover h2 { opacity: .9; text-decoration: underline; }
-
-    nav {
-      display: flex;
-      gap: 12px;
-      font-size: 13px;
+    nav{
+      display:flex;
+      gap:12px;
+      font-size:13px;
       text-transform: uppercase;
       flex-wrap: wrap;
     }
-    nav a {
-      color: #1f4e79;
-      font-weight: bold;
-      text-decoration: none;
-      padding: 6px 10px;
+    nav a{
+      color:#1f4e79;
+      font-weight:bold;
+      text-decoration:none;
+      padding:6px 10px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(255, 255, 255, 0.25);
+      border: 1px solid rgba(255,255,255,.25);
       backdrop-filter: blur(4px);
-      opacity: 0.9;
-      white-space: nowrap;
+      opacity:.9;
+      white-space:nowrap;
     }
-    nav a:hover { opacity: 1; background: rgba(255,255,255,.12); }
-    nav a.active {
-      opacity: 1;
+    nav a:hover{ opacity:1; background: rgba(255,255,255,.12); }
+    nav a.active{
+      opacity:1;
       background: rgba(255,255,255,.18);
       border-color: rgba(255,255,255,.45);
     }
 
-    #auth-bar { display:flex; gap:10px; align-items:center; font-size:13px; flex-wrap:wrap; }
-    #logout-btn {
+    #auth-bar{ display:flex; gap:10px; align-items:center; font-size:13px; flex-wrap:wrap; }
+    #logout-btn{
       padding: 5px 12px;
       font-size: 13px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(255, 255, 255, 0.7);
-      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255,255,255,.7);
+      background: rgba(255,255,255,.10);
       color: var(--white);
-      cursor: pointer;
+      cursor:pointer;
     }
-    #logout-btn:hover { background: rgba(255,255,255,.2); }
+    #logout-btn:hover{ background: rgba(255,255,255,.20); }
 
-    main { padding: 24px 16px 40px; max-width: 1060px; margin: 0 auto; }
+    main{ padding: 24px 16px 40px; max-width: 1060px; margin: 0 auto; }
 
-    .welcome-card, section, .chestCard {
+    .welcome-card, section, .chestCard{
       background: linear-gradient(180deg, rgba(15,42,82,.96), rgba(11,31,58,.96));
       border-radius: var(--radius-lg);
       padding: 18px 18px 12px;
@@ -110,28 +112,34 @@
       color: var(--rx-text);
     }
 
-    .welcome-card { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap; }
-    .welcome-card h3 { margin:0 0 4px; font-size:18px; color:var(--rx-text); }
-    .welcome-card p { margin:0; font-size:14px; color:var(--rx-muted); }
+    .welcome-card{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+    .welcome-card h3{ margin:0 0 4px; font-size:18px; color:var(--rx-text); }
+    .welcome-card p{ margin:0; font-size:14px; color:var(--rx-muted); }
 
-    .badgeTag {
+    .badgeTag{
       font-size: 11px;
       padding: 6px 10px;
       border-radius: var(--radius-pill);
       background: rgba(255,255,255,.12);
       color: var(--rx-text);
       text-transform: uppercase;
-      letter-spacing: 0.07em;
-      display: inline-block;
+      letter-spacing: .07em;
+      display:inline-block;
       border: 1px solid rgba(255,255,255,.18);
     }
-    .badgeTag.admin {
+    .badgeTag.admin{
       background: rgba(245,158,11,.18);
       border-color: rgba(245,158,11,.42);
     }
 
-    .stats-row { margin-top:12px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-    .stat-pill, .countPill {
+    .stats-row{ margin-top:12px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .stat-pill, .countPill{
       padding: 7px 12px;
       border-radius: var(--radius-pill);
       border: 1px solid rgba(255,255,255,.18);
@@ -142,30 +150,32 @@
       align-items: baseline;
       color: var(--rx-text);
     }
-    .stat-pill .k, .countPill span {
+    .stat-pill .k, .countPill span{
       font-size: 11px;
       color: rgba(236,243,255,.72);
       text-transform: uppercase;
       letter-spacing: .05em;
       font-weight: 800;
     }
-    .stat-pill .v, .countPill b { font-weight: 950; color: var(--rx-text); }
+    .stat-pill .v, .countPill b{ font-weight: 950; color: var(--rx-text); }
 
-    section h2 {
-      margin-top: 0;
-      font-size: 18px;
-      display:flex; align-items:center; gap:8px;
+    section h2{
+      margin-top:0;
+      font-size:18px;
+      display:flex;
+      align-items:center;
+      gap:8px;
       color: var(--rx-text);
     }
-    section h2::before { content:"▸"; font-size:14px; color: rgba(236,243,255,.85); }
+    section h2::before{ content:"▸"; font-size:14px; color: rgba(236,243,255,.85); }
 
-    .row { display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap:12px; margin-top: 10px; }
-    @media (max-width: 900px) { .row { grid-template-columns: 1fr; } }
+    .row{ display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap:12px; margin-top:10px; }
+    @media (max-width: 900px){ .row{ grid-template-columns: 1fr; } }
 
-    .chestCard {
+    .chestCard{
       padding: 14px;
       position: relative;
-      overflow: hidden;
+      overflow:hidden;
       background: linear-gradient(180deg, rgba(22,58,114,.55), rgba(11,31,58,.88));
     }
     .chestCard::after{
@@ -180,10 +190,10 @@
       opacity:.65;
     }
     .chestCard *{ position:relative; z-index:2; }
-    .chestCard h4{ margin:0 0 6px; color: var(--rx-text); font-size: 15px; font-weight:1000; }
-    .chestCard p{ margin:0; color: var(--rx-muted); font-size: 13px; line-height:1.35; font-weight:700; }
+    .chestCard h4{ margin:0 0 6px; color: var(--rx-text); font-size:15px; font-weight:1000; }
+    .chestCard p{ margin:0; color: var(--rx-muted); font-size:13px; line-height:1.35; font-weight:700; }
 
-    .countRow { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:12px; flex-wrap:wrap; }
+    .countRow{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:12px; flex-wrap:wrap; }
 
     .openBtn{
       padding: 7px 12px;
@@ -191,7 +201,7 @@
       border: 1px solid rgba(255,255,255,.18);
       cursor:pointer;
       font-weight: 950;
-      background: linear-gradient(180deg, rgba(49,130,246,.98), rgba(30,64,175,.98));
+      background: linear-gradient(180deg, var(--btn-blue1), var(--btn-blue2));
       color: #fff;
       font-size: 13px;
       white-space:nowrap;
@@ -202,16 +212,17 @@
       background: rgba(255,255,255,.10);
       color: rgba(236,243,255,.55);
       border-color: rgba(255,255,255,.12);
-      opacity: .85;
+      opacity:.85;
       cursor:not-allowed;
       box-shadow:none;
     }
 
+    /* Overlay */
     .overlay{
-      position:fixed;
-      inset:0;
-      z-index:9999;
-      background: rgba(5, 10, 24, 0.80);
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(5,10,24,.80);
       backdrop-filter: blur(6px);
       display:none;
       align-items:center;
@@ -222,7 +233,7 @@
 
     .openStage{
       width:min(980px, 96vw);
-      height:min(640px, 88vh);
+      height:min(680px, 90vh);
       border-radius: 22px;
       border: 1px solid rgba(255,255,255,.18);
       background:
@@ -250,8 +261,8 @@
       display:flex;
       justify-content:space-between;
       align-items:center;
-      gap: 10px;
-      color: #fff;
+      gap:10px;
+      color:#fff;
       font-weight: 1000;
       text-transform: uppercase;
       letter-spacing:.08em;
@@ -268,44 +279,6 @@
       font-size: 12px;
       font-weight: 1000;
       letter-spacing:.05em;
-    }
-
-    .closeX { display: none !important; }
-    .closeX:hover{ background: rgba(255,255,255,.20); }
-
-    .chestVisual{
-      width: 210px;
-      height: 170px;
-      border-radius: 22px;
-      border: 2px solid rgba(255,255,255,.35);
-      background: linear-gradient(135deg, rgba(31,78,121,.95), rgba(178,34,34,.85));
-      box-shadow: 0 16px 40px rgba(0,0,0,.30);
-      position: relative;
-      transform: translateZ(0);
-    }
-    .chestVisual:before{
-      content:"";
-      position:absolute;
-      inset: 12px;
-      border-radius: 16px;
-      border: 2px dashed rgba(255,255,255,.45);
-      opacity:.9;
-    }
-    .sparkle{
-      position:absolute;
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.95);
-      box-shadow: 0 0 16px rgba(255,255,255,.85);
-      opacity:.0;
-      animation: sparkle 1.1s ease-in-out infinite;
-    }
-    @keyframes sparkle{
-      0%{ transform: translateY(0) scale(.7); opacity:0; }
-      35%{ opacity:1; }
-      70%{ opacity:.0; transform: translateY(-28px) scale(1.1); }
-      100%{ opacity:0; }
     }
 
     .bigText{
@@ -326,6 +299,41 @@
       letter-spacing:.08em;
       text-align:center;
       padding: 0 16px;
+    }
+
+    /* Lucky chest visual */
+    .chestVisual{
+      width: 210px;
+      height: 170px;
+      border-radius: 22px;
+      border: 2px solid rgba(255,255,255,.35);
+      background: linear-gradient(135deg, rgba(31,78,121,.95), rgba(178,34,34,.85));
+      box-shadow: 0 16px 40px rgba(0,0,0,.30);
+      position: relative;
+      transform: translateZ(0);
+    }
+    .chestVisual:before{
+      content:"";
+      position:absolute;
+      inset: 12px;
+      border-radius: 16px;
+      border: 2px dashed rgba(255,255,255,.45);
+      opacity:.9;
+    }
+
+    .sparkle{
+      position:absolute;
+      width:10px;height:10px;border-radius:999px;
+      background: rgba(255,255,255,.95);
+      box-shadow: 0 0 16px rgba(255,255,255,.85);
+      opacity:0;
+      animation: sparkle 1.1s ease-in-out infinite;
+    }
+    @keyframes sparkle{
+      0%{ transform: translateY(0) scale(.7); opacity:0; }
+      35%{ opacity:1; }
+      70%{ opacity:0; transform: translateY(-28px) scale(1.1); }
+      100%{ opacity:0; }
     }
 
     .lvl1{ background: linear-gradient(135deg, rgba(31,78,121,.95), rgba(178,34,34,.85)); }
@@ -391,25 +399,18 @@
       100%{ opacity:0; transform: scale(1.2) rotate(140deg); }
     }
 
-    .confetti{
-      position:absolute;
-      inset:0;
-      pointer-events:none;
-      overflow:hidden;
-    }
+    .confetti{ position:absolute; inset:0; pointer-events:none; overflow:hidden; }
     .confetti i{
       position:absolute;
-      width:10px;
-      height:16px;
+      width:10px;height:16px;border-radius:4px;
       opacity:0;
-      border-radius:4px;
       animation: fall 1.2s ease-in forwards;
       box-shadow: 0 10px 18px rgba(0,0,0,.20);
     }
     @keyframes fall{
       0%{ transform: translateY(-40px) rotate(0deg); opacity:0; }
       15%{ opacity:1; }
-      100%{ transform: translateY(680px) rotate(360deg); opacity:0; }
+      100%{ transform: translateY(760px) rotate(360deg); opacity:0; }
     }
 
     .rewardCard{
@@ -434,22 +435,111 @@
       text-transform: uppercase;
       letter-spacing:.08em;
     }
+    .tinyNote{ margin-top:10px; color: rgba(255,255,255,.92); font-size:12px; font-weight:850; opacity:.95; }
 
-    .tinyNote{ margin-top: 10px; color: rgba(255,255,255,.92); font-size: 12px; font-weight: 850; opacity:.95; }
+    /* Level-up rarity selection */
+    .rarityPick{
+      display:none;
+      width:min(840px, 92vw);
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.22);
+      background: rgba(255,255,255,.10);
+      backdrop-filter: blur(10px);
+      padding: 14px 14px 12px;
+      box-shadow: 0 18px 60px rgba(0,0,0,.35);
+      text-align:center;
+      color:#fff;
+    }
+    .rarityPick.show{ display:block; }
+
+    .rarityTitle{
+      font-weight: 1000;
+      text-transform: uppercase;
+      letter-spacing:.08em;
+      font-size: 12px;
+      opacity:.95;
+      margin-bottom: 10px;
+    }
+    .rarityBtns{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+    .rarBtn{
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.20);
+      background: rgba(255,255,255,.10);
+      color:#fff;
+      font-weight: 1000;
+      text-transform: uppercase;
+      letter-spacing:.06em;
+      cursor:pointer;
+      min-width: 150px;
+    }
+    .rarBtn:hover{ filter: brightness(1.06); }
+    .rarBtn.common{ background: rgba(148,163,184,.22); }
+    .rarBtn.uncommon{ background: rgba(34,197,94,.22); }
+    .rarBtn.rare{ background: rgba(59,130,246,.24); }
+    .rarBtn.epic{ background: rgba(168,85,247,.24); }
+    .rarBtn.legendary{ background: rgba(245,158,11,.26); }
+
+    /* Spinner wheel */
+    .wheelWrap{
+      display:none;
+      width:min(900px, 96vw);
+      align-items:center;
+      justify-content:center;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .wheelWrap.show{ display:flex; }
+    .wheelRow{
+      display:flex;
+      gap: 14px;
+      align-items:center;
+      justify-content:center;
+      flex-wrap: wrap;
+    }
+    canvas#wheel{
+      width: 340px;
+      height: 340px;
+      border-radius: 999px;
+      border: 2px solid rgba(255,255,255,.26);
+      background: rgba(255,255,255,.08);
+      box-shadow: 0 18px 60px rgba(0,0,0,.35);
+    }
+    .pointer{
+      width: 0; height: 0;
+      border-left: 14px solid transparent;
+      border-right: 14px solid transparent;
+      border-bottom: 26px solid rgba(255,255,255,.95);
+      filter: drop-shadow(0 10px 18px rgba(0,0,0,.35));
+      margin-top: -6px;
+    }
+
+    .spinNote{
+      font-size: 12px;
+      font-weight: 900;
+      opacity:.92;
+      text-transform: uppercase;
+      letter-spacing:.08em;
+      text-align:center;
+      padding: 0 14px;
+    }
 
     @media (max-width: 640px) {
-      header { flex-direction: column; align-items: flex-start; }
-      nav { width: 100%; }
-      .openStage{ height: min(620px, 88vh); }
+      header{ flex-direction: column; align-items:flex-start; }
+      nav{ width:100%; }
+      canvas#wheel{ width: 300px; height: 300px; }
     }
   </style>
 </head>
 
 <body>
   <header>
-    <div>
-      <a href="/home" class="troop-home-link"><h2>Troop 248</h2></a>
-    </div>
+    <div><a href="/home" class="troop-home-link"><h2>Troop 248</h2></a></div>
 
     <nav>
       <a href="/home">Home</a>
@@ -460,6 +550,10 @@
       <a href="/useful-links">Useful Links</a>
       <a href="/events">Events</a>
       <a href="/mail">Mail</a>
+
+      <a href="/advancements/rewards/">Rewards</a>
+      <a class="active" href="/advancements/rewards/chests/">Chests</a>
+      <a href="/advancements/rewards/badges/">Badges</a>
     </nav>
 
     <div id="auth-bar">
@@ -472,7 +566,7 @@
     <div class="welcome-card">
       <div>
         <h3>Chests</h3>
-        <p>Lucky chests award badge points. If the selected badge is Level 8, the points convert to gems.</p>
+        <p>Lucky chests award badge points. Level Up chests now let you choose a rarity and spin a wheel for an instant Max badge.</p>
 
         <div class="stats-row">
           <div class="stat-pill"><span class="k">Gold</span> <span id="goldValue" class="v">—</span></div>
@@ -489,7 +583,7 @@
       <div class="row">
         <div class="chestCard">
           <h4>Lucky Chests</h4>
-          <p>Start at Level 1, 5 spins, chance to level up each spin (never down), cap Level 6. Final click reveals reward.</p>
+          <p>Start at Level 1, 5 spins, 40% chance to level up each spin (never down), cap Level 6. Final click reveals reward.</p>
           <div class="countRow">
             <div class="countPill"><span>Count</span><b id="luckyCount">—</b></div>
             <button class="openBtn" id="openLuckyBtn">Open</button>
@@ -498,7 +592,7 @@
 
         <div class="chestCard">
           <h4>Gold Chests</h4>
-          <p>Contains only gold, random based on website activity.</p>
+          <p>Contains only gold, random between 5,000 and 100,000.</p>
           <div class="countRow">
             <div class="countPill"><span>Count</span><b id="goldChestCount">—</b></div>
             <button class="openBtn" id="openGoldBtn">Open</button>
@@ -507,9 +601,9 @@
 
         <div class="chestCard">
           <h4>Level Up Chests</h4>
-          <p>7 variants, one per REAL scout rank. Timed opening animations.</p>
+          <p>Select a rarity → wheel spins → landed badge becomes Max Level instantly. If already max, convert to 1000 gems.</p>
           <div class="countRow">
-            <div class="countPill"><span>Available</span><b id="levelUpTotal">—</b></div>
+            <div class="countPill"><span>Count</span><b id="levelUpCount">—</b></div>
             <button class="openBtn" id="openLevelUpBtn">Open</button>
           </div>
         </div>
@@ -517,15 +611,16 @@
     </section>
   </main>
 
+  <!-- rank.mp3 must be in the same folder as this page -->
+  <audio id="rankAudio" src="rank.mp3" preload="auto"></audio>
+
   <div id="overlay" class="overlay">
     <div id="openStage" class="openStage">
-      <button id="closeX" class="closeX" aria-label="Close">×</button>
-
       <div class="stageTitle">
-        <div id="stageLeft">Lucky Chest</div>
+        <div id="stageLeft">Chest</div>
         <div class="right">
-          <div class="miniPill" id="miniA">Level: 1</div>
-          <div class="miniPill" id="miniB">Spins: 5</div>
+          <div class="miniPill" id="miniA">—</div>
+          <div class="miniPill" id="miniB">—</div>
         </div>
       </div>
 
@@ -533,6 +628,7 @@
       <div id="supernova" class="supernova"></div>
       <div id="confetti" class="confetti"></div>
 
+      <!-- Lucky / Gold visual -->
       <div id="chestVisual" class="chestVisual lvl1">
         <i class="sparkle" style="left:18px; top:24px; animation-delay:.0s;"></i>
         <i class="sparkle" style="left:44px; top:44px; animation-delay:.2s;"></i>
@@ -540,8 +636,29 @@
         <i class="sparkle" style="right:44px; top:60px; animation-delay:.33s;"></i>
       </div>
 
-      <div id="bigText" class="bigText">Click to Spin (5)</div>
-      <div id="hint" class="hint">Lucky Chest • Go for the GOLD (Level 6)</div>
+      <!-- Level-up rarity picker -->
+      <div id="rarityPick" class="rarityPick">
+        <div class="rarityTitle">Select a rarity to award</div>
+        <div class="rarityBtns">
+          <button class="rarBtn common" data-r="Common">Common</button>
+          <button class="rarBtn uncommon" data-r="Uncommon">Uncommon</button>
+          <button class="rarBtn rare" data-r="Rare">Rare</button>
+          <button class="rarBtn epic" data-r="Epic">Epic</button>
+          <button class="rarBtn legendary" data-r="Legendary">Legendary</button>
+        </div>
+      </div>
+
+      <!-- Wheel -->
+      <div id="wheelWrap" class="wheelWrap">
+        <div class="pointer"></div>
+        <div class="wheelRow">
+          <canvas id="wheel" width="420" height="420"></canvas>
+        </div>
+        <div id="spinNote" class="spinNote">Spinning…</div>
+      </div>
+
+      <div id="bigText" class="bigText"></div>
+      <div id="hint" class="hint"></div>
 
       <div id="rewardCard" class="rewardCard">
         <div id="rewardBig" class="rewardBig">Reward</div>
@@ -556,6 +673,7 @@
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
     import { getFirestore, doc, getDoc, onSnapshot, runTransaction, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
+    // ✅ Your Troop site Firebase (as in your calendar page)
     const firebaseConfig = {
       apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
       authDomain: "troop-248.firebaseapp.com",
@@ -580,7 +698,7 @@
 
     const luckyCountEl = document.getElementById("luckyCount");
     const goldChestCountEl = document.getElementById("goldChestCount");
-    const levelUpTotalEl = document.getElementById("levelUpTotal");
+    const levelUpCountEl = document.getElementById("levelUpCount");
 
     const openLuckyBtn = document.getElementById("openLuckyBtn");
     const openGoldBtn = document.getElementById("openGoldBtn");
@@ -588,7 +706,6 @@
 
     const overlay = document.getElementById("overlay");
     const openStage = document.getElementById("openStage");
-    const closeX = document.getElementById("closeX");
 
     const miniA = document.getElementById("miniA");
     const miniB = document.getElementById("miniB");
@@ -602,9 +719,16 @@
     const supernova = document.getElementById("supernova");
     const confetti = document.getElementById("confetti");
 
+    const rarityPick = document.getElementById("rarityPick");
+    const wheelWrap = document.getElementById("wheelWrap");
+    const wheelCanvas = document.getElementById("wheel");
+    const spinNote = document.getElementById("spinNote");
+
     const rewardCard = document.getElementById("rewardCard");
     const rewardBig = document.getElementById("rewardBig");
     const rewardSub = document.getElementById("rewardSub");
+
+    const rankAudio = document.getElementById("rankAudio");
 
     logoutBtn.addEventListener("click", async () => { await signOut(auth); window.location.href = "/"; });
 
@@ -614,6 +738,29 @@
 
     function rewardsRef(uid){ return doc(db, "accountInfo", uid, "modules", "rewards"); }
 
+    // ===== Badge rarity mapping A-Y =====
+    const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXY".split("");
+    function rarityOfBadge(letter){
+      const i = LETTERS.indexOf(letter);
+      if (i < 0) return "Common";
+      if (i < 5) return "Common";
+      if (i < 10) return "Uncommon";
+      if (i < 15) return "Rare";
+      if (i < 20) return "Epic";
+      return "Legendary";
+    }
+    const BADGES_BY_RARITY = {
+      Common: LETTERS.slice(0,5),
+      Uncommon: LETTERS.slice(5,10),
+      Rare: LETTERS.slice(10,15),
+      Epic: LETTERS.slice(15,20),
+      Legendary: LETTERS.slice(20,25),
+    };
+
+    // ===== Lucky chest points->gems multipliers when badge max =====
+    const GEM_MULT = { Common:1, Uncommon:5, Rare:20, Epic:50, Legendary:100 };
+
+    // ===== Rank unlocks for Lucky chest targeting (unchanged) =====
     const RANK_ORDER = ["No Rank", "Scout", "Tenderfoot", "2nd Class", "1st Class", "Star", "Life", "Eagle"];
     function unlockedByRank(rank){
       const r = (rank && RANK_ORDER.includes(rank)) ? rank : "No Rank";
@@ -622,22 +769,11 @@
       if (r === "Scout"){ ["F","G","H"].forEach(x=>set.add(x)); return set; }
       if (r === "Tenderfoot"){ ["F","G","H","I","J"].forEach(x=>set.add(x)); ["K","L"].forEach(x=>set.add(x)); return set; }
       if (r === "2nd Class"){ ["F","G","H","I","J"].forEach(x=>set.add(x)); ["K","L","M","N","O"].forEach(x=>set.add(x)); set.add("P"); return set; }
-      "ABCDEFGHIJKLMNOPQRSTUVWXY".split("").forEach(x=>set.add(x));
+      LETTERS.forEach(x=>set.add(x));
       return set;
     }
 
-    function rarityOfBadge(letter){
-      const i = "ABCDEFGHIJKLMNOPQRSTUVWXY".indexOf(letter);
-      if (i < 0) return "Common";
-      if (i < 5) return "Common";
-      if (i < 10) return "Uncommon";
-      if (i < 15) return "Rare";
-      if (i < 20) return "Epic";
-      return "Legendary";
-    }
-
-    const GEM_MULT = { Common:1, Uncommon:5, Rare:15, Epic:45, Legendary:125 };
-
+    // ===== Lucky reward rules (same as before) =====
     function pointsFor(finalLevel, rarity){
       if (finalLevel === 1) return randInt(50,150);
       if (finalLevel === 2){
@@ -663,11 +799,11 @@
         if (rarity === "Legendary") return randInt(1,3);
       }
       if (finalLevel === 6){
-        if (rarity === "Common") return randInt(1200,1550);
-        if (rarity === "Uncommon") return randInt(575,850);
-        if (rarity === "Rare") return randInt(255,355);
-        if (rarity === "Epic") return randInt(140,200);
-        if (rarity === "Legendary") return randInt(8,22);
+        if (rarity === "Common") return randInt(1000,1250);
+        if (rarity === "Uncommon") return randInt(350,475);
+        if (rarity === "Rare") return randInt(175,210);
+        if (rarity === "Epic") return randInt(90,120);
+        if (rarity === "Legendary") return randInt(5,25);
       }
       return randInt(50,150);
     }
@@ -688,14 +824,13 @@
       return arr;
     }
 
-    const LEVELUP_SECONDS = { scout:2, tenderfoot:4, "2class":6, "1class":8, star:10, life:12, eagle:15 };
-
-    const state = { mode:null, lucky:null, gold:null, levelup:null, unlockedSet: unlockedByRank("No Rank") };
-
+    // ===== Visual helpers =====
     function showOverlay(){ overlay.classList.add("show"); }
     function hideOverlay(){
       overlay.classList.remove("show");
       rewardCard.classList.remove("show");
+      rarityPick.classList.remove("show");
+      wheelWrap.classList.remove("show");
       burst.classList.remove("show");
       supernova.classList.remove("show");
       confetti.innerHTML = "";
@@ -703,12 +838,20 @@
       chestVisual.className = "chestVisual lvl1";
       bigText.textContent = "";
       hint.textContent = "";
-      miniA.textContent = "";
-      miniB.textContent = "";
-      stageLeft.textContent = "";
-      state.mode = null; state.lucky = null; state.gold = null; state.levelup = null;
+      miniA.textContent = "—";
+      miniB.textContent = "—";
+      stageLeft.textContent = "Chest";
+      state.mode = null;
+      state.lucky = null;
+      state.gold = null;
+      state.levelup = null;
+      state.wheel = null;
     }
-    closeX.addEventListener("click", (e)=>{ e.stopPropagation(); hideOverlay(); });
+
+    // Close overlay: after reward shows, click closes. Also allow clicking dark area to close.
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) hideOverlay();
+    });
 
     function triggerBurst(level){
       burst.classList.remove("show"); void burst.offsetWidth; burst.classList.add("show");
@@ -726,16 +869,27 @@
         confetti.appendChild(p);
       }
     }
-
-    function setLuckyTheme(level){
-      chestVisual.className = "chestVisual " + (level===1?"lvl1":level===2?"lvl2":level===3?"lvl3":level===4?"lvl4":level===5?"lvl5":"lvl6");
-    }
     function wobble(){
       chestVisual.classList.remove("spinAnim");
       void chestVisual.offsetWidth;
       chestVisual.classList.add("spinAnim");
     }
+    function setLuckyTheme(level){
+      chestVisual.className = "chestVisual " + (level===1?"lvl1":level===2?"lvl2":level===3?"lvl3":level===4?"lvl4":level===5?"lvl5":"lvl6");
+    }
 
+    // ===== State =====
+    const state = {
+      mode: null,
+      lucky: null,
+      gold: null,
+      levelup: null,
+      wheel: null,
+      unlockedSet: unlockedByRank("No Rank"),
+      lastRewards: null
+    };
+
+    // ===== Firestore transactions =====
     async function transactOpenGold(uid){
       const ref = rewardsRef(uid);
       return runTransaction(db, async (tx) => {
@@ -747,7 +901,7 @@
         const goldChests = Number(ch.gold || 0);
         if (goldChests <= 0) throw new Error("No gold chests");
 
-        const amount = randInt(15000, 100000);
+        const amount = randInt(5000, 100000);
         const nextGold = Number(d.gold || 0) + amount;
         const nextCh = { ...ch, gold: goldChests - 1 };
 
@@ -759,41 +913,6 @@
       });
     }
 
-    async function transactOpenLevelUp(uid, variant){
-      const ref = rewardsRef(uid);
-      return runTransaction(db, async (tx) => {
-        const snap = await tx.get(ref);
-        if (!snap.exists()) throw new Error("Rewards doc missing");
-        const d = snap.data();
-
-        const ch = d.chests || {};
-        const lu = (ch.levelUp || {});
-        const cur = Number(lu[variant] || 0);
-        if (cur <= 0) throw new Error("No level up chests of this type");
-
-        const baseMin = { scout: 40000, tenderfoot: 40000, "2class": 60000, "1class": 80000, star: 100000, life: 120000, eagle: 500000 }[variant] || 2500;
-        const baseMax = { scout: 80000, tenderfoot: 120000, "2class": 160000, "1class": 200000, star: 240000, life: 280000, eagle: 2500000 }[variant] || 9000;
-        const goldAmt = randInt(baseMin, baseMax);
-
-        const nextGold = Number(d.gold || 0) + goldAmt;
-        const nextLU = { ...lu, [variant]: cur - 1 };
-        const nextCh = { ...ch, levelUp: nextLU };
-
-        const history = Array.isArray(d.history) ? d.history.slice(0, 60) : [];
-        history.unshift({
-          type: "levelup",
-          variant,
-          gold: goldAmt,
-          otherRewards: [{ type:"TBD", note:"Other rewards will be defined later." }],
-          openedAt: new Date().toISOString()
-        });
-
-        tx.update(ref, { gold: nextGold, chests: nextCh, history, lastChestOpen: serverTimestamp() });
-        return { goldAmt };
-      });
-    }
-
-    // Lucky: if awarded badge is Level 8, convert points to gems with multiplier and DO NOT add points.
     async function transactOpenLuckyAndAward(uid, finalLevel){
       const ref = rewardsRef(uid);
       return runTransaction(db, async (tx) => {
@@ -840,7 +959,6 @@
         if (isMax){
           gemsGained = pts * (GEM_MULT[rarity] ?? 1);
           nextGems = curGems + gemsGained;
-          // Points are converted; do not add to points total when at Level 8.
         } else {
           const nextPoints = Number(badgesPoints[badge] || 0) + pts;
           nextBadgesPoints = { ...badgesPoints, [badge]: nextPoints };
@@ -861,32 +979,296 @@
           openedAt: new Date().toISOString()
         });
 
-        const update = {
-          chests: nextCh,
-          history,
-          lastChestOpen: serverTimestamp()
-        };
-
-        if (isMax){
-          update.gems = nextGems;
-        } else {
-          update.badgesPoints = nextBadgesPoints;
-        }
+        const update = { chests: nextCh, history, lastChestOpen: serverTimestamp() };
+        if (isMax) update.gems = nextGems;
+        else update.badgesPoints = nextBadgesPoints;
 
         tx.update(ref, update);
-
         return { badge, rarity, pts, finalLevel, badgeLevel: curLevel, converted: isMax, gemsGained };
       });
     }
 
+    // ✅ NEW: Level Up chest single type.
+    // Decrements a Level Up chest from either:
+    //  - chests.levelUp (number), OR
+    //  - legacy chests.levelUp map (sum) by decrementing the first available key in a fixed order
+    function consumeOneLevelUpChest(chests){
+      const ch = { ...(chests || {}) };
+
+      // New format (recommended): ch.levelUp = number
+      if (typeof ch.levelUp === "number"){
+        const cur = Number(ch.levelUp || 0);
+        if (cur <= 0) return { ok:false, ch };
+        ch.levelUp = cur - 1;
+        return { ok:true, ch };
+      }
+
+      // Legacy format: ch.levelUp is map
+      const lu = (ch.levelUp || {});
+      const order = ["eagle","life","star","1class","2class","tenderfoot","scout"];
+      const key = order.find(k => Number(lu[k] || 0) > 0);
+      if (!key) return { ok:false, ch };
+      ch.levelUp = { ...lu, [key]: Number(lu[key]) - 1 };
+      return { ok:true, ch };
+    }
+
+    async function transactOpenLevelUpAward(uid, rarity, landedBadge){
+      const ref = rewardsRef(uid);
+      return runTransaction(db, async (tx) => {
+        const snap = await tx.get(ref);
+        if (!snap.exists()) throw new Error("Rewards doc missing");
+        const d = snap.data();
+
+        const chests = d.chests || {};
+        const consumed = consumeOneLevelUpChest(chests);
+        if (!consumed.ok) throw new Error("No level up chests");
+
+        // Validate badge is in that rarity set
+        const allowed = new Set(BADGES_BY_RARITY[rarity] || []);
+        if (!allowed.has(landedBadge)) throw new Error("Spinner result invalid.");
+
+        const badgesLevel = d.badgesLevel || {};
+        const curLevel = Number(badgesLevel?.[landedBadge] ?? 1);
+        const alreadyMax = curLevel >= 8;
+
+        const history = Array.isArray(d.history) ? d.history.slice(0, 60) : [];
+        const nowIso = new Date().toISOString();
+
+        // If already max => +1000 gems
+        if (alreadyMax){
+          const nextGems = Number(d.gems || 0) + 1000;
+
+          history.unshift({
+            type: "levelup",
+            selectedRarity: rarity,
+            landedBadge,
+            result: "ALREADY_MAX",
+            gemsGained: 1000,
+            openedAt: nowIso
+          });
+
+          tx.update(ref, {
+            chests: consumed.ch,
+            gems: nextGems,
+            history,
+            lastChestOpen: serverTimestamp()
+          });
+
+          return { landedBadge, rarity, alreadyMax: true };
+        }
+
+        // Otherwise, instantly set to level 8
+        const nextBadgesLevel = { ...badgesLevel, [landedBadge]: 8 };
+
+        history.unshift({
+          type: "levelup",
+          selectedRarity: rarity,
+          landedBadge,
+          result: "SET_MAX",
+          toLevel: 8,
+          openedAt: nowIso
+        });
+
+        tx.update(ref, {
+          chests: consumed.ch,
+          badgesLevel: nextBadgesLevel,
+          history,
+          lastChestOpen: serverTimestamp()
+        });
+
+        return { landedBadge, rarity, alreadyMax: false };
+      });
+    }
+
+    // ===== Wheel drawing + physics =====
+    const ctx = wheelCanvas.getContext("2d");
+
+    function drawWheel(labels, angleRad){
+      const w = wheelCanvas.width;
+      const h = wheelCanvas.height;
+      const cx = w/2, cy = h/2;
+      const r = Math.min(w,h) * 0.44;
+
+      ctx.clearRect(0,0,w,h);
+
+      // Outer glow
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.beginPath();
+      ctx.arc(0,0,r+18,0,Math.PI*2);
+      ctx.fillStyle = "rgba(255,255,255,.06)";
+      ctx.fill();
+      ctx.restore();
+
+      const n = labels.length;
+      const slice = (Math.PI*2)/n;
+
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(angleRad);
+
+      for (let i=0;i<n;i++){
+        const start = i*slice;
+        const end = start + slice;
+
+        // Segment fill
+        ctx.beginPath();
+        ctx.moveTo(0,0);
+        ctx.arc(0,0,r,start,end);
+        ctx.closePath();
+        const hue = (i * (360/n)) % 360;
+        ctx.fillStyle = `hsla(${hue} 90% 55% / .95)`;
+        ctx.fill();
+
+        // Border
+        ctx.strokeStyle = "rgba(255,255,255,.25)";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Label
+        ctx.save();
+        ctx.rotate(start + slice/2);
+        ctx.textAlign = "right";
+        ctx.fillStyle = "rgba(0,0,0,.75)";
+        ctx.font = "900 30px system-ui, -apple-system, Segoe UI, sans-serif";
+        ctx.shadowColor = "rgba(255,255,255,.30)";
+        ctx.shadowBlur = 8;
+        ctx.fillText(labels[i], r-18, 10);
+        ctx.restore();
+      }
+
+      // Center cap
+      ctx.beginPath();
+      ctx.arc(0,0,52,0,Math.PI*2);
+      ctx.fillStyle = "rgba(255,255,255,.12)";
+      ctx.fill();
+      ctx.strokeStyle = "rgba(255,255,255,.22)";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.font = "1000 12px system-ui, -apple-system, Segoe UI, sans-serif";
+      ctx.fillStyle = "rgba(255,255,255,.92)";
+      ctx.textAlign = "center";
+      ctx.fillText("RANK SPIN", 0, 4);
+
+      ctx.restore();
+    }
+
+    function computeLandedIndex(labels, angleRad){
+      // Pointer is at top (0 degrees). Our wheel rotates; find which segment is at pointer.
+      const n = labels.length;
+      const slice = (Math.PI*2)/n;
+
+      // Normalize angle to [0, 2π)
+      let a = angleRad % (Math.PI*2);
+      if (a < 0) a += Math.PI*2;
+
+      // Because the wheel is rotated, the segment at the pointer corresponds to angle = (2π - a)
+      const pointerAngle = (Math.PI*2 - a) % (Math.PI*2);
+
+      const idx = Math.floor(pointerAngle / slice) % n;
+      return idx;
+    }
+
+    async function spinWheelAndAward(rarity){
+      const labels = BADGES_BY_RARITY[rarity] || [];
+      if (labels.length === 0) throw new Error("No badges in this rarity.");
+
+      state.wheel = { rarity, labels, spinning: true };
+      rarityPick.classList.remove("show");
+      chestVisual.style.display = "none";
+      wheelWrap.classList.add("show");
+
+      miniA.textContent = `Rarity: ${rarity}`;
+      miniB.textContent = "Spinning…";
+      bigText.textContent = "Spinning the Rank Wheel…";
+      hint.textContent = "This will land on a badge and apply instantly.";
+
+      // Start angle + velocity
+      let angle = 0;
+      let velocity = 0.35 + Math.random()*0.18; // initial rad/frame
+      const friction = 0.985 - Math.random()*0.003; // slight randomness
+      const minVel = 0.0025;
+      const extraSpinFrames = 90 + Math.floor(Math.random()*60); // guarantee a long spin feel
+
+      // Random “target” by adding extra energy late (still genuine looking)
+      let frames = 0;
+
+      // Pre-draw
+      drawWheel(labels, angle);
+
+      await new Promise((resolve) => {
+        function tick(){
+          frames++;
+
+          // Add a little wobble energy early so it feels alive
+          if (frames < 22) velocity += (Math.random()*0.004);
+
+          angle += velocity;
+          velocity *= friction;
+
+          drawWheel(labels, angle);
+
+          if (frames < extraSpinFrames){
+            requestAnimationFrame(tick);
+            return;
+          }
+
+          if (velocity > minVel){
+            requestAnimationFrame(tick);
+            return;
+          }
+
+          resolve();
+        }
+        requestAnimationFrame(tick);
+      });
+
+      // Determine landed badge
+      const idx = computeLandedIndex(labels, angle);
+      const landed = labels[idx];
+
+      spinNote.textContent = `Landed on: ${landed}`;
+      miniB.textContent = `Landed: ${landed}`;
+
+      // Celebration visuals
+      triggerBurst(6);
+      spawnConfetti(60);
+
+      // Apply immediately to Firestore
+      const uid = auth.currentUser?.uid;
+      const res = await transactOpenLevelUpAward(uid, rarity, landed);
+
+      // Show result
+      rewardCard.classList.add("show");
+      if (res.alreadyMax){
+        rewardBig.textContent = "ALREADY MAX LEVEL — CONVERTED TO 1000 GEMS";
+        rewardSub.textContent = `Spinner landed on Badge ${landed} • ${rarity} • Click to close`;
+      } else {
+        rewardBig.textContent = `Badge ${landed} is now MAX LEVEL (8)!`;
+        rewardSub.textContent = `${rarity} • Applied instantly • Click to close`;
+      }
+
+      bigText.textContent = "Complete!";
+      hint.textContent = "Click anywhere to close.";
+      state.wheel.spinning = false;
+    }
+
+    // ===== Open flows =====
     function openLuckyFlow(){
       state.mode = "lucky";
       state.lucky = { level: 1, spinsLeft: 5, doneSpins: false, revealing: false, revealed: false };
+
       stageLeft.textContent = "Lucky Chest";
       miniA.textContent = "Level: 1";
       miniB.textContent = "Spins: 5";
-      setLuckyTheme(1);
+
+      chestVisual.style.display = "";
+      rarityPick.classList.remove("show");
+      wheelWrap.classList.remove("show");
       rewardCard.classList.remove("show");
+
+      chestVisual.className = "chestVisual lvl1";
       bigText.textContent = "Click to Spin (5)";
       hint.textContent = "Lucky Chest • 40% level-up chance • Never goes down";
       showOverlay();
@@ -895,35 +1277,77 @@
     function openGoldFlow(){
       state.mode = "gold";
       state.gold = { revealing:false, revealed:false, amount:0 };
+
       stageLeft.textContent = "Gold Chest";
       miniA.textContent = "Gold Chest";
       miniB.textContent = "Click to Open";
+
+      chestVisual.style.display = "";
+      rarityPick.classList.remove("show");
+      wheelWrap.classList.remove("show");
+      rewardCard.classList.remove("show");
+
       chestVisual.className = "chestVisual lvl6";
       bigText.textContent = "Click to Open";
       hint.textContent = "Gold Chest • 5,000 – 100,000";
-      rewardCard.classList.remove("show");
       showOverlay();
     }
 
-    function openLevelUpFlow(variant){
+    function openLevelUpFlow(){
       state.mode = "levelup";
-      const sec = LEVELUP_SECONDS[variant] ?? 2;
-      state.levelup = { variant, seconds: sec, revealed:false, revealing:false, goldAmount:0 };
-      stageLeft.textContent = `Level Up Chest • ${variant}`;
-      miniA.textContent = `Variant: ${variant}`;
-      miniB.textContent = `Time: ${sec}s`;
-      chestVisual.className = "chestVisual lvl3";
-      bigText.textContent = "Click to Begin";
-      hint.textContent = "Level Up Chest • Big celebration";
+      state.levelup = { selectedRarity: null, revealing:false, revealed:false };
+
+      stageLeft.textContent = "Level Up Chest";
+      miniA.textContent = "Select rarity";
+      miniB.textContent = "—";
+
+      // hide other visuals
+      chestVisual.style.display = "none";
+      wheelWrap.classList.remove("show");
       rewardCard.classList.remove("show");
+
+      rarityPick.classList.add("show");
+      bigText.textContent = "Choose a rarity to spin for";
+      hint.textContent = "After selection, the wheel will spin and apply instantly.";
       showOverlay();
     }
 
+    // Clicking inside stage: only handles Lucky/Gold/reward closing
     openStage.addEventListener("click", async () => {
       if (!state.mode) return;
+
+      // If reward showing, click closes
+      if (rewardCard.classList.contains("show")) { hideOverlay(); return; }
+
       if (state.mode === "lucky") return handleLuckyClick();
       if (state.mode === "gold") return handleGoldClick();
-      if (state.mode === "levelup") return handleLevelUpClick();
+      // levelup is driven by rarity buttons, not stage clicks
+    });
+
+    // Rarity selection buttons
+    document.querySelectorAll(".rarBtn").forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        if (state.mode !== "levelup") return;
+        if (state.wheel?.spinning) return;
+
+        const rarity = btn.dataset.r;
+        state.levelup.selectedRarity = rarity;
+
+        // Play rank.mp3 (best effort; browser may require user gesture — this click counts)
+        try{
+          rankAudio.currentTime = 0;
+          await rankAudio.play();
+        }catch(_){ /* ignore autoplay restrictions */ }
+
+        spinNote.textContent = "Spinning…";
+        try{
+          await spinWheelAndAward(rarity);
+        }catch(err){
+          alert(err.message || "Could not open level up chest.");
+          hideOverlay();
+        }
+      });
     });
 
     async function handleGoldClick(){
@@ -958,60 +1382,6 @@
       }
     }
 
-    async function handleLevelUpClick(){
-      if (!state.levelup) return;
-      if (state.levelup.revealed){ hideOverlay(); return; }
-      if (state.levelup.revealing) return;
-
-      state.levelup.revealing = true;
-      const { variant, seconds } = state.levelup;
-
-      bigText.textContent = "Celebration starting…";
-      hint.textContent = "This will play the full animation time.";
-      miniB.textContent = `Time: ${seconds}s`;
-
-      const start = Date.now();
-      spawnConfetti(Math.min(40, 10 + seconds * 2));
-      triggerBurst(6);
-
-      const burstTimer = setInterval(() => {
-        triggerBurst(6);
-        spawnConfetti(Math.min(60, 12 + Math.floor(Math.random() * (10 + seconds))));
-      }, 1500);
-
-      const tick = setInterval(() => {
-        const left = Math.max(0, seconds - ((Date.now() - start) / 1000));
-        miniB.textContent = `Time: ${left.toFixed(0)}s`;
-      }, 250);
-
-      try{
-        await new Promise(r => setTimeout(r, seconds * 1000));
-        clearInterval(burstTimer);
-        clearInterval(tick);
-
-        wobble();
-        triggerBurst(6);
-        spawnConfetti(Math.min(90, 30 + seconds * 2));
-
-        const uid = auth.currentUser?.uid;
-        const res = await transactOpenLevelUp(uid, variant);
-        state.levelup.goldAmount = res.goldAmt;
-        state.levelup.revealed = true;
-
-        rewardBig.textContent = `Level Up Chest: ${variant.toUpperCase()} • +${formatNum(res.goldAmt)} Gold`;
-        rewardSub.textContent = "Click to close";
-        rewardCard.classList.add("show");
-
-        bigText.textContent = "Triumphant!";
-        miniB.textContent = "Done";
-      }catch(e){
-        alert(e.message || "Could not open level up chest.");
-        hideOverlay();
-      }finally{
-        state.levelup.revealing = false;
-      }
-    }
-
     async function handleLuckyClick(){
       if (!state.lucky) return;
 
@@ -1035,6 +1405,7 @@
             const res = await transactOpenLuckyAndAward(uid, finalLevel);
             state.lucky.revealed = true;
 
+            rewardCard.classList.add("show");
             if (res.converted){
               rewardBig.textContent = `Lucky (Level ${res.finalLevel}) → Badge ${res.badge} (Lv ${res.badgeLevel}) MAX • +${formatNum(res.gemsGained)} GEMS`;
               rewardSub.textContent = `Converted from ${formatNum(res.pts)} ${res.rarity} points • Click to close`;
@@ -1043,7 +1414,6 @@
               rewardSub.textContent = `Rarity: ${res.rarity} • Click to close`;
             }
 
-            rewardCard.classList.add("show");
             bigText.textContent = "Reward Granted!";
             miniB.textContent = "Done";
           }catch(e){
@@ -1060,7 +1430,7 @@
       state.lucky.spinsLeft--;
 
       let leveled = false;
-      if (state.lucky.level < 6 && Math.random() < 0.4573){
+      if (state.lucky.level < 6 && Math.random() < 0.40){
         state.lucky.level++;
         leveled = true;
       }
@@ -1089,26 +1459,21 @@
       }
     }
 
-    function openLuckyIfPossible(){ if (!openLuckyBtn.disabled) openLuckyFlow(); }
-    function openGoldIfPossible(){ if (!openGoldBtn.disabled) openGoldFlow(); }
+    // ===== Button handlers =====
+    openLuckyBtn.addEventListener("click", () => { if (!openLuckyBtn.disabled) openLuckyFlow(); });
+    openGoldBtn.addEventListener("click", () => { if (!openGoldBtn.disabled) openGoldFlow(); });
+    openLevelUpBtn.addEventListener("click", () => { if (!openLevelUpBtn.disabled) openLevelUpFlow(); });
 
-    openLuckyBtn.addEventListener("click", openLuckyIfPossible);
-    openGoldBtn.addEventListener("click", openGoldIfPossible);
-
-    let lastRewards = null;
-    openLevelUpBtn.addEventListener("click", () => {
-      const order = ["eagle","life","star","1class","2class","tenderfoot","scout"];
-      const d = lastRewards || {};
-      const ch = d.chests || {};
-      const lu = ch.levelUp || {};
-      const pick = order.find(v => Number(lu[v] || 0) > 0);
-      if (!pick){ alert("No level up chests available."); return; }
-      openLevelUpFlow(pick);
-    });
-
-    function sumLevelUp(lu){
+    // ===== Chest counts display =====
+    function sumLegacyLevelUpMap(lu){
       const keys = ["scout","tenderfoot","2class","1class","star","life","eagle"];
       return keys.reduce((a,k)=> a + Number(lu?.[k] || 0), 0);
+    }
+    function getLevelUpCount(ch){
+      if (!ch) return 0;
+      if (typeof ch.levelUp === "number") return Number(ch.levelUp || 0);
+      // legacy map
+      return sumLegacyLevelUpMap(ch.levelUp || {});
     }
 
     let unsubRewards = null;
@@ -1118,7 +1483,6 @@
 
       const infoRef = doc(db, "accountInfo", user.uid);
       const infoSnap = await getDoc(infoRef);
-
       if (!infoSnap.exists()) { window.location.href = "/under-review/"; return; }
 
       const info = infoSnap.data() || {};
@@ -1140,7 +1504,7 @@
 
       unsubRewards = onSnapshot(rewardsRef(user.uid), (snap) => {
         const d = snap.exists() ? (snap.data() || {}) : {};
-        lastRewards = d;
+        state.lastRewards = d;
 
         goldValue.textContent = formatNum(d.gold ?? 0);
         gemsValue.textContent = formatNum(d.gems ?? 0);
@@ -1152,15 +1516,15 @@
         const ch = d.chests || {};
         const lucky = Number(ch.lucky || 0);
         const goldCh = Number(ch.gold || 0);
-        const luTotal = sumLevelUp(ch.levelUp || {});
+        const levelUp = getLevelUpCount(ch);
 
         luckyCountEl.textContent = formatNum(lucky);
         goldChestCountEl.textContent = formatNum(goldCh);
-        levelUpTotalEl.textContent = formatNum(luTotal);
+        levelUpCountEl.textContent = formatNum(levelUp);
 
         openLuckyBtn.disabled = lucky <= 0;
         openGoldBtn.disabled = goldCh <= 0;
-        openLevelUpBtn.disabled = luTotal <= 0;
+        openLevelUpBtn.disabled = levelUp <= 0;
       }, (err) => {
         console.warn("Rewards snapshot error:", err);
         goldValue.textContent = "0";
@@ -1168,7 +1532,7 @@
         rankValue.textContent = "No Rank";
         luckyCountEl.textContent = "0";
         goldChestCountEl.textContent = "0";
-        levelUpTotalEl.textContent = "0";
+        levelUpCountEl.textContent = "0";
         openLuckyBtn.disabled = true;
         openGoldBtn.disabled = true;
         openLevelUpBtn.disabled = true;
