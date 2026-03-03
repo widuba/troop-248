@@ -557,10 +557,6 @@
       <a href="/useful-links">Useful Links</a>
       <a href="/events">Events</a>
       <a href="/mail">Mail</a>
-
-      <a href="/advancements/rewards/">Rewards</a>
-      <a class="active" href="/advancements/rewards/chests/">Chests</a>
-      <a href="/advancements/rewards/badges/">Badges</a>
     </nav>
 
     <div id="auth-bar">
@@ -590,7 +586,7 @@
       <div class="row">
         <div class="chestCard">
           <h4>Lucky Chests</h4>
-          <p>Start at Level 1, 5 spins, 40% chance to level up each spin (never down), cap Level 6. Final click reveals reward.</p>
+          <p>Start at Level 1, 5 spins, chance to level up each spin (never down), cap Level 6. Final click reveals reward.</p>
           <div class="countRow">
             <div class="countPill"><span>Count</span><b id="luckyCount">—</b></div>
             <button class="openBtn" id="openLuckyBtn">Open</button>
@@ -599,7 +595,7 @@
 
         <div class="chestCard">
           <h4>Gold Chests</h4>
-          <p>Contains only gold, random between 5,000 and 100,000.</p>
+          <p>Contains only gold, amount based on algorithmically detected website activity.</p>
           <div class="countRow">
             <div class="countPill"><span>Count</span><b id="goldChestCount">—</b></div>
             <button class="openBtn" id="openGoldBtn">Open</button>
@@ -608,7 +604,7 @@
 
         <div class="chestCard">
           <h4>Level Up Chests</h4>
-          <p>Select a rarity → wheel spins → landed badge becomes Max Level instantly. If already max, convert to 1000 gems.</p>
+          <p>Select a rarity → wheel spins → landed badge becomes Max Level instantly. By far the most rewarding chest. Each BSA rank gets one Level Up Chest, Eagle gets 5 instantly.</p>
           <div class="countRow">
             <div class="countPill"><span>Count</span><b id="levelUpCount">—</b></div>
             <button class="openBtn" id="openLevelUpBtn">Open</button>
@@ -618,7 +614,6 @@
     </section>
   </main>
 
-  <!-- rank.mp3 must be in the same folder as this page -->
   <audio id="rankAudio" src="rank.mp3" preload="auto"></audio>
 
   <div id="overlay" class="overlay">
