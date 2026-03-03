@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Rewards Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="/bsafavicon.ico">
+
+  <style>
+    :root{
+      --bg:#0b0f18;
+      --panel:#111827;
+      --panel2:#0f172a;
+      --line:rgba(255,255,255,.10);
+      --text:#e5e7eb;
+      --muted:rgba(229,231,235,.70);
+      --accent:#22c55e;
+      --danger:#ef4444;
+      --warn:#f59e0b;
+      --blue:#60a5fa;
+      --radius:14px;
+      --shadow: 0 18px 55px rgba(0,0,0,.45);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: system-ui, -apple-system, Segoe UI, sans-serif;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      background:
+        radial-gradient(900px 600px at 20% 10%, rgba(96,165,250,.10), transparent 55%),
+        radial-gradient(900px 600px at 80% 20%, rgba(34,197,94,.10), transparent 55%),
+        var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      min-height:100vh;
+    }
+
+    .wrap{ max-width: 1200px; margin: 0 auto; padding: 20px 16px 40px; }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding: 14px 16px;
+      border:1px solid var(--line);
+      background: rgba(17,24,39,.82);
+      backdrop-filter: blur(8px);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 12px;
+      z-index: 20;
+    }
+
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+      min-width: 240px;
+    }
+    .brand .title{
+      font-weight: 950;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-size: 12px;
+      font-family: var(--mono);
+      color: rgba(229,231,235,.92);
+    }
+    .brand .sub{
+      font-size: 12px;
+      color: var(--muted);
+      font-family: var(--mono);
+    }
+
+    .top-actions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .pill{
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(15,23,42,.75);
+      color: rgba(229,231,235,.92);
+      font-family: var(--mono);
+      font-size: 12px;
+      white-space:nowrap;
+    }
+
+    .btn{
+      appearance:none;
+      border: 1px solid var(--line);
+      background: rgba(15,23,42,.85);
+      color: var(--text);
+      padding: 9px 12px;
+      border-radius: 999px;
+      cursor:pointer;
+      font-weight: 800;
+      font-size: 12px;
+      font-family: var(--mono);
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+    .btn:hover{ filter: brightness(1.05); }
+    .btn.green{
+      border-color: rgba(34,197,94,.25);
+      background: rgba(34,197,94,.15);
+      color: rgba(236,253,245,.96);
+    }
+    .btn.red{
+      border-color: rgba(239,68,68,.25);
+      background: rgba(239,68,68,.12);
+      color: rgba(254,242,242,.96);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 360px 1fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+      .brand{ min-width: unset; }
+    }
+
+    .panel{
+      border: 1px solid var(--line);
+      background: rgba(17,24,39,.84);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .panelHead{
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      background: rgba(15,23,42,.72);
+    }
+    .panelHead h2{
+      margin:0;
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-family: var(--mono);
+      color: rgba(229,231,235,.92);
+    }
+    .panelBody{ padding: 12px 14px; }
+
+    .search{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    .search input{
+      width:100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(2,6,23,.65);
+      color: var(--text);
+      outline:none;
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+    .search input:focus{ border-color: rgba(96,165,250,.35); }
+
+    .list{
+      margin-top: 10px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      max-height: 64vh;
+      overflow:auto;
+      padding-right: 4px;
+    }
+    .userRow{
+      border:1px solid var(--line);
+      background: rgba(2,6,23,.45);
+      border-radius: 12px;
+      padding: 10px 10px;
+      cursor:pointer;
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+    .userRow:hover{ border-color: rgba(96,165,250,.35); }
+    .userRow.active{
+      border-color: rgba(34,197,94,.38);
+      box-shadow: 0 0 0 2px rgba(34,197,94,.12) inset;
+    }
+    .uName{
+      font-weight: 950;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing:.02em;
+    }
+    .uMeta{
+      font-family: var(--mono);
+      color: var(--muted);
+      font-size: 11px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .twoCol{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 980px){
+      .twoCol{ grid-template-columns: 1fr; }
+    }
+
+    .kv{
+      display:grid;
+      grid-template-columns: 130px 1fr;
+      gap: 10px;
+      align-items:center;
+      margin-bottom: 10px;
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+    .kv label{ color: rgba(229,231,235,.85); }
+    .kv input, .kv select{
+      width:100%;
+      padding: 9px 10px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(2,6,23,.65);
+      color: var(--text);
+      outline:none;
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+
+    .splitBtns{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top: 12px;
+    }
+
+    .badgeGrid{
+      display:grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+    }
+    @media (max-width: 1100px){
+      .badgeGrid{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+    @media (max-width: 560px){
+      .badgeGrid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    .badgeCard{
+      border: 1px solid var(--line);
+      background: rgba(2,6,23,.45);
+      border-radius: 12px;
+      padding: 10px;
+      font-family: var(--mono);
+    }
+    .badgeCard .t{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom: 6px;
+      font-weight: 950;
+      font-size: 12px;
+    }
+    .badgeCard .m{
+      color: var(--muted);
+      font-size: 11px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .tag{
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing:.07em;
+      color: rgba(229,231,235,.85);
+      background: rgba(15,23,42,.6);
+      white-space:nowrap;
+    }
+
+    .blocked{
+      max-width: 820px;
+      margin: 40px auto;
+      border: 1px solid rgba(239,68,68,.30);
+      background: rgba(239,68,68,.10);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+    .blocked h1{
+      margin:0 0 6px;
+      font-size: 16px;
+      letter-spacing:.03em;
+      font-family: var(--mono);
+    }
+    .blocked p{
+      margin:0;
+      color: rgba(254,242,242,.88);
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap" id="app" style="display:none;">
+    <div class="topbar">
+      <div class="brand">
+        <div class="title">Rewards Admin Console</div>
+        <div class="sub">Internal tool — admins only</div>
+      </div>
+
+      <div class="top-actions">
+        <div class="pill" id="authPill">Signed in as …</div>
+        <a class="btn" href="/home">Home</a>
+        <a class="btn green" href="/advancements/rewards/">Rewards</a>
+        <button class="btn red" id="logoutBtn">Log out</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- Left: user list -->
+      <div class="panel">
+        <div class="panelHead">
+          <h2>Scouts / Users</h2>
+          <span class="tag" id="countTag">0</span>
+        </div>
+        <div class="panelBody">
+          <div class="search">
+            <input id="searchInput" type="text" placeholder="Search name or email…" autocomplete="off" />
+          </div>
+          <div class="list" id="userList"></div>
+        </div>
+      </div>
+
+      <!-- Right: details -->
+      <div class="panel">
+        <div class="panelHead">
+          <h2 id="detailTitle">Select a user</h2>
+          <span class="tag" id="uidTag">—</span>
+        </div>
+        <div class="panelBody">
+          <div class="twoCol">
+            <!-- Badges -->
+            <div class="panel" style="box-shadow:none;">
+              <div class="panelHead">
+                <h2>Badges</h2>
+                <span class="tag" id="badgeCountTag">0</span>
+              </div>
+              <div class="panelBody">
+                <div class="badgeGrid" id="badgesGrid">
+                  <div style="color:var(--muted); font-family:var(--mono); font-size:12px;">
+                    Choose a user to load badge data.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Edit rewards -->
+            <div class="panel" style="box-shadow:none;">
+              <div class="panelHead">
+                <h2>Edit Rewards</h2>
+                <span class="tag">Admin Write</span>
+              </div>
+              <div class="panelBody">
+                <div class="kv">
+                  <label>Rank</label>
+                  <select id="rankSelect">
+                    <option>No Rank</option>
+                    <option>Scout</option>
+                    <option>Tenderfoot</option>
+                    <option>2nd Class</option>
+                    <option>1st Class</option>
+                    <option>Star</option>
+                    <option>Life</option>
+                    <option>Eagle</option>
+                  </select>
+                </div>
+
+                <div class="kv"><label>Gold</label><input id="goldInput" type="number" min="0" step="1"></div>
+                <div class="kv"><label>Gems</label><input id="gemsInput" type="number" min="0" step="1"></div>
+
+                <hr style="border:none; border-top:1px solid var(--line); margin: 12px 0;">
+
+                <div class="kv"><label>Lucky chests</label><input id="luckyInput" type="number" min="0" step="1"></div>
+                <div class="kv"><label>Gold chests</label><input id="goldChestInput" type="number" min="0" step="1"></div>
+                <div class="kv"><label>LevelUp chests</label><input id="levelUpInput" type="number" min="0" step="1"></div>
+
+                <div class="splitBtns">
+                  <button class="btn green" id="saveBtn">Save changes</button>
+                  <button class="btn" id="refreshBtn">Refresh</button>
+                </div>
+
+                <div style="margin-top:10px; color:var(--muted); font-family:var(--mono); font-size:11px; line-height:1.4;">
+                  Notes: This edits <code>accountInfo/&lt;uid&gt;/modules/rewards</code> for the selected user.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="status" style="margin-top:12px; font-family:var(--mono); font-size:12px; color:var(--muted);"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Blocked view -->
+  <div class="wrap" id="blocked" style="display:none;">
+    <div class="blocked">
+      <h1>Blocked — Admins Only</h1>
+      <p>You do not have access to this page. Please return to Home.</p>
+      <div style="margin-top:12px;">
+        <a class="btn" href="/home">Go to Home</a>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import {
+      getFirestore,
+      doc, getDoc,
+      collection, getDocs,
+      setDoc, updateDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+    // ✅ Troop-248 Firebase config (same as your calendar page)
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+      authDomain: "troop-248.firebaseapp.com",
+      projectId: "troop-248",
+      storageBucket: "troop-248.firebasestorage.app",
+      messagingSenderId: "925363875752",
+      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+      measurementId: "G-NY75GX5TBH"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const elApp = document.getElementById("app");
+    const elBlocked = document.getElementById("blocked");
+
+    const authPill = document.getElementById("authPill");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    const searchInput = document.getElementById("searchInput");
+    const userList = document.getElementById("userList");
+    const countTag = document.getElementById("countTag");
+
+    const detailTitle = document.getElementById("detailTitle");
+    const uidTag = document.getElementById("uidTag");
+    const badgeCountTag = document.getElementById("badgeCountTag");
+    const badgesGrid = document.getElementById("badgesGrid");
+
+    const rankSelect = document.getElementById("rankSelect");
+    const goldInput = document.getElementById("goldInput");
+    const gemsInput = document.getElementById("gemsInput");
+    const luckyInput = document.getElementById("luckyInput");
+    const goldChestInput = document.getElementById("goldChestInput");
+    const levelUpInput = document.getElementById("levelUpInput");
+
+    const saveBtn = document.getElementById("saveBtn");
+    const refreshBtn = document.getElementById("refreshBtn");
+    const statusEl = document.getElementById("status");
+
+    const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXY".split("");
+
+    function rewardsRef(uid){ return doc(db, "accountInfo", uid, "modules", "rewards"); }
+    function fmt(n){ return Number(n || 0).toLocaleString("en-US"); }
+
+    function defaultRewardsDocForCreate(){
+      return {
+        gold: 0,
+        gems: 0,
+        rank: "No Rank",
+        chests: { lucky: 0, gold: 0, levelUp: 0 },
+        badgesPoints: {},
+        badgesLevel: {},
+        history: [],
+        createdAt: serverTimestamp()
+      };
+    }
+
+    async function ensureRewardsDoc(uid){
+      const ref = rewardsRef(uid);
+      const snap = await getDoc(ref);
+      if (!snap.exists()){
+        await setDoc(ref, defaultRewardsDocForCreate(), { merge:true });
+      }
+    }
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "/";
+    });
+
+    let allUsers = []; // { uid, name, email, accountType, authRole }
+    let selectedUid = null;
+
+    function userLabel(u){
+      const name = (u.name || u.displayName || "").trim();
+      const email = (u.email || "").trim();
+      return name || email || u.uid;
+    }
+
+    function renderUserList(list){
+      userList.innerHTML = "";
+      countTag.textContent = String(list.length);
+
+      if (list.length === 0){
+        userList.innerHTML = `<div style="color:var(--muted); font-family:var(--mono); font-size:12px;">No users found.</div>`;
+        return;
+      }
+
+      for (const u of list){
+        const row = document.createElement("div");
+        row.className = "userRow" + (u.uid === selectedUid ? " active" : "");
+        row.innerHTML = `
+          <div class="uName">${userLabel(u)}</div>
+          <div class="uMeta">
+            <span>${u.email ? u.email : "no-email"}</span>
+            <span>${u.accountType ? u.accountType : "unknown-type"}</span>
+            <span>${u.authRole ? u.authRole : "no-role"}</span>
+          </div>
+        `;
+        row.addEventListener("click", () => selectUser(u.uid));
+        userList.appendChild(row);
+      }
+    }
+
+    function filterUsers(q){
+      q = (q || "").toLowerCase();
+      if (!q) return allUsers.slice();
+      return allUsers.filter(u => {
+        const s = `${u.uid} ${u.name||""} ${u.displayName||""} ${u.email||""}`.toLowerCase();
+        return s.includes(q);
+      });
+    }
+
+    searchInput.addEventListener("input", () => {
+      renderUserList(filterUsers(searchInput.value));
+    });
+
+    function renderBadges(rewards){
+      const pts = rewards.badgesPoints || {};
+      const lvl = rewards.badgesLevel || {};
+
+      // "Has" = points > 0 OR level > 1
+      const owned = LETTERS.filter(L => Number(pts[L] || 0) > 0 || Number(lvl[L] || 1) > 1);
+
+      badgeCountTag.textContent = String(owned.length);
+      badgesGrid.innerHTML = "";
+
+      if (owned.length === 0){
+        badgesGrid.innerHTML = `<div style="color:var(--muted); font-family:var(--mono); font-size:12px;">No badges earned yet (points=0 and level=1 across all).</div>`;
+        return;
+      }
+
+      for (const L of owned){
+        const p = Number(pts[L] || 0);
+        const lv = Number(lvl[L] || 1);
+
+        const card = document.createElement("div");
+        card.className = "badgeCard";
+        card.innerHTML = `
+          <div class="t">
+            <span>Badge ${L}</span>
+            <span class="tag">Lv ${lv}</span>
+          </div>
+          <div class="m">
+            <span>Points: <b style="color:rgba(229,231,235,.92)">${fmt(p)}</b></span>
+          </div>
+        `;
+        badgesGrid.appendChild(card);
+      }
+    }
+
+    function loadRewardsToForm(rewards){
+      const ch = rewards.chests || {};
+      rankSelect.value = rewards.rank || "No Rank";
+      goldInput.value = Number(rewards.gold || 0);
+      gemsInput.value = Number(rewards.gems || 0);
+
+      luckyInput.value = Number(ch.lucky || 0);
+      goldChestInput.value = Number(ch.gold || 0);
+      // supports only the simple number format in this admin UI:
+      levelUpInput.value = (typeof ch.levelUp === "number") ? Number(ch.levelUp || 0) : 0;
+    }
+
+    async function selectUser(uid){
+      selectedUid = uid;
+      const u = allUsers.find(x => x.uid === uid);
+
+      detailTitle.textContent = u ? `User: ${userLabel(u)}` : "User";
+      uidTag.textContent = uid;
+
+      statusEl.textContent = "Loading rewards…";
+      badgesGrid.innerHTML = `<div style="color:var(--muted); font-family:var(--mono); font-size:12px;">Loading…</div>`;
+      badgeCountTag.textContent = "0";
+
+      try{
+        await ensureRewardsDoc(uid);
+        const snap = await getDoc(rewardsRef(uid));
+        const rewards = snap.exists() ? snap.data() : defaultRewardsDocForCreate();
+
+        renderBadges(rewards);
+        loadRewardsToForm(rewards);
+
+        statusEl.textContent = "Loaded. Edit values and click Save changes.";
+        renderUserList(filterUsers(searchInput.value));
+      }catch(e){
+        console.error(e);
+        statusEl.textContent = "Error loading rewards (check rules).";
+        badgesGrid.innerHTML = `<div style="color:var(--muted); font-family:var(--mono); font-size:12px;">Error.</div>`;
+      }
+    }
+
+    refreshBtn.addEventListener("click", async () => {
+      if (!selectedUid) return;
+      await selectUser(selectedUid);
+    });
+
+    saveBtn.addEventListener("click", async () => {
+      if (!selectedUid){
+        alert("Select a user first.");
+        return;
+      }
+
+      const patch = {
+        rank: rankSelect.value,
+        gold: Math.max(0, Number(goldInput.value || 0)),
+        gems: Math.max(0, Number(gemsInput.value || 0)),
+        "chests.lucky": Math.max(0, Number(luckyInput.value || 0)),
+        "chests.gold": Math.max(0, Number(goldChestInput.value || 0)),
+        "chests.levelUp": Math.max(0, Number(levelUpInput.value || 0)),
+        updatedAt: serverTimestamp()
+      };
+
+      statusEl.textContent = "Saving…";
+
+      try{
+        await updateDoc(rewardsRef(selectedUid), patch);
+        statusEl.textContent = "Saved ✅";
+        // reload badge panel too (if you changed rank/gems, etc.)
+        await selectUser(selectedUid);
+      }catch(e){
+        console.error(e);
+        statusEl.textContent = "Save failed — check Firestore rules.";
+        alert("Save failed: " + (e?.message || e));
+      }
+    });
+
+    async function loadAllUsersForAdmin(){
+      // Reads accountInfo collection (admin only per your rules)
+      const snap = await getDocs(collection(db, "accountInfo"));
+      const list = [];
+      snap.forEach(docSnap => {
+        const d = docSnap.data() || {};
+        list.push({
+          uid: docSnap.id,
+          name: d.name || d.displayName || d.fullName || "",
+          displayName: d.displayName || "",
+          email: d.email || "",
+          accountType: d.accountType || "",
+          authRole: d.authRole || ""
+        });
+      });
+
+      // You can optionally filter to scouts only if your schema uses accountType="scout"
+      // const scoutsOnly = list.filter(u => u.accountType === "scout");
+
+      // Sort by name/email
+      list.sort((a,b) => userLabel(a).localeCompare(userLabel(b)));
+
+      allUsers = list;
+      renderUserList(allUsers);
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user){
+        window.location.href = "/";
+        return;
+      }
+
+      authPill.textContent = `Signed in as ${user.email || "—"}`;
+
+      // Check admin role
+      const infoSnap = await getDoc(doc(db, "accountInfo", user.uid));
+      if (!infoSnap.exists()){
+        elBlocked.style.display = "block";
+        return;
+      }
+
+      const info = infoSnap.data() || {};
+      const role = info.authRole;
+
+      if (role !== "admin"){
+        elBlocked.style.display = "block";
+        return;
+      }
+
+      // Admin allowed
+      elApp.style.display = "block";
+
+      try{
+        await loadAllUsersForAdmin();
+      }catch(e){
+        console.error(e);
+        statusEl.textContent = "Could not load user list (check rules).";
+      }
+    });
+  </script>
+</body>
+</html>
