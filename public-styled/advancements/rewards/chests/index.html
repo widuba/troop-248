@@ -878,35 +878,35 @@ function defaultRewardsPatchForExisting() {
 
     // ===== Lucky reward rules (same as before) =====
     function pointsFor(finalLevel, rarity){
-      if (finalLevel === 1) return randInt(50,150);
+      if (finalLevel === 1) return randInt(100,200);
       if (finalLevel === 2){
-        if (rarity === "Common") return randInt(100,200);
-        if (rarity === "Uncommon") return randInt(50,75);
+        if (rarity === "Common") return randInt(275,400);
+        if (rarity === "Uncommon") return randInt(240,350);
       }
       if (finalLevel === 3){
-        if (rarity === "Common") return randInt(200,300);
-        if (rarity === "Uncommon") return randInt(125,150);
-        if (rarity === "Rare") return randInt(30,60);
+        if (rarity === "Common") return randInt(425,600);
+        if (rarity === "Uncommon") return randInt(350,450);
+        if (rarity === "Rare") return randInt(50,60);
       }
       if (finalLevel === 4){
-        if (rarity === "Common") return randInt(450,600);
-        if (rarity === "Uncommon") return randInt(200,240);
-        if (rarity === "Rare") return randInt(80,110);
-        if (rarity === "Epic") return randInt(25,50);
+        if (rarity === "Common") return randInt(625,850);
+        if (rarity === "Uncommon") return randInt(460,575);
+        if (rarity === "Rare") return randInt(115,150);
+        if (rarity === "Epic") return randInt(8,18);
       }
       if (finalLevel === 5){
-        if (rarity === "Common") return randInt(700,900);
-        if (rarity === "Uncommon") return randInt(260,310);
-        if (rarity === "Rare") return randInt(120,155);
-        if (rarity === "Epic") return randInt(55,80);
-        if (rarity === "Legendary") return randInt(1,3);
+        if (rarity === "Common") return randInt(875,1050);
+        if (rarity === "Uncommon") return randInt(600,750);
+        if (rarity === "Rare") return randInt(155,205);
+        if (rarity === "Epic") return randInt(25,55);
+        if (rarity === "Legendary") return randInt(5,20);
       }
       if (finalLevel === 6){
-        if (rarity === "Common") return randInt(1000,1250);
-        if (rarity === "Uncommon") return randInt(350,475);
-        if (rarity === "Rare") return randInt(175,210);
-        if (rarity === "Epic") return randInt(90,120);
-        if (rarity === "Legendary") return randInt(5,25);
+        if (rarity === "Common") return randInt(1250,1550);
+        if (rarity === "Uncommon") return randInt(800,1100);
+        if (rarity === "Rare") return randInt(210,275);
+        if (rarity === "Epic") return randInt(65,100);
+        if (rarity === "Legendary") return randInt(25,50);
       }
       return randInt(50,150);
     }
