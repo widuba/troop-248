@@ -500,7 +500,7 @@
       gap: 14px;
       align-items:center;
       justify-content:center;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
     }
     canvas#wheel{
       width: 340px;
@@ -511,12 +511,21 @@
       box-shadow: 0 18px 60px rgba(0,0,0,.35);
     }
     .pointer{
-      width: 0; height: 0;
-      border-left: 14px solid transparent;
-      border-right: 14px solid transparent;
-      border-top: 26px solid rgba(255,255,255,.95);
-      margin-top: -6px;
-    }
+  width: 0;
+  height: 0;
+
+  /* triangle */
+  border-top: 14px solid transparent;
+  border-bottom: 14px solid transparent;
+  border-left: 26px solid rgba(255,255,255,.95);
+
+  /* position at RIGHT side of wheel */
+  position: relative;
+  margin-top: 0;
+  margin-left: 12px;
+
+  filter: drop-shadow(0 10px 18px rgba(0,0,0,.35));
+}
 
     .spinNote{
       font-size: 12px;
@@ -649,10 +658,10 @@
 
       <!-- Wheel -->
       <div id="wheelWrap" class="wheelWrap">
-        <div class="pointer"></div>
         <div class="wheelRow">
-          <canvas id="wheel" width="420" height="420"></canvas>
-        </div>
+  <canvas id="wheel" width="420" height="420"></canvas>
+  <div class="pointer"></div>
+</div>
         <div id="spinNote" class="spinNote">Spinning…</div>
       </div>
 
