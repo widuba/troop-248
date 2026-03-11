@@ -1546,7 +1546,7 @@ function defaultRewardsPatchForExisting() {
               rewardBig.textContent = `Lucky (Level ${res.finalLevel}) → ${badgeName(res.badge)} (Lv ${res.badgeLevel}) MAX • +${formatNum(res.gemsGained)} GEMS`;
               rewardSub.textContent = `Converted from ${formatNum(res.pts)} ${res.rarity} points • Click to close`;
             } else {
-              rewardBig.textContent = `Lucky (Level ${res.finalLevel}) → Badge ${res.badge} • +${formatNum(res.pts)} pts`;
+              rewardBig.textContent = `Lucky (Level ${res.finalLevel}) → ${badgeName(res.badge)} • +${formatNum(res.pts)} pts`;
               rewardSub.textContent = `Rarity: ${res.rarity} • Click to close`;
             }
 
