@@ -1379,9 +1379,9 @@ function defaultRewardsPatchForExisting() {
       rewardCard.classList.add("show");
       if (res.alreadyMax){
         rewardBig.textContent = "ALREADY MAX LEVEL — CONVERTED TO 1000 GEMS";
-        rewardSub.textContent = `Spinner landed on Badge ${landed} • ${rarity} • Click to close`;
+        rewardSub.textContent = `Spinner landed on ${badgeName(landed)} • ${rarity} • Click to close`;
       } else {
-        rewardBig.textContent = `Badge ${landed} is now MAX LEVEL (8)!`;
+        rewardBig.textContent = `${badgeName(landed)} is now MAX LEVEL (8)!`;
         rewardSub.textContent = `${rarity} • Applied instantly • Click to close`;
       }
 
@@ -1543,7 +1543,7 @@ function defaultRewardsPatchForExisting() {
 
             rewardCard.classList.add("show");
             if (res.converted){
-              rewardBig.textContent = `Lucky (Level ${res.finalLevel}) → Badge ${res.badge} (Lv ${res.badgeLevel}) MAX • +${formatNum(res.gemsGained)} GEMS`;
+              rewardBig.textContent = `Lucky (Level ${res.finalLevel}) → ${badgeName(res.badge)} (Lv ${res.badgeLevel}) MAX • +${formatNum(res.gemsGained)} GEMS`;
               rewardSub.textContent = `Converted from ${formatNum(res.pts)} ${res.rarity} points • Click to close`;
             } else {
               rewardBig.textContent = `Lucky (Level ${res.finalLevel}) → Badge ${res.badge} • +${formatNum(res.pts)} pts`;
