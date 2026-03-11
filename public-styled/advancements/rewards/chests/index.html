@@ -843,6 +843,40 @@ function defaultRewardsPatchForExisting() {
 
     // ===== Badge rarity mapping A-Y =====
     const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXY".split("");
+
+    const BADGE_NAMES = {
+          A: "Skibidi Scout",
+          B: "Peek-A-Chu",
+          C: "Will Byers",
+          D: "19 dolla Fortnite Card",
+          E: "CLANKER",
+          F: "Green Thumb",
+          G: "Elite Barbarians",
+          H: "Kai Cenat",
+          I: "67",
+          J: "Chudmaxxing",
+          K: "Master Chef",
+          L: "Willie's Wee-nee Wagon",
+          M: "TTTSAHUR",
+          N: "1 Pound Fish",
+          O: "Camp Rainey Mountain",
+          P: "Ian's Hot Dog",
+          Q: "Golden Wind",
+          R: "PLEASE SPEED I NEED THIS",
+          S: "Water Bottle and Me",
+          T: "Patrick's Hub",
+          U: "Lord of the Fries",
+          V: "BETA BLOCKZ",
+          W: "Mega Knight",
+          X: "Apple Fishing Pro",
+          Y: "Brady Hanrahan",
+    };
+
+    function badgeName(id){
+      return BADGE_NAMES[id] || `Badge ${id}`;
+    }
+      
+    
     function rarityOfBadge(letter){
       const i = LETTERS.indexOf(letter);
       if (i < 0) return "Common";
