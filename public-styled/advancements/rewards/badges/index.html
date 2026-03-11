@@ -517,20 +517,38 @@
       Legendary:{ cls: "rar-legend"   }
     };
 
-    const BADGES = (() => {
-      const arr = [];
-      const letters = "ABCDEFGHIJKLMNOPQRSTUVWXY".split("");
-      for (let i = 0; i < letters.length; i++) {
-        const L = letters[i];
-        let rarity = "Common";
-        if (i >= 5 && i < 10) rarity = "Uncommon";
-        else if (i >= 10 && i < 15) rarity = "Rare";
-        else if (i >= 15 && i < 20) rarity = "Epic";
-        else if (i >= 20) rarity = "Legendary";
-        arr.push({ id: L, name: `Badge ${L}`, rarity });
-      }
-      return arr;
-    })();
+    const BADGES = [
+      { id: "A", name: "Skibidi Scout", rarity: "Common" },
+      { id: "B", name: "Peek-A-Chu", rarity: "Common" },
+      { id: "C", name: "Will Byers", rarity: "Common" },
+      { id: "D", name: "19 dolla Fortnite Card", rarity: "Common" },
+      { id: "E", name: "CLANKER", rarity: "Common" },
+
+      { id: "F", name: "Green Thumb", rarity: "Unommon" },
+      { id: "G", name: "Elite Barbarians", rarity: "Unommon" },
+      { id: "H", name: "Kai Cenat", rarity: "Unommon" },
+      { id: "I", name: "67", rarity: "Uncommon" },
+      { id: "J", name: "Chudmaxxing", rarity: "Uncommon" },
+
+      { id: "K", name: "Master Chef", rarity: "Rare" },
+      { id: "L", name: "Willie's Wee-nee Wagon", rarity: "Rare" },
+      { id: "M", name: "TTTSAHUR", rarity: "Rare" },
+      { id: "N", name: "1 Pound Fish", rarity: "Rare" },
+      { id: "O", name: "Camp Rainey Mountain", rarity: "Rare" },
+
+      { id: "P", name: "Ian's Hot Dog", rarity: "Epic" },
+      { id: "Q", name: "Golden Wind)", rarity: "Epic" },
+      { id: "R", name: "PLEASE SPEED I NEED THIS", rarity: "Epic" },
+      { id: "S", name: "Water Bottle and Me", rarity: "Epic" },
+      { id: "T", name: "Patrick's Hub", rarity: "Epic" },
+
+      { id: "U", name: "Lord of the Fries", rarity: "Legendary" },
+      { id: "V", name: "BETA BLOCKZ", rarity: "Legendary" },
+      { id: "W", name: "Mega Knight", rarity: "Legendary" },
+      { id: "X", name: "Apple Fishing Pro", rarity: "Legendary" },
+      { id: "Y", name: "Brady Hanrahan", rarity: "Legendary"
+];        
+      
 
     const RANK_ORDER = ["No Rank", "Scout", "Tenderfoot", "2nd Class", "1st Class", "Star", "Life", "Eagle"];
 
