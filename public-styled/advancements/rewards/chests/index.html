@@ -1173,14 +1173,14 @@ function defaultRewardsPatchForExisting() {
 
         // If already max => +1000 gems
         if (alreadyMax){
-          const nextGems = Number(d.gems || 0) + 1000;
+          const nextGems = Number(d.gems || 0) + 2500;
 
           history.unshift({
             type: "levelup",
             selectedRarity: rarity,
             landedBadge,
             result: "ALREADY_MAX",
-            gemsGained: 1000,
+            gemsGained: 2500,
             openedAt: nowIso
           });
 
@@ -1378,7 +1378,7 @@ function defaultRewardsPatchForExisting() {
       // Show result
       rewardCard.classList.add("show");
       if (res.alreadyMax){
-        rewardBig.textContent = "ALREADY MAX LEVEL — CONVERTED TO 1000 GEMS";
+        rewardBig.textContent = "ALREADY MAX LEVEL — CONVERTED TO 2500 GEMS";
         rewardSub.textContent = `Spinner landed on ${badgeName(landed)} • ${rarity} • Click to close`;
       } else {
         rewardBig.textContent = `${badgeName(landed)} is now MAX LEVEL (8)!`;
@@ -1406,7 +1406,7 @@ function defaultRewardsPatchForExisting() {
 
       chestVisual.className = "chestVisual lvl1";
       bigText.textContent = "Click to Spin (5)";
-      hint.textContent = "Lucky Chest • 40% level-up chance • Never goes down";
+      hint.textContent = "Lucky Chest • Chance to level up to 6 • Never goes down";
       showOverlay();
     }
 
