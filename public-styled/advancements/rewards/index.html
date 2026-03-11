@@ -267,6 +267,43 @@
       header { flex-direction: column; align-items: flex-start; }
       nav { width: 100%; }
     }
+
+    .howItWorksBox{
+  border:1px solid rgba(255,255,255,.16);
+  background:linear-gradient(180deg, rgba(22,58,114,.55), rgba(11,31,58,.88));
+  border-radius:14px;
+  padding:18px;
+  line-height:1.6;
+}
+
+.howItWorksBox p{
+  margin:10px 0;
+  color:var(--rx-text);
+}
+
+.howDivider{
+  margin:16px 0;
+  opacity:.25;
+}
+
+.howTitle{
+  font-weight:700;
+  margin-bottom:6px;
+}
+
+.howList{
+  margin:8px 0 10px 18px;
+  line-height:1.7;
+}
+
+  .howLink{
+    color:#6df9ff;
+    font-weight:600;
+    text-decoration:none;
+
+  .howLink:hover{
+    text-decoration:underline;
+  }
   </style>
 </head>
 
@@ -335,6 +372,38 @@
         </div>
       </div>
     </section>
+    <section>
+  <h2>How It Works</h2>
+
+  <div class="howItWorksBox">
+
+    <p>
+      Rewards are earned primarily through opening chests. When you open a chest, you receive points toward one of your unlocked badges. Each badge belongs to a rarity tier: Common, Uncommon, Rare, Epic, or Legendary. Higher rarity badges are harder to earn points for but are also more valuable.
+    </p>
+
+    <p>
+      Lucky Chests use a spin system. Each chest gives you five spins, and every spin has a chance to increase the chest’s level. The higher the final level of the chest, the better the possible rewards. Higher level chests can award points to rarer badges and larger amounts of points overall.
+    </p>
+
+    <p>
+      When a badge receives points, those points count toward upgrading that badge. Badges can be upgraded through multiple levels using gold once enough points are collected.
+    </p>
+
+    <p>
+      If a badge has already reached the maximum level, any additional points that would have been awarded to that badge are automatically converted into gems instead.
+    </p>
+
+    <hr class="howDivider">
+
+    <p>
+      Exact rewards and chest opportunities may vary depending on troop events, achievements, and leadership decisions, and can change at any time without notice.
+    </p>
+
+    <p>
+      For more information on how to get chests, <a href="/advancements/rewards/chests-info" class="howLink">click here</a>.
+    </p>
+  </div>
+</section>
   </main>
 
   <script type="module">
