@@ -1173,14 +1173,14 @@ function defaultRewardsPatchForExisting() {
 
         // If already max => +1000 gems
         if (alreadyMax){
-          const nextGems = Number(d.gems || 0) + 2500;
+          const nextGems = Number(d.gems || 0) + 25000;
 
           history.unshift({
             type: "levelup",
             selectedRarity: rarity,
             landedBadge,
             result: "ALREADY_MAX",
-            gemsGained: 2500,
+            gemsGained: 25000,
             openedAt: nowIso
           });
 
@@ -1378,7 +1378,7 @@ function defaultRewardsPatchForExisting() {
       // Show result
       rewardCard.classList.add("show");
       if (res.alreadyMax){
-        rewardBig.textContent = "ALREADY MAX LEVEL — CONVERTED TO 2500 GEMS";
+        rewardBig.textContent = "ALREADY MAX LEVEL — CONVERTED TO 25000 GEMS";
         rewardSub.textContent = `Spinner landed on ${badgeName(landed)} • ${rarity} • Click to close`;
       } else {
         rewardBig.textContent = `${badgeName(landed)} is now MAX LEVEL (8)!`;
