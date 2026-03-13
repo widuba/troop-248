@@ -719,9 +719,16 @@
     }
 
     eventType.addEventListener("change", syncConditionalFields);
-    serviceHours.addEventListener("input", updateSelectedCounts);
-    campoutHalfDays.addEventListener("input", updateSelectedCounts);
-    rankSelect.addEventListener("change", updateSelectedCounts);
+
+serviceHours.addEventListener("input", () => {
+  let v = Math.floor(Number(serviceHours.value || 1));
+  if (!Number.isFinite(v) || v < 1) v = 1;
+  serviceHours.value = v;
+  updateSelectedCounts();
+});
+
+campoutHalfDays.addEventListener("input", updateSelectedCounts);
+rankSelect.addEventListener("change", updateSelectedCounts);
 
     function computeRewardPerScout(){
       const t = eventType.value;
