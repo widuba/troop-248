@@ -733,7 +733,7 @@
       if (t === "service"){
         const hours = Math.max(0, Number(serviceHours.value || 0));
         return {
-          lucky: 1 + hours,
+          lucky: hours,
           gold: hours,
           levelUp: 0,
           desc: `Service project (${hours} hour${hours === 1 ? "" : "s"})`
