@@ -879,25 +879,36 @@ rankSelect.addEventListener("change", updateSelectedCounts);
     });
 
     async function loadScoutsForAdmin(){
-      const snap = await getDocs(collection(db, "accountInfo"));
-      const list = [];
+  const snap = await getDocs(collection(db, "accountInfo"));
+  const list = [];
 
-      snap.forEach(docSnap => {
-        const d = docSnap.data() || {};
-        if (!isScout(d)) return;
+  for (const docSnap of snap.docs){
+    const d = docSnap.data() || {};
+    if (!isScout(d)) continue;
 
-        list.push({
-          uid: docSnap.id,
-          name: d.name || d.displayName || d.fullName || "",
-          displayName: d.displayName || "",
-          email: d.email || "",
-          rank: d.rank || d.scoutRank || ""
-        });
-      });
-
-      list.sort((a,b) => userLabel(a).localeCompare(userLabel(b)));
-      allScouts = list;
+    let rewardsRank = "";
+    try{
+      const rewardsSnap = await getDoc(doc(db, "accountInfo", docSnap.id, "modules", "rewards"));
+      if (rewardsSnap.exists()){
+        const rewardsData = rewardsSnap.data() || {};
+        rewardsRank = rewardsData.rank || "";
+      }
+    }catch(e){
+      console.error("Could not load rewards rank for", docSnap.id, e);
     }
+
+    list.push({
+      uid: docSnap.id,
+      name: d.name || d.displayName || d.fullName || "",
+      displayName: d.displayName || "",
+      email: d.email || "",
+      rank: rewardsRank
+    });
+  }
+
+  list.sort((a,b) => userLabel(a).localeCompare(userLabel(b)));
+  allScouts = list;
+}
 
     onAuthStateChanged(auth, async (user) => {
       if (!user){
