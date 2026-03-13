@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Rewards Awards Admin — Troop 248</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="/bsafavicon.ico" />
+
+  <style>
+    :root{
+      --bg:#0b0f18;
+      --panel:#111827;
+      --panel2:#0f172a;
+      --line:rgba(255,255,255,.10);
+      --text:#e5e7eb;
+      --muted:rgba(229,231,235,.70);
+      --accent:#22c55e;
+      --danger:#ef4444;
+      --blue:#60a5fa;
+      --warn:#f59e0b;
+      --radius:14px;
+      --shadow: 0 18px 55px rgba(0,0,0,.45);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: system-ui, -apple-system, Segoe UI, sans-serif;
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      background:
+        radial-gradient(900px 600px at 20% 10%, rgba(96,165,250,.10), transparent 55%),
+        radial-gradient(900px 600px at 80% 20%, rgba(34,197,94,.10), transparent 55%),
+        var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      min-height:100vh;
+    }
+
+    .wrap{ max-width: 1280px; margin: 0 auto; padding: 20px 16px 40px; }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding: 14px 16px;
+      border:1px solid var(--line);
+      background: rgba(17,24,39,.82);
+      backdrop-filter: blur(8px);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 12px;
+      z-index: 20;
+      flex-wrap: wrap;
+    }
+
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+      min-width: 240px;
+    }
+
+    .brand .title{
+      font-weight: 950;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-size: 12px;
+      font-family: var(--mono);
+      color: rgba(229,231,235,.92);
+    }
+
+    .brand .sub{
+      font-size: 12px;
+      color: var(--muted);
+      font-family: var(--mono);
+    }
+
+    .top-actions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .pill{
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(15,23,42,.75);
+      color: rgba(229,231,235,.92);
+      font-family: var(--mono);
+      font-size: 12px;
+      white-space:nowrap;
+    }
+
+    .btn{
+      appearance:none;
+      border: 1px solid var(--line);
+      background: rgba(15,23,42,.85);
+      color: var(--text);
+      padding: 9px 12px;
+      border-radius: 999px;
+      cursor:pointer;
+      font-weight: 800;
+      font-size: 12px;
+      font-family: var(--mono);
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .btn:hover{ filter: brightness(1.05); }
+
+    .btn.green{
+      border-color: rgba(34,197,94,.25);
+      background: rgba(34,197,94,.15);
+      color: rgba(236,253,245,.96);
+    }
+
+    .btn.red{
+      border-color: rgba(239,68,68,.25);
+      background: rgba(239,68,68,.12);
+      color: rgba(254,242,242,.96);
+    }
+
+    .btn.blue{
+      border-color: rgba(96,165,250,.25);
+      background: rgba(96,165,250,.12);
+      color: rgba(239,246,255,.96);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 380px 1fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .panel{
+      border: 1px solid var(--line);
+      background: rgba(17,24,39,.84);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .panelHead{
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      background: rgba(15,23,42,.72);
+    }
+
+    .panelHead h2{
+      margin:0;
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-family: var(--mono);
+      color: rgba(229,231,235,.92);
+    }
+
+    .panelBody{ padding: 12px 14px; }
+
+    .search{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      margin-bottom: 10px;
+    }
+
+    .search input,
+    .field input,
+    .field select{
+      width:100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(2,6,23,.65);
+      color: var(--text);
+      outline:none;
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+
+    .search input:focus,
+    .field input:focus,
+    .field select:focus{
+      border-color: rgba(96,165,250,.35);
+    }
+
+    .list{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      max-height: 68vh;
+      overflow:auto;
+      padding-right: 4px;
+    }
+
+    .scoutRow{
+      border:1px solid var(--line);
+      background: rgba(2,6,23,.45);
+      border-radius: 12px;
+      padding: 10px;
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+    }
+
+    .scoutRow:hover{
+      border-color: rgba(96,165,250,.35);
+    }
+
+    .scoutRow input[type="checkbox"]{
+      margin-top: 3px;
+      transform: scale(1.15);
+    }
+
+    .scoutMeta{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      min-width: 0;
+    }
+
+    .scoutName{
+      font-weight: 950;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing:.02em;
+      word-break: break-word;
+    }
+
+    .scoutSub{
+      font-family: var(--mono);
+      color: var(--muted);
+      font-size: 11px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      word-break: break-word;
+    }
+
+    .inlineBtns{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top: 8px;
+    }
+
+    .formGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+
+    @media (max-width: 860px){
+      .formGrid{ grid-template-columns: 1fr; }
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      margin-bottom: 10px;
+    }
+
+    .field label{
+      font-size: 11px;
+      letter-spacing:.08em;
+      text-transform: uppercase;
+      font-family: var(--mono);
+      color: rgba(229,231,235,.82);
+    }
+
+    .rewardCard{
+      border:1px solid var(--line);
+      background: rgba(2,6,23,.45);
+      border-radius: 14px;
+      padding: 14px;
+      margin-top: 10px;
+    }
+
+    .rewardCard h3{
+      margin:0 0 10px;
+      font-size: 13px;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing:.08em;
+    }
+
+    .rewardGrid{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap:10px;
+    }
+
+    @media (max-width: 780px){
+      .rewardGrid{ grid-template-columns: 1fr; }
+    }
+
+    .rewardBox{
+      border:1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+      background: linear-gradient(180deg, rgba(22,58,114,.42), rgba(11,31,58,.72));
+    }
+
+    .rewardBox .k{
+      font-size: 11px;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing:.08em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .rewardBox .v{
+      font-size: 22px;
+      font-weight: 1000;
+      font-family: var(--mono);
+      color: var(--text);
+    }
+
+    .note{
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+      font-family: var(--mono);
+    }
+
+    .status{
+      margin-top: 12px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .blocked{
+      max-width: 820px;
+      margin: 40px auto;
+      border: 1px solid rgba(239,68,68,.30);
+      background: rgba(239,68,68,.10);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .blocked h1{
+      margin:0 0 6px;
+      font-size: 16px;
+      letter-spacing:.03em;
+      font-family: var(--mono);
+    }
+
+    .blocked p{
+      margin:0;
+      color: rgba(254,242,242,.88);
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap" id="app" style="display:none;">
+    <div class="topbar">
+      <div class="brand">
+        <div class="title">Rewards Batch Awards</div>
+        <div class="sub">Internal tool — admins only</div>
+      </div>
+
+      <div class="top-actions">
+        <div class="pill" id="authPill">Signed in as …</div>
+        <a class="btn" href="/home">Home</a>
+        <a class="btn blue" href="/advancements/rewards/">Rewards</a>
+        <button class="btn red" id="logoutBtn">Log out</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- LEFT -->
+      <div class="panel">
+        <div class="panelHead">
+          <h2>Scouts</h2>
+          <span class="pill" id="countPill">0 selected</span>
+        </div>
+        <div class="panelBody">
+          <div class="search">
+            <input id="searchInput" type="text" placeholder="Search scouts by name or email…" autocomplete="off" />
+          </div>
+
+          <div class="inlineBtns">
+            <button class="btn" id="selectAllBtn">Select all shown</button>
+            <button class="btn" id="clearAllBtn">Clear selection</button>
+          </div>
+
+          <div class="list" id="scoutList"></div>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="panel">
+        <div class="panelHead">
+          <h2>Award Event Rewards</h2>
+          <span class="pill" id="selectedCountTop">0 scouts</span>
+        </div>
+        <div class="panelBody">
+          <div class="formGrid">
+            <div>
+              <div class="field">
+                <label for="eventType">Event Type</label>
+                <select id="eventType">
+                  <option value="meeting">Meeting</option>
+                  <option value="service">Service Project</option>
+                  <option value="campout">Campout</option>
+                  <option value="eagle-mb">Eagle-Required Merit Badge</option>
+                  <option value="elective-mb">Elective Merit Badge</option>
+                  <option value="rank">Rank Up</option>
+                </select>
+              </div>
+
+              <div class="field" id="serviceHoursWrap" style="display:none;">
+                <label for="serviceHours">Service Hours</label>
+                <input id="serviceHours" type="number" min="0" step="0.25" value="1" />
+              </div>
+
+              <div class="field" id="campoutHalfDaysWrap" style="display:none;">
+                <label for="campoutHalfDays">Campout Half Days</label>
+                <input id="campoutHalfDays" type="number" min="1" step="1" value="4" />
+              </div>
+
+              <div class="field" id="rankWrap" style="display:none;">
+                <label for="rankSelect">Rank Earned</label>
+                <select id="rankSelect">
+                  <option value="Scout">Scout</option>
+                  <option value="Tenderfoot">Tenderfoot</option>
+                  <option value="2nd Class">2nd Class</option>
+                  <option value="1st Class">1st Class</option>
+                  <option value="Star">Star</option>
+                  <option value="Life">Life</option>
+                  <option value="Eagle">Eagle</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="notesInput">Admin Notes (optional)</label>
+                <input id="notesInput" type="text" maxlength="200" placeholder="Example: March service project award" />
+              </div>
+            </div>
+
+            <div>
+              <div class="rewardCard">
+                <h3>Reward Preview (Per Scout)</h3>
+                <div class="rewardGrid">
+                  <div class="rewardBox">
+                    <div class="k">Lucky Chests</div>
+                    <div class="v" id="previewLucky">0</div>
+                  </div>
+                  <div class="rewardBox">
+                    <div class="k">Gold Chests</div>
+                    <div class="v" id="previewGold">0</div>
+                  </div>
+                  <div class="rewardBox">
+                    <div class="k">Level Up Chests</div>
+                    <div class="v" id="previewLevelUp">0</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="rewardCard">
+                <h3>Total To Be Granted</h3>
+                <div class="rewardGrid">
+                  <div class="rewardBox">
+                    <div class="k">Lucky Total</div>
+                    <div class="v" id="totalLucky">0</div>
+                  </div>
+                  <div class="rewardBox">
+                    <div class="k">Gold Total</div>
+                    <div class="v" id="totalGold">0</div>
+                  </div>
+                  <div class="rewardBox">
+                    <div class="k">Level Up Total</div>
+                    <div class="v" id="totalLevelUp">0</div>
+                  </div>
+                </div>
+              </div>
+
+              <p class="note">
+                Reward rules match the chest-info page:
+                <br>• Full meeting = 1 Lucky + 1 Gold
+                <br>• Service project = 1 Lucky + 1 Gold per hour
+                <br>• Campout = 1 Lucky per half day
+                <br>• Eagle-required merit badge = 5 Lucky + 5 Gold
+                <br>• Elective merit badge = 1 Lucky + 10 Gold
+                <br>• Rank up Scout–1st Class = 1 Level Up + 5 Lucky
+                <br>• Rank up Star–Life = 1 Level Up + 10 Lucky + 10 Gold
+                <br>• Rank up Eagle = 5 Level Up + 25 Lucky + 25 Gold
+              </p>
+            </div>
+          </div>
+
+          <div class="inlineBtns" style="margin-top:14px;">
+            <button class="btn green" id="applyBtn">Apply Rewards to Selected Scouts</button>
+            <button class="btn" id="refreshBtn">Refresh Scout List</button>
+          </div>
+
+          <div class="status" id="status">Ready.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap" id="blocked" style="display:none;">
+    <div class="blocked">
+      <h1>Blocked — Admins Only</h1>
+      <p>You do not have access to this page. Please return to Home.</p>
+      <div style="margin-top:12px;">
+        <a class="btn" href="/home">Go to Home</a>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import {
+      getFirestore,
+      doc, getDoc,
+      collection, getDocs,
+      setDoc, updateDoc, serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+      authDomain: "troop-248.firebaseapp.com",
+      projectId: "troop-248",
+      storageBucket: "troop-248.firebasestorage.app",
+      messagingSenderId: "925363875752",
+      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+      measurementId: "G-NY75GX5TBH"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const elApp = document.getElementById("app");
+    const elBlocked = document.getElementById("blocked");
+
+    const authPill = document.getElementById("authPill");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    const searchInput = document.getElementById("searchInput");
+    const scoutList = document.getElementById("scoutList");
+    const countPill = document.getElementById("countPill");
+    const selectedCountTop = document.getElementById("selectedCountTop");
+
+    const selectAllBtn = document.getElementById("selectAllBtn");
+    const clearAllBtn = document.getElementById("clearAllBtn");
+
+    const eventType = document.getElementById("eventType");
+    const serviceHoursWrap = document.getElementById("serviceHoursWrap");
+    const serviceHours = document.getElementById("serviceHours");
+    const campoutHalfDaysWrap = document.getElementById("campoutHalfDaysWrap");
+    const campoutHalfDays = document.getElementById("campoutHalfDays");
+    const rankWrap = document.getElementById("rankWrap");
+    const rankSelect = document.getElementById("rankSelect");
+    const notesInput = document.getElementById("notesInput");
+
+    const previewLucky = document.getElementById("previewLucky");
+    const previewGold = document.getElementById("previewGold");
+    const previewLevelUp = document.getElementById("previewLevelUp");
+
+    const totalLucky = document.getElementById("totalLucky");
+    const totalGold = document.getElementById("totalGold");
+    const totalLevelUp = document.getElementById("totalLevelUp");
+
+    const applyBtn = document.getElementById("applyBtn");
+    const refreshBtn = document.getElementById("refreshBtn");
+    const statusEl = document.getElementById("status");
+
+    function fmt(n){ return Number(n || 0).toLocaleString("en-US"); }
+    function rewardsRef(uid){ return doc(db, "accountInfo", uid, "modules", "rewards"); }
+
+    function defaultRewardsDocForCreate(){
+      return {
+        gold: 0,
+        gems: 0,
+        rank: "No Rank",
+        chests: { lucky: 0, gold: 0, levelUp: 0 },
+        badgesPoints: {},
+        badgesLevel: {},
+        history: [],
+        createdAt: serverTimestamp()
+      };
+    }
+
+    async function ensureRewardsDoc(uid){
+      const ref = rewardsRef(uid);
+      const snap = await getDoc(ref);
+      if (!snap.exists()){
+        await setDoc(ref, defaultRewardsDocForCreate(), { merge:true });
+      }
+    }
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "/";
+    });
+
+    let allScouts = [];
+    const selectedScoutIds = new Set();
+
+    function userLabel(u){
+      return (u.name || u.displayName || u.email || u.uid || "").trim();
+    }
+
+    function isScout(data){
+      const type = (data.accountType || "").toLowerCase().trim();
+      return type === "scout";
+    }
+
+    function renderScoutList(list){
+      scoutList.innerHTML = "";
+
+      if (list.length === 0){
+        scoutList.innerHTML = `<div class="note">No scouts found.</div>`;
+        updateSelectedCounts();
+        return;
+      }
+
+      for (const scout of list){
+        const checked = selectedScoutIds.has(scout.uid);
+        const row = document.createElement("label");
+        row.className = "scoutRow";
+        row.innerHTML = `
+          <input type="checkbox" ${checked ? "checked" : ""} data-uid="${scout.uid}">
+          <div class="scoutMeta">
+            <div class="scoutName">${userLabel(scout)}</div>
+            <div class="scoutSub">
+              <span>${scout.email || "no-email"}</span>
+              <span>${scout.rank || "No Rank"}</span>
+            </div>
+          </div>
+        `;
+        const checkbox = row.querySelector("input");
+        checkbox.addEventListener("change", () => {
+          if (checkbox.checked) selectedScoutIds.add(scout.uid);
+          else selectedScoutIds.delete(scout.uid);
+          updateSelectedCounts();
+        });
+        scoutList.appendChild(row);
+      }
+
+      updateSelectedCounts();
+    }
+
+    function filteredScouts(){
+      const q = (searchInput.value || "").trim().toLowerCase();
+      if (!q) return allScouts.slice();
+      return allScouts.filter(s => {
+        const hay = `${s.uid} ${s.name || ""} ${s.displayName || ""} ${s.email || ""}`.toLowerCase();
+        return hay.includes(q);
+      });
+    }
+
+    function updateSelectedCounts(){
+      const count = selectedScoutIds.size;
+      countPill.textContent = `${count} selected`;
+      selectedCountTop.textContent = `${count} scout${count === 1 ? "" : "s"}`;
+
+      const r = computeRewardPerScout();
+      previewLucky.textContent = fmt(r.lucky);
+      previewGold.textContent = fmt(r.gold);
+      previewLevelUp.textContent = fmt(r.levelUp);
+
+      totalLucky.textContent = fmt(r.lucky * count);
+      totalGold.textContent = fmt(r.gold * count);
+      totalLevelUp.textContent = fmt(r.levelUp * count);
+    }
+
+    searchInput.addEventListener("input", () => {
+      renderScoutList(filteredScouts());
+    });
+
+    selectAllBtn.addEventListener("click", () => {
+      for (const s of filteredScouts()) selectedScoutIds.add(s.uid);
+      renderScoutList(filteredScouts());
+    });
+
+    clearAllBtn.addEventListener("click", () => {
+      selectedScoutIds.clear();
+      renderScoutList(filteredScouts());
+    });
+
+    function syncConditionalFields(){
+      const t = eventType.value;
+      serviceHoursWrap.style.display = t === "service" ? "" : "none";
+      campoutHalfDaysWrap.style.display = t === "campout" ? "" : "none";
+      rankWrap.style.display = t === "rank" ? "" : "none";
+      updateSelectedCounts();
+    }
+
+    eventType.addEventListener("change", syncConditionalFields);
+    serviceHours.addEventListener("input", updateSelectedCounts);
+    campoutHalfDays.addEventListener("input", updateSelectedCounts);
+    rankSelect.addEventListener("change", updateSelectedCounts);
+
+    function computeRewardPerScout(){
+      const t = eventType.value;
+
+      if (t === "meeting"){
+        return { lucky: 1, gold: 1, levelUp: 0, desc: "Full meeting" };
+      }
+
+      if (t === "service"){
+        const hours = Math.max(0, Number(serviceHours.value || 0));
+        return {
+          lucky: 1,
+          gold: hours,
+          levelUp: 0,
+          desc: `Service project (${hours} hour${hours === 1 ? "" : "s"})`
+        };
+      }
+
+      if (t === "campout"){
+        const halfDays = Math.max(0, Number(campoutHalfDays.value || 0));
+        return {
+          lucky: halfDays,
+          gold: 0,
+          levelUp: 0,
+          desc: `Campout (${halfDays} half day${halfDays === 1 ? "" : "s"})`
+        };
+      }
+
+      if (t === "eagle-mb"){
+        return { lucky: 5, gold: 5, levelUp: 0, desc: "Eagle-required merit badge" };
+      }
+
+      if (t === "elective-mb"){
+        return { lucky: 1, gold: 10, levelUp: 0, desc: "Elective merit badge" };
+      }
+
+      if (t === "rank"){
+        const r = rankSelect.value;
+        if (["Scout", "Tenderfoot", "2nd Class", "1st Class"].includes(r)){
+          return { lucky: 5, gold: 0, levelUp: 1, desc: `Rank up: ${r}` };
+        }
+        if (["Star", "Life"].includes(r)){
+          return { lucky: 10, gold: 10, levelUp: 1, desc: `Rank up: ${r}` };
+        }
+        if (r === "Eagle"){
+          return { lucky: 25, gold: 25, levelUp: 5, desc: `Rank up: Eagle` };
+        }
+      }
+
+      return { lucky: 0, gold: 0, levelUp: 0, desc: "Unknown" };
+    }
+
+    async function awardOneScout(uid, reward){
+      await ensureRewardsDoc(uid);
+
+      const ref = rewardsRef(uid);
+      const snap = await getDoc(ref);
+      const d = snap.exists() ? (snap.data() || {}) : defaultRewardsDocForCreate();
+
+      const ch = d.chests || {};
+      let currentLevelUp = 0;
+
+      // support simple number format and legacy map format
+      if (typeof ch.levelUp === "number"){
+        currentLevelUp = Number(ch.levelUp || 0);
+      } else if (ch.levelUp && typeof ch.levelUp === "object"){
+        const keys = ["scout","tenderfoot","2class","1class","star","life","eagle"];
+        currentLevelUp = keys.reduce((sum, k) => sum + Number(ch.levelUp[k] || 0), 0);
+      }
+
+      const nextLucky = Number(ch.lucky || 0) + reward.lucky;
+      const nextGold = Number(ch.gold || 0) + reward.gold;
+      const nextLevelUp = currentLevelUp + reward.levelUp;
+
+      const history = Array.isArray(d.history) ? d.history.slice(0, 80) : [];
+      history.unshift({
+        type: "adminAward",
+        eventType: eventType.value,
+        eventDescription: reward.desc,
+        lucky: reward.lucky,
+        goldChests: reward.gold,
+        levelUp: reward.levelUp,
+        notes: (notesInput.value || "").trim(),
+        appliedAt: new Date().toISOString(),
+        appliedBy: auth.currentUser?.uid || null
+      });
+
+      await updateDoc(ref, {
+        "chests.lucky": nextLucky,
+        "chests.gold": nextGold,
+        "chests.levelUp": nextLevelUp,
+        history,
+        updatedAt: serverTimestamp()
+      });
+    }
+
+    applyBtn.addEventListener("click", async () => {
+      const ids = Array.from(selectedScoutIds);
+      if (ids.length === 0){
+        alert("Select at least one scout.");
+        return;
+      }
+
+      const reward = computeRewardPerScout();
+
+      if (reward.lucky === 0 && reward.gold === 0 && reward.levelUp === 0){
+        alert("This event currently grants no rewards.");
+        return;
+      }
+
+      applyBtn.disabled = true;
+      statusEl.textContent = "Applying rewards…";
+
+      let success = 0;
+      const failures = [];
+
+      for (const uid of ids){
+        try{
+          await awardOneScout(uid, reward);
+          success++;
+        }catch(e){
+          console.error(e);
+          failures.push(`${uid}: ${e?.message || e}`);
+        }
+      }
+
+      applyBtn.disabled = false;
+
+      const lines = [];
+      lines.push(`Applied event: ${reward.desc}`);
+      lines.push(`Selected scouts: ${ids.length}`);
+      lines.push(`Successful: ${success}`);
+      lines.push(`Per scout: ${reward.lucky} Lucky, ${reward.gold} Gold, ${reward.levelUp} Level Up`);
+
+      if (failures.length){
+        lines.push("");
+        lines.push("Failures:");
+        lines.push(...failures);
+      }
+
+      statusEl.textContent = lines.join("\n");
+    });
+
+    refreshBtn.addEventListener("click", async () => {
+      await loadScoutsForAdmin();
+      renderScoutList(filteredScouts());
+      statusEl.textContent = "Scout list refreshed.";
+    });
+
+    async function loadScoutsForAdmin(){
+      const snap = await getDocs(collection(db, "accountInfo"));
+      const list = [];
+
+      snap.forEach(docSnap => {
+        const d = docSnap.data() || {};
+        if (!isScout(d)) return;
+
+        list.push({
+          uid: docSnap.id,
+          name: d.name || d.displayName || d.fullName || "",
+          displayName: d.displayName || "",
+          email: d.email || "",
+          rank: d.rank || d.scoutRank || ""
+        });
+      });
+
+      list.sort((a,b) => userLabel(a).localeCompare(userLabel(b)));
+      allScouts = list;
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user){
+        window.location.href = "/";
+        return;
+      }
+
+      authPill.textContent = `Signed in as ${user.email || "—"}`;
+
+      const infoSnap = await getDoc(doc(db, "accountInfo", user.uid));
+      if (!infoSnap.exists()){
+        elBlocked.style.display = "block";
+        return;
+      }
+
+      const info = infoSnap.data() || {};
+      const role = info.authRole;
+
+      if (role !== "admin"){
+        elBlocked.style.display = "block";
+        return;
+      }
+
+      elApp.style.display = "block";
+
+      try{
+        await loadScoutsForAdmin();
+        renderScoutList(allScouts);
+        syncConditionalFields();
+        statusEl.textContent = "Ready.";
+      }catch(e){
+        console.error(e);
+        statusEl.textContent = "Could not load scouts. Check Firestore rules.";
+      }
+    });
+  </script>
+</body>
+</html>
