@@ -731,14 +731,14 @@
       }
 
       if (t === "service"){
-        const hours = Math.max(0, Number(serviceHours.value || 0));
-        return {
-          lucky: hours,
-          gold: hours,
-          levelUp: 0,
-          desc: `Service project (${hours} hour${hours === 1 ? "" : "s"})`
-        };
-      }
+  const hours = Math.max(1, Math.floor(Number(serviceHours.value || 1)));
+  return {
+    lucky: hours,
+    gold: hours,
+    levelUp: 0,
+    desc: `Service project (${hours} hour${hours === 1 ? "" : "s"})`
+  };
+}
 
       if (t === "campout"){
         const halfDays = Math.max(0, Number(campoutHalfDays.value || 0));
