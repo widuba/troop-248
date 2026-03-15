@@ -617,6 +617,13 @@
           <div class="countRow">
             <div class="countPill"><span>Count</span><b id="luckyCount">—</b></div>
             <button class="openBtn" id="openLuckyBtn">Open</button>
+            <div class="shopBlock">
+  <div class="gemBar">
+    <div id="luckyGemFill" class="gemFill"></div>
+  </div>
+  <div id="luckyGemText" class="gemText">0 / 15,000 Gems</div>
+  <button class="buyBtn" id="buyLuckyBtn">Buy with Gems</button>
+</div>
           </div>
         </div>
 
@@ -626,6 +633,13 @@
           <div class="countRow">
             <div class="countPill"><span>Count</span><b id="goldChestCount">—</b></div>
             <button class="openBtn" id="openGoldBtn">Open</button>
+            <div class="shopBlock">
+  <div class="gemBar">
+    <div id="goldGemFill" class="gemFill"></div>
+  </div>
+  <div id="goldGemText" class="gemText">0 / 10,000 Gems</div>
+  <button class="buyBtn" id="buyGoldBtn">Buy with Gems</button>
+</div>
           </div>
         </div>
 
@@ -635,6 +649,13 @@
           <div class="countRow">
             <div class="countPill"><span>Count</span><b id="levelUpCount">—</b></div>
             <button class="openBtn" id="openLevelUpBtn">Open</button>
+            <div class="shopBlock">
+  <div class="gemBar">
+    <div id="levelGemFill" class="gemFill"></div>
+  </div>
+  <div id="levelGemText" class="gemText">0 / 150,000 Gems</div>
+  <button class="buyBtn" id="buyLevelBtn">Buy with Gems</button>
+</div>
           </div>
         </div>
       </div>
@@ -758,6 +779,12 @@
     const rewardSub = document.getElementById("rewardSub");
 
     const rankAudio = document.getElementById("rankAudio");
+
+    const GEM_COSTS = {
+  gold: 10000,
+  lucky: 15000,
+  levelUp: 150000
+};
 
     logoutBtn.addEventListener("click", async () => { await signOut(auth); window.location.href = "/"; });
 
