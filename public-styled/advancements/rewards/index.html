@@ -336,7 +336,7 @@
     <div class="welcome-card">
       <div>
         <h3>Rewards</h3>
-        <a class="linkBtn" href="/advancements/rewards/admin-only/">Manage Rewards (Admin Only)</a>
+        <a id="adminRewardsBtn" href="/admin-only/" class="linkBtn">Manage Rewards</a>
         <p>This module includes Chests and Badges. Rank, Gems, and counts are manually editable in Firestore for now.</p>
 
         <div class="stats-row">
@@ -456,6 +456,10 @@
       if (role !== "admin" && role !== "viewer") {
         window.location.href = "/under-review/";
         return;
+      }
+
+      if (role !== "admin") {
+        document.getElementById("adminRewardsBtn").style.display = "none";
       }
 
       authInfoEl.textContent = `Signed in as ${user.email || "—"}`;
