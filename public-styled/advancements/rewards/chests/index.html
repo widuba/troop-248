@@ -1531,33 +1531,14 @@
       if (state.mode === "gold") return handleGoldClick();
     });
 
-   document.querySelectorAll(".rarBtn").forEach((btn) => {
-  btn.addEventListener("click", async (e) => {
-    e.stopPropagation();
-    if (state.mode !== "levelup") return;
-    if (state.wheel?.spinning) return;
+    document.querySelectorAll(".rarBtn").forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        if (state.mode !== "levelup") return;
+        if (state.wheel?.spinning) return;
 
-    const rarity = btn.dataset.r;
-    state.levelup.selectedRarity = rarity;
-
-    try {
-      rankAudio.pause();
-      rankAudio.currentTime = 0;
-      await rankAudio.play();
-    } catch (err) {
-      console.warn("Audio play blocked:", err);
-    }
-
-    spinNote.textContent = "Spinning…";
-
-    try {
-      await spinWheelAndAward(rarity);
-    } catch (err) {
-      alert(err.message || "Could not open level up chest.");
-      hideOverlay();
-    }
-  });
-});
+        const rarity = btn.dataset.r;
+        state.levelup.selectedRarity = rarity;
 
         try{
           rankAudio.currentTime = 0;
@@ -1571,7 +1552,7 @@
           alert(err.message || "Could not open level up chest.");
           hideOverlay();
         }
-    });
+      });
     });
 
     async function handleGoldClick(){
