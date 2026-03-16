@@ -1531,7 +1531,7 @@
       if (state.mode === "gold") return handleGoldClick();
     });
 
-    document.querySelectorAll(".rarBtn").forEach(btn => {
+   document.querySelectorAll(".rarBtn").forEach((btn) => {
   btn.addEventListener("click", async (e) => {
     e.stopPropagation();
     if (state.mode !== "levelup") return;
@@ -1540,7 +1540,6 @@
     const rarity = btn.dataset.r;
     state.levelup.selectedRarity = rarity;
 
-    // 🔊 Play rank spin sound
     try {
       rankAudio.pause();
       rankAudio.currentTime = 0;
@@ -1553,7 +1552,7 @@
 
     try {
       await spinWheelAndAward(rarity);
-    } catch(err){
+    } catch (err) {
       alert(err.message || "Could not open level up chest.");
       hideOverlay();
     }
