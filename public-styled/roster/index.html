@@ -584,8 +584,9 @@
       // ✅ Load that person's streak doc
       let streak = null;
       try {
-        const streakSnap = await getDoc(doc(db, "accountInfo", uid, "streaks", "daily"));
-        streak = streakSnap.exists() ? (streakSnap.data() || {}) : null;
+        const userSnap = await getDoc(doc(db, "accountInfo", uid));
+const userData = userSnap.exists() ? userSnap.data() : null;
+streak = userData ? { count: userData.streakCount || 0 } : null;
       } catch (e) {
         // If rules block it, show unknown rather than breaking the whole page
         streak = { _error: true, message: e?.message || String(e) };
