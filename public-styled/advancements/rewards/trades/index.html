@@ -741,8 +741,11 @@
 
         scouts.push({
           uid,
-          name: d.name || d.displayName || d.fullName || "",
+          name: d.name || d.fullName || d.displayName || d.firstName || d.username || "",
           displayName: d.displayName || "",
+          fullName: d.fullName || "",
+          firstName: d.firstName || "",
+          useranme: d.username || "",
           email: d.email || "",
           accountType: d.accountType || "",
           rewards
