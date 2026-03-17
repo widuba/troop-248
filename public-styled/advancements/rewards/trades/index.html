@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Badge Trades — Rewards — Troop 248</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="/bsafavicon.ico" />
+  <link rel="stylesheet" href="/modern-2026.css" />
+
+  <style>
+    :root {
+      --red: #b22222;
+      --blue: #1f4e79;
+      --white: #ffffff;
+      --radius-lg: 16px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
+      --rx-line: rgba(255,255,255,.16);
+      --rx-text: #ecf3ff;
+      --rx-muted: rgba(236,243,255,.78);
+      --btn-blue1: rgba(49,130,246,.98);
+      --btn-blue2: rgba(30,64,175,.98);
+    }
+
+    * { box-sizing: border-box; }
+
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(900px 600px at 40% 20%, rgba(31,78,121,.18), transparent 55%),
+                  radial-gradient(800px 520px at 70% 30%, rgba(178,34,34,.10), transparent 58%),
+                  #cfc6b0;
+      min-height:100vh;
+    }
+
+    header{
+      background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
+      color: var(--white);
+      padding: 14px 24px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    header h2{
+      margin:0;
+      font-size:19px;
+      letter-spacing:.08em;
+      text-transform: uppercase;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    header h2::before{ content:"★"; font-size:18px; }
+
+    .troop-home-link{
+      text-decoration:none;
+      color:inherit;
+      display:inline-flex;
+      align-items:center;
+    }
+
+    .troop-home-link:hover h2{
+      opacity:.9;
+      text-decoration: underline;
+    }
+
+    nav{
+      display:flex;
+      gap:12px;
+      font-size:13px;
+      text-transform: uppercase;
+      flex-wrap: wrap;
+    }
+
+    nav a{
+      color:#1f4e79;
+      font-weight:bold;
+      text-decoration:none;
+      padding:6px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255,255,255,.25);
+      backdrop-filter: blur(4px);
+      opacity:.9;
+      white-space:nowrap;
+    }
+
+    nav a:hover{
+      opacity:1;
+      background: rgba(255,255,255,.12);
+    }
+
+    #auth-bar{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      font-size:13px;
+      flex-wrap:wrap;
+    }
+
+    #logout-btn{
+      padding: 5px 12px;
+      font-size: 13px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255,255,255,.7);
+      background: rgba(255,255,255,.10);
+      color: var(--white);
+      cursor:pointer;
+    }
+
+    #logout-btn:hover{
+      background: rgba(255,255,255,.20);
+    }
+
+    main{
+      padding: 24px 16px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .welcome-card, section, .tradeCard, .blockedCard{
+      background: linear-gradient(180deg, rgba(15,42,82,.96), rgba(11,31,58,.96));
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 12px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--rx-line);
+      color: var(--rx-text);
+    }
+
+    .welcome-card{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+
+    .welcome-card h3{
+      margin:0 0 4px;
+      font-size:18px;
+      color:var(--rx-text);
+    }
+
+    .welcome-card p{
+      margin:0;
+      font-size:14px;
+      color:var(--rx-muted);
+    }
+
+    .badgeTag{
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(255,255,255,.12);
+      color: var(--rx-text);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      display:inline-block;
+      border: 1px solid rgba(255,255,255,.18);
+    }
+
+    .topActionBtn,
+    .acceptBtn,
+    .submitBtn,
+    .cancelBtn{
+      padding: 9px 14px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255,255,255,.18);
+      cursor:pointer;
+      font-weight: 900;
+      font-size: 13px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+    }
+
+    .topActionBtn,
+    .acceptBtn,
+    .submitBtn{
+      background: linear-gradient(180deg, var(--btn-blue1), var(--btn-blue2));
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(0,0,0,.18);
+    }
+
+    .topActionBtn:hover,
+    .acceptBtn:hover,
+    .submitBtn:hover{
+      filter: brightness(1.05);
+    }
+
+    .cancelBtn{
+      background: rgba(255,255,255,.10);
+      color: var(--rx-text);
+    }
+
+    .tradeList{
+      display:grid;
+      gap:12px;
+      margin-top:10px;
+    }
+
+    .tradeCard{
+      padding:14px;
+      background: linear-gradient(180deg, rgba(22,58,114,.55), rgba(11,31,58,.88));
+      position:relative;
+      overflow:hidden;
+    }
+
+    .tradeCard::after{
+      content:"";
+      position:absolute;
+      inset:-60px;
+      background:
+        radial-gradient(circle at 25% 20%, rgba(109,249,255,.16), transparent 45%),
+        radial-gradient(circle at 70% 35%, rgba(255,224,109,.14), transparent 45%),
+        radial-gradient(circle at 45% 75%, rgba(255,79,216,.10), transparent 45%);
+      pointer-events:none;
+      opacity:.55;
+    }
+
+    .tradeCard > *{
+      position:relative;
+      z-index:2;
+    }
+
+    .tradeHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:8px;
+    }
+
+    .tradeTitle{
+      font-size:15px;
+      font-weight:1000;
+    }
+
+    .tradeMeta{
+      color:var(--rx-muted);
+      font-size:12px;
+      line-height:1.6;
+    }
+
+    .tradeBadgeRow{
+      display:grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap:12px;
+      align-items:center;
+      margin-top:10px;
+    }
+
+    .tradeBox{
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.08);
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .tradeBox .label{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      color: rgba(236,243,255,.72);
+      margin-bottom:4px;
+      font-weight:800;
+    }
+
+    .tradeBox .value{
+      font-size:14px;
+      font-weight:900;
+      color:var(--rx-text);
+    }
+
+    .arrowMid{
+      font-size:24px;
+      font-weight:1000;
+      color:#fff;
+      text-align:center;
+    }
+
+    .tradeActions{
+      margin-top:12px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .helper{
+      color:var(--rx-muted);
+      font-size:12px;
+      line-height:1.6;
+    }
+
+    .empty{
+      color:var(--rx-muted);
+      font-size:14px;
+    }
+
+    .overlay{
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(5,10,24,.80);
+      backdrop-filter: blur(6px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+    }
+
+    .overlay.show{
+      display:flex;
+    }
+
+    .modalCard{
+      width:min(760px, 96vw);
+      max-height:90vh;
+      overflow:auto;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: linear-gradient(180deg, rgba(15,42,82,.96), rgba(11,31,58,.96));
+      box-shadow: 0 30px 90px rgba(0,0,0,.45);
+      padding: 18px;
+      color:var(--rx-text);
+    }
+
+    .modalTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:12px;
+    }
+
+    .modalTop h3{
+      margin:0;
+      font-size:18px;
+    }
+
+    .fieldGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+
+    @media (max-width: 760px){
+      .fieldGrid{ grid-template-columns: 1fr; }
+      .tradeBadgeRow{ grid-template-columns: 1fr; }
+      .arrowMid{ transform: rotate(90deg); }
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      margin-bottom:10px;
+    }
+
+    .field label{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      color: rgba(236,243,255,.72);
+      font-weight:800;
+    }
+
+    .field input,
+    .field select{
+      width:100%;
+      padding: 11px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.08);
+      color: var(--rx-text);
+      font-size:14px;
+    }
+
+    .field input[readonly]{
+      opacity:.85;
+    }
+
+    .miniNote{
+      font-size:12px;
+      color:var(--rx-muted);
+      line-height:1.55;
+      margin-top:4px;
+    }
+
+    .errorText{
+      color: #fecaca;
+      font-size:12px;
+      line-height:1.55;
+      min-height:18px;
+    }
+
+    .modalActions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      margin-top:8px;
+    }
+
+    .statusLine{
+      margin-top:10px;
+      color:var(--rx-muted);
+      font-size:13px;
+      line-height:1.6;
+    }
+
+    .blockedWrap{
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div><a href="/home" class="troop-home-link"><h2>Troop 248</h2></a></div>
+
+    <nav>
+      <a href="/home">Home</a>
+      <a href="/calendar">Calendar</a>
+      <a href="/documents">Documents</a>
+      <a href="/scoutmaster">SM Blog</a>
+      <a href="/spl">SPL Blog</a>
+      <a href="/useful-links">Useful Links</a>
+      <a href="/events">Events</a>
+      <a href="/mail">Mail</a>
+    </nav>
+
+    <div id="auth-bar">
+      <div id="auth-info">Signed in as …</div>
+      <button id="logout-btn">Log Out</button>
+    </div>
+  </header>
+
+  <main id="app" style="display:none;">
+    <div class="welcome-card">
+      <div>
+        <h3>Badge Trades</h3>
+        <p>Trade spare badge points with other scouts. Trades only exchange equal points between badges of the same rarity.</p>
+      </div>
+
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <span id="roleBadge" class="badgeTag">Scout</span>
+        <button id="newTradeBtn" class="topActionBtn">New Trade</button>
+      </div>
+    </div>
+
+    <section>
+      <h2>Open Trades</h2>
+      <div id="tradeList" class="tradeList">
+        <div class="empty">Loading trades…</div>
+      </div>
+      <div id="statusLine" class="statusLine"></div>
+    </section>
+  </main>
+
+  <div id="blockedWrap" class="blockedWrap" style="display:none;">
+    <div class="blockedCard">
+      <h3 style="margin-top:0;">Blocked</h3>
+      <p class="helper">This page is for scouts only. Go to Home.</p>
+      <div style="margin-top:12px;">
+        <a href="/home" class="topActionBtn">Go to Home</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="tradeOverlay" class="overlay">
+    <div class="modalCard">
+      <div class="modalTop">
+        <h3>Start a Trade</h3>
+        <button id="closeTradeModalBtn" class="cancelBtn">Close</button>
+      </div>
+
+      <div class="fieldGrid">
+        <div>
+          <div class="field">
+            <label for="targetScoutSelect">Trade With</label>
+            <select id="targetScoutSelect"></select>
+          </div>
+
+          <div class="field">
+            <label for="giveBadgeSelect">Badge You Are Giving From</label>
+            <select id="giveBadgeSelect"></select>
+            <div id="giveSpareNote" class="miniNote">Choose a badge you have spare points in.</div>
+          </div>
+
+          <div class="field">
+            <label for="giveAmountInput">Points You Are Giving</label>
+            <input id="giveAmountInput" type="number" min="1" step="1" value="1" />
+            <div id="giveAmountNote" class="miniNote"></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="field">
+            <label for="receiveBadgeSelect">Badge You Want</label>
+            <select id="receiveBadgeSelect"></select>
+            <div id="receiveSpareNote" class="miniNote">Only the other 4 badges of the same rarity will appear.</div>
+          </div>
+
+          <div class="field">
+            <label for="receiveAmountInput">Points You Want</label>
+            <input id="receiveAmountInput" type="number" readonly />
+            <div class="miniNote">This always matches the amount you are giving.</div>
+          </div>
+
+          <div class="field">
+            <label>Trade Rules</label>
+            <div class="miniNote">
+              You can only trade points above your current badge level floor.
+              The other scout must also have enough spare points in the badge you are requesting.
+              Trades between different rarities are not allowed.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tradeFormError" class="errorText"></div>
+
+      <div class="modalActions">
+        <button id="submitTradeBtn" class="submitBtn">Create Trade</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import {
+      getFirestore,
+      doc, getDoc, getDocs, addDoc, updateDoc,
+      collection, onSnapshot, query, orderBy,
+      runTransaction, serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+      authDomain: "troop-248.firebaseapp.com",
+      projectId: "troop-248",
+      storageBucket: "troop-248.firebasestorage.app",
+      messagingSenderId: "925363875752",
+      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+      measurementId: "G-NY75GX5TBH"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const authInfoEl = document.getElementById("auth-info");
+    const logoutBtn = document.getElementById("logout-btn");
+    const roleBadge = document.getElementById("roleBadge");
+
+    const appEl = document.getElementById("app");
+    const blockedWrap = document.getElementById("blockedWrap");
+
+    const newTradeBtn = document.getElementById("newTradeBtn");
+    const tradeOverlay = document.getElementById("tradeOverlay");
+    const closeTradeModalBtn = document.getElementById("closeTradeModalBtn");
+
+    const targetScoutSelect = document.getElementById("targetScoutSelect");
+    const giveBadgeSelect = document.getElementById("giveBadgeSelect");
+    const giveAmountInput = document.getElementById("giveAmountInput");
+    const receiveBadgeSelect = document.getElementById("receiveBadgeSelect");
+    const receiveAmountInput = document.getElementById("receiveAmountInput");
+
+    const giveSpareNote = document.getElementById("giveSpareNote");
+    const giveAmountNote = document.getElementById("giveAmountNote");
+    const receiveSpareNote = document.getElementById("receiveSpareNote");
+    const tradeFormError = document.getElementById("tradeFormError");
+    const submitTradeBtn = document.getElementById("submitTradeBtn");
+
+    const tradeList = document.getElementById("tradeList");
+    const statusLine = document.getElementById("statusLine");
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "/";
+    });
+
+    const BADGES = [
+      { id: "A", name: "Skibidi Scout", rarity: "Common" },
+      { id: "B", name: "Peek-A-Chu", rarity: "Common" },
+      { id: "C", name: "Will Byers", rarity: "Common" },
+      { id: "D", name: "19 dolla Fortnite Card", rarity: "Common" },
+      { id: "E", name: "CLANKER", rarity: "Common" },
+
+      { id: "F", name: "Green Thumb", rarity: "Uncommon" },
+      { id: "G", name: "Elite Barbarians", rarity: "Uncommon" },
+      { id: "H", name: "Kai Cenat", rarity: "Uncommon" },
+      { id: "I", name: "Six Seven", rarity: "Uncommon" },
+      { id: "J", name: "Chudmaxxing", rarity: "Uncommon" },
+
+      { id: "K", name: "Master Chef", rarity: "Rare" },
+      { id: "L", name: "Willie's Wee-nee Wagon", rarity: "Rare" },
+      { id: "M", name: "TTTSAHUR", rarity: "Rare" },
+      { id: "N", name: "1 Pound Fish", rarity: "Rare" },
+      { id: "O", name: "Camp Rainey Mountain", rarity: "Rare" },
+
+      { id: "P", name: "Ian's Hot Dog", rarity: "Epic" },
+      { id: "Q", name: "Golden Wind", rarity: "Epic" },
+      { id: "R", name: "PLEASE SPEED I NEED THIS", rarity: "Epic" },
+      { id: "S", name: "Water Bottle and Me", rarity: "Epic" },
+      { id: "T", name: "Patrick's Hub", rarity: "Epic" },
+
+      { id: "U", name: "Lord of the Fries", rarity: "Legendary" },
+      { id: "V", name: "BETA BLOCKZ", rarity: "Legendary" },
+      { id: "W", name: "Mega Knight", rarity: "Legendary" },
+      { id: "X", name: "Apple Fishing Pro", rarity: "Legendary" },
+      { id: "Y", name: "Brady Hanrahan", rarity: "Legendary" }
+    ];
+
+    const BADGE_BY_ID = Object.fromEntries(BADGES.map(b => [b.id, b]));
+    const BADGES_BY_RARITY = {
+      Common: BADGES.filter(b => b.rarity === "Common"),
+      Uncommon: BADGES.filter(b => b.rarity === "Uncommon"),
+      Rare: BADGES.filter(b => b.rarity === "Rare"),
+      Epic: BADGES.filter(b => b.rarity === "Epic"),
+      Legendary: BADGES.filter(b => b.rarity === "Legendary")
+    };
+
+    // Replace this if your badges page uses different thresholds.
+    const THRESHOLDS = {
+      Common:     { 1:0, 2:400, 3:900, 4:1700, 5:3000, 6:5000, 7:8000, 8:13000 },
+      Uncommon:   { 1:0, 2:240, 3:550, 4:1040, 5:1800, 6:3000, 7:4800, 8:7800 },
+      Rare:       { 1:0, 2:120, 3:280, 4:540, 5:960, 6:1640, 7:2700, 8:4400 },
+      Epic:       { 1:0, 2:18, 3:40, 4:76, 5:136, 6:226, 7:370, 8:600 },
+      Legendary:  { 1:0, 2:500, 3:1000, 4:1700, 5:2600, 6:3800, 7:5300, 8:7000 }
+    };
+
+    const RANK_ORDER = ["No Rank", "Scout", "Tenderfoot", "2nd Class", "1st Class", "Star", "Life", "Eagle"];
+
+    let currentUser = null;
+    let currentInfo = null;
+    let currentRewards = null;
+    let allScouts = [];
+    let rewardsCache = {};
+    let tradesUnsub = null;
+
+    function badgeName(id){ return BADGE_BY_ID[id]?.name || id; }
+    function badgeRarity(id){ return BADGE_BY_ID[id]?.rarity || "Common"; }
+    function rewardsRef(uid){ return doc(db, "accountInfo", uid, "modules", "rewards"); }
+
+    function thresholdFor(rarity, level){
+      return Number(THRESHOLDS[rarity]?.[level] || 0);
+    }
+
+    function pointsForBadge(rewards, badgeId){
+      return Number(rewards?.badgesPoints?.[badgeId] || 0);
+    }
+
+    function levelForBadge(rewards, badgeId){
+      return Number(rewards?.badgesLevel?.[badgeId] || 1);
+    }
+
+    function sparePointsForBadge(rewards, badgeId){
+      const rarity = badgeRarity(badgeId);
+      const level = levelForBadge(rewards, badgeId);
+      const total = pointsForBadge(rewards, badgeId);
+      const floor = thresholdFor(rarity, level);
+      return Math.max(0, total - floor);
+    }
+
+    function unlockedByRank(rank){
+      const r = (rank && RANK_ORDER.includes(rank)) ? rank : "No Rank";
+      const set = new Set(["A","B","C","D","E"]);
+      if (r === "No Rank") return set;
+      if (r === "Scout"){ ["F","G","H"].forEach(x=>set.add(x)); return set; }
+      if (r === "Tenderfoot"){ ["F","G","H","I","J"].forEach(x=>set.add(x)); ["K","L"].forEach(x=>set.add(x)); return set; }
+      if (r === "2nd Class"){ ["F","G","H","I","J"].forEach(x=>set.add(x)); ["K","L","M","N","O"].forEach(x=>set.add(x)); set.add("P"); return set; }
+      BADGES.forEach(b => set.add(b.id));
+      return set;
+    }
+
+    function unlockedBadgesForUser(info, rewards){
+      const set = unlockedByRank(rewards?.rank || info?.rank || "No Rank");
+      BADGES.forEach((b) => {
+        if (pointsForBadge(rewards, b.id) > 0) set.add(b.id);
+        if (levelForBadge(rewards, b.id) > 1) set.add(b.id);
+      });
+      return Array.from(set).map(id => BADGE_BY_ID[id]).filter(Boolean);
+    }
+
+    function scoutLabel(scout){
+      return scout.name || scout.displayName || scout.email || scout.uid;
+    }
+
+    async function ensureRewardsDoc(uid) {
+      const ref = rewardsRef(uid);
+      const snap = await getDoc(ref);
+      if (snap.exists()) return;
+
+      await updateDoc(doc(db, "accountInfo", uid), {}); // no-op permission probe
+    }
+
+    async function loadAllScouts(){
+      const snap = await getDocs(collection(db, "accountInfo"));
+      const scouts = [];
+
+      for (const docSnap of snap.docs){
+        const d = docSnap.data() || {};
+        if ((d.accountType || "").toLowerCase() !== "scout") continue;
+
+        const uid = docSnap.id;
+        const rewardsSnap = await getDoc(rewardsRef(uid));
+        const rewards = rewardsSnap.exists() ? rewardsSnap.data() : {
+          rank: d.rank || "No Rank",
+          badgesPoints: {},
+          badgesLevel: {}
+        };
+
+        rewardsCache[uid] = rewards;
+
+        scouts.push({
+          uid,
+          name: d.name || d.displayName || d.fullName || "",
+          displayName: d.displayName || "",
+          email: d.email || "",
+          accountType: d.accountType || "",
+          rewards
+        });
+      }
+
+      scouts.sort((a,b) => scoutLabel(a).localeCompare(scoutLabel(b)));
+      allScouts = scouts;
+    }
+
+    function openTradeModal(){
+      tradeOverlay.classList.add("show");
+    }
+
+    function closeTradeModal(){
+      tradeOverlay.classList.remove("show");
+      tradeFormError.textContent = "";
+    }
+
+    newTradeBtn.addEventListener("click", openTradeModal);
+    closeTradeModalBtn.addEventListener("click", closeTradeModal);
+    tradeOverlay.addEventListener("click", (e) => {
+      if (e.target === tradeOverlay) closeTradeModal();
+    });
+
+    function populateTargetScoutSelect(){
+      targetScoutSelect.innerHTML = "";
+      const mine = currentUser?.uid;
+
+      const others = allScouts.filter(s => s.uid !== mine);
+
+      if (others.length === 0){
+        targetScoutSelect.innerHTML = `<option value="">No other scouts found</option>`;
+        return;
+      }
+
+      others.forEach((s) => {
+        const opt = document.createElement("option");
+        opt.value = s.uid;
+        opt.textContent = scoutLabel(s);
+        targetScoutSelect.appendChild(opt);
+      });
+    }
+
+    function populateGiveBadgeSelect(){
+      giveBadgeSelect.innerHTML = "";
+      const unlocked = unlockedBadgesForUser(currentInfo, currentRewards)
+        .filter(b => sparePointsForBadge(currentRewards, b.id) > 0);
+
+      if (unlocked.length === 0){
+        const opt = document.createElement("option");
+        opt.value = "";
+        opt.textContent = "No tradeable badges";
+        giveBadgeSelect.appendChild(opt);
+        return;
+      }
+
+      unlocked.forEach((b) => {
+        const spare = sparePointsForBadge(currentRewards, b.id);
+        const opt = document.createElement("option");
+        opt.value = b.id;
+        opt.textContent = `${b.name} (${b.rarity}) — spare ${spare}`;
+        giveBadgeSelect.appendChild(opt);
+      });
+    }
+
+    function updateGiveBadgeInfo(){
+      const giveBadge = giveBadgeSelect.value;
+      if (!giveBadge){
+        giveSpareNote.textContent = "Choose a badge you have spare points in.";
+        giveAmountNote.textContent = "";
+        return;
+      }
+
+      const spare = sparePointsForBadge(currentRewards, giveBadge);
+      const level = levelForBadge(currentRewards, giveBadge);
+      const floor = thresholdFor(badgeRarity(giveBadge), level);
+
+      giveSpareNote.textContent = `Current level: ${level}. Tradeable spare points: ${spare}. Floor protected: ${floor}.`;
+
+      const currentAmount = Math.max(1, Number(giveAmountInput.value || 1));
+      const clamped = Math.min(currentAmount, spare || 1);
+      giveAmountInput.value = clamped;
+      receiveAmountInput.value = clamped;
+
+      giveAmountNote.textContent = `You may give up to ${spare} points from this badge without lowering its level.`;
+    }
+
+    function populateReceiveBadgeSelect(){
+      receiveBadgeSelect.innerHTML = "";
+      const targetUid = targetScoutSelect.value;
+      const giveBadge = giveBadgeSelect.value;
+      const amount = Math.max(1, Number(giveAmountInput.value || 1));
+
+      if (!targetUid || !giveBadge){
+        const opt = document.createElement("option");
+        opt.value = "";
+        opt.textContent = "Choose target and give badge first";
+        receiveBadgeSelect.appendChild(opt);
+        receiveSpareNote.textContent = "Only the other 4 badges of the same rarity will appear.";
+        return;
+      }
+
+      const rarity = badgeRarity(giveBadge);
+      const targetRewards = rewardsCache[targetUid] || {};
+      const possible = BADGES_BY_RARITY[rarity].filter(b => b.id !== giveBadge);
+
+      if (!possible.length){
+        const opt = document.createElement("option");
+        opt.value = "";
+        opt.textContent = "No matching badges found";
+        receiveBadgeSelect.appendChild(opt);
+        return;
+      }
+
+      possible.forEach((b) => {
+        const spare = sparePointsForBadge(targetRewards, b.id);
+        const opt = document.createElement("option");
+        opt.value = b.id;
+        opt.textContent = `${b.name} — ${spare >= amount ? `spare ${spare}` : `not enough spare (${spare})`}`;
+        if (spare < amount) opt.disabled = true;
+        receiveBadgeSelect.appendChild(opt);
+      });
+
+      if (receiveBadgeSelect.options.length && receiveBadgeSelect.selectedIndex < 0){
+        receiveBadgeSelect.selectedIndex = 0;
+      }
+
+      updateReceiveInfo();
+    }
+
+    function updateReceiveInfo(){
+      const targetUid = targetScoutSelect.value;
+      const receiveBadge = receiveBadgeSelect.value;
+      const amount = Math.max(1, Number(giveAmountInput.value || 1));
+
+      if (!targetUid || !receiveBadge){
+        receiveSpareNote.textContent = "Select a valid badge from the same rarity.";
+        return;
+      }
+
+      const targetRewards = rewardsCache[targetUid] || {};
+      const spare = sparePointsForBadge(targetRewards, receiveBadge);
+
+      if (spare < amount){
+        receiveSpareNote.textContent = `This scout only has ${spare} spare points in ${badgeName(receiveBadge)}.`;
+      } else {
+        receiveSpareNote.textContent = `This scout can trade up to ${spare} spare points from ${badgeName(receiveBadge)}.`;
+      }
+    }
+
+    function refreshTradeForm(){
+      populateTargetScoutSelect();
+      populateGiveBadgeSelect();
+      updateGiveBadgeInfo();
+      receiveAmountInput.value = Math.max(1, Number(giveAmountInput.value || 1));
+      populateReceiveBadgeSelect();
+      tradeFormError.textContent = "";
+    }
+
+    targetScoutSelect.addEventListener("change", () => {
+      populateReceiveBadgeSelect();
+    });
+
+    giveBadgeSelect.addEventListener("change", () => {
+      updateGiveBadgeInfo();
+      populateReceiveBadgeSelect();
+    });
+
+    giveAmountInput.addEventListener("input", () => {
+      updateGiveBadgeInfo();
+      receiveAmountInput.value = Math.max(1, Number(giveAmountInput.value || 1));
+      populateReceiveBadgeSelect();
+    });
+
+    receiveBadgeSelect.addEventListener("change", updateReceiveInfo);
+
+    function validateTradeForm(){
+      const targetUid = targetScoutSelect.value;
+      const giveBadge = giveBadgeSelect.value;
+      const receiveBadge = receiveBadgeSelect.value;
+      const amount = Math.max(1, Number(giveAmountInput.value || 1));
+
+      if (!targetUid) return "Choose a scout to trade with.";
+      if (!giveBadge) return "Choose a badge you want to give from.";
+      if (!receiveBadge) return "Choose a badge you want to receive.";
+      if (giveBadge === receiveBadge) return "You must trade for a different badge.";
+      if (badgeRarity(giveBadge) !== badgeRarity(receiveBadge)) return "Trades must stay within the same rarity.";
+      if (!Number.isFinite(amount) || amount <= 0) return "Trade amount must be at least 1.";
+
+      const mySpare = sparePointsForBadge(currentRewards, giveBadge);
+      if (amount > mySpare) return `You only have ${mySpare} spare points available in ${badgeName(giveBadge)}.`;
+
+      const targetRewards = rewardsCache[targetUid] || {};
+      const theirSpare = sparePointsForBadge(targetRewards, receiveBadge);
+      if (amount > theirSpare) return `${scoutLabel(allScouts.find(s => s.uid === targetUid))} only has ${theirSpare} spare points in ${badgeName(receiveBadge)}.`;
+
+      const myReceiveLevel = levelForBadge(currentRewards, receiveBadge);
+      if (myReceiveLevel >= 8) return `You cannot request points for ${badgeName(receiveBadge)} because it is already max level.`;
+
+      return "";
+    }
+
+    submitTradeBtn.addEventListener("click", async () => {
+      const error = validateTradeForm();
+      if (error){
+        tradeFormError.textContent = error;
+        return;
+      }
+
+      tradeFormError.textContent = "";
+
+      const targetUid = targetScoutSelect.value;
+      const targetScout = allScouts.find(s => s.uid === targetUid);
+
+      const giveBadge = giveBadgeSelect.value;
+      const receiveBadge = receiveBadgeSelect.value;
+      const amount = Math.max(1, Number(giveAmountInput.value || 1));
+      const rarity = badgeRarity(giveBadge);
+
+      submitTradeBtn.disabled = true;
+
+      try {
+        await addDoc(collection(db, "badgeTrades"), {
+          fromUid: currentUser.uid,
+          fromName: scoutLabel({ ...currentInfo, uid: currentUser.uid, rewards: currentRewards }),
+          toUid: targetUid,
+          toName: scoutLabel(targetScout),
+          giveBadge,
+          giveBadgeName: badgeName(giveBadge),
+          givePoints: amount,
+          receiveBadge,
+          receiveBadgeName: badgeName(receiveBadge),
+          receivePoints: amount,
+          rarity,
+          status: "open",
+          createdAt: serverTimestamp()
+        });
+
+        closeTradeModal();
+      } catch (err) {
+        tradeFormError.textContent = err.message || "Could not create trade.";
+      } finally {
+        submitTradeBtn.disabled = false;
+      }
+    });
+
+    async function acceptTrade(tradeId){
+      const tradeRef = doc(db, "badgeTrades", tradeId);
+
+      await runTransaction(db, async (tx) => {
+        const tradeSnap = await tx.get(tradeRef);
+        if (!tradeSnap.exists()) throw new Error("Trade no longer exists.");
+
+        const trade = tradeSnap.data();
+        if (trade.status !== "open") throw new Error("Trade is no longer open.");
+        if (trade.toUid !== currentUser.uid) throw new Error("This trade is not for you.");
+
+        const fromRef = rewardsRef(trade.fromUid);
+        const toRef = rewardsRef(trade.toUid);
+
+        const fromSnap = await tx.get(fromRef);
+        const toSnap = await tx.get(toRef);
+
+        if (!fromSnap.exists() || !toSnap.exists()) throw new Error("Rewards data missing.");
+
+        const fromRewards = fromSnap.data() || {};
+        const toRewards = toSnap.data() || {};
+
+        const fromSpare = sparePointsForBadge(fromRewards, trade.giveBadge);
+        const toSpare = sparePointsForBadge(toRewards, trade.receiveBadge);
+
+        if (fromSpare < trade.givePoints){
+          throw new Error(`${trade.fromName} no longer has enough spare points in ${trade.giveBadgeName}.`);
+        }
+
+        if (toSpare < trade.receivePoints){
+          throw new Error(`You no longer have enough spare points in ${trade.receiveBadgeName}.`);
+        }
+
+        const nextFromPoints = {
+          ...(fromRewards.badgesPoints || {}),
+          [trade.giveBadge]: pointsForBadge(fromRewards, trade.giveBadge) - trade.givePoints,
+          [trade.receiveBadge]: pointsForBadge(fromRewards, trade.receiveBadge) + trade.receivePoints
+        };
+
+        const nextToPoints = {
+          ...(toRewards.badgesPoints || {}),
+          [trade.receiveBadge]: pointsForBadge(toRewards, trade.receiveBadge) - trade.receivePoints,
+          [trade.giveBadge]: pointsForBadge(toRewards, trade.giveBadge) + trade.givePoints
+        };
+
+        const fromHistory = Array.isArray(fromRewards.history) ? fromRewards.history.slice(0, 80) : [];
+        fromHistory.unshift({
+          type: "badgeTradeAccepted",
+          tradeId,
+          direction: "sent",
+          withUid: trade.toUid,
+          withName: trade.toName,
+          gaveBadge: trade.giveBadge,
+          gavePoints: trade.givePoints,
+          receivedBadge: trade.receiveBadge,
+          receivedPoints: trade.receivePoints,
+          openedAt: new Date().toISOString()
+        });
+
+        const toHistory = Array.isArray(toRewards.history) ? toRewards.history.slice(0, 80) : [];
+        toHistory.unshift({
+          type: "badgeTradeAccepted",
+          tradeId,
+          direction: "received",
+          withUid: trade.fromUid,
+          withName: trade.fromName,
+          gaveBadge: trade.receiveBadge,
+          gavePoints: trade.receivePoints,
+          receivedBadge: trade.giveBadge,
+          receivedPoints: trade.givePoints,
+          openedAt: new Date().toISOString()
+        });
+
+        tx.update(fromRef, {
+          badgesPoints: nextFromPoints,
+          history: fromHistory,
+          updatedAt: serverTimestamp()
+        });
+
+        tx.update(toRef, {
+          badgesPoints: nextToPoints,
+          history: toHistory,
+          updatedAt: serverTimestamp()
+        });
+
+        tx.update(tradeRef, {
+          status: "accepted",
+          acceptedAt: serverTimestamp(),
+          acceptedBy: currentUser.uid
+        });
+      });
+    }
+
+    function renderTrades(docs){
+      const cards = docs
+        .map(docSnap => ({ id: docSnap.id, ...docSnap.data() }))
+        .filter(t => t.status === "open" && t.fromUid !== currentUser.uid);
+
+      tradeList.innerHTML = "";
+
+      if (!cards.length){
+        tradeList.innerHTML = `<div class="empty">No open trades from other scouts right now.</div>`;
+        return;
+      }
+
+      cards.forEach((trade) => {
+        const card = document.createElement("div");
+        card.className = "tradeCard";
+
+        const isForMe = trade.toUid === currentUser.uid;
+
+        card.innerHTML = `
+          <div class="tradeHead">
+            <div class="tradeTitle">${trade.fromName} wants to trade with ${trade.toName}</div>
+            <span class="badgeTag">${trade.rarity}</span>
+          </div>
+
+          <div class="tradeMeta">
+            ${trade.fromName} gives away ${trade.givePoints} points from <strong>${trade.giveBadgeName}</strong>
+            and wants ${trade.receivePoints} points from <strong>${trade.receiveBadgeName}</strong>.
+          </div>
+
+          <div class="tradeBadgeRow">
+            <div class="tradeBox">
+              <div class="label">They Give</div>
+              <div class="value">${trade.givePoints} pts • ${trade.giveBadgeName}</div>
+            </div>
+
+            <div class="arrowMid">⇄</div>
+
+            <div class="tradeBox">
+              <div class="label">They Want</div>
+              <div class="value">${trade.receivePoints} pts • ${trade.receiveBadgeName}</div>
+            </div>
+          </div>
+
+          <div class="tradeActions">
+            ${isForMe ? `<button class="acceptBtn" data-trade-id="${trade.id}">Accept Trade</button>` : `<span class="helper">This trade is not directed to you.</span>`}
+          </div>
+        `;
+
+        tradeList.appendChild(card);
+      });
+
+      tradeList.querySelectorAll(".acceptBtn").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          btn.disabled = true;
+          try{
+            await acceptTrade(btn.dataset.tradeId);
+            statusLine.textContent = "Trade accepted.";
+          }catch(err){
+            statusLine.textContent = err.message || "Could not accept trade.";
+          }finally{
+            btn.disabled = false;
+          }
+        });
+      });
+    }
+
+    async function bootstrap(user){
+      currentUser = user;
+
+      const infoSnap = await getDoc(doc(db, "accountInfo", user.uid));
+      if (!infoSnap.exists()){
+        blockedWrap.style.display = "";
+        return;
+      }
+
+      currentInfo = infoSnap.data() || {};
+      authInfoEl.textContent = `Signed in as ${user.email || "—"}`;
+
+      if ((currentInfo.accountType || "").toLowerCase() !== "scout"){
+        blockedWrap.style.display = "";
+        return;
+      }
+
+      roleBadge.textContent = "Scout";
+      appEl.style.display = "";
+
+      const myRewardsSnap = await getDoc(rewardsRef(user.uid));
+      currentRewards = myRewardsSnap.exists()
+        ? myRewardsSnap.data()
+        : { rank: currentInfo.rank || "No Rank", badgesPoints: {}, badgesLevel: {} };
+
+      await loadAllScouts();
+      refreshTradeForm();
+
+      if (tradesUnsub) tradesUnsub();
+      tradesUnsub = onSnapshot(
+        query(collection(db, "badgeTrades"), orderBy("createdAt", "desc")),
+        (snap) => renderTrades(snap.docs),
+        () => {
+          tradeList.innerHTML = `<div class="empty">Could not load trades.</div>`;
+        }
+      );
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user){
+        window.location.href = "/";
+        return;
+      }
+
+      try{
+        await bootstrap(user);
+      }catch(err){
+        blockedWrap.style.display = "";
+      }
+    });
+  </script>
+</body>
+</html>
