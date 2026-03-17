@@ -718,7 +718,10 @@
     }
 
     function scoutLabel(scout){
-      return scout?.name || scout?.displayName || scout?.email || scout?.uid || "Scout";
+      return scout?.fullName 
+        || scout?.name
+        || scout?.displayName
+        || "Scout";
     }
 
     async function loadAllScouts(){
@@ -741,11 +744,9 @@
 
         scouts.push({
           uid,
-          name: d.name || d.fullName || d.displayName || d.firstName || d.username || "",
-          displayName: d.displayName || "",
           fullName: d.fullName || "",
-          firstName: d.firstName || "",
-          useranme: d.username || "",
+          name: d.name || "",
+          displayName: d.displayName || "",
           email: d.email || "",
           accountType: d.accountType || "",
           rewards
