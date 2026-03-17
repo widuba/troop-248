@@ -1,3 +1,4 @@
+<!-- /advancements/rewards/trades/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,9 +28,10 @@
     body{
       margin:0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(900px 600px at 40% 20%, rgba(31,78,121,.18), transparent 55%),
-                  radial-gradient(800px 520px at 70% 30%, rgba(178,34,34,.10), transparent 58%),
-                  #cfc6b0;
+      background:
+        radial-gradient(900px 600px at 40% 20%, rgba(31,78,121,.18), transparent 55%),
+        radial-gradient(800px 520px at 70% 30%, rgba(178,34,34,.10), transparent 58%),
+        #cfc6b0;
       min-height:100vh;
     }
 
@@ -294,6 +296,7 @@
       display:flex;
       gap:10px;
       flex-wrap:wrap;
+      align-items:center;
     }
 
     .helper{
@@ -489,13 +492,13 @@
       <div class="fieldGrid">
         <div>
           <div class="field">
-            <label for+"tradeModeSelect">Trade Type</label>
+            <label for="tradeModeSelect">Trade Type</label>
             <select id="tradeModeSelect">
               <option value="private">Private Trade</option>
               <option value="public">Public Trade</option>
             </select>
           </div>
-          
+
           <div class="field" id="targetScoutWrap">
             <label for="targetScoutSelect">Trade With</label>
             <select id="targetScoutSelect"></select>
@@ -533,6 +536,7 @@
               You can only trade points above your current badge level floor.
               The other scout must also have enough spare points in the badge you are requesting.
               Trades between different rarities are not allowed.
+              Level 8 badges cannot be given or requested.
             </div>
           </div>
         </div>
@@ -581,6 +585,8 @@
     const tradeOverlay = document.getElementById("tradeOverlay");
     const closeTradeModalBtn = document.getElementById("closeTradeModalBtn");
 
+    const tradeModeSelect = document.getElementById("tradeModeSelect");
+    const targetScoutWrap = document.getElementById("targetScoutWrap");
     const targetScoutSelect = document.getElementById("targetScoutSelect");
     const giveBadgeSelect = document.getElementById("giveBadgeSelect");
     const giveAmountInput = document.getElementById("giveAmountInput");
@@ -595,9 +601,6 @@
 
     const tradeList = document.getElementById("tradeList");
     const statusLine = document.getElementById("statusLine");
-
-    const tradeModeSelect = document.getElementById("tradeModeSelect");
-    const targetScoutWrap = document.getElementById("targetScoutWrap");
 
     logoutBtn.addEventListener("click", async () => {
       await signOut(auth);
@@ -647,11 +650,11 @@
 
     // Replace this if your badges page uses different thresholds.
     const THRESHOLDS = {
-      Common:     { 1:0, 2:400, 3:900, 4:1700, 5:3000, 6:5000, 7:8000, 8:13000 },
-      Uncommon:   { 1:0, 2:240, 3:550, 4:1040, 5:1800, 6:3000, 7:4800, 8:7800 },
-      Rare:       { 1:0, 2:120, 3:280, 4:540, 5:960, 6:1640, 7:2700, 8:4400 },
-      Epic:       { 1:0, 2:18, 3:40, 4:76, 5:136, 6:226, 7:370, 8:600 },
-      Legendary:  { 1:0, 2:10, 3:24, 4:44, 5:76, 6:120, 7:180, 8:260 }
+      Common:     { 1:0, 2:200, 3:450, 4:800, 5:1300, 6:1900, 7:2700, 8:3800 },
+      Uncommon:   { 1:0, 2:250, 3:600, 4:1100, 5:1800, 6:2700, 7:3900, 8:5500 },
+      Rare:       { 1:0, 2:400, 3:900, 4:1600, 5:2500, 6:3800, 7:5600, 8:8000 },
+      Epic:       { 1:0, 2:300, 3:700, 4:1200, 5:1900, 6:2800, 7:4000, 8:5600 },
+      Legendary:  { 1:0, 2:500, 3:1000, 4:1700, 5:2600, 6:3800, 7:5300, 8:7000 }
     };
 
     const RANK_ORDER = ["No Rank", "Scout", "Tenderfoot", "2nd Class", "1st Class", "Star", "Life", "Eagle"];
@@ -671,14 +674,14 @@
       return Number(THRESHOLDS[rarity]?.[level] || 0);
     }
 
+    function levelForBadge(rewards, badgeId){
+      return Number(rewards?.badgesLevel?.[badgeId] || 1);
+    }
+
     function pointsForBadge(rewards, badgeId){
       const level = levelForBadge(rewards, badgeId);
       if (level >= 8) return 0;
       return Number(rewards?.badgesPoints?.[badgeId] || 0);
-    }
-
-    function levelForBadge(rewards, badgeId){
-      return Number(rewards?.badgesLevel?.[badgeId] || 1);
     }
 
     function sparePointsForBadge(rewards, badgeId){
@@ -686,7 +689,7 @@
       const level = levelForBadge(rewards, badgeId);
 
       if (level >= 8) return 0;
-      
+
       const total = Number(rewards?.badgesPoints?.[badgeId] || 0);
       const floor = thresholdFor(rarity, level);
       return Math.max(0, total - floor);
@@ -715,25 +718,7 @@
     }
 
     function scoutLabel(scout){
-      return scout.name || scout.displayName || scout.email || scout.uid;
-    }
-
-    function syncTradeModeUI(){
-      const mode = tradeModeSelect.value;
-      targetScoutWrap.style.display = mode === "private" ? "" : "none";
-    }
-
-    tradeModeSelect.addEventListener("change", () => {
-      syncTradeModeUI();
-      populateReceiveBadgeSelect();
-    });
-
-    async function ensureRewardsDoc(uid) {
-      const ref = rewardsRef(uid);
-      const snap = await getDoc(ref);
-      if (snap.exists()) return;
-
-      await updateDoc(doc(db, "accountInfo", uid), {}); // no-op permission probe
+      return scout?.name || scout?.displayName || scout?.email || scout?.uid || "Scout";
     }
 
     async function loadAllScouts(){
@@ -783,6 +768,11 @@
       if (e.target === tradeOverlay) closeTradeModal();
     });
 
+    function syncTradeModeUI(){
+      const mode = tradeModeSelect.value;
+      targetScoutWrap.style.display = mode === "private" ? "" : "none";
+    }
+
     function populateTargetScoutSelect(){
       targetScoutSelect.innerHTML = "";
       const mine = currentUser?.uid;
@@ -805,6 +795,7 @@
     function populateGiveBadgeSelect(){
       giveBadgeSelect.innerHTML = "";
       const unlocked = unlockedBadgesForUser(currentInfo, currentRewards)
+        .filter(b => levelForBadge(currentRewards, b.id) < 8)
         .filter(b => sparePointsForBadge(currentRewards, b.id) > 0);
 
       if (unlocked.length === 0){
@@ -848,22 +839,37 @@
 
     function populateReceiveBadgeSelect(){
       receiveBadgeSelect.innerHTML = "";
+      const mode = tradeModeSelect.value;
       const targetUid = targetScoutSelect.value;
       const giveBadge = giveBadgeSelect.value;
       const amount = Math.max(1, Number(giveAmountInput.value || 1));
 
-      if (!targetUid || !giveBadge){
+      if (!giveBadge){
         const opt = document.createElement("option");
         opt.value = "";
-        opt.textContent = "Choose target and give badge first";
+        opt.textContent = "Choose give badge first";
         receiveBadgeSelect.appendChild(opt);
         receiveSpareNote.textContent = "Only the other 4 badges of the same rarity will appear.";
         return;
       }
 
+      if (mode === "private" && !targetUid){
+        const opt = document.createElement("option");
+        opt.value = "";
+        opt.textContent = "Choose target scout first";
+        receiveBadgeSelect.appendChild(opt);
+        receiveSpareNote.textContent = "Select a specific scout for a private trade.";
+        return;
+      }
+
       const rarity = badgeRarity(giveBadge);
-      const targetRewards = rewardsCache[targetUid] || {};
-      const possible = BADGES_BY_RARITY[rarity].filter(b => b.id !== giveBadge);
+      const targetRewards = mode === "private" ? (rewardsCache[targetUid] || {}) : null;
+      const possible = BADGES_BY_RARITY[rarity]
+        .filter(b => b.id !== giveBadge)
+        .filter(b => {
+          if (levelForBadge(currentRewards, b.id) >= 8) return false;
+          return true;
+        });
 
       if (!possible.length){
         const opt = document.createElement("option");
@@ -874,11 +880,20 @@
       }
 
       possible.forEach((b) => {
-        const spare = sparePointsForBadge(targetRewards, b.id);
         const opt = document.createElement("option");
         opt.value = b.id;
-        opt.textContent = `${b.name} — ${spare >= amount ? `spare ${spare}` : `not enough spare (${spare})`}`;
-        if (spare < amount) opt.disabled = true;
+
+        if (mode === "private"){
+          const spare = sparePointsForBadge(targetRewards, b.id);
+          const isMax = levelForBadge(targetRewards, b.id) >= 8;
+          opt.textContent = isMax
+            ? `${b.name} — max level`
+            : (spare >= amount ? `${b.name} — spare ${spare}` : `${b.name} — not enough spare (${spare})`);
+          if (spare < amount || isMax) opt.disabled = true;
+        } else {
+          opt.textContent = `${b.name}`;
+        }
+
         receiveBadgeSelect.appendChild(opt);
       });
 
@@ -890,16 +905,37 @@
     }
 
     function updateReceiveInfo(){
+      const mode = tradeModeSelect.value;
       const targetUid = targetScoutSelect.value;
       const receiveBadge = receiveBadgeSelect.value;
       const amount = Math.max(1, Number(giveAmountInput.value || 1));
 
-      if (!targetUid || !receiveBadge){
+      if (!receiveBadge){
         receiveSpareNote.textContent = "Select a valid badge from the same rarity.";
         return;
       }
 
+      if (levelForBadge(currentRewards, receiveBadge) >= 8){
+        receiveSpareNote.textContent = `${badgeName(receiveBadge)} is max level for you, so it cannot be requested.`;
+        return;
+      }
+
+      if (mode === "public"){
+        receiveSpareNote.textContent = `Any scout with at least ${amount} spare points in ${badgeName(receiveBadge)} may accept this trade.`;
+        return;
+      }
+
+      if (!targetUid){
+        receiveSpareNote.textContent = "Choose a target scout first.";
+        return;
+      }
+
       const targetRewards = rewardsCache[targetUid] || {};
+      if (levelForBadge(targetRewards, receiveBadge) >= 8){
+        receiveSpareNote.textContent = `This scout has ${badgeName(receiveBadge)} at max level, so it cannot be traded.`;
+        return;
+      }
+
       const spare = sparePointsForBadge(targetRewards, receiveBadge);
 
       if (spare < amount){
@@ -919,6 +955,11 @@
       tradeFormError.textContent = "";
     }
 
+    tradeModeSelect.addEventListener("change", () => {
+      syncTradeModeUI();
+      populateReceiveBadgeSelect();
+    });
+
     targetScoutSelect.addEventListener("change", () => {
       populateReceiveBadgeSelect();
     });
@@ -937,39 +978,39 @@
     receiveBadgeSelect.addEventListener("change", updateReceiveInfo);
 
     function validateTradeForm(){
-  const mode = tradeModeSelect.value;
-  const targetUid = targetScoutSelect.value;
-  const giveBadge = giveBadgeSelect.value;
-  const receiveBadge = receiveBadgeSelect.value;
-  const amount = Math.max(1, Number(giveAmountInput.value || 1));
+      const mode = tradeModeSelect.value;
+      const targetUid = targetScoutSelect.value;
+      const giveBadge = giveBadgeSelect.value;
+      const receiveBadge = receiveBadgeSelect.value;
+      const amount = Math.max(1, Number(giveAmountInput.value || 1));
 
-  if (mode === "private" && !targetUid) return "Choose a scout to trade with.";
-  if (!giveBadge) return "Choose a badge you want to give from.";
-  if (!receiveBadge) return "Choose a badge you want to receive.";
-  if (giveBadge === receiveBadge) return "You must trade for a different badge.";
-  if (badgeRarity(giveBadge) !== badgeRarity(receiveBadge)) return "Trades must stay within the same rarity.";
-  if (!Number.isFinite(amount) || amount <= 0) return "Trade amount must be at least 1.";
+      if (mode === "private" && !targetUid) return "Choose a scout to trade with.";
+      if (!giveBadge) return "Choose a badge you want to give from.";
+      if (!receiveBadge) return "Choose a badge you want to receive.";
+      if (giveBadge === receiveBadge) return "You must trade for a different badge.";
+      if (badgeRarity(giveBadge) !== badgeRarity(receiveBadge)) return "Trades must stay within the same rarity.";
+      if (!Number.isFinite(amount) || amount <= 0) return "Trade amount must be at least 1.";
 
-  if (levelForBadge(currentRewards, giveBadge) >= 8) return `${badgeName(giveBadge)} is max level and cannot be traded.`;
-  if (levelForBadge(currentRewards, receiveBadge) >= 8) return `You cannot request ${badgeName(receiveBadge)} because it is max level.`;
+      if (levelForBadge(currentRewards, giveBadge) >= 8) return `${badgeName(giveBadge)} is max level and cannot be traded.`;
+      if (levelForBadge(currentRewards, receiveBadge) >= 8) return `You cannot request ${badgeName(receiveBadge)} because it is max level.`;
 
-  const mySpare = sparePointsForBadge(currentRewards, giveBadge);
-  if (amount > mySpare) return `You only have ${mySpare} spare points available in ${badgeName(giveBadge)}.`;
+      const mySpare = sparePointsForBadge(currentRewards, giveBadge);
+      if (amount > mySpare) return `You only have ${mySpare} spare points available in ${badgeName(giveBadge)}.`;
 
-  if (mode === "private"){
-    const targetRewards = rewardsCache[targetUid] || {};
-    if (levelForBadge(targetRewards, receiveBadge) >= 8) {
-      return `${scoutLabel(allScouts.find(s => s.uid === targetUid))} has ${badgeName(receiveBadge)} at max level, so it cannot be traded.`;
+      if (mode === "private"){
+        const targetRewards = rewardsCache[targetUid] || {};
+        if (levelForBadge(targetRewards, receiveBadge) >= 8) {
+          return `${scoutLabel(allScouts.find(s => s.uid === targetUid))} has ${badgeName(receiveBadge)} at max level, so it cannot be traded.`;
+        }
+
+        const theirSpare = sparePointsForBadge(targetRewards, receiveBadge);
+        if (amount > theirSpare) {
+          return `${scoutLabel(allScouts.find(s => s.uid === targetUid))} only has ${theirSpare} spare points in ${badgeName(receiveBadge)}.`;
+        }
+      }
+
+      return "";
     }
-
-    const theirSpare = sparePointsForBadge(targetRewards, receiveBadge);
-    if (amount > theirSpare) {
-      return `${scoutLabel(allScouts.find(s => s.uid === targetUid))} only has ${theirSpare} spare points in ${badgeName(receiveBadge)}.`;
-    }
-  }
-
-  return "";
-}
 
     submitTradeBtn.addEventListener("click", async () => {
       const error = validateTradeForm();
@@ -982,7 +1023,7 @@
 
       const mode = tradeModeSelect.value;
       const targetUid = mode === "private" ? targetScoutSelect.value : null;
-      const targetScout = targetuid ? allScouts.find(s => s.uid === targetUid) : null;
+      const targetScout = targetUid ? allScouts.find(s => s.uid === targetUid) : null;
 
       const giveBadge = giveBadgeSelect.value;
       const receiveBadge = receiveBadgeSelect.value;
@@ -995,7 +1036,7 @@
         await addDoc(collection(db, "badgeTrades"), {
           fromUid: currentUser.uid,
           fromName: scoutLabel({ ...currentInfo, uid: currentUser.uid, rewards: currentRewards }),
-          tradeMode: mode;
+          tradeMode: mode,
           toUid: mode === "private" ? targetUid : null,
           toName: mode === "private" ? scoutLabel(targetScout) : "Anyone",
           giveBadge,
@@ -1026,18 +1067,17 @@
 
         const trade = tradeSnap.data();
         if (trade.status !== "open") throw new Error("Trade is no longer open.");
-        if (trade.trademode === "private" && trade.toUid !== currentUser.uid)  {
+
+        if (trade.tradeMode === "private" && trade.toUid !== currentUser.uid) {
           throw new Error("This private trade is not for you.");
         }
-        if (trade.trademode === "public" && trade.toUid !== currentUser.uid)  {
+        if (trade.tradeMode === "public" && trade.fromUid === currentUser.uid) {
           throw new Error("You cannot accept your own public trade.");
         }
 
-        const accepterUid = currentUser.uid;
-        const accepterRef = rewardsRef(accepterUid);
-
         const fromRef = rewardsRef(trade.fromUid);
-        const toRef = accepterRef;
+        const accepterUid = currentUser.uid;
+        const toRef = rewardsRef(accepterUid);
 
         const fromSnap = await tx.get(fromRef);
         const toSnap = await tx.get(toRef);
@@ -1046,6 +1086,13 @@
 
         const fromRewards = fromSnap.data() || {};
         const toRewards = toSnap.data() || {};
+
+        if (levelForBadge(fromRewards, trade.giveBadge) >= 8) {
+          throw new Error(`${trade.giveBadgeName} is max level and cannot be traded.`);
+        }
+        if (levelForBadge(toRewards, trade.receiveBadge) >= 8) {
+          throw new Error(`${trade.receiveBadgeName} is max level and cannot be traded.`);
+        }
 
         const fromSpare = sparePointsForBadge(fromRewards, trade.giveBadge);
         const toSpare = sparePointsForBadge(toRewards, trade.receiveBadge);
@@ -1075,8 +1122,8 @@
           type: "badgeTradeAccepted",
           tradeId,
           direction: "sent",
-          withUid: trade.toUid,
-          withName: trade.toName,
+          withUid: accepterUid,
+          withName: scoutLabel(allScouts.find(s => s.uid === accepterUid)),
           gaveBadge: trade.giveBadge,
           gavePoints: trade.givePoints,
           receivedBadge: trade.receiveBadge,
@@ -1113,7 +1160,8 @@
         tx.update(tradeRef, {
           status: "accepted",
           acceptedAt: serverTimestamp(),
-          acceptedBy: currentUser.uid
+          acceptedBy: currentUser.uid,
+          acceptedByName: scoutLabel(allScouts.find(s => s.uid === currentUser.uid))
         });
       });
     }
@@ -1134,12 +1182,18 @@
         const card = document.createElement("div");
         card.className = "tradeCard";
 
-        const isForMe = trade.toUid === currentUser.uid;
+        const isForMe = trade.tradeMode === "private"
+          ? trade.toUid === currentUser.uid
+          : trade.fromUid !== currentUser.uid;
 
         card.innerHTML = `
           <div class="tradeHead">
-            <div class="tradeTitle">${trade.fromName} wants to trade with ${trade.toName}</div>
-            <span class="badgeTag">${trade.rarity}</span>
+            <div class="tradeTitle">
+              ${trade.tradeMode === "public"
+                ? `${trade.fromName} posted a public trade`
+                : `${trade.fromName} wants to trade with ${trade.toName}`}
+            </div>
+            <span class="badgeTag">${trade.rarity} • ${trade.tradeMode === "public" ? "Public" : "Private"}</span>
           </div>
 
           <div class="tradeMeta">
