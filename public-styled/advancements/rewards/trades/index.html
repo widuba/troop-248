@@ -489,6 +489,14 @@
       <div class="fieldGrid">
         <div>
           <div class="field">
+            <label for+"tradeModeSelect">Trade Type</label>
+            <select id="tradeModeSelect">
+              <option value="private">Private Trade</option>
+              <option value="public">Public Trade</option>
+            </select>
+          </div>
+          
+          <div class="field" id="targetScoutWrap">
             <label for="targetScoutSelect">Trade With</label>
             <select id="targetScoutSelect"></select>
           </div>
@@ -588,6 +596,9 @@
     const tradeList = document.getElementById("tradeList");
     const statusLine = document.getElementById("statusLine");
 
+    const tradeModeSelect = document.getElementById("tradeModeSelect");
+    const targetScoutWrap = document.getElementById("targetScoutWrap");
+
     logoutBtn.addEventListener("click", async () => {
       await signOut(auth);
       window.location.href = "/";
@@ -661,6 +672,8 @@
     }
 
     function pointsForBadge(rewards, badgeId){
+      const level = levelForBadge(rewards, badgeId);
+      if (level >= 8) return 0;
       return Number(rewards?.badgesPoints?.[badgeId] || 0);
     }
 
@@ -671,7 +684,10 @@
     function sparePointsForBadge(rewards, badgeId){
       const rarity = badgeRarity(badgeId);
       const level = levelForBadge(rewards, badgeId);
-      const total = pointsForBadge(rewards, badgeId);
+
+      if (level >= 8) return 0;
+      
+      const total = Number(rewards?.badgesPoints?.[badgeId] || 0);
       const floor = thresholdFor(rarity, level);
       return Math.max(0, total - floor);
     }
@@ -690,8 +706,10 @@
     function unlockedBadgesForUser(info, rewards){
       const set = unlockedByRank(rewards?.rank || info?.rank || "No Rank");
       BADGES.forEach((b) => {
+        const lvl = levelForBadge(rewards, b.id);
+        if (lvl >= 8) return;
         if (pointsForBadge(rewards, b.id) > 0) set.add(b.id);
-        if (levelForBadge(rewards, b.id) > 1) set.add(b.id);
+        if (lvl > 1) set.add(b.id);
       });
       return Array.from(set).map(id => BADGE_BY_ID[id]).filter(Boolean);
     }
@@ -699,6 +717,16 @@
     function scoutLabel(scout){
       return scout.name || scout.displayName || scout.email || scout.uid;
     }
+
+    function syncTradeModeUI(){
+      const mode = tradeModeSelect.value;
+      targetScoutWrap.style.display = mode === "private" ? "" : "none";
+    }
+
+    tradeModeSelect.addEventListener("change", () => {
+      syncTradeModeUI();
+      populateReceiveBadgeSelect();
+    });
 
     async function ensureRewardsDoc(uid) {
       const ref = rewardsRef(uid);
@@ -882,6 +910,7 @@
     }
 
     function refreshTradeForm(){
+      syncTradeModeUI();
       populateTargetScoutSelect();
       populateGiveBadgeSelect();
       updateGiveBadgeInfo();
