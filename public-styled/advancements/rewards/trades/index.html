@@ -937,30 +937,39 @@
     receiveBadgeSelect.addEventListener("change", updateReceiveInfo);
 
     function validateTradeForm(){
-      const targetUid = targetScoutSelect.value;
-      const giveBadge = giveBadgeSelect.value;
-      const receiveBadge = receiveBadgeSelect.value;
-      const amount = Math.max(1, Number(giveAmountInput.value || 1));
+  const mode = tradeModeSelect.value;
+  const targetUid = targetScoutSelect.value;
+  const giveBadge = giveBadgeSelect.value;
+  const receiveBadge = receiveBadgeSelect.value;
+  const amount = Math.max(1, Number(giveAmountInput.value || 1));
 
-      if (!targetUid) return "Choose a scout to trade with.";
-      if (!giveBadge) return "Choose a badge you want to give from.";
-      if (!receiveBadge) return "Choose a badge you want to receive.";
-      if (giveBadge === receiveBadge) return "You must trade for a different badge.";
-      if (badgeRarity(giveBadge) !== badgeRarity(receiveBadge)) return "Trades must stay within the same rarity.";
-      if (!Number.isFinite(amount) || amount <= 0) return "Trade amount must be at least 1.";
+  if (mode === "private" && !targetUid) return "Choose a scout to trade with.";
+  if (!giveBadge) return "Choose a badge you want to give from.";
+  if (!receiveBadge) return "Choose a badge you want to receive.";
+  if (giveBadge === receiveBadge) return "You must trade for a different badge.";
+  if (badgeRarity(giveBadge) !== badgeRarity(receiveBadge)) return "Trades must stay within the same rarity.";
+  if (!Number.isFinite(amount) || amount <= 0) return "Trade amount must be at least 1.";
 
-      const mySpare = sparePointsForBadge(currentRewards, giveBadge);
-      if (amount > mySpare) return `You only have ${mySpare} spare points available in ${badgeName(giveBadge)}.`;
+  if (levelForBadge(currentRewards, giveBadge) >= 8) return `${badgeName(giveBadge)} is max level and cannot be traded.`;
+  if (levelForBadge(currentRewards, receiveBadge) >= 8) return `You cannot request ${badgeName(receiveBadge)} because it is max level.`;
 
-      const targetRewards = rewardsCache[targetUid] || {};
-      const theirSpare = sparePointsForBadge(targetRewards, receiveBadge);
-      if (amount > theirSpare) return `${scoutLabel(allScouts.find(s => s.uid === targetUid))} only has ${theirSpare} spare points in ${badgeName(receiveBadge)}.`;
+  const mySpare = sparePointsForBadge(currentRewards, giveBadge);
+  if (amount > mySpare) return `You only have ${mySpare} spare points available in ${badgeName(giveBadge)}.`;
 
-      const myReceiveLevel = levelForBadge(currentRewards, receiveBadge);
-      if (myReceiveLevel >= 8) return `You cannot request points for ${badgeName(receiveBadge)} because it is already max level.`;
-
-      return "";
+  if (mode === "private"){
+    const targetRewards = rewardsCache[targetUid] || {};
+    if (levelForBadge(targetRewards, receiveBadge) >= 8) {
+      return `${scoutLabel(allScouts.find(s => s.uid === targetUid))} has ${badgeName(receiveBadge)} at max level, so it cannot be traded.`;
     }
+
+    const theirSpare = sparePointsForBadge(targetRewards, receiveBadge);
+    if (amount > theirSpare) {
+      return `${scoutLabel(allScouts.find(s => s.uid === targetUid))} only has ${theirSpare} spare points in ${badgeName(receiveBadge)}.`;
+    }
+  }
+
+  return "";
+}
 
     submitTradeBtn.addEventListener("click", async () => {
       const error = validateTradeForm();
@@ -971,8 +980,9 @@
 
       tradeFormError.textContent = "";
 
-      const targetUid = targetScoutSelect.value;
-      const targetScout = allScouts.find(s => s.uid === targetUid);
+      const mode = tradeModeSelect.value;
+      const targetUid = mode === "private" ? targetScoutSelect.value : null;
+      const targetScout = targetuid ? allScouts.find(s => s.uid === targetUid) : null;
 
       const giveBadge = giveBadgeSelect.value;
       const receiveBadge = receiveBadgeSelect.value;
@@ -985,8 +995,9 @@
         await addDoc(collection(db, "badgeTrades"), {
           fromUid: currentUser.uid,
           fromName: scoutLabel({ ...currentInfo, uid: currentUser.uid, rewards: currentRewards }),
-          toUid: targetUid,
-          toName: scoutLabel(targetScout),
+          tradeMode: mode;
+          toUid: mode === "private" ? targetUid : null,
+          toName: mode === "private" ? scoutLabel(targetScout) : "Anyone",
           giveBadge,
           giveBadgeName: badgeName(giveBadge),
           givePoints: amount,
@@ -1015,10 +1026,18 @@
 
         const trade = tradeSnap.data();
         if (trade.status !== "open") throw new Error("Trade is no longer open.");
-        if (trade.toUid !== currentUser.uid) throw new Error("This trade is not for you.");
+        if (trade.trademode === "private" && trade.toUid !== currentUser.uid)  {
+          throw new Error("This private trade is not for you.");
+        }
+        if (trade.trademode === "public" && trade.toUid !== currentUser.uid)  {
+          throw new Error("You cannot accept your own public trade.");
+        }
+
+        const accepterUid = currentUser.uid;
+        const accepterRef = rewardsRef(accepterUid);
 
         const fromRef = rewardsRef(trade.fromUid);
-        const toRef = rewardsRef(trade.toUid);
+        const toRef = accepterRef;
 
         const fromSnap = await tx.get(fromRef);
         const toSnap = await tx.get(toRef);
