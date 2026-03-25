@@ -816,13 +816,19 @@ rankSelect.addEventListener("change", updateSelectedCounts);
         appliedBy: auth.currentUser?.uid || null
       });
 
-      await updateDoc(ref, {
-        "chests.lucky": nextLucky,
-        "chests.gold": nextGold,
-        "chests.levelUp": nextLevelUp,
-        history,
-        updatedAt: serverTimestamp()
-      });
+      const updatePayload = {
+  "chests.lucky": nextLucky,
+  "chests.gold": nextGold,
+  "chests.levelUp": nextLevelUp,
+  history,
+  updatedAt: serverTimestamp()
+};
+
+if (eventType.value === "rank") {
+  updatePayload.rank = rankSelect.value;
+}
+
+await updateDoc(ref, updatePayload);
     }
 
     applyBtn.addEventListener("click", async () => {
