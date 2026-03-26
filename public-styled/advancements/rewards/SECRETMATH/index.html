@@ -1,0 +1,909 @@
+<!-- /advancements/rewards/lucky-odds/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Lucky Chest Math — Rewards — Troop 248</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="/bsafavicon.ico" />
+  <link rel="stylesheet" href="/modern-2026.css" />
+
+  <style>
+    :root{
+      --red:#b22222;
+      --blue:#1f4e79;
+      --white:#ffffff;
+      --radius-lg:16px;
+      --radius-pill:999px;
+      --shadow-soft:0 10px 25px rgba(0,0,0,.06);
+
+      --rx-blue-900:#0b1f3a;
+      --rx-blue-800:#0f2a52;
+      --rx-blue-700:#163a72;
+      --rx-line:rgba(255,255,255,.16);
+      --rx-text:#ecf3ff;
+      --rx-muted:rgba(236,243,255,.78);
+      --rx-soft:rgba(255,255,255,.08);
+      --rx-soft-2:rgba(255,255,255,.12);
+      --good:#00ff88;
+      --warn:#f59e0b;
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:
+        radial-gradient(900px 600px at 40% 20%, rgba(31,78,121,.18), transparent 55%),
+        radial-gradient(800px 520px at 70% 30%, rgba(178,34,34,.10), transparent 58%),
+        #cfc6b0;
+      min-height:100vh;
+      color:var(--rx-text);
+    }
+
+    header{
+      background:linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
+      color:var(--white);
+      padding:14px 24px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      position:sticky;
+      top:0;
+      z-index:10;
+      flex-wrap:wrap;
+    }
+
+    header h2{
+      margin:0;
+      font-size:19px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    header h2::before{
+      content:"★";
+      font-size:18px;
+    }
+
+    .troop-home-link{
+      text-decoration:none;
+      color:inherit;
+      display:inline-flex;
+      align-items:center;
+    }
+
+    .troop-home-link:hover h2{
+      opacity:.9;
+      text-decoration:underline;
+    }
+
+    #auth-bar{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      font-size:13px;
+      flex-wrap:wrap;
+    }
+
+    .badgeTag{
+      font-size:11px;
+      padding:6px 10px;
+      border-radius:var(--radius-pill);
+      background:rgba(245,158,11,.18);
+      border:1px solid rgba(245,158,11,.42);
+      color:var(--rx-text);
+      text-transform:uppercase;
+      letter-spacing:.07em;
+      display:inline-block;
+      font-weight:900;
+    }
+
+    #logout-btn{
+      padding:5px 12px;
+      font-size:13px;
+      border-radius:var(--radius-pill);
+      border:1px solid rgba(255,255,255,.7);
+      background:rgba(255,255,255,.10);
+      color:var(--white);
+      cursor:pointer;
+    }
+    #logout-btn:hover{ background:rgba(255,255,255,.20); }
+
+    main{
+      padding:24px 16px 40px;
+      max-width:1220px;
+      margin:0 auto;
+    }
+
+    .heroCard,
+    section{
+      background:linear-gradient(180deg, rgba(15,42,82,.96), rgba(11,31,58,.96));
+      border-radius:var(--radius-lg);
+      padding:18px 18px 14px;
+      margin-bottom:18px;
+      box-shadow:var(--shadow-soft);
+      border:1px solid var(--rx-line);
+      color:var(--rx-text);
+    }
+
+    .heroCard{
+      position:relative;
+      overflow:hidden;
+    }
+
+    .heroCard::after,
+    .statCard::after,
+    .tableWrap::after{
+      content:"";
+      position:absolute;
+      inset:-60px;
+      background:
+        radial-gradient(circle at 25% 20%, rgba(109,249,255,.12), transparent 45%),
+        radial-gradient(circle at 70% 35%, rgba(255,224,109,.10), transparent 45%),
+        radial-gradient(circle at 45% 75%, rgba(255,79,216,.08), transparent 45%);
+      pointer-events:none;
+      opacity:.65;
+    }
+
+    .heroCard > *,
+    .statCard > *,
+    .tableWrap > *{
+      position:relative;
+      z-index:2;
+    }
+
+    .eyebrow{
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.10);
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.07em;
+      font-weight:900;
+      margin-bottom:10px;
+    }
+
+    .heroTitle{
+      margin:0 0 6px;
+      font-size:30px;
+      line-height:1.08;
+    }
+
+    .heroSub{
+      margin:0;
+      color:var(--rx-muted);
+      line-height:1.65;
+      font-size:14px;
+      max-width:900px;
+      font-weight:700;
+    }
+
+    .heroActions{
+      margin-top:14px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .linkBtn{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.18);
+      background:linear-gradient(180deg, rgba(49,130,246,.98), rgba(30,64,175,.98));
+      color:#fff;
+      text-decoration:none;
+      font-weight:900;
+      font-size:13px;
+      box-shadow:0 10px 24px rgba(0,0,0,.18);
+    }
+    .linkBtn:hover{ filter:brightness(1.05); }
+
+    .statsGrid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:12px;
+      margin-top:16px;
+    }
+
+    @media (max-width: 1000px){
+      .statsGrid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+    }
+
+    @media (max-width: 640px){
+      header{ flex-direction:column; align-items:flex-start; }
+      .statsGrid{ grid-template-columns:1fr; }
+    }
+
+    .statCard{
+      position:relative;
+      overflow:hidden;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.16);
+      background:linear-gradient(180deg, rgba(22,58,114,.55), rgba(11,31,58,.88));
+      padding:14px;
+      min-height:130px;
+    }
+
+    .statLabel{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.07em;
+      color:rgba(236,243,255,.72);
+      font-weight:900;
+      margin-bottom:8px;
+    }
+
+    .statValue{
+      font-size:28px;
+      font-weight:1000;
+      line-height:1.05;
+      margin-bottom:8px;
+    }
+
+    .statHint{
+      color:var(--rx-muted);
+      font-size:13px;
+      line-height:1.5;
+      font-weight:700;
+    }
+
+    section h2{
+      margin:0 0 10px;
+      font-size:18px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:var(--rx-text);
+    }
+
+    section h2::before{
+      content:"▸";
+      font-size:14px;
+      color:rgba(236,243,255,.85);
+    }
+
+    section p{
+      margin:0;
+      color:var(--rx-muted);
+      line-height:1.65;
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .tableWrap{
+      position:relative;
+      overflow:hidden;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.16);
+      background:linear-gradient(180deg, rgba(22,58,114,.55), rgba(11,31,58,.88));
+      margin-top:12px;
+    }
+
+    .tableScroller{
+      overflow-x:auto;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:780px;
+    }
+
+    th, td{
+      padding:12px 12px;
+      text-align:left;
+      border-bottom:1px solid rgba(255,255,255,.10);
+      font-size:13px;
+      vertical-align:top;
+    }
+
+    th{
+      color:rgba(236,243,255,.82);
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      font-size:11px;
+      font-weight:900;
+      background:rgba(255,255,255,.04);
+      white-space:nowrap;
+    }
+
+    td{
+      color:var(--rx-text);
+      font-weight:800;
+    }
+
+    tr:last-child td{ border-bottom:none; }
+
+    .mono{
+      font-variant-numeric:tabular-nums;
+      font-feature-settings:"tnum" 1;
+      white-space:nowrap;
+    }
+
+    .subtle{
+      color:var(--rx-muted);
+      font-weight:700;
+    }
+
+    .calloutRow{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:12px;
+      margin-top:12px;
+    }
+
+    @media (max-width: 900px){
+      .calloutRow{ grid-template-columns:1fr; }
+    }
+
+    .callout{
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(255,255,255,.08);
+      padding:14px;
+    }
+
+    .callout h3{
+      margin:0 0 6px;
+      font-size:14px;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+    }
+
+    .callout p{
+      margin:0;
+      font-size:13px;
+      line-height:1.55;
+      color:var(--rx-muted);
+    }
+
+    .footerNote{
+      margin-top:8px;
+      font-size:12px;
+      color:rgba(236,243,255,.70);
+      font-weight:800;
+      line-height:1.5;
+    }
+
+    .good{ color: var(--good); }
+    .warn{ color: var(--warn); }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <a href="/home" class="troop-home-link"><h2>Troop 248</h2></a>
+    </div>
+
+    <div id="auth-bar">
+      <div id="auth-info">Checking access…</div>
+      <span class="badgeTag">Admin Only</span>
+      <button id="logout-btn">Log Out</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="heroCard">
+      <div class="eyebrow">Lucky Chest Analytics</div>
+      <h1 class="heroTitle">Lucky Chest Math Dashboard</h1>
+      <p class="heroSub">
+        Full fixed-odds reference for the Lucky Chest. This page assumes all 25 badges are unlocked, all rarities have 5 badges each, and no opening behavior changes the odds. This is a pure math sheet for the exact Lucky Chest as coded.
+      </p>
+
+      <div class="heroActions">
+        <a class="linkBtn" href="/advancements/rewards/">← Back to Rewards</a>
+        <a class="linkBtn" href="/advancements/rewards/chests/">Open Chests</a>
+        <a class="linkBtn" href="/advancements/rewards/badges/">View Badges</a>
+      </div>
+
+      <div class="statsGrid">
+        <div class="statCard">
+          <div class="statLabel">Average Final Level</div>
+          <div class="statValue mono">3.2865</div>
+          <div class="statHint">Expected final level after 5 spins with a 45.73% level-up chance per spin.</div>
+        </div>
+
+        <div class="statCard">
+          <div class="statLabel">Chance of Level 4+</div>
+          <div class="statValue mono">42.032592%</div>
+          <div class="statHint">About 2 in 5 Lucky Chests end at Level 4 or better.</div>
+        </div>
+
+        <div class="statCard">
+          <div class="statLabel">Raw Point EV</div>
+          <div class="statValue mono">336.987462</div>
+          <div class="statHint">Exact expected raw points per Lucky Chest across all rarities and levels.</div>
+        </div>
+
+        <div class="statCard">
+          <div class="statLabel">Badge Progress EV</div>
+          <div class="statValue mono">4.160820%</div>
+          <div class="statHint">Expected full-badge completion value per Lucky Chest, ignoring gold.</div>
+        </div>
+      </div>
+    </div>
+
+    <section>
+      <h2>Core Model</h2>
+      <p>
+        Lucky Chest flow is fixed: start at Level 1, roll 5 independent level-up checks at <span class="mono">45.73%</span> each, cap at Level 6, choose a rarity uniformly from the allowed rarities at that final level, choose one badge uniformly from the 5 badges in that rarity, then roll points uniformly from that level-and-rarity range.
+      </p>
+
+      <div class="calloutRow">
+        <div class="callout">
+          <h3>Fixed</h3>
+          <p>Final level odds, rarity odds, badge odds, point ranges, and long-run expected values are all fixed by the code.</p>
+        </div>
+        <div class="callout">
+          <h3>Not Player-Controlled</h3>
+          <p>There is no better or worse way to open a Lucky Chest. Opening behavior does not change the odds.</p>
+        </div>
+        <div class="callout">
+          <h3>Assumption Used Here</h3>
+          <p>This sheet ignores rank restrictions and assumes all 25 badges are available at all times.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Exact Final Level Odds</h2>
+      <p>Final level equals 1 plus the number of successful level-up spins out of 5.</p>
+
+      <div class="tableWrap">
+        <div class="tableScroller">
+          <table>
+            <thead>
+              <tr>
+                <th>Final Level</th>
+                <th>Exact Probability</th>
+                <th>Per 100 Chests</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Level 1</td><td class="mono">4.7075951625%</td><td class="mono">4.707595</td></tr>
+              <tr><td>Level 2</td><td class="mono">19.8340083638%</td><td class="mono">19.834008</td></tr>
+              <tr><td>Level 3</td><td class="mono">33.4258044030%</td><td class="mono">33.425804</td></tr>
+              <tr><td>Level 4</td><td class="mono">28.1658749834%</td><td class="mono">28.165875</td></tr>
+              <tr><td>Level 5</td><td class="mono">11.8668275566%</td><td class="mono">11.866828</td></tr>
+              <tr><td>Level 6</td><td class="mono">1.9998895307%</td><td class="mono">1.999890</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="footerNote">
+        <span class="good">Level 4+:</span> <span class="mono">42.0325920707%</span> &nbsp;•&nbsp;
+        <span class="warn">Level 5+:</span> <span class="mono">13.8667170873%</span> &nbsp;•&nbsp;
+        <span>Level 6:</span> <span class="mono">1.9998895307%</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>Allowed Rarities by Final Level</h2>
+      <p>Rarity is chosen uniformly among the allowed rarities at that level.</p>
+
+      <div class="tableWrap">
+        <div class="tableScroller">
+          <table>
+            <thead>
+              <tr>
+                <th>Final Level</th>
+                <th>Allowed Rarities</th>
+                <th>Chance Per Allowed Rarity</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Level 1</td><td>Common</td><td class="mono">100%</td></tr>
+              <tr><td>Level 2</td><td>Common, Uncommon</td><td class="mono">50% each</td></tr>
+              <tr><td>Level 3</td><td>Common, Uncommon, Rare</td><td class="mono">33.333333% each</td></tr>
+              <tr><td>Level 4</td><td>Common, Uncommon, Rare, Epic</td><td class="mono">25% each</td></tr>
+              <tr><td>Level 5</td><td>Common, Uncommon, Rare, Epic, Legendary</td><td class="mono">20% each</td></tr>
+              <tr><td>Level 6</td><td>Common, Uncommon, Rare, Epic, Legendary</td><td class="mono">20% each</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Exact Final Rarity Odds</h2>
+      <p>These are the true end-result rarity probabilities for one Lucky Chest when all badges are unlocked.</p>
+
+      <div class="tableWrap">
+        <div class="tableScroller">
+          <table>
+            <thead>
+              <tr>
+                <th>Rarity</th>
+                <th>Exact Probability</th>
+                <th>Per 100 Chests</th>
+                <th>One Specific Badge</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Common</td>
+                <td class="mono">35.5813463087%</td>
+                <td class="mono">35.581346</td>
+                <td class="mono">7.1162692617%</td>
+              </tr>
+              <tr>
+                <td>Uncommon</td>
+                <td class="mono">30.8737511462%</td>
+                <td class="mono">30.873751</td>
+                <td class="mono">6.1747502292%</td>
+              </tr>
+              <tr>
+                <td>Rare</td>
+                <td class="mono">20.9567469643%</td>
+                <td class="mono">20.956747</td>
+                <td class="mono">4.1913493929%</td>
+              </tr>
+              <tr>
+                <td>Epic</td>
+                <td class="mono">9.8148121633%</td>
+                <td class="mono">9.814812</td>
+                <td class="mono">1.9629624327%</td>
+              </tr>
+              <tr>
+                <td>Legendary</td>
+                <td class="mono">2.7733434175%</td>
+                <td class="mono">2.773343</td>
+                <td class="mono">0.5546686835%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="footerNote">
+        “One Specific Badge” means the chance of hitting one exact badge inside that rarity, since each rarity contains 5 badges.
+      </div>
+    </section>
+
+    <section>
+      <h2>Exact Joint Odds: Final Level and Rarity</h2>
+      <p>Every possible level-and-rarity outcome with its exact probability.</p>
+
+      <div class="tableWrap">
+        <div class="tableScroller">
+          <table>
+            <thead>
+              <tr>
+                <th>Outcome</th>
+                <th>Exact Probability</th>
+                <th>Specific Badge in That Outcome</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>L1 Common</td><td class="mono">4.7075951625%</td><td class="mono">0.9415190325%</td></tr>
+
+              <tr><td>L2 Common</td><td class="mono">9.9170041819%</td><td class="mono">1.9834008364%</td></tr>
+              <tr><td>L2 Uncommon</td><td class="mono">9.9170041819%</td><td class="mono">1.9834008364%</td></tr>
+
+              <tr><td>L3 Common</td><td class="mono">11.1419348010%</td><td class="mono">2.2283869602%</td></tr>
+              <tr><td>L3 Uncommon</td><td class="mono">11.1419348010%</td><td class="mono">2.2283869602%</td></tr>
+              <tr><td>L3 Rare</td><td class="mono">11.1419348010%</td><td class="mono">2.2283869602%</td></tr>
+
+              <tr><td>L4 Common</td><td class="mono">7.0414687459%</td><td class="mono">1.4082937492%</td></tr>
+              <tr><td>L4 Uncommon</td><td class="mono">7.0414687459%</td><td class="mono">1.4082937492%</td></tr>
+              <tr><td>L4 Rare</td><td class="mono">7.0414687459%</td><td class="mono">1.4082937492%</td></tr>
+              <tr><td>L4 Epic</td><td class="mono">7.0414687459%</td><td class="mono">1.4082937492%</td></tr>
+
+              <tr><td>L5 Common</td><td class="mono">2.3733655113%</td><td class="mono">0.4746731023%</td></tr>
+              <tr><td>L5 Uncommon</td><td class="mono">2.3733655113%</td><td class="mono">0.4746731023%</td></tr>
+              <tr><td>L5 Rare</td><td class="mono">2.3733655113%</td><td class="mono">0.4746731023%</td></tr>
+              <tr><td>L5 Epic</td><td class="mono">2.3733655113%</td><td class="mono">0.4746731023%</td></tr>
+              <tr><td>L5 Legendary</td><td class="mono">2.3733655113%</td><td class="mono">0.4746731023%</td></tr>
+
+              <tr><td>L6 Common</td><td class="mono">0.3999779061%</td><td class="mono">0.0799955812%</td></tr>
+              <tr><td>L6 Uncommon</td><td class="mono">0.3999779061%</td><td class="mono">0.0799955812%</td></tr>
+              <tr><td>L6 Rare</td><td class="mono">0.3999779061%</td><td class="mono">0.0799955812%</td></tr>
+              <tr><td>L6 Epic</td><td class="mono">0.3999779061%</td><td class="mono">0.0799955812%</td></tr>
+              <tr><td>L6 Legendary</td><td class="mono">0.3999779061%</td><td class="mono">0.0799955812%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Point Tables and Expected Points</h2>
+      <p>Point roll is uniform within the coded range, so expected points are the midpoint of each range.</p>
+
+      <div class="tableWrap">
+        <div class="tableScroller">
+          <table>
+            <thead>
+              <tr>
+                <th>Outcome</th>
+                <th>Point Range</th>
+                <th>Expected Points</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>L1 Common</td><td class="mono">100–200</td><td class="mono">150</td></tr>
+
+              <tr><td>L2 Common</td><td class="mono">275–400</td><td class="mono">337.5</td></tr>
+              <tr><td>L2 Uncommon</td><td class="mono">240–350</td><td class="mono">295</td></tr>
+
+              <tr><td>L3 Common</td><td class="mono">425–600</td><td class="mono">512.5</td></tr>
+              <tr><td>L3 Uncommon</td><td class="mono">350–450</td><td class="mono">400</td></tr>
+              <tr><td>L3 Rare</td><td class="mono">50–60</td><td class="mono">55</td></tr>
+
+              <tr><td>L4 Common</td><td class="mono">625–850</td><td class="mono">737.5</td></tr>
+              <tr><td>L4 Uncommon</td><td class="mono">460–575</td><td class="mono">517.5</td></tr>
+              <tr><td>L4 Rare</td><td class="mono">115–150</td><td class="mono">132.5</td></tr>
+              <tr><td>L4 Epic</td><td class="mono">8–18</td><td class="mono">13</td></tr>
+
+              <tr><td>L5 Common</td><td class="mono">875–1050</td><td class="mono">962.5</td></tr>
+              <tr><td>L5 Uncommon</td><td class="mono">600–750</td><td class="mono">675</td></tr>
+              <tr><td>L5 Rare</td><td class="mono">155–205</td><td class="mono">180</td></tr>
+              <tr><td>L5 Epic</td><td class="mono">25–55</td><td class="mono">40</td></tr>
+              <tr><td>L5 Legendary</td><td class="mono">5–20</td><td class="mono">12.5</td></tr>
+
+              <tr><td>L6 Common</td><td class="mono">1875–2375</td><td class="mono">2125</td></tr>
+              <tr><td>L6 Uncommon</td><td class="mono">1200–1650</td><td class="mono">1425</td></tr>
+              <tr><td>L6 Rare</td><td class="mono">315–425</td><td class="mono">370</td></tr>
+              <tr><td>L6 Epic</td><td class="mono">100–150</td><td class="mono">125</td></tr>
+              <tr><td>L6 Legendary</td><td class="mono">38–75</td><td class="mono">56.5</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Conditional Expected Points by Final Rarity</h2>
+      <p>If you already know the final rarity, these are the exact average points for that rarity.</p>
+
+      <div class="tableWrap">
+        <div class="tableScroller">
+          <table>
+            <thead>
+              <tr>
+                <th>Rarity</th>
+                <th>Conditional EV</th>
+                <th>Level Mix Inside That Rarity</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Common</td>
+                <td class="mono">508.4341151566</td>
+                <td class="subtle">L1 13.230514% • L2 27.871357% • L3 31.313978% • L4 19.789776% • L5 6.670252% • L6 1.124122%</td>
+              </tr>
+              <tr>
+                <td>Uncommon</td>
+                <td class="mono">427.4906668753</td>
+                <td class="subtle">L2 32.121151% • L3 36.088698% • L4 22.807299% • L5 7.687325% • L6 1.295527%</td>
+              </tr>
+              <tr>
+                <td>Rare</td>
+                <td class="mono">101.2083909684</td>
+                <td class="subtle">L3 53.166337% • L4 33.600008% • L5 11.325066% • L6 1.908588%</td>
+              </tr>
+              <tr>
+                <td>Epic</td>
+                <td class="mono">24.0932733589</td>
+                <td class="subtle">L4 71.743286% • L5 24.181466% • L6 4.075248%</td>
+              </tr>
+              <tr>
+                <td>Legendary</td>
+                <td class="mono">18.8457802447</td>
+                <td class="subtle">L5 85.577772% • L6 14.422228%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Overall Expected Value</h2>
+      <p>These are the exact per-chest long-run contributions from each rarity and the full Lucky Chest total.</p>
+
+      <div class="tableWrap">
+        <div class="tableScroller">
+          <table>
+            <thead>
+              <tr>
+                <th>Rarity</th>
+                <th>Raw Point Contribution Per Chest</th>
+                <th>Level 8 Total Needed</th>
+                <th>Full-Badge Progress Per Chest</th>
+                <th>Specific Badge Progress Per Chest</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Common</td>
+                <td class="mono">180.9077032654</td>
+                <td class="mono">13000</td>
+                <td class="mono">1.3915977174%</td>
+                <td class="mono">0.2783195435%</td>
+              </tr>
+              <tr>
+                <td>Uncommon</td>
+                <td class="mono">131.9824046643</td>
+                <td class="mono">7800</td>
+                <td class="mono">1.6920821111%</td>
+                <td class="mono">0.3384164222%</td>
+              </tr>
+              <tr>
+                <td>Rare</td>
+                <td class="mono">21.2099864019</td>
+                <td class="mono">4400</td>
+                <td class="mono">0.4819996909%</td>
+                <td class="mono">0.0963999382%</td>
+              </tr>
+              <tr>
+                <td>Epic</td>
+                <td class="mono">2.3647095242</td>
+                <td class="mono">600</td>
+                <td class="mono">0.3941182540%</td>
+                <td class="mono">0.0788236508%</td>
+              </tr>
+              <tr>
+                <td>Legendary</td>
+                <td class="mono">0.5226582059</td>
+                <td class="mono">260</td>
+                <td class="mono">0.2010223869%</td>
+                <td class="mono">0.0402044774%</td>
+              </tr>
+              <tr>
+                <td><strong>Total</strong></td>
+                <td class="mono"><strong>336.9874620617</strong></td>
+                <td class="mono">—</td>
+                <td class="mono"><strong>4.1608201603%</strong></td>
+                <td class="mono">—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="footerNote">
+        Exact badge-equivalent rate: <span class="mono">1 / 0.041608201603 ≈ 24.03 Lucky Chests</span> for one full badge-equivalent of total progress, spread across the whole system.
+      </div>
+    </section>
+
+    <section>
+      <h2>Lucky-Only Time to Max One Specific Badge</h2>
+      <p>Ignoring gold and assuming only Lucky Chests are used.</p>
+
+      <div class="tableWrap">
+        <div class="tableScroller">
+          <table>
+            <thead>
+              <tr>
+                <th>Specific Badge Rarity</th>
+                <th>Specific Badge Progress Per Chest</th>
+                <th>Expected Lucky Chests to Max</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Specific Common Badge</td><td class="mono">0.2783195435%</td><td class="mono">359.30</td></tr>
+              <tr><td>Specific Uncommon Badge</td><td class="mono">0.3384164222%</td><td class="mono">295.49</td></tr>
+              <tr><td>Specific Rare Badge</td><td class="mono">0.0963999382%</td><td class="mono">1037.35</td></tr>
+              <tr><td>Specific Epic Badge</td><td class="mono">0.0788236508%</td><td class="mono">1268.65</td></tr>
+              <tr><td>Specific Legendary Badge</td><td class="mono">0.0402044774%</td><td class="mono">2487.29</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Gem Conversion EV When Badges Are Already Maxed</h2>
+      <p>Lucky Chest converts to gems only when the chosen badge is already Level 8.</p>
+
+      <div class="tableWrap">
+        <div class="tableScroller">
+          <table>
+            <thead>
+              <tr>
+                <th>Maxed Badge Setup</th>
+                <th>Gem Multiplier</th>
+                <th>Gem EV Per Lucky Chest</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>One maxed Common badge</td><td class="mono">×1</td><td class="mono">36.1815406531</td></tr>
+              <tr><td>One maxed Uncommon badge</td><td class="mono">×5</td><td class="mono">131.9824046643</td></tr>
+              <tr><td>One maxed Rare badge</td><td class="mono">×20</td><td class="mono">84.8399456077</td></tr>
+              <tr><td>One maxed Epic badge</td><td class="mono">×50</td><td class="mono">23.6470952417</td></tr>
+              <tr><td>One maxed Legendary badge</td><td class="mono">×100</td><td class="mono">10.4531641177</td></tr>
+              <tr><td>All 5 Common maxed</td><td class="mono">×1</td><td class="mono">180.9077032654</td></tr>
+              <tr><td>All 5 Uncommon maxed</td><td class="mono">×5</td><td class="mono">659.9120233217</td></tr>
+              <tr><td>All 5 Rare maxed</td><td class="mono">×20</td><td class="mono">424.1997280383</td></tr>
+              <tr><td>All 5 Epic maxed</td><td class="mono">×50</td><td class="mono">118.2354762084</td></tr>
+              <tr><td>All 5 Legendary maxed</td><td class="mono">×100</td><td class="mono">52.2658205887</td></tr>
+              <tr><td><strong>All 25 badges maxed</strong></td><td class="mono">All active</td><td class="mono"><strong>1435.5207514224</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>One-Screen House Summary</h2>
+      <p>
+        If you only want the top-level math: average final level <span class="mono">3.2865</span>, final rarity mix
+        <span class="mono">35.5813 / 30.8738 / 20.9567 / 9.8148 / 2.7733</span>, raw point EV
+        <span class="mono">336.9874620617</span>, and full-badge completion EV
+        <span class="mono">4.1608201603%</span> per Lucky Chest.
+      </p>
+    </section>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+      authDomain: "troop-248.firebaseapp.com",
+      projectId: "troop-248",
+      storageBucket: "troop-248.firebasestorage.app",
+      messagingSenderId: "925363875752",
+      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+      measurementId: "G-NY75GX5TBH"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const authInfoEl = document.getElementById("auth-info");
+    const logoutBtn = document.getElementById("logout-btn");
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "/";
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "/advancements/rewards/";
+        return;
+      }
+
+      try {
+        const infoRef = doc(db, "accountInfo", user.uid);
+        const infoSnap = await getDoc(infoRef);
+
+        if (!infoSnap.exists()) {
+          window.location.href = "/advancements/rewards/";
+          return;
+        }
+
+        const info = infoSnap.data() || {};
+        const role = info.authRole || "";
+
+        if (role !== "admin") {
+          window.location.href = "/advancements/rewards/";
+          return;
+        }
+
+        authInfoEl.textContent = `Signed in as ${user.email || "—"} • Admin access confirmed`;
+      } catch (err) {
+        console.error("Admin check failed:", err);
+        window.location.href = "/advancements/rewards/";
+      }
+    });
+  </script>
+</body>
+</html>
