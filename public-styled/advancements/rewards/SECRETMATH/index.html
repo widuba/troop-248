@@ -1,12 +1,13 @@
-<!-- /advancements/rewards/lucky-odds/index.html -->
+<!-- /advancements/rewards/SECRETMATH/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Lucky Chest Math — Rewards — Troop 248</title>
+  <title>Lucky Chest Math — SecretMath — Troop 248</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" type="image/png" href="/bsafavicon.ico" />
   <link rel="stylesheet" href="/modern-2026.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 
   <style>
     :root{
@@ -113,11 +114,14 @@
       color:var(--white);
       cursor:pointer;
     }
-    #logout-btn:hover{ background:rgba(255,255,255,.20); }
+
+    #logout-btn:hover{
+      background:rgba(255,255,255,.20);
+    }
 
     main{
       padding:24px 16px 40px;
-      max-width:1220px;
+      max-width:1400px;
       margin:0 auto;
     }
 
@@ -132,14 +136,20 @@
       color:var(--rx-text);
     }
 
-    .heroCard{
+    .heroCard,
+    .statCard,
+    .chartCard,
+    .tableWrap,
+    .callout{
       position:relative;
       overflow:hidden;
     }
 
     .heroCard::after,
     .statCard::after,
-    .tableWrap::after{
+    .chartCard::after,
+    .tableWrap::after,
+    .callout::after{
       content:"";
       position:absolute;
       inset:-60px;
@@ -153,7 +163,9 @@
 
     .heroCard > *,
     .statCard > *,
-    .tableWrap > *{
+    .chartCard > *,
+    .tableWrap > *,
+    .callout > *{
       position:relative;
       z-index:2;
     }
@@ -182,7 +194,7 @@
       color:var(--rx-muted);
       line-height:1.65;
       font-size:14px;
-      max-width:900px;
+      max-width:980px;
       font-weight:700;
     }
 
@@ -207,32 +219,36 @@
       font-size:13px;
       box-shadow:0 10px 24px rgba(0,0,0,.18);
     }
-    .linkBtn:hover{ filter:brightness(1.05); }
+
+    .linkBtn:hover{
+      filter:brightness(1.05);
+    }
 
     .statsGrid{
       display:grid;
-      grid-template-columns:repeat(4, minmax(0,1fr));
+      grid-template-columns:repeat(5, minmax(0,1fr));
       gap:12px;
       margin-top:16px;
     }
 
-    @media (max-width: 1000px){
+    @media (max-width: 1200px){
+      .statsGrid{ grid-template-columns:repeat(3, minmax(0,1fr)); }
+    }
+
+    @media (max-width: 760px){
       .statsGrid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
     }
 
-    @media (max-width: 640px){
-      header{ flex-direction:column; align-items:flex-start; }
+    @media (max-width: 560px){
       .statsGrid{ grid-template-columns:1fr; }
     }
 
     .statCard{
-      position:relative;
-      overflow:hidden;
       border-radius:14px;
       border:1px solid rgba(255,255,255,.16);
       background:linear-gradient(180deg, rgba(22,58,114,.55), rgba(11,31,58,.88));
       padding:14px;
-      min-height:130px;
+      min-height:132px;
     }
 
     .statLabel{
@@ -245,7 +261,7 @@
     }
 
     .statValue{
-      font-size:28px;
+      font-size:25px;
       font-weight:1000;
       line-height:1.05;
       margin-bottom:8px;
@@ -281,9 +297,70 @@
       font-weight:700;
     }
 
-    .tableWrap{
+    .chartsGrid{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:12px;
+      margin-top:12px;
+    }
+
+    .chartsGrid.three{
+      grid-template-columns:repeat(3, minmax(0,1fr));
+    }
+
+    .chartsGrid.one{
+      grid-template-columns:1fr;
+    }
+
+    @media (max-width: 1100px){
+      .chartsGrid,
+      .chartsGrid.three{
+        grid-template-columns:1fr;
+      }
+    }
+
+    .chartCard{
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.16);
+      background:linear-gradient(180deg, rgba(22,58,114,.55), rgba(11,31,58,.88));
+      padding:14px;
+      min-height:420px;
+    }
+
+    .chartCard.short{
+      min-height:340px;
+    }
+
+    .chartTitle{
+      margin:0 0 6px;
+      font-size:14px;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      font-weight:1000;
+    }
+
+    .chartSub{
+      margin:0 0 12px;
+      font-size:13px;
+      line-height:1.55;
+      color:var(--rx-muted);
+      font-weight:700;
+    }
+
+    .chartWrap{
       position:relative;
-      overflow:hidden;
+      height:300px;
+    }
+
+    .chartCard.tall .chartWrap{
+      height:360px;
+    }
+
+    .chartCard.short .chartWrap{
+      height:240px;
+    }
+
+    .tableWrap{
       border-radius:14px;
       border:1px solid rgba(255,255,255,.16);
       background:linear-gradient(180deg, rgba(22,58,114,.55), rgba(11,31,58,.88));
@@ -297,7 +374,7 @@
     table{
       width:100%;
       border-collapse:collapse;
-      min-width:780px;
+      min-width:860px;
     }
 
     th, td{
@@ -323,7 +400,9 @@
       font-weight:800;
     }
 
-    tr:last-child td{ border-bottom:none; }
+    tr:last-child td{
+      border-bottom:none;
+    }
 
     .mono{
       font-variant-numeric:tabular-nums;
@@ -338,12 +417,17 @@
 
     .calloutRow{
       display:grid;
-      grid-template-columns:repeat(3, minmax(0,1fr));
+      grid-template-columns:repeat(4, minmax(0,1fr));
       gap:12px;
       margin-top:12px;
     }
 
-    @media (max-width: 900px){
+    @media (max-width: 1100px){
+      .calloutRow{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+    }
+
+    @media (max-width: 640px){
+      header{ flex-direction:column; align-items:flex-start; }
       .calloutRow{ grid-template-columns:1fr; }
     }
 
@@ -376,8 +460,36 @@
       line-height:1.5;
     }
 
-    .good{ color: var(--good); }
-    .warn{ color: var(--warn); }
+    .heatTable th,
+    .heatTable td{
+      text-align:center;
+    }
+
+    .heatCell{
+      border-radius:10px;
+      padding:8px 6px;
+      display:block;
+      font-weight:1000;
+    }
+
+    .legendRow{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+
+    .legendPill{
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.16);
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      font-weight:900;
+      color:var(--rx-text);
+    }
   </style>
 </head>
 <body>
@@ -395,10 +507,10 @@
 
   <main>
     <div class="heroCard">
-      <div class="eyebrow">Lucky Chest Analytics</div>
-      <h1 class="heroTitle">Lucky Chest Math Dashboard</h1>
+      <div class="eyebrow">SecretMath • Lucky Chest</div>
+      <h1 class="heroTitle">Lucky Chest Graph Lab</h1>
       <p class="heroSub">
-        Full fixed-odds reference for the Lucky Chest. This page assumes all 25 badges are unlocked, all rarities have 5 badges each, and no opening behavior changes the odds. This is a pure math sheet for the exact Lucky Chest as coded.
+        This page displays the full fixed math for the Lucky Chest as coded. It assumes all 25 badges are unlocked, each rarity contains 5 badges, and no opening behavior can change the odds. This is the visual admin dashboard version with graphs everywhere.
       </p>
 
       <div class="heroActions">
@@ -411,114 +523,292 @@
         <div class="statCard">
           <div class="statLabel">Average Final Level</div>
           <div class="statValue mono">3.2865</div>
-          <div class="statHint">Expected final level after 5 spins with a 45.73% level-up chance per spin.</div>
+          <div class="statHint">Expected final level after 5 spins.</div>
         </div>
-
         <div class="statCard">
           <div class="statLabel">Chance of Level 4+</div>
           <div class="statValue mono">42.032592%</div>
-          <div class="statHint">About 2 in 5 Lucky Chests end at Level 4 or better.</div>
+          <div class="statHint">About 2 in 5 Lucky Chests reach 4 or higher.</div>
         </div>
-
+        <div class="statCard">
+          <div class="statLabel">Chance of Level 5+</div>
+          <div class="statValue mono">13.866717%</div>
+          <div class="statHint">Roughly 1 in 7 reach 5 or higher.</div>
+        </div>
         <div class="statCard">
           <div class="statLabel">Raw Point EV</div>
           <div class="statValue mono">336.987462</div>
-          <div class="statHint">Exact expected raw points per Lucky Chest across all rarities and levels.</div>
+          <div class="statHint">Exact average raw points per Lucky Chest.</div>
         </div>
-
         <div class="statCard">
           <div class="statLabel">Badge Progress EV</div>
           <div class="statValue mono">4.160820%</div>
-          <div class="statHint">Expected full-badge completion value per Lucky Chest, ignoring gold.</div>
+          <div class="statHint">Full-badge completion value per chest, ignoring gold.</div>
         </div>
       </div>
     </div>
 
     <section>
-      <h2>Core Model</h2>
+      <h2>Quick Interpretation</h2>
       <p>
-        Lucky Chest flow is fixed: start at Level 1, roll 5 independent level-up checks at <span class="mono">45.73%</span> each, cap at Level 6, choose a rarity uniformly from the allowed rarities at that final level, choose one badge uniformly from the 5 badges in that rarity, then roll points uniformly from that level-and-rarity range.
+        These graphs show the whole Lucky Chest system from multiple angles: final level distribution, rarity distribution, level+rareness combinations, point expectation, badge completion value, specific badge timelines, and gem conversion value once badges are maxed.
       </p>
 
       <div class="calloutRow">
         <div class="callout">
-          <h3>Fixed</h3>
-          <p>Final level odds, rarity odds, badge odds, point ranges, and long-run expected values are all fixed by the code.</p>
+          <h3>Fixed Odds</h3>
+          <p>The Lucky Chest has no player skill path. Final level odds, rarity odds, badge odds, and point EV are all fixed by code.</p>
         </div>
         <div class="callout">
-          <h3>Not Player-Controlled</h3>
-          <p>There is no better or worse way to open a Lucky Chest. Opening behavior does not change the odds.</p>
+          <h3>All Badges Unlocked</h3>
+          <p>This dashboard ignores rank restrictions and treats every rarity as fully available at all times.</p>
         </div>
         <div class="callout">
-          <h3>Assumption Used Here</h3>
-          <p>This sheet ignores rank restrictions and assumes all 25 badges are available at all times.</p>
+          <h3>Specific Badge vs System</h3>
+          <p>One chest creates decent total system progress, but one exact badge still takes much longer because progress is spread across many targets.</p>
+        </div>
+        <div class="callout">
+          <h3>Gem Engine</h3>
+          <p>Lucky Chests only become gem-producing once the chosen badge is already level 8.</p>
         </div>
       </div>
     </section>
 
     <section>
-      <h2>Exact Final Level Odds</h2>
-      <p>Final level equals 1 plus the number of successful level-up spins out of 5.</p>
+      <h2>Level Odds</h2>
+      <p>The final level comes from five independent 45.73% level-up checks.</p>
+
+      <div class="chartsGrid">
+        <div class="chartCard">
+          <h3 class="chartTitle">Exact Final Level Odds</h3>
+          <p class="chartSub">Probability of landing on each final level.</p>
+          <div class="chartWrap"><canvas id="levelOddsChart"></canvas></div>
+        </div>
+
+        <div class="chartCard">
+          <h3 class="chartTitle">Cumulative Level Odds</h3>
+          <p class="chartSub">Chance of landing at or above each level.</p>
+          <div class="chartWrap"><canvas id="levelCumulativeChart"></canvas></div>
+        </div>
+
+        <div class="chartCard short">
+          <h3 class="chartTitle">Level Probability Donut</h3>
+          <p class="chartSub">Same level distribution shown as a donut.</p>
+          <div class="chartWrap"><canvas id="levelDonutChart"></canvas></div>
+        </div>
+
+        <div class="chartCard short">
+          <h3 class="chartTitle">Per 100 Chests by Level</h3>
+          <p class="chartSub">Expected number of Level 1–6 results per 100 Lucky Chests.</p>
+          <div class="chartWrap"><canvas id="levelPer100Chart"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Rarity Odds</h2>
+      <p>With all badges unlocked, rarity is chosen uniformly inside the allowed rarities at the final level.</p>
+
+      <div class="chartsGrid">
+        <div class="chartCard">
+          <h3 class="chartTitle">Exact Final Rarity Odds</h3>
+          <p class="chartSub">True end-result rarity probabilities for one Lucky Chest.</p>
+          <div class="chartWrap"><canvas id="rarityOddsChart"></canvas></div>
+        </div>
+
+        <div class="chartCard">
+          <h3 class="chartTitle">Rarity Donut</h3>
+          <p class="chartSub">The same rarity mix in donut form.</p>
+          <div class="chartWrap"><canvas id="rarityDonutChart"></canvas></div>
+        </div>
+
+        <div class="chartCard short">
+          <h3 class="chartTitle">Per 100 Chests by Rarity</h3>
+          <p class="chartSub">Expected counts per 100 Lucky Chests.</p>
+          <div class="chartWrap"><canvas id="rarityPer100Chart"></canvas></div>
+        </div>
+
+        <div class="chartCard short">
+          <h3 class="chartTitle">Specific Badge Odds</h3>
+          <p class="chartSub">Chance of one exact badge inside each rarity.</p>
+          <div class="chartWrap"><canvas id="specificBadgeOddsChart"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Joint Outcome Density</h2>
+      <p>Every possible level-and-rarity result, shown both as a heatmap table and as stacked bars.</p>
+
+      <div class="chartsGrid">
+        <div class="chartCard tall">
+          <h3 class="chartTitle">Level × Rarity Stacked Outcome Chart</h3>
+          <p class="chartSub">Each bar is a level, split by the rarity weights possible at that level.</p>
+          <div class="chartWrap"><canvas id="jointStackedChart"></canvas></div>
+        </div>
+
+        <div class="chartCard tall">
+          <h3 class="chartTitle">Point EV by Level and Rarity</h3>
+          <p class="chartSub">Line chart showing the expected point value of each rarity as levels rise.</p>
+          <div class="chartWrap"><canvas id="pointEvByLevelChart"></canvas></div>
+        </div>
+      </div>
+
+      <div class="tableWrap">
+        <div class="tableScroller">
+          <table class="heatTable">
+            <thead>
+              <tr>
+                <th>Level</th>
+                <th>Common</th>
+                <th>Uncommon</th>
+                <th>Rare</th>
+                <th>Epic</th>
+                <th>Legendary</th>
+              </tr>
+            </thead>
+            <tbody id="heatmapBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="legendRow">
+        <div class="legendPill">Higher percent = brighter cell</div>
+        <div class="legendPill">Impossible outcomes are blanked out</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Expected Value Breakdown</h2>
+      <p>These graphs show what each rarity contributes to raw point EV and badge progress EV.</p>
+
+      <div class="chartsGrid">
+        <div class="chartCard">
+          <h3 class="chartTitle">Raw Point Contribution Per Chest</h3>
+          <p class="chartSub">How much each rarity contributes to total raw EV.</p>
+          <div class="chartWrap"><canvas id="rawContributionChart"></canvas></div>
+        </div>
+
+        <div class="chartCard">
+          <h3 class="chartTitle">Conditional Point EV by Final Rarity</h3>
+          <p class="chartSub">Average points if the final rarity is already known.</p>
+          <div class="chartWrap"><canvas id="conditionalRarityEvChart"></canvas></div>
+        </div>
+
+        <div class="chartCard">
+          <h3 class="chartTitle">Full-Badge Progress Per Chest</h3>
+          <p class="chartSub">Contribution to full badge completion per chest, ignoring gold.</p>
+          <div class="chartWrap"><canvas id="progressContributionChart"></canvas></div>
+        </div>
+
+        <div class="chartCard">
+          <h3 class="chartTitle">Specific Badge Progress Per Chest</h3>
+          <p class="chartSub">Per-chest progress toward one exact badge of each rarity.</p>
+          <div class="chartWrap"><canvas id="specificProgressChart"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Time to Max</h2>
+      <p>These charts turn the progress rates into expected Lucky Chest counts for one exact badge.</p>
+
+      <div class="chartsGrid">
+        <div class="chartCard">
+          <h3 class="chartTitle">Expected Lucky Chests to Max One Exact Badge</h3>
+          <p class="chartSub">Ignoring gold and assuming only Lucky Chests are used.</p>
+          <div class="chartWrap"><canvas id="chestsToMaxChart"></canvas></div>
+        </div>
+
+        <div class="chartCard">
+          <h3 class="chartTitle">Inverse View: Exact Badge Progress Speed</h3>
+          <p class="chartSub">Higher bar means faster progress toward one exact badge.</p>
+          <div class="chartWrap"><canvas id="badgeSpeedChart"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Cumulative Growth Curves</h2>
+      <p>These show what happens as chest count rises over time using exact EV numbers.</p>
+
+      <div class="chartsGrid one">
+        <div class="chartCard tall">
+          <h3 class="chartTitle">Cumulative Raw Points by Chest Count</h3>
+          <p class="chartSub">Expected raw point EV after 0–500 Lucky Chests.</p>
+          <div class="chartWrap"><canvas id="cumulativeRawChart"></canvas></div>
+        </div>
+
+        <div class="chartCard tall">
+          <h3 class="chartTitle">Cumulative Full-Badge Completion Value</h3>
+          <p class="chartSub">Expected badge-equivalent progress after 0–500 Lucky Chests.</p>
+          <div class="chartWrap"><canvas id="cumulativeProgressChart"></canvas></div>
+        </div>
+
+        <div class="chartCard tall">
+          <h3 class="chartTitle">Cumulative Specific Badge Progress</h3>
+          <p class="chartSub">Expected percentage progress toward one exact badge over 0–500 Lucky Chests.</p>
+          <div class="chartWrap"><canvas id="cumulativeSpecificChart"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Gem Conversion Graphs</h2>
+      <p>These assume a reward converts to gems only when the chosen badge is already maxed.</p>
+
+      <div class="chartsGrid">
+        <div class="chartCard">
+          <h3 class="chartTitle">Gem EV from One Maxed Badge</h3>
+          <p class="chartSub">How much one maxed badge of each rarity adds per Lucky Chest.</p>
+          <div class="chartWrap"><canvas id="oneMaxedGemChart"></canvas></div>
+        </div>
+
+        <div class="chartCard">
+          <h3 class="chartTitle">Gem EV from All 5 Maxed in a Rarity</h3>
+          <p class="chartSub">Per-chest gem EV when all five badges of a rarity are maxed.</p>
+          <div class="chartWrap"><canvas id="allFiveGemChart"></canvas></div>
+        </div>
+
+        <div class="chartCard">
+          <h3 class="chartTitle">Gem EV Rank by Rarity</h3>
+          <p class="chartSub">Shows which maxed rarity contributes most to Lucky Chest gem EV.</p>
+          <div class="chartWrap"><canvas id="gemRankingChart"></canvas></div>
+        </div>
+
+        <div class="chartCard">
+          <h3 class="chartTitle">Cumulative Gems if All 25 Badges Are Maxed</h3>
+          <p class="chartSub">Expected total gems from Lucky Chests when every reward converts.</p>
+          <div class="chartWrap"><canvas id="allMaxedGemsCumulativeChart"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Comparison Tables</h2>
+      <p>This is the full exact reference sheet in table form.</p>
 
       <div class="tableWrap">
         <div class="tableScroller">
           <table>
             <thead>
               <tr>
-                <th>Final Level</th>
-                <th>Exact Probability</th>
-                <th>Per 100 Chests</th>
+                <th>Level</th>
+                <th>Probability</th>
+                <th>At Least This Level</th>
               </tr>
             </thead>
             <tbody>
-              <tr><td>Level 1</td><td class="mono">4.7075951625%</td><td class="mono">4.707595</td></tr>
-              <tr><td>Level 2</td><td class="mono">19.8340083638%</td><td class="mono">19.834008</td></tr>
-              <tr><td>Level 3</td><td class="mono">33.4258044030%</td><td class="mono">33.425804</td></tr>
-              <tr><td>Level 4</td><td class="mono">28.1658749834%</td><td class="mono">28.165875</td></tr>
-              <tr><td>Level 5</td><td class="mono">11.8668275566%</td><td class="mono">11.866828</td></tr>
-              <tr><td>Level 6</td><td class="mono">1.9998895307%</td><td class="mono">1.999890</td></tr>
+              <tr><td>1</td><td class="mono">4.7075951625%</td><td class="mono">100.0000000000%</td></tr>
+              <tr><td>2</td><td class="mono">19.8340083638%</td><td class="mono">95.2924048375%</td></tr>
+              <tr><td>3</td><td class="mono">33.4258044030%</td><td class="mono">75.4583964737%</td></tr>
+              <tr><td>4</td><td class="mono">28.1658749834%</td><td class="mono">42.0325920707%</td></tr>
+              <tr><td>5</td><td class="mono">11.8668275566%</td><td class="mono">13.8667170873%</td></tr>
+              <tr><td>6</td><td class="mono">1.9998895307%</td><td class="mono">1.9998895307%</td></tr>
             </tbody>
           </table>
         </div>
       </div>
-
-      <div class="footerNote">
-        <span class="good">Level 4+:</span> <span class="mono">42.0325920707%</span> &nbsp;•&nbsp;
-        <span class="warn">Level 5+:</span> <span class="mono">13.8667170873%</span> &nbsp;•&nbsp;
-        <span>Level 6:</span> <span class="mono">1.9998895307%</span>
-      </div>
-    </section>
-
-    <section>
-      <h2>Allowed Rarities by Final Level</h2>
-      <p>Rarity is chosen uniformly among the allowed rarities at that level.</p>
-
-      <div class="tableWrap">
-        <div class="tableScroller">
-          <table>
-            <thead>
-              <tr>
-                <th>Final Level</th>
-                <th>Allowed Rarities</th>
-                <th>Chance Per Allowed Rarity</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>Level 1</td><td>Common</td><td class="mono">100%</td></tr>
-              <tr><td>Level 2</td><td>Common, Uncommon</td><td class="mono">50% each</td></tr>
-              <tr><td>Level 3</td><td>Common, Uncommon, Rare</td><td class="mono">33.333333% each</td></tr>
-              <tr><td>Level 4</td><td>Common, Uncommon, Rare, Epic</td><td class="mono">25% each</td></tr>
-              <tr><td>Level 5</td><td>Common, Uncommon, Rare, Epic, Legendary</td><td class="mono">20% each</td></tr>
-              <tr><td>Level 6</td><td>Common, Uncommon, Rare, Epic, Legendary</td><td class="mono">20% each</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <h2>Exact Final Rarity Odds</h2>
-      <p>These are the true end-result rarity probabilities for one Lucky Chest when all badges are unlocked.</p>
 
       <div class="tableWrap">
         <div class="tableScroller">
@@ -526,247 +816,74 @@
             <thead>
               <tr>
                 <th>Rarity</th>
-                <th>Exact Probability</th>
-                <th>Per 100 Chests</th>
-                <th>One Specific Badge</th>
+                <th>Final Odds</th>
+                <th>Specific Badge Odds</th>
+                <th>Conditional Point EV</th>
+                <th>Raw Contribution</th>
+                <th>Full Badge Progress</th>
+                <th>Specific Badge Progress</th>
+                <th>Expected Chests to Max One Exact Badge</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>Common</td>
                 <td class="mono">35.5813463087%</td>
-                <td class="mono">35.581346</td>
                 <td class="mono">7.1162692617%</td>
+                <td class="mono">508.4341151566</td>
+                <td class="mono">180.9077032654</td>
+                <td class="mono">1.3915977174%</td>
+                <td class="mono">0.2783195435%</td>
+                <td class="mono">359.30</td>
               </tr>
               <tr>
                 <td>Uncommon</td>
                 <td class="mono">30.8737511462%</td>
-                <td class="mono">30.873751</td>
                 <td class="mono">6.1747502292%</td>
+                <td class="mono">427.4906668753</td>
+                <td class="mono">131.9824046643</td>
+                <td class="mono">1.6920821111%</td>
+                <td class="mono">0.3384164222%</td>
+                <td class="mono">295.49</td>
               </tr>
               <tr>
                 <td>Rare</td>
                 <td class="mono">20.9567469643%</td>
-                <td class="mono">20.956747</td>
                 <td class="mono">4.1913493929%</td>
+                <td class="mono">101.2083909684</td>
+                <td class="mono">21.2099864019</td>
+                <td class="mono">0.4819996909%</td>
+                <td class="mono">0.0963999382%</td>
+                <td class="mono">1037.35</td>
               </tr>
               <tr>
                 <td>Epic</td>
                 <td class="mono">9.8148121633%</td>
-                <td class="mono">9.814812</td>
                 <td class="mono">1.9629624327%</td>
+                <td class="mono">24.0932733589</td>
+                <td class="mono">2.3647095242</td>
+                <td class="mono">0.3941182540%</td>
+                <td class="mono">0.0788236508%</td>
+                <td class="mono">1268.65</td>
               </tr>
               <tr>
                 <td>Legendary</td>
                 <td class="mono">2.7733434175%</td>
-                <td class="mono">2.773343</td>
                 <td class="mono">0.5546686835%</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="footerNote">
-        “One Specific Badge” means the chance of hitting one exact badge inside that rarity, since each rarity contains 5 badges.
-      </div>
-    </section>
-
-    <section>
-      <h2>Exact Joint Odds: Final Level and Rarity</h2>
-      <p>Every possible level-and-rarity outcome with its exact probability.</p>
-
-      <div class="tableWrap">
-        <div class="tableScroller">
-          <table>
-            <thead>
-              <tr>
-                <th>Outcome</th>
-                <th>Exact Probability</th>
-                <th>Specific Badge in That Outcome</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>L1 Common</td><td class="mono">4.7075951625%</td><td class="mono">0.9415190325%</td></tr>
-
-              <tr><td>L2 Common</td><td class="mono">9.9170041819%</td><td class="mono">1.9834008364%</td></tr>
-              <tr><td>L2 Uncommon</td><td class="mono">9.9170041819%</td><td class="mono">1.9834008364%</td></tr>
-
-              <tr><td>L3 Common</td><td class="mono">11.1419348010%</td><td class="mono">2.2283869602%</td></tr>
-              <tr><td>L3 Uncommon</td><td class="mono">11.1419348010%</td><td class="mono">2.2283869602%</td></tr>
-              <tr><td>L3 Rare</td><td class="mono">11.1419348010%</td><td class="mono">2.2283869602%</td></tr>
-
-              <tr><td>L4 Common</td><td class="mono">7.0414687459%</td><td class="mono">1.4082937492%</td></tr>
-              <tr><td>L4 Uncommon</td><td class="mono">7.0414687459%</td><td class="mono">1.4082937492%</td></tr>
-              <tr><td>L4 Rare</td><td class="mono">7.0414687459%</td><td class="mono">1.4082937492%</td></tr>
-              <tr><td>L4 Epic</td><td class="mono">7.0414687459%</td><td class="mono">1.4082937492%</td></tr>
-
-              <tr><td>L5 Common</td><td class="mono">2.3733655113%</td><td class="mono">0.4746731023%</td></tr>
-              <tr><td>L5 Uncommon</td><td class="mono">2.3733655113%</td><td class="mono">0.4746731023%</td></tr>
-              <tr><td>L5 Rare</td><td class="mono">2.3733655113%</td><td class="mono">0.4746731023%</td></tr>
-              <tr><td>L5 Epic</td><td class="mono">2.3733655113%</td><td class="mono">0.4746731023%</td></tr>
-              <tr><td>L5 Legendary</td><td class="mono">2.3733655113%</td><td class="mono">0.4746731023%</td></tr>
-
-              <tr><td>L6 Common</td><td class="mono">0.3999779061%</td><td class="mono">0.0799955812%</td></tr>
-              <tr><td>L6 Uncommon</td><td class="mono">0.3999779061%</td><td class="mono">0.0799955812%</td></tr>
-              <tr><td>L6 Rare</td><td class="mono">0.3999779061%</td><td class="mono">0.0799955812%</td></tr>
-              <tr><td>L6 Epic</td><td class="mono">0.3999779061%</td><td class="mono">0.0799955812%</td></tr>
-              <tr><td>L6 Legendary</td><td class="mono">0.3999779061%</td><td class="mono">0.0799955812%</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <h2>Point Tables and Expected Points</h2>
-      <p>Point roll is uniform within the coded range, so expected points are the midpoint of each range.</p>
-
-      <div class="tableWrap">
-        <div class="tableScroller">
-          <table>
-            <thead>
-              <tr>
-                <th>Outcome</th>
-                <th>Point Range</th>
-                <th>Expected Points</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>L1 Common</td><td class="mono">100–200</td><td class="mono">150</td></tr>
-
-              <tr><td>L2 Common</td><td class="mono">275–400</td><td class="mono">337.5</td></tr>
-              <tr><td>L2 Uncommon</td><td class="mono">240–350</td><td class="mono">295</td></tr>
-
-              <tr><td>L3 Common</td><td class="mono">425–600</td><td class="mono">512.5</td></tr>
-              <tr><td>L3 Uncommon</td><td class="mono">350–450</td><td class="mono">400</td></tr>
-              <tr><td>L3 Rare</td><td class="mono">50–60</td><td class="mono">55</td></tr>
-
-              <tr><td>L4 Common</td><td class="mono">625–850</td><td class="mono">737.5</td></tr>
-              <tr><td>L4 Uncommon</td><td class="mono">460–575</td><td class="mono">517.5</td></tr>
-              <tr><td>L4 Rare</td><td class="mono">115–150</td><td class="mono">132.5</td></tr>
-              <tr><td>L4 Epic</td><td class="mono">8–18</td><td class="mono">13</td></tr>
-
-              <tr><td>L5 Common</td><td class="mono">875–1050</td><td class="mono">962.5</td></tr>
-              <tr><td>L5 Uncommon</td><td class="mono">600–750</td><td class="mono">675</td></tr>
-              <tr><td>L5 Rare</td><td class="mono">155–205</td><td class="mono">180</td></tr>
-              <tr><td>L5 Epic</td><td class="mono">25–55</td><td class="mono">40</td></tr>
-              <tr><td>L5 Legendary</td><td class="mono">5–20</td><td class="mono">12.5</td></tr>
-
-              <tr><td>L6 Common</td><td class="mono">1875–2375</td><td class="mono">2125</td></tr>
-              <tr><td>L6 Uncommon</td><td class="mono">1200–1650</td><td class="mono">1425</td></tr>
-              <tr><td>L6 Rare</td><td class="mono">315–425</td><td class="mono">370</td></tr>
-              <tr><td>L6 Epic</td><td class="mono">100–150</td><td class="mono">125</td></tr>
-              <tr><td>L6 Legendary</td><td class="mono">38–75</td><td class="mono">56.5</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <h2>Conditional Expected Points by Final Rarity</h2>
-      <p>If you already know the final rarity, these are the exact average points for that rarity.</p>
-
-      <div class="tableWrap">
-        <div class="tableScroller">
-          <table>
-            <thead>
-              <tr>
-                <th>Rarity</th>
-                <th>Conditional EV</th>
-                <th>Level Mix Inside That Rarity</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Common</td>
-                <td class="mono">508.4341151566</td>
-                <td class="subtle">L1 13.230514% • L2 27.871357% • L3 31.313978% • L4 19.789776% • L5 6.670252% • L6 1.124122%</td>
-              </tr>
-              <tr>
-                <td>Uncommon</td>
-                <td class="mono">427.4906668753</td>
-                <td class="subtle">L2 32.121151% • L3 36.088698% • L4 22.807299% • L5 7.687325% • L6 1.295527%</td>
-              </tr>
-              <tr>
-                <td>Rare</td>
-                <td class="mono">101.2083909684</td>
-                <td class="subtle">L3 53.166337% • L4 33.600008% • L5 11.325066% • L6 1.908588%</td>
-              </tr>
-              <tr>
-                <td>Epic</td>
-                <td class="mono">24.0932733589</td>
-                <td class="subtle">L4 71.743286% • L5 24.181466% • L6 4.075248%</td>
-              </tr>
-              <tr>
-                <td>Legendary</td>
                 <td class="mono">18.8457802447</td>
-                <td class="subtle">L5 85.577772% • L6 14.422228%</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <h2>Overall Expected Value</h2>
-      <p>These are the exact per-chest long-run contributions from each rarity and the full Lucky Chest total.</p>
-
-      <div class="tableWrap">
-        <div class="tableScroller">
-          <table>
-            <thead>
-              <tr>
-                <th>Rarity</th>
-                <th>Raw Point Contribution Per Chest</th>
-                <th>Level 8 Total Needed</th>
-                <th>Full-Badge Progress Per Chest</th>
-                <th>Specific Badge Progress Per Chest</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Common</td>
-                <td class="mono">180.9077032654</td>
-                <td class="mono">13000</td>
-                <td class="mono">1.3915977174%</td>
-                <td class="mono">0.2783195435%</td>
-              </tr>
-              <tr>
-                <td>Uncommon</td>
-                <td class="mono">131.9824046643</td>
-                <td class="mono">7800</td>
-                <td class="mono">1.6920821111%</td>
-                <td class="mono">0.3384164222%</td>
-              </tr>
-              <tr>
-                <td>Rare</td>
-                <td class="mono">21.2099864019</td>
-                <td class="mono">4400</td>
-                <td class="mono">0.4819996909%</td>
-                <td class="mono">0.0963999382%</td>
-              </tr>
-              <tr>
-                <td>Epic</td>
-                <td class="mono">2.3647095242</td>
-                <td class="mono">600</td>
-                <td class="mono">0.3941182540%</td>
-                <td class="mono">0.0788236508%</td>
-              </tr>
-              <tr>
-                <td>Legendary</td>
                 <td class="mono">0.5226582059</td>
-                <td class="mono">260</td>
                 <td class="mono">0.2010223869%</td>
                 <td class="mono">0.0402044774%</td>
+                <td class="mono">2487.29</td>
               </tr>
               <tr>
                 <td><strong>Total</strong></td>
-                <td class="mono"><strong>336.9874620617</strong></td>
+                <td class="mono"><strong>100.0000000000%</strong></td>
                 <td class="mono">—</td>
+                <td class="mono">—</td>
+                <td class="mono"><strong>336.9874620617</strong></td>
                 <td class="mono"><strong>4.1608201603%</strong></td>
+                <td class="mono">—</td>
                 <td class="mono">—</td>
               </tr>
             </tbody>
@@ -775,76 +892,8 @@
       </div>
 
       <div class="footerNote">
-        Exact badge-equivalent rate: <span class="mono">1 / 0.041608201603 ≈ 24.03 Lucky Chests</span> for one full badge-equivalent of total progress, spread across the whole system.
+        This page uses the exact Lucky Chest assumptions from your code and visualizes them in multiple redundant ways so you can sanity-check the whole system at a glance.
       </div>
-    </section>
-
-    <section>
-      <h2>Lucky-Only Time to Max One Specific Badge</h2>
-      <p>Ignoring gold and assuming only Lucky Chests are used.</p>
-
-      <div class="tableWrap">
-        <div class="tableScroller">
-          <table>
-            <thead>
-              <tr>
-                <th>Specific Badge Rarity</th>
-                <th>Specific Badge Progress Per Chest</th>
-                <th>Expected Lucky Chests to Max</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>Specific Common Badge</td><td class="mono">0.2783195435%</td><td class="mono">359.30</td></tr>
-              <tr><td>Specific Uncommon Badge</td><td class="mono">0.3384164222%</td><td class="mono">295.49</td></tr>
-              <tr><td>Specific Rare Badge</td><td class="mono">0.0963999382%</td><td class="mono">1037.35</td></tr>
-              <tr><td>Specific Epic Badge</td><td class="mono">0.0788236508%</td><td class="mono">1268.65</td></tr>
-              <tr><td>Specific Legendary Badge</td><td class="mono">0.0402044774%</td><td class="mono">2487.29</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <h2>Gem Conversion EV When Badges Are Already Maxed</h2>
-      <p>Lucky Chest converts to gems only when the chosen badge is already Level 8.</p>
-
-      <div class="tableWrap">
-        <div class="tableScroller">
-          <table>
-            <thead>
-              <tr>
-                <th>Maxed Badge Setup</th>
-                <th>Gem Multiplier</th>
-                <th>Gem EV Per Lucky Chest</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>One maxed Common badge</td><td class="mono">×1</td><td class="mono">36.1815406531</td></tr>
-              <tr><td>One maxed Uncommon badge</td><td class="mono">×5</td><td class="mono">131.9824046643</td></tr>
-              <tr><td>One maxed Rare badge</td><td class="mono">×20</td><td class="mono">84.8399456077</td></tr>
-              <tr><td>One maxed Epic badge</td><td class="mono">×50</td><td class="mono">23.6470952417</td></tr>
-              <tr><td>One maxed Legendary badge</td><td class="mono">×100</td><td class="mono">10.4531641177</td></tr>
-              <tr><td>All 5 Common maxed</td><td class="mono">×1</td><td class="mono">180.9077032654</td></tr>
-              <tr><td>All 5 Uncommon maxed</td><td class="mono">×5</td><td class="mono">659.9120233217</td></tr>
-              <tr><td>All 5 Rare maxed</td><td class="mono">×20</td><td class="mono">424.1997280383</td></tr>
-              <tr><td>All 5 Epic maxed</td><td class="mono">×50</td><td class="mono">118.2354762084</td></tr>
-              <tr><td>All 5 Legendary maxed</td><td class="mono">×100</td><td class="mono">52.2658205887</td></tr>
-              <tr><td><strong>All 25 badges maxed</strong></td><td class="mono">All active</td><td class="mono"><strong>1435.5207514224</strong></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <h2>One-Screen House Summary</h2>
-      <p>
-        If you only want the top-level math: average final level <span class="mono">3.2865</span>, final rarity mix
-        <span class="mono">35.5813 / 30.8738 / 20.9567 / 9.8148 / 2.7733</span>, raw point EV
-        <span class="mono">336.9874620617</span>, and full-badge completion EV
-        <span class="mono">4.1608201603%</span> per Lucky Chest.
-      </p>
     </section>
   </main>
 
@@ -899,11 +948,693 @@
         }
 
         authInfoEl.textContent = `Signed in as ${user.email || "—"} • Admin access confirmed`;
+        buildAllCharts();
       } catch (err) {
         console.error("Admin check failed:", err);
         window.location.href = "/advancements/rewards/";
       }
     });
+
+    const levelLabels = ["L1","L2","L3","L4","L5","L6"];
+    const rarityLabels = ["Common","Uncommon","Rare","Epic","Legendary"];
+
+    const levelOdds = [
+      4.7075951625,
+      19.8340083638,
+      33.4258044030,
+      28.1658749834,
+      11.8668275566,
+      1.9998895307
+    ];
+
+    const levelAtLeast = [
+      100.0000000000,
+      95.2924048375,
+      75.4583964737,
+      42.0325920707,
+      13.8667170873,
+      1.9998895307
+    ];
+
+    const rarityOdds = [
+      35.5813463087,
+      30.8737511462,
+      20.9567469643,
+      9.8148121633,
+      2.7733434175
+    ];
+
+    const specificBadgeOdds = [
+      7.1162692617,
+      6.1747502292,
+      4.1913493929,
+      1.9629624327,
+      0.5546686835
+    ];
+
+    const conditionalEv = [
+      508.4341151566,
+      427.4906668753,
+      101.2083909684,
+      24.0932733589,
+      18.8457802447
+    ];
+
+    const rawContribution = [
+      180.9077032654,
+      131.9824046643,
+      21.2099864019,
+      2.3647095242,
+      0.5226582059
+    ];
+
+    const fullBadgeProgress = [
+      1.3915977174,
+      1.6920821111,
+      0.4819996909,
+      0.3941182540,
+      0.2010223869
+    ];
+
+    const specificBadgeProgress = [
+      0.2783195435,
+      0.3384164222,
+      0.0963999382,
+      0.0788236508,
+      0.0402044774
+    ];
+
+    const chestsToMax = [
+      359.30,
+      295.49,
+      1037.35,
+      1268.65,
+      2487.29
+    ];
+
+    const oneMaxedGemEv = [
+      36.1815406531,
+      131.9824046643,
+      84.8399456077,
+      23.6470952417,
+      10.4531641177
+    ];
+
+    const allFiveGemEv = [
+      180.9077032654,
+      659.9120233217,
+      424.1997280383,
+      118.2354762084,
+      52.2658205887
+    ];
+
+    const allMaxedGemEv = 1435.5207514224;
+    const totalRawEv = 336.9874620617;
+    const totalProgressEv = 4.1608201603;
+
+    const joint = {
+      Common:     [4.7075951625, 9.9170041819, 11.1419348010, 7.0414687459, 2.3733655113, 0.3999779061],
+      Uncommon:   [0,            9.9170041819, 11.1419348010, 7.0414687459, 2.3733655113, 0.3999779061],
+      Rare:       [0,            0,            11.1419348010, 7.0414687459, 2.3733655113, 0.3999779061],
+      Epic:       [0,            0,            0,             7.0414687459, 2.3733655113, 0.3999779061],
+      Legendary:  [0,            0,            0,             0,            2.3733655113, 0.3999779061]
+    };
+
+    const pointEvByLevel = {
+      Common:     [150, 337.5, 512.5, 737.5, 962.5, 2125],
+      Uncommon:   [null, 295, 400, 517.5, 675, 1425],
+      Rare:       [null, null, 55, 132.5, 180, 370],
+      Epic:       [null, null, null, 13, 40, 125],
+      Legendary:  [null, null, null, null, 12.5, 56.5]
+    };
+
+    function percent(v){ return `${v.toFixed(4)}%`; }
+    function num(v){ return Number(v).toLocaleString("en-US", { maximumFractionDigits: 4 }); }
+
+    function gridColor(alpha = 0.12){
+      return `rgba(255,255,255,${alpha})`;
+    }
+
+    function axisCommon(){
+      return {
+        ticks: { color: "rgba(236,243,255,.88)", font: { weight: "700" } },
+        grid: { color: gridColor(0.08) }
+      };
+    }
+
+    function pluginLegend(){
+      return {
+        labels: {
+          color: "rgba(236,243,255,.88)",
+          font: { weight: "700" }
+        }
+      };
+    }
+
+    function commonPlugins(title){
+      return {
+        legend: pluginLegend(),
+        tooltip: {
+          callbacks: {
+            label: (ctx) => {
+              const raw = ctx.raw;
+              if (typeof raw === "number") return `${ctx.dataset.label || ctx.label}: ${raw.toLocaleString("en-US", {maximumFractionDigits: 4})}`;
+              return `${ctx.dataset.label || ctx.label}: ${raw}`;
+            }
+          }
+        },
+        title: {
+          display: !!title,
+          text: title,
+          color: "rgba(236,243,255,.95)",
+          font: { size: 14, weight: "900" }
+        }
+      };
+    }
+
+    function makeChart(id, config){
+      const ctx = document.getElementById(id);
+      if (!ctx) return;
+      new Chart(ctx, config);
+    }
+
+    function buildHeatmap(){
+      const body = document.getElementById("heatmapBody");
+      const maxVal = 11.1419348010;
+
+      const levels = [1,2,3,4,5,6];
+      const rarities = ["Common","Uncommon","Rare","Epic","Legendary"];
+
+      body.innerHTML = levels.map((lv, idx) => {
+        const cells = rarities.map(r => {
+          const v = joint[r][idx];
+          if (!v || v <= 0){
+            return `<td><span class="heatCell" style="background:rgba(255,255,255,.05); color:rgba(236,243,255,.28);">—</span></td>`;
+          }
+          const ratio = v / maxVal;
+          const alpha = 0.16 + ratio * 0.64;
+          return `<td><span class="heatCell mono" style="background:rgba(0,255,136,${alpha}); color:#061a12;">${v.toFixed(4)}%</span></td>`;
+        }).join("");
+
+        return `<tr><td class="mono">L${lv}</td>${cells}</tr>`;
+      }).join("");
+    }
+
+    function buildAllCharts(){
+      buildHeatmap();
+
+      makeChart("levelOddsChart", {
+        type: "bar",
+        data: {
+          labels: levelLabels,
+          datasets: [{
+            label: "Level Odds %",
+            data: levelOdds
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: axisCommon(),
+            y: { ...axisCommon(), beginAtZero: true }
+          },
+          plugins: commonPlugins()
+        }
+      });
+
+      makeChart("levelCumulativeChart", {
+        type: "line",
+        data: {
+          labels: ["≥1","≥2","≥3","≥4","≥5","≥6"],
+          datasets: [{
+            label: "Chance at or above level",
+            data: levelAtLeast,
+            tension: 0.25
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: axisCommon(),
+            y: { ...axisCommon(), beginAtZero: true, max: 100 }
+          },
+          plugins: commonPlugins()
+        }
+      });
+
+      makeChart("levelDonutChart", {
+        type: "doughnut",
+        data: {
+          labels: levelLabels,
+          datasets: [{
+            label: "Level Mix",
+            data: levelOdds
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: commonPlugins()
+        }
+      });
+
+      makeChart("levelPer100Chart", {
+        type: "bar",
+        data: {
+          labels: levelLabels,
+          datasets: [{
+            label: "Per 100 chests",
+            data: levelOdds
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          indexAxis: "y",
+          scales: {
+            x: { ...axisCommon(), beginAtZero: true },
+            y: axisCommon()
+          },
+          plugins: commonPlugins()
+        }
+      });
+
+      makeChart("rarityOddsChart", {
+        type: "bar",
+        data: {
+          labels: rarityLabels,
+          datasets: [{
+            label: "Rarity Odds %",
+            data: rarityOdds
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: axisCommon(),
+            y: { ...axisCommon(), beginAtZero: true }
+          },
+          plugins: commonPlugins()
+        }
+      });
+
+      makeChart("rarityDonutChart", {
+        type: "doughnut",
+        data: {
+          labels: rarityLabels,
+          datasets: [{
+            label: "Rarity Mix",
+            data: rarityOdds
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: commonPlugins()
+        }
+      });
+
+      makeChart("rarityPer100Chart", {
+        type: "bar",
+        data: {
+          labels: rarityLabels,
+          datasets: [{
+            label: "Per 100 chests",
+            data: rarityOdds
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          indexAxis: "y",
+          scales: {
+            x: { ...axisCommon(), beginAtZero: true },
+            y: axisCommon()
+          },
+          plugins: commonPlugins()
+        }
+      });
+
+      makeChart("specificBadgeOddsChart", {
+        type: "bar",
+        data: {
+          labels: rarityLabels,
+          datasets: [{
+            label: "One exact badge odds %",
+            data: specificBadgeOdds
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: axisCommon(),
+            y: { ...axisCommon(), beginAtZero: true }
+          },
+          plugins: commonPlugins()
+        }
+      });
+
+      makeChart("jointStackedChart", {
+        type: "bar",
+        data: {
+          labels: levelLabels,
+          datasets: [
+            { label: "Common", data: joint.Common, stack: "joint" },
+            { label: "Uncommon", data: joint.Uncommon, stack: "joint" },
+            { label: "Rare", data: joint.Rare, stack: "joint" },
+            { label: "Epic", data: joint.Epic, stack: "joint" },
+            { label: "Legendary", data: joint.Legendary, stack: "joint" }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { ...axisCommon(), stacked: true },
+            y: { ...axisCommon(), stacked: true, beginAtZero: true }
+          },
+          plugins: commonPlugins()
+        }
+      });
+
+      makeChart("pointEvByLevelChart", {
+        type: "line",
+        data: {
+          labels: levelLabels,
+          datasets: [
+            { label: "Common", data: pointEvByLevel.Common, tension: 0.25, spanGaps: true },
+            { label: "Uncommon", data: pointEvByLevel.Uncommon, tension: 0.25, spanGaps: true },
+            { label: "Rare", data: pointEvByLevel.Rare, tension: 0.25, spanGaps: true },
+            { label: "Epic", data: pointEvByLevel.Epic, tension: 0.25, spanGaps: true },
+            { label: "Legendary", data: pointEvByLevel.Legendary, tension: 0.25, spanGaps: true }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: axisCommon(),
+            y: { ...axisCommon(), beginAtZero: true }
+          },
+          plugins: commonPlugins()
+        }
+      });
+
+      makeChart("rawContributionChart", {
+        type: "bar",
+        data: {
+          labels: rarityLabels,
+          datasets: [{
+            label: "Raw point contribution per chest",
+            data: rawContribution
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: axisCommon(),
+            y: { ...axisCommon(), beginAtZero: true }
+          },
+          plugins: commonPlugins()
+        }
+      });
+
+      makeChart("conditionalRarityEvChart", {
+        type: "bar",
+        data: {
+          labels: rarityLabels,
+          datasets: [{
+            label: "Conditional EV if rarity is known",
+            data: conditionalEv
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          indexAxis: "y",
+          scales: {
+            x: { ...axisCommon(), beginAtZero: true },
+            y: axisCommon()
+          },
+          plugins: commonPlugins()
+        }
+      });
+
+      makeChart("progressContributionChart", {
+        type: "bar",
+        data: {
+          labels: rarityLabels,
+          datasets: [{
+            label: "% of full badge per chest",
+            data: fullBadgeProgress
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: axisCommon(),
+            y: { ...axisCommon(), beginAtZero: true }
+          },
+          plugins: commonPlugins()
+        }
+      });
+
+      makeChart("specificProgressChart", {
+        type: "bar",
+        data: {
+          labels: rarityLabels,
+          datasets: [{
+            label: "% toward one exact badge per chest",
+            data: specificBadgeProgress
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          indexAxis: "y",
+          scales: {
+            x: { ...axisCommon(), beginAtZero: true },
+            y: axisCommon()
+          },
+          plugins: commonPlugins()
+        }
+      });
+
+      makeChart("chestsToMaxChart", {
+        type: "bar",
+        data: {
+          labels: rarityLabels,
+          datasets: [{
+            label: "Expected Lucky Chests to max one exact badge",
+            data: chestsToMax
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: axisCommon(),
+            y: { ...axisCommon(), beginAtZero: true }
+          },
+          plugins: commonPlugins()
+        }
+      });
+
+      makeChart("badgeSpeedChart", {
+        type: "bar",
+        data: {
+          labels: rarityLabels,
+          datasets: [{
+            label: "Exact badge progress speed (higher = faster)",
+            data: specificBadgeProgress
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: axisCommon(),
+            y: { ...axisCommon(), beginAtZero: true }
+          },
+          plugins: commonPlugins()
+        }
+      });
+
+      const chestCounts = [];
+      const cumulativeRaw = [];
+      const cumulativeBadgeEq = [];
+      const cumulativeSpecificCommon = [];
+      const cumulativeSpecificUncommon = [];
+      const cumulativeSpecificRare = [];
+      const cumulativeSpecificEpic = [];
+      const cumulativeSpecificLegendary = [];
+      const cumulativeAllMaxedGems = [];
+
+      for (let i = 0; i <= 500; i += 10) {
+        chestCounts.push(i);
+        cumulativeRaw.push(i * totalRawEv);
+        cumulativeBadgeEq.push(i * totalProgressEv / 100);
+        cumulativeSpecificCommon.push(i * specificBadgeProgress[0]);
+        cumulativeSpecificUncommon.push(i * specificBadgeProgress[1]);
+        cumulativeSpecificRare.push(i * specificBadgeProgress[2]);
+        cumulativeSpecificEpic.push(i * specificBadgeProgress[3]);
+        cumulativeSpecificLegendary.push(i * specificBadgeProgress[4]);
+        cumulativeAllMaxedGems.push(i * allMaxedGemEv);
+      }
+
+      makeChart("cumulativeRawChart", {
+        type: "line",
+        data: {
+          labels: chestCounts,
+          datasets: [{
+            label: "Expected raw points",
+            data: cumulativeRaw,
+            tension: 0.18
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { ...axisCommon(), title: { display: true, text: "Lucky Chests", color: "rgba(236,243,255,.88)" } },
+            y: { ...axisCommon(), beginAtZero: true }
+          },
+          plugins: commonPlugins()
+        }
+      });
+
+      makeChart("cumulativeProgressChart", {
+        type: "line",
+        data: {
+          labels: chestCounts,
+          datasets: [{
+            label: "Badge-equivalent progress",
+            data: cumulativeBadgeEq,
+            tension: 0.18
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { ...axisCommon(), title: { display: true, text: "Lucky Chests", color: "rgba(236,243,255,.88)" } },
+            y: { ...axisCommon(), beginAtZero: true }
+          },
+          plugins: commonPlugins()
+        }
+      });
+
+      makeChart("cumulativeSpecificChart", {
+        type: "line",
+        data: {
+          labels: chestCounts,
+          datasets: [
+            { label: "Specific Common badge", data: cumulativeSpecificCommon, tension: 0.18 },
+            { label: "Specific Uncommon badge", data: cumulativeSpecificUncommon, tension: 0.18 },
+            { label: "Specific Rare badge", data: cumulativeSpecificRare, tension: 0.18 },
+            { label: "Specific Epic badge", data: cumulativeSpecificEpic, tension: 0.18 },
+            { label: "Specific Legendary badge", data: cumulativeSpecificLegendary, tension: 0.18 }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { ...axisCommon(), title: { display: true, text: "Lucky Chests", color: "rgba(236,243,255,.88)" } },
+            y: { ...axisCommon(), beginAtZero: true, title: { display: true, text: "Expected Progress %", color: "rgba(236,243,255,.88)" } }
+          },
+          plugins: commonPlugins()
+        }
+      });
+
+      makeChart("oneMaxedGemChart", {
+        type: "bar",
+        data: {
+          labels: rarityLabels,
+          datasets: [{
+            label: "Gem EV from one maxed badge",
+            data: oneMaxedGemEv
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: axisCommon(),
+            y: { ...axisCommon(), beginAtZero: true }
+          },
+          plugins: commonPlugins()
+        }
+      });
+
+      makeChart("allFiveGemChart", {
+        type: "bar",
+        data: {
+          labels: rarityLabels,
+          datasets: [{
+            label: "Gem EV if all 5 in rarity are maxed",
+            data: allFiveGemEv
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          indexAxis: "y",
+          scales: {
+            x: { ...axisCommon(), beginAtZero: true },
+            y: axisCommon()
+          },
+          plugins: commonPlugins()
+        }
+      });
+
+      makeChart("gemRankingChart", {
+        type: "bar",
+        data: {
+          labels: rarityLabels,
+          datasets: [{
+            label: "Gem EV rank by maxed rarity",
+            data: allFiveGemEv
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: axisCommon(),
+            y: { ...axisCommon(), beginAtZero: true }
+          },
+          plugins: commonPlugins()
+        }
+      });
+
+      makeChart("allMaxedGemsCumulativeChart", {
+        type: "line",
+        data: {
+          labels: chestCounts,
+          datasets: [{
+            label: "Expected gems if all 25 badges are maxed",
+            data: cumulativeAllMaxedGems,
+            tension: 0.18
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { ...axisCommon(), title: { display: true, text: "Lucky Chests", color: "rgba(236,243,255,.88)" } },
+            y: { ...axisCommon(), beginAtZero: true }
+          },
+          plugins: commonPlugins()
+        }
+      });
+    }
   </script>
 </body>
 </html>
