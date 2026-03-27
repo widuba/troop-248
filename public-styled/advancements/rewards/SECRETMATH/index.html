@@ -942,10 +942,10 @@
         const info = infoSnap.data() || {};
         const role = info.authRole || "";
 
-        if (role !== "admin") {
-          window.location.href = "/advancements/rewards/";
-          return;
-        }
+        if (role !== "admin" && role !== "viewer") {
+  window.location.href = "/advancements/rewards/";
+  return;
+}
 
         authInfoEl.textContent = `Signed in as ${user.email || "—"} • Admin access confirmed`;
         buildAllCharts();
