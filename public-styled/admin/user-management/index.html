@@ -1,0 +1,1186 @@
+<!-- /admin/approvals/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pending Approvals — Troop 248</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="/bsafavicon.ico" />
+  <link rel="stylesheet" href="/modern-2026.css" />
+
+  <style>
+    :root{
+      --red:#b22222;
+      --blue:#1f4e79;
+      --tan:#d2cab6;
+      --white:#ffffff;
+      --radius-lg:16px;
+      --radius-pill:999px;
+      --shadow-soft:0 10px 25px rgba(0,0,0,.06);
+
+      --rx-blue-900:#0b1f3a;
+      --rx-blue-800:#0f2a52;
+      --rx-blue-700:#163a72;
+      --rx-line:rgba(255,255,255,.16);
+      --rx-text:#ecf3ff;
+      --rx-muted:rgba(236,243,255,.78);
+
+      --good:#22c55e;
+      --good-2:#16a34a;
+      --bad:#ef4444;
+      --bad-2:#dc2626;
+      --soft:#111827;
+      --soft-2:#0f172a;
+      --amber:#f59e0b;
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:
+        radial-gradient(900px 600px at 40% 20%, rgba(31,78,121,.18), transparent 55%),
+        radial-gradient(800px 520px at 70% 30%, rgba(178,34,34,.10), transparent 58%),
+        #cfc6b0;
+      min-height:100vh;
+      color:var(--rx-text);
+    }
+
+    header{
+      background:linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
+      color:var(--white);
+      padding:14px 24px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      position:sticky;
+      top:0;
+      z-index:20;
+      flex-wrap:wrap;
+    }
+
+    header h2{
+      margin:0;
+      font-size:19px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    header h2::before{ content:"★"; font-size:18px; }
+
+    .troop-home-link{
+      text-decoration:none;
+      color:inherit;
+      display:inline-flex;
+      align-items:center;
+    }
+    .troop-home-link:hover h2{
+      opacity:.9;
+      text-decoration:underline;
+    }
+
+    #auth-bar{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      font-size:13px;
+      flex-wrap:wrap;
+    }
+
+    #logout-btn,
+    .topBtn,
+    .actionBtn,
+    .confirmBtn,
+    .dropdownItem{
+      border:none;
+      cursor:pointer;
+      font-family:inherit;
+    }
+
+    #logout-btn,
+    .topBtn{
+      padding:8px 12px;
+      border-radius:var(--radius-pill);
+      border:1px solid rgba(255,255,255,.7);
+      background:rgba(255,255,255,.10);
+      color:var(--white);
+      font-size:13px;
+      font-weight:800;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    #logout-btn:hover,
+    .topBtn:hover{
+      background:rgba(255,255,255,.20);
+    }
+
+    main{
+      max-width:1360px;
+      margin:0 auto;
+      padding:24px 16px 40px;
+    }
+
+    .heroCard,
+    .panel{
+      background:linear-gradient(180deg, rgba(15,42,82,.96), rgba(11,31,58,.96));
+      border-radius:var(--radius-lg);
+      border:1px solid var(--rx-line);
+      box-shadow:var(--shadow-soft);
+      color:var(--rx-text);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .heroCard::after,
+    .panel::after{
+      content:"";
+      position:absolute;
+      inset:-60px;
+      background:
+        radial-gradient(circle at 25% 20%, rgba(109,249,255,.12), transparent 45%),
+        radial-gradient(circle at 70% 35%, rgba(255,224,109,.10), transparent 45%),
+        radial-gradient(circle at 45% 75%, rgba(255,79,216,.08), transparent 45%);
+      pointer-events:none;
+      opacity:.65;
+    }
+
+    .heroCard > *,
+    .panel > *{
+      position:relative;
+      z-index:2;
+    }
+
+    .heroCard{
+      padding:18px;
+      margin-bottom:18px;
+    }
+
+    .heroTop{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+
+    .heroTitle{
+      margin:0 0 6px;
+      font-size:24px;
+      line-height:1.08;
+    }
+
+    .heroSub{
+      margin:0;
+      color:var(--rx-muted);
+      font-size:14px;
+      line-height:1.6;
+      max-width:860px;
+      font-weight:700;
+    }
+
+    .heroStats{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
+
+    .statPill{
+      padding:8px 12px;
+      border-radius:var(--radius-pill);
+      background:rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.18);
+      display:inline-flex;
+      gap:8px;
+      align-items:baseline;
+      font-size:13px;
+    }
+
+    .statPill .k{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      color:rgba(236,243,255,.70);
+      font-weight:900;
+    }
+
+    .statPill .v{
+      font-weight:1000;
+      color:var(--rx-text);
+    }
+
+    .badgeTag{
+      font-size:11px;
+      padding:6px 10px;
+      border-radius:var(--radius-pill);
+      background:rgba(245,158,11,.18);
+      border:1px solid rgba(245,158,11,.42);
+      color:var(--rx-text);
+      text-transform:uppercase;
+      letter-spacing:.07em;
+      display:inline-block;
+      font-weight:900;
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns:430px minmax(0,1fr);
+      gap:16px;
+      align-items:start;
+    }
+
+    @media (max-width: 1050px){
+      .layout{ grid-template-columns:1fr; }
+    }
+
+    .panel{
+      padding:16px;
+      min-height:620px;
+    }
+
+    .panelHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:12px;
+      flex-wrap:wrap;
+    }
+
+    .panelTitle{
+      margin:0;
+      font-size:16px;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+    }
+
+    .panelSub{
+      margin:0;
+      color:var(--rx-muted);
+      font-size:13px;
+      line-height:1.5;
+      font-weight:700;
+    }
+
+    .searchWrap{
+      margin-bottom:12px;
+    }
+
+    .searchInput{
+      width:100%;
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(255,255,255,.08);
+      color:var(--rx-text);
+      outline:none;
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .searchInput::placeholder{
+      color:rgba(236,243,255,.52);
+    }
+
+    .listWrap{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      max-height:700px;
+      overflow:auto;
+      padding-right:2px;
+    }
+
+    .userCard{
+      border:1px solid rgba(255,255,255,.14);
+      background:linear-gradient(180deg, rgba(22,58,114,.48), rgba(11,31,58,.82));
+      border-radius:14px;
+      padding:12px;
+      cursor:pointer;
+      transition:transform .14s ease, border-color .14s ease, background .14s ease;
+    }
+
+    .userCard:hover{
+      transform:translateY(-1px);
+      border-color:rgba(255,255,255,.28);
+    }
+
+    .userCard.active{
+      border-color:rgba(34,197,94,.62);
+      background:linear-gradient(180deg, rgba(34,197,94,.18), rgba(11,31,58,.9));
+      box-shadow:0 0 0 1px rgba(34,197,94,.20);
+    }
+
+    .userName{
+      margin:0 0 4px;
+      font-size:15px;
+      font-weight:1000;
+      color:var(--rx-text);
+    }
+
+    .userMeta{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      color:var(--rx-muted);
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .userMetaRow{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .softPill{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:5px 9px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.08);
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      color:rgba(236,243,255,.86);
+      font-weight:900;
+      white-space:nowrap;
+    }
+
+    .emptyState{
+      border:1px dashed rgba(255,255,255,.18);
+      background:rgba(255,255,255,.06);
+      border-radius:14px;
+      padding:22px 16px;
+      text-align:center;
+      color:var(--rx-muted);
+      font-size:14px;
+      font-weight:800;
+      line-height:1.6;
+    }
+
+    .detailGrid{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:12px;
+      margin-top:8px;
+    }
+
+    @media (max-width: 760px){
+      .detailGrid{ grid-template-columns:1fr; }
+    }
+
+    .fieldCard{
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.08);
+      border-radius:14px;
+      padding:12px;
+    }
+
+    .fieldLabel{
+      margin:0 0 6px;
+      font-size:11px;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      color:rgba(236,243,255,.70);
+      font-weight:900;
+    }
+
+    .fieldValue{
+      margin:0;
+      font-size:14px;
+      line-height:1.5;
+      color:var(--rx-text);
+      font-weight:900;
+      overflow-wrap:anywhere;
+    }
+
+    .notesCard{
+      margin-top:12px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.08);
+      border-radius:14px;
+      padding:12px;
+    }
+
+    .notesBody{
+      margin:0;
+      font-size:14px;
+      line-height:1.6;
+      color:var(--rx-text);
+      font-weight:800;
+      white-space:pre-wrap;
+      min-height:60px;
+    }
+
+    .actionsWrap{
+      margin-top:14px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:flex-start;
+      position:relative;
+    }
+
+    .actionBtn{
+      padding:11px 14px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:1000;
+      letter-spacing:.02em;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border:1px solid rgba(255,255,255,.18);
+      color:#fff;
+      background:rgba(255,255,255,.08);
+    }
+
+    .actionBtn.approve{
+      background:linear-gradient(180deg, rgba(34,197,94,.95), rgba(22,163,74,.95));
+      color:#052e16;
+      border-color:rgba(255,255,255,.22);
+    }
+
+    .actionBtn.deny{
+      background:linear-gradient(180deg, rgba(239,68,68,.95), rgba(220,38,38,.95));
+      color:#fff;
+      border-color:rgba(255,255,255,.22);
+    }
+
+    .actionBtn:hover{ filter:brightness(1.04); }
+    .actionBtn:disabled{
+      cursor:not-allowed;
+      filter:none;
+      opacity:.55;
+    }
+
+    .dropdown{
+      position:absolute;
+      top:48px;
+      left:0;
+      min-width:230px;
+      background:linear-gradient(180deg, rgba(15,23,42,.98), rgba(11,31,58,.98));
+      border:1px solid rgba(255,255,255,.16);
+      border-radius:14px;
+      box-shadow:0 20px 50px rgba(0,0,0,.35);
+      padding:8px;
+      display:none;
+      z-index:30;
+    }
+
+    .dropdown.show{ display:block; }
+
+    .dropdownItem{
+      width:100%;
+      text-align:left;
+      padding:11px 12px;
+      border-radius:10px;
+      background:transparent;
+      color:var(--rx-text);
+      font-size:13px;
+      font-weight:900;
+    }
+
+    .dropdownItem:hover{
+      background:rgba(255,255,255,.10);
+    }
+
+    .rightEmpty{
+      border:1px dashed rgba(255,255,255,.18);
+      background:rgba(255,255,255,.06);
+      border-radius:14px;
+      padding:30px 18px;
+      text-align:center;
+      color:var(--rx-muted);
+      font-size:14px;
+      font-weight:800;
+      line-height:1.7;
+      margin-top:12px;
+    }
+
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:18px;
+      transform:translateX(-50%);
+      z-index:9999;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(11,31,58,.95);
+      color:var(--rx-text);
+      box-shadow:0 18px 60px rgba(0,0,0,.35);
+      padding:10px 14px;
+      font-size:13px;
+      font-weight:900;
+      display:none;
+      max-width:min(780px, 92vw);
+      text-align:center;
+    }
+
+    .toast.show{ display:block; }
+
+    .modalOverlay{
+      position:fixed;
+      inset:0;
+      background:rgba(5,10,24,.74);
+      backdrop-filter:blur(6px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:9998;
+    }
+
+    .modalOverlay.show{ display:flex; }
+
+    .modal{
+      width:min(560px, 96vw);
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.18);
+      background:
+        radial-gradient(circle at 25% 20%, rgba(109,249,255,.08), transparent 45%),
+        radial-gradient(circle at 70% 35%, rgba(255,224,109,.08), transparent 45%),
+        linear-gradient(180deg, rgba(15,42,82,.98), rgba(11,31,58,.98));
+      box-shadow:0 30px 90px rgba(0,0,0,.45);
+      padding:18px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .modal::after{
+      content:"";
+      position:absolute;
+      inset:-60px;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(109,249,255,.12), transparent 45%),
+        radial-gradient(circle at 70% 70%, rgba(255,79,216,.08), transparent 45%);
+      pointer-events:none;
+      opacity:.7;
+    }
+
+    .modal > *{
+      position:relative;
+      z-index:2;
+    }
+
+    .modalEyebrow{
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(255,255,255,.08);
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      font-weight:900;
+      margin-bottom:10px;
+    }
+
+    .modalTitle{
+      margin:0 0 8px;
+      font-size:20px;
+      line-height:1.2;
+      font-weight:1000;
+    }
+
+    .modalText{
+      margin:0;
+      color:var(--rx-muted);
+      font-size:14px;
+      line-height:1.7;
+      font-weight:800;
+      white-space:pre-line;
+    }
+
+    .modalActions{
+      margin-top:16px;
+      display:flex;
+      justify-content:flex-end;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .confirmBtn{
+      padding:11px 14px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:1000;
+      letter-spacing:.02em;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.08);
+      color:var(--rx-text);
+    }
+
+    .confirmBtn.cancel:hover{
+      background:rgba(255,255,255,.14);
+    }
+
+    .confirmBtn.proceedApprove{
+      background:linear-gradient(180deg, rgba(34,197,94,.95), rgba(22,163,74,.95));
+      color:#052e16;
+      box-shadow:0 0 14px rgba(34,197,94,.28);
+    }
+
+    .confirmBtn.proceedDeny{
+      background:linear-gradient(180deg, rgba(239,68,68,.95), rgba(220,38,38,.95));
+      color:#fff;
+      box-shadow:0 0 14px rgba(239,68,68,.28);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <a href="/home" class="troop-home-link"><h2>Troop 248</h2></a>
+    </div>
+
+    <div id="auth-bar">
+      <a class="topBtn" href="/home">Home</a>
+      <div id="auth-info">Checking access…</div>
+      <span class="badgeTag">Admin Only</span>
+      <button id="logout-btn">Log Out</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="heroCard">
+      <div class="heroTop">
+        <div>
+          <h1 class="heroTitle">Pending Account Approvals</h1>
+          <p class="heroSub">
+            Review pending accounts, inspect submitted information, and approve as Viewer or Admin. Deny permanently removes the Firestore profile now. Authentication-account deletion needs a backend function later.
+          </p>
+        </div>
+      </div>
+
+      <div class="heroStats">
+        <div class="statPill"><span class="k">Pending</span> <span id="pendingCount" class="v">0</span></div>
+        <div class="statPill"><span class="k">Selected</span> <span id="selectedLabel" class="v">None</span></div>
+      </div>
+    </div>
+
+    <div class="layout">
+      <section class="panel">
+        <div class="panelHead">
+          <div>
+            <h2 class="panelTitle">Pending Queue</h2>
+            <p class="panelSub">Click an account to review it on the right.</p>
+          </div>
+          <span class="softPill" id="queuePill">0 pending</span>
+        </div>
+
+        <div class="searchWrap">
+          <input id="searchInput" class="searchInput" type="text" placeholder="Search by full name or email" />
+        </div>
+
+        <div id="pendingList" class="listWrap"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panelHead">
+          <div>
+            <h2 class="panelTitle">Account Review</h2>
+            <p class="panelSub">Select a pending user to view full details and take action.</p>
+          </div>
+        </div>
+
+        <div id="detailArea"></div>
+      </section>
+    </div>
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <div id="modalOverlay" class="modalOverlay">
+    <div class="modal">
+      <div id="modalEyebrow" class="modalEyebrow">Confirmation</div>
+      <h3 id="modalTitle" class="modalTitle">Confirm action</h3>
+      <p id="modalText" class="modalText">...</p>
+
+      <div class="modalActions">
+        <button id="modalCancel" class="confirmBtn cancel">Cancel</button>
+        <button id="modalProceed" class="confirmBtn">Proceed</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      doc,
+      getDoc,
+      updateDoc,
+      deleteDoc,
+      query,
+      orderBy
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+      authDomain: "troop-248.firebaseapp.com",
+      projectId: "troop-248",
+      storageBucket: "troop-248.firebasestorage.app",
+      messagingSenderId: "925363875752",
+      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+      measurementId: "G-NY75GX5TBH"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const authInfoEl = document.getElementById("auth-info");
+    const logoutBtn = document.getElementById("logout-btn");
+    const searchInput = document.getElementById("searchInput");
+    const pendingList = document.getElementById("pendingList");
+    const detailArea = document.getElementById("detailArea");
+    const pendingCount = document.getElementById("pendingCount");
+    const queuePill = document.getElementById("queuePill");
+    const selectedLabel = document.getElementById("selectedLabel");
+    const toast = document.getElementById("toast");
+
+    const modalOverlay = document.getElementById("modalOverlay");
+    const modalEyebrow = document.getElementById("modalEyebrow");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalText = document.getElementById("modalText");
+    const modalCancel = document.getElementById("modalCancel");
+    const modalProceed = document.getElementById("modalProceed");
+
+    let allPending = [];
+    let filteredPending = [];
+    let selectedUser = null;
+    let currentAdminUid = null;
+    let modalResolver = null;
+    let isBusy = false;
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "/";
+    });
+
+    searchInput.addEventListener("input", () => {
+      applySearch();
+      renderPendingList();
+      if (selectedUser) {
+        const stillExists = filteredPending.find(u => u.uid === selectedUser.uid) || allPending.find(u => u.uid === selectedUser.uid);
+        if (!stillExists) {
+          selectedUser = null;
+          renderDetails();
+        }
+      }
+    });
+
+    modalCancel.addEventListener("click", () => closeModal(false));
+    modalProceed.addEventListener("click", () => closeModal(true));
+    modalOverlay.addEventListener("click", (e) => {
+      if (e.target === modalOverlay) closeModal(false);
+    });
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(showToast._timer);
+      showToast._timer = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2600);
+    }
+
+    function normalizeText(value) {
+      return String(value || "").trim();
+    }
+
+    function isPendingRole(role) {
+      const r = normalizeText(role);
+      return !r || r.toLowerCase() === "pending";
+    }
+
+    function formatDate(value) {
+      if (!value) return "—";
+
+      try {
+        if (typeof value.toDate === "function") {
+          return value.toDate().toLocaleString("en-US");
+        }
+        if (value.seconds) {
+          return new Date(value.seconds * 1000).toLocaleString("en-US");
+        }
+        const d = new Date(value);
+        if (!Number.isNaN(d.getTime())) return d.toLocaleString("en-US");
+      } catch (_) {}
+
+      return "—";
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function applySearch() {
+      const q = normalizeText(searchInput.value).toLowerCase();
+      if (!q) {
+        filteredPending = [...allPending];
+        return;
+      }
+
+      filteredPending = allPending.filter(user => {
+        const hay = [
+          user.fullName,
+          user.email,
+          user.phone,
+          user.accountType,
+          user.authRole,
+          user.notes
+        ].join(" ").toLowerCase();
+        return hay.includes(q);
+      });
+    }
+
+    async function loadPendingUsers() {
+      const q = query(collection(db, "accountInfo"), orderBy("createdAt", "desc"));
+      const snap = await getDocs(q);
+
+      const rows = [];
+      snap.forEach(docSnap => {
+        const data = docSnap.data() || {};
+        const authRole = normalizeText(data.authRole);
+
+        if (!isPendingRole(authRole)) return;
+
+        rows.push({
+          uid: docSnap.id,
+          fullName: normalizeText(data.fullName || data.name || data.displayName || "Unnamed Account"),
+          email: normalizeText(data.email || ""),
+          phone: normalizeText(data.phone || ""),
+          accountType: normalizeText(data.accountType || ""),
+          authRole: authRole || "pending",
+          createdAt: data.createdAt || null,
+          notes: normalizeText(data.notes || "")
+        });
+      });
+
+      allPending = rows;
+      applySearch();
+
+      if (selectedUser) {
+        const refreshed = allPending.find(u => u.uid === selectedUser.uid);
+        selectedUser = refreshed || null;
+      }
+
+      renderPendingList();
+      renderDetails();
+    }
+
+    function renderPendingList() {
+      pendingCount.textContent = String(filteredPending.length);
+      queuePill.textContent = `${filteredPending.length} pending`;
+
+      if (!filteredPending.length) {
+        pendingList.innerHTML = `
+          <div class="emptyState">
+            No pending accounts found.
+          </div>
+        `;
+        return;
+      }
+
+      pendingList.innerHTML = filteredPending.map(user => {
+        const active = selectedUser && selectedUser.uid === user.uid ? "active" : "";
+        return `
+          <div class="userCard ${active}" data-uid="${escapeHtml(user.uid)}">
+            <h3 class="userName">${escapeHtml(user.fullName || "Unnamed Account")}</h3>
+
+            <div class="userMeta">
+              <div class="userMetaRow">
+                <span>${escapeHtml(user.email || "No email")}</span>
+                <span class="softPill">${escapeHtml(user.accountType || "Unknown type")}</span>
+              </div>
+
+              <div class="userMetaRow">
+                <span>${escapeHtml(formatDate(user.createdAt))}</span>
+                <span class="softPill">${escapeHtml(user.authRole || "pending")}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      pendingList.querySelectorAll(".userCard").forEach(card => {
+        card.addEventListener("click", () => {
+          const uid = card.dataset.uid;
+          selectedUser = allPending.find(u => u.uid === uid) || null;
+          renderPendingList();
+          renderDetails();
+        });
+      });
+    }
+
+    function renderDetails() {
+      selectedLabel.textContent = selectedUser ? (selectedUser.fullName || "Selected") : "None";
+
+      if (!selectedUser) {
+        detailArea.innerHTML = `
+          <div class="rightEmpty">
+            Select a pending account from the left to review full details and approve or deny it.
+          </div>
+        `;
+        return;
+      }
+
+      detailArea.innerHTML = `
+        <div class="detailGrid">
+          <div class="fieldCard">
+            <p class="fieldLabel">Full Name</p>
+            <p class="fieldValue">${escapeHtml(selectedUser.fullName || "—")}</p>
+          </div>
+
+          <div class="fieldCard">
+            <p class="fieldLabel">Email</p>
+            <p class="fieldValue">${escapeHtml(selectedUser.email || "—")}</p>
+          </div>
+
+          <div class="fieldCard">
+            <p class="fieldLabel">Phone</p>
+            <p class="fieldValue">${escapeHtml(selectedUser.phone || "—")}</p>
+          </div>
+
+          <div class="fieldCard">
+            <p class="fieldLabel">Account Type</p>
+            <p class="fieldValue">${escapeHtml(selectedUser.accountType || "—")}</p>
+          </div>
+
+          <div class="fieldCard">
+            <p class="fieldLabel">Current Auth Role</p>
+            <p class="fieldValue">${escapeHtml(selectedUser.authRole || "pending")}</p>
+          </div>
+
+          <div class="fieldCard">
+            <p class="fieldLabel">Created At</p>
+            <p class="fieldValue">${escapeHtml(formatDate(selectedUser.createdAt))}</p>
+          </div>
+        </div>
+
+        <div class="notesCard">
+          <p class="fieldLabel">Notes</p>
+          <p class="notesBody">${escapeHtml(selectedUser.notes || "—")}</p>
+        </div>
+
+        <div class="actionsWrap">
+          <button id="approveBtn" class="actionBtn approve" ${isBusy ? "disabled" : ""}>Approve</button>
+          <button id="denyBtn" class="actionBtn deny" ${isBusy ? "disabled" : ""}>Deny</button>
+
+          <div id="approveDropdown" class="dropdown">
+            <button class="dropdownItem" data-approve-role="admin">Approve as Admin</button>
+            <button class="dropdownItem" data-approve-role="viewer">Approve as Viewer</button>
+          </div>
+        </div>
+      `;
+
+      const approveBtn = document.getElementById("approveBtn");
+      const denyBtn = document.getElementById("denyBtn");
+      const approveDropdown = document.getElementById("approveDropdown");
+
+      approveBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (isBusy) return;
+        approveDropdown.classList.toggle("show");
+      });
+
+      document.querySelectorAll("[data-approve-role]").forEach(btn => {
+        btn.addEventListener("click", async (e) => {
+          e.stopPropagation();
+          approveDropdown.classList.remove("show");
+          const role = btn.dataset.approveRole;
+          await handleApproval(role);
+        });
+      });
+
+      denyBtn.addEventListener("click", async () => {
+        await handleDeny();
+      });
+
+      document.addEventListener("click", handleOutsideApproveDropdown, { once: true });
+
+      function handleOutsideApproveDropdown(event) {
+        if (!approveDropdown.contains(event.target) && event.target !== approveBtn) {
+          approveDropdown.classList.remove("show");
+        }
+      }
+    }
+
+    function openModal({ eyebrow, title, text, proceedType }) {
+      modalEyebrow.textContent = eyebrow || "Confirmation";
+      modalTitle.textContent = title || "Confirm action";
+      modalText.textContent = text || "";
+      modalProceed.className = `confirmBtn ${proceedType === "deny" ? "proceedDeny" : "proceedApprove"}`;
+
+      modalOverlay.classList.add("show");
+
+      return new Promise(resolve => {
+        modalResolver = resolve;
+      });
+    }
+
+    function closeModal(result) {
+      if (modalResolver) {
+        modalResolver(result);
+        modalResolver = null;
+      }
+      modalOverlay.classList.remove("show");
+    }
+
+    async function askTwoStepConfirm(firstConfig, secondConfig) {
+      const first = await openModal(firstConfig);
+      if (!first) return false;
+
+      const second = await openModal(secondConfig);
+      if (!second) return false;
+
+      return true;
+    }
+
+    async function handleApproval(role) {
+      if (!selectedUser || isBusy) return;
+
+      const niceRole = role === "admin" ? "Admin" : "Viewer";
+
+      const confirmed = await askTwoStepConfirm(
+        {
+          eyebrow: "Approve Account",
+          title: `Approve as ${niceRole}`,
+          text: `You are about to approve an account for ${niceRole}.\nAre you sure you would like to proceed?`,
+          proceedType: "approve"
+        },
+        {
+          eyebrow: "Final Confirmation",
+          title: "This is final",
+          text: "This is final. Proceed?",
+          proceedType: "approve"
+        }
+      );
+
+      if (!confirmed) return;
+
+      isBusy = true;
+      renderDetails();
+
+      try {
+        const ref = doc(db, "accountInfo", selectedUser.uid);
+        await updateDoc(ref, { authRole: role });
+
+        const justApprovedName = selectedUser.fullName || selectedUser.email || "Account";
+        selectedUser = null;
+        await loadPendingUsers();
+        showToast(`${justApprovedName} approved as ${niceRole}.`);
+      } catch (err) {
+        console.error("Approval failed:", err);
+        showToast(err?.message || "Could not approve account.");
+      } finally {
+        isBusy = false;
+        renderDetails();
+      }
+    }
+
+    async function handleDeny() {
+      if (!selectedUser || isBusy) return;
+
+      const confirmed = await askTwoStepConfirm(
+        {
+          eyebrow: "Permanent Delete",
+          title: "Delete account permanently",
+          text: "You are about to permanently delete this account.\nAre you sure you would like to proceed?",
+          proceedType: "deny"
+        },
+        {
+          eyebrow: "Final Confirmation",
+          title: "This action cannot be undone",
+          text: "This action cannot be undone. Proceed?",
+          proceedType: "deny"
+        }
+      );
+
+      if (!confirmed) return;
+
+      isBusy = true;
+      renderDetails();
+
+      try {
+        const target = selectedUser;
+
+        // Placeholder for future backend auth deletion.
+        // Once you have a secure backend/Admin SDK route, call it here first.
+        // Example:
+        // await fetch("/api/delete-auth-user", {
+        //   method: "POST",
+        //   headers: { "Content-Type": "application/json" },
+        //   body: JSON.stringify({ uid: target.uid, email: target.email })
+        // });
+
+        const ref = doc(db, "accountInfo", target.uid);
+        await deleteDoc(ref);
+
+        selectedUser = null;
+        await loadPendingUsers();
+        showToast("Account permanently deleted from Firestore. Auth deletion still needs a backend system.");
+      } catch (err) {
+        console.error("Deny failed:", err);
+        showToast(err?.message || "Could not delete account.");
+      } finally {
+        isBusy = false;
+        renderDetails();
+      }
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "/home";
+        return;
+      }
+
+      try {
+        currentAdminUid = user.uid;
+        const infoRef = doc(db, "accountInfo", user.uid);
+        const infoSnap = await getDoc(infoRef);
+
+        if (!infoSnap.exists()) {
+          window.location.href = "/home";
+          return;
+        }
+
+        const info = infoSnap.data() || {};
+        const role = normalizeText(info.authRole);
+
+        if (role !== "admin") {
+          window.location.href = "/home";
+          return;
+        }
+
+        authInfoEl.textContent = `Signed in as ${user.email || "—"} • Admin`;
+        await loadPendingUsers();
+      } catch (err) {
+        console.error("Admin check failed:", err);
+        window.location.href = "/home";
+      }
+    });
+  </script>
+</body>
+</html>
