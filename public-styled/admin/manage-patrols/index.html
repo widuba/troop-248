@@ -1,0 +1,1295 @@
+<!-- /admin/manage-patrols/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Manage Patrols — Troop 248</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="/bsafavicon.ico" />
+
+  <style>
+    :root{
+      --bg:#0b0f18;
+      --panel:#111827;
+      --panel2:#0f172a;
+      --line:rgba(255,255,255,.10);
+      --text:#e5e7eb;
+      --muted:rgba(229,231,235,.70);
+      --accent:#22c55e;
+      --danger:#ef4444;
+      --blue:#60a5fa;
+      --warn:#f59e0b;
+      --radius:14px;
+      --shadow:0 18px 55px rgba(0,0,0,.45);
+      --mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+      --sans:system-ui,-apple-system,Segoe UI,sans-serif;
+    }
+
+    *{ box-sizing:border-box; }
+    html, body { touch-action: manipulation; }
+
+    body{
+      margin:0;
+      background:
+        radial-gradient(900px 600px at 20% 10%, rgba(96,165,250,.10), transparent 55%),
+        radial-gradient(900px 600px at 80% 20%, rgba(34,197,94,.10), transparent 55%),
+        var(--bg);
+      color:var(--text);
+      font-family:var(--sans);
+      min-height:100vh;
+    }
+
+    .wrap{
+      max-width:1380px;
+      margin:0 auto;
+      padding:20px 16px 40px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:14px 16px;
+      border:1px solid var(--line);
+      background:rgba(17,24,39,.82);
+      backdrop-filter:blur(8px);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:12px;
+      z-index:20;
+      flex-wrap:wrap;
+    }
+
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+      min-width:240px;
+    }
+
+    .brand .title{
+      font-weight:950;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size:12px;
+      font-family:var(--mono);
+      color:rgba(229,231,235,.92);
+    }
+
+    .brand .sub{
+      font-size:12px;
+      color:var(--muted);
+      font-family:var(--mono);
+    }
+
+    .top-actions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .pill{
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(15,23,42,.75);
+      color:rgba(229,231,235,.92);
+      font-family:var(--mono);
+      font-size:12px;
+      white-space:nowrap;
+    }
+
+    .btn, .btnGhost, .btnDanger{
+      appearance:none;
+      border:1px solid var(--line);
+      background:rgba(15,23,42,.85);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:800;
+      font-size:13px;
+      font-family:var(--mono);
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+    }
+
+    .btn:hover, .btnGhost:hover, .btnDanger:hover{ filter:brightness(1.05); }
+    .btn:disabled, .btnGhost:disabled, .btnDanger:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+      filter:none;
+    }
+
+    .btn{
+      border-color:rgba(34,197,94,.28);
+      background:rgba(34,197,94,.15);
+      color:rgba(236,253,245,.96);
+    }
+
+    .btnGhost{
+      border-color:rgba(96,165,250,.28);
+      background:rgba(96,165,250,.12);
+      color:rgba(219,234,254,.96);
+    }
+
+    .btnDanger{
+      border-color:rgba(239,68,68,.28);
+      background:rgba(239,68,68,.14);
+      color:rgba(254,226,226,.96);
+    }
+
+    .appGrid{
+      display:grid;
+      grid-template-columns:380px 1fr;
+      gap:16px;
+      margin-top:16px;
+    }
+
+    @media (max-width: 1100px){
+      .appGrid{ grid-template-columns:1fr; }
+    }
+
+    .panel{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(17,24,39,.96), rgba(15,23,42,.96));
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .panelHead{
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .panelTitle{
+      font-weight:950;
+      font-size:15px;
+      letter-spacing:.03em;
+    }
+
+    .panelSub{
+      margin-top:4px;
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.5;
+      font-family:var(--mono);
+    }
+
+    .panelBody{
+      padding:14px 16px 16px;
+    }
+
+    .formStack{
+      display:grid;
+      gap:12px;
+    }
+
+    .field{
+      display:grid;
+      gap:6px;
+    }
+
+    .field label{
+      font-size:12px;
+      color:var(--muted);
+      font-family:var(--mono);
+    }
+
+    .field input, .field select{
+      width:100%;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.05);
+      color:var(--text);
+      padding:12px 12px;
+      font:inherit;
+      outline:none;
+    }
+
+    .field input::placeholder{
+      color:rgba(229,231,235,.40);
+    }
+
+    .inlineBtns{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .status{
+      margin-top:12px;
+      min-height:20px;
+      font-size:12px;
+      color:var(--muted);
+      font-family:var(--mono);
+    }
+
+    .searchInput{
+      width:100%;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.05);
+      color:var(--text);
+      padding:12px 12px;
+      font:inherit;
+      outline:none;
+      margin-bottom:12px;
+    }
+
+    .summaryGrid{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:12px;
+      margin-bottom:14px;
+    }
+
+    @media (max-width: 640px){
+      .summaryGrid{ grid-template-columns:1fr; }
+    }
+
+    .summaryBox{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      border-radius:12px;
+      padding:12px;
+    }
+
+    .summaryBox .k{
+      font-size:11px;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.07em;
+      font-family:var(--mono);
+    }
+
+    .summaryBox .v{
+      margin-top:4px;
+      font-size:22px;
+      font-weight:950;
+    }
+
+    .editorMeta{
+      display:grid;
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .metaPill{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      font-size:12px;
+      font-family:var(--mono);
+      flex-wrap:wrap;
+    }
+
+    .boardWrap{
+      display:grid;
+      gap:14px;
+    }
+
+    .dragHelp{
+      border:1px solid rgba(96,165,250,.22);
+      background:rgba(96,165,250,.10);
+      color:rgba(219,234,254,.94);
+      border-radius:12px;
+      padding:12px;
+      font-size:12px;
+      line-height:1.6;
+      font-family:var(--mono);
+    }
+
+    .patrolBoard{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+      gap:14px;
+      align-items:start;
+    }
+
+    .lane{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(17,24,39,.92), rgba(15,23,42,.92));
+      border-radius:14px;
+      min-height:320px;
+      display:flex;
+      flex-direction:column;
+      transition:border-color .12s ease, box-shadow .12s ease, transform .12s ease;
+    }
+
+    .lane.dropActive{
+      border-color:rgba(34,197,94,.58);
+      box-shadow:0 0 0 2px rgba(34,197,94,.22);
+      transform:translateY(-2px);
+    }
+
+    .laneHead{
+      padding:12px 12px 10px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      gap:8px;
+      align-items:flex-start;
+    }
+
+    .laneTitle{
+      font-weight:950;
+      line-height:1.25;
+      font-size:14px;
+    }
+
+    .laneSub{
+      font-size:11px;
+      color:var(--muted);
+      margin-top:4px;
+      font-family:var(--mono);
+    }
+
+    .laneCount{
+      padding:6px 9px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      font-size:11px;
+      font-family:var(--mono);
+      white-space:nowrap;
+    }
+
+    .laneBody{
+      padding:12px;
+      display:grid;
+      gap:10px;
+      min-height:180px;
+    }
+
+    .emptyLane{
+      border:1px dashed rgba(255,255,255,.14);
+      border-radius:12px;
+      padding:14px 10px;
+      text-align:center;
+      color:var(--muted);
+      font-size:12px;
+      font-family:var(--mono);
+      background:rgba(255,255,255,.03);
+    }
+
+    .scoutCard{
+      border:1px solid rgba(255,255,255,.12);
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      border-radius:12px;
+      padding:10px;
+      cursor:grab;
+      user-select:none;
+      touch-action:none;
+      transition:transform .12s ease, border-color .12s ease, opacity .12s ease;
+    }
+
+    .scoutCard:hover{
+      border-color:rgba(255,255,255,.24);
+      transform:translateY(-1px);
+    }
+
+    .scoutCard.draggingSource{
+      opacity:.25;
+    }
+
+    .scoutName{
+      font-weight:900;
+      font-size:13px;
+      line-height:1.35;
+    }
+
+    .scoutSub{
+      margin-top:4px;
+      color:var(--muted);
+      font-size:11px;
+      line-height:1.45;
+      font-family:var(--mono);
+      overflow-wrap:anywhere;
+    }
+
+    .scoutActions{
+      margin-top:8px;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .miniBtn{
+      appearance:none;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.05);
+      color:var(--text);
+      padding:6px 8px;
+      border-radius:999px;
+      cursor:pointer;
+      font-size:11px;
+      font-family:var(--mono);
+      font-weight:800;
+    }
+
+    .miniBtn:hover{ filter:brightness(1.05); }
+
+    .dragGhost{
+      position:fixed;
+      top:0;
+      left:0;
+      z-index:9999;
+      pointer-events:none;
+      width:250px;
+      border:1px solid rgba(34,197,94,.42);
+      background:linear-gradient(180deg, rgba(34,197,94,.22), rgba(15,23,42,.96));
+      color:var(--text);
+      border-radius:12px;
+      padding:10px;
+      box-shadow:0 18px 40px rgba(0,0,0,.35);
+      transform:translate(-9999px,-9999px);
+    }
+
+    .dragGhost .scoutName{ font-size:13px; }
+    .dragGhost .scoutSub{ font-size:11px; }
+
+    .moveModalWrap{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.55);
+      backdrop-filter:blur(6px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:90;
+      padding:16px;
+    }
+
+    .moveModalWrap.show{ display:flex; }
+
+    .moveModal{
+      width:min(460px, 96vw);
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(17,24,39,.98), rgba(15,23,42,.98));
+      border-radius:16px;
+      box-shadow:var(--shadow);
+      padding:16px;
+    }
+
+    .moveModal h3{
+      margin:0 0 6px;
+      font-size:16px;
+    }
+
+    .moveModal p{
+      margin:0 0 12px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.6;
+      font-family:var(--mono);
+    }
+
+    .modalActions{
+      display:flex;
+      gap:10px;
+      margin-top:12px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .toast{
+      position:fixed;
+      bottom:18px;
+      left:50%;
+      transform:translateX(-50%);
+      z-index:100;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(15,23,42,.96);
+      color:var(--text);
+      box-shadow:var(--shadow);
+      font-size:12px;
+      font-family:var(--mono);
+      display:none;
+      max-width:min(90vw, 820px);
+      text-align:center;
+    }
+
+    .toast.show{ display:block; }
+
+    .blocked{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(17,24,39,.96), rgba(15,23,42,.96));
+      border-radius:16px;
+      box-shadow:var(--shadow);
+      padding:24px;
+      text-align:center;
+      margin-top:24px;
+    }
+
+    .blocked h1{
+      margin:0 0 8px;
+      font-size:24px;
+    }
+
+    .blocked p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.7;
+      font-family:var(--mono);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap" id="app" style="display:none;">
+    <div class="topbar">
+      <div class="brand">
+        <div class="title">Troop 248 • Patrol Manager</div>
+        <div class="sub">Admin only • drag scouts between patrols • patrol assignment = accountInfo.patrol</div>
+      </div>
+
+      <div class="top-actions">
+        <a class="btnGhost" href="/home">Home</a>
+        <a class="btnGhost" href="/admin/resources/">Admin Resources</a>
+        <div class="pill" id="authPill">Signed in as —</div>
+        <button class="btnGhost" id="logoutBtn" type="button">Log Out</button>
+      </div>
+    </div>
+
+    <div class="appGrid">
+      <div class="panel">
+        <div class="panelHead">
+          <div>
+            <div class="panelTitle">Patrol Editor</div>
+            <div class="panelSub">Create, edit, delete, and manage patrols.</div>
+          </div>
+          <div class="pill" id="selectedPatrolPill">Selected: None</div>
+        </div>
+
+        <div class="panelBody">
+          <div class="summaryGrid">
+            <div class="summaryBox">
+              <div class="k">Patrols</div>
+              <div class="v" id="patrolCount">0</div>
+            </div>
+            <div class="summaryBox">
+              <div class="k">Assigned Scouts</div>
+              <div class="v" id="assignedCount">0</div>
+            </div>
+            <div class="summaryBox">
+              <div class="k">Unassigned</div>
+              <div class="v" id="unassignedCount">0</div>
+            </div>
+          </div>
+
+          <div class="formStack">
+            <div class="field">
+              <label for="patrolName">Patrol Name</label>
+              <input id="patrolName" maxlength="60" placeholder="e.g. Raven Patrol" />
+            </div>
+
+            <div class="field">
+              <label for="patrolTag">Patrol Tag</label>
+              <input id="patrolTag" maxlength="40" placeholder="e.g. RAVEN" />
+            </div>
+
+            <div class="inlineBtns">
+              <button class="btn" id="createBtn" type="button">Create Patrol</button>
+              <button class="btnGhost" id="saveBtn" type="button" disabled>Save Changes</button>
+              <button class="btnDanger" id="deleteBtn" type="button" disabled>Delete Patrol</button>
+              <button class="btnGhost" id="clearSelectionBtn" type="button">Clear Selection</button>
+            </div>
+          </div>
+
+          <div class="editorMeta" id="editorMeta">
+            <div class="metaPill">Select a patrol to edit it.</div>
+          </div>
+
+          <div class="status" id="status">Ready.</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panelHead">
+          <div>
+            <div class="panelTitle">Patrol Board</div>
+            <div class="panelSub">Drag scouts between patrols or into Unassigned. Tap “Move” on any scout if you want a fallback instead of dragging.</div>
+          </div>
+        </div>
+
+        <div class="panelBody">
+          <input id="searchInput" class="searchInput" type="text" placeholder="Search scouts by name or email" />
+
+          <div class="dragHelp">
+            Drag-and-drop on this page uses custom pointer tracking instead of the usual flaky browser drag API. That means it works more reliably on both mouse and touch. If dragging still feels awkward on a device, use the <strong>Move</strong> button on a scout card.
+          </div>
+
+          <div class="boardWrap">
+            <div class="patrolBoard" id="patrolBoard"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap" id="blocked" style="display:none;">
+    <div class="blocked">
+      <h1>Blocked — Admins Only</h1>
+      <p>You do not have access to this page. Please return to Home.</p>
+      <div style="margin-top:14px;">
+        <a class="btnGhost" href="/home">Go to Home</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="dragGhost" class="dragGhost"></div>
+
+  <div id="moveModalWrap" class="moveModalWrap">
+    <div class="moveModal">
+      <h3>Move Scout</h3>
+      <p id="moveModalText">Choose a destination patrol.</p>
+      <div class="field">
+        <label for="moveTarget">Destination</label>
+        <select id="moveTarget"></select>
+      </div>
+      <div class="modalActions">
+        <button class="btnGhost" id="moveCancelBtn" type="button">Cancel</button>
+        <button class="btn" id="moveConfirmBtn" type="button">Move Scout</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import {
+      getFirestore,
+      doc, getDoc, collection, getDocs,
+      query, orderBy, addDoc, updateDoc, deleteDoc,
+      serverTimestamp, writeBatch
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+      authDomain: "troop-248.firebaseapp.com",
+      projectId: "troop-248",
+      storageBucket: "troop-248.firebasestorage.app",
+      messagingSenderId: "925363875752",
+      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+      measurementId: "G-NY75GX5TBH"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const elApp = document.getElementById("app");
+    const elBlocked = document.getElementById("blocked");
+    const authPill = document.getElementById("authPill");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    const patrolCount = document.getElementById("patrolCount");
+    const assignedCount = document.getElementById("assignedCount");
+    const unassignedCount = document.getElementById("unassignedCount");
+    const selectedPatrolPill = document.getElementById("selectedPatrolPill");
+    const patrolNameInput = document.getElementById("patrolName");
+    const patrolTagInput = document.getElementById("patrolTag");
+    const createBtn = document.getElementById("createBtn");
+    const saveBtn = document.getElementById("saveBtn");
+    const deleteBtn = document.getElementById("deleteBtn");
+    const clearSelectionBtn = document.getElementById("clearSelectionBtn");
+    const editorMeta = document.getElementById("editorMeta");
+    const statusEl = document.getElementById("status");
+    const searchInput = document.getElementById("searchInput");
+    const patrolBoard = document.getElementById("patrolBoard");
+    const dragGhost = document.getElementById("dragGhost");
+    const toast = document.getElementById("toast");
+
+    const moveModalWrap = document.getElementById("moveModalWrap");
+    const moveModalText = document.getElementById("moveModalText");
+    const moveTarget = document.getElementById("moveTarget");
+    const moveCancelBtn = document.getElementById("moveCancelBtn");
+    const moveConfirmBtn = document.getElementById("moveConfirmBtn");
+
+    let patrolsCache = [];
+    let scoutsCache = [];
+    let selectedPatrolId = "";
+    let currentDrag = null;
+    let currentMoveScout = null;
+    let busy = false;
+
+    function escapeHtml(s){
+      return String(s ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function fmt(n){
+      return Number(n || 0).toLocaleString("en-US");
+    }
+
+    function showToast(msg){
+      toast.textContent = msg;
+      toast.classList.add("show");
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => toast.classList.remove("show"), 2400);
+    }
+
+    function setStatus(msg){
+      statusEl.textContent = msg;
+    }
+
+    function patrolNameById(id){
+      if (!id) return "Unassigned";
+      const p = patrolsCache.find(x => x.id === id);
+      return p ? p.name : "Unknown Patrol";
+    }
+
+    function patrolTagById(id){
+      if (!id) return "—";
+      const p = patrolsCache.find(x => x.id === id);
+      return (p?.tag || "—").toString().trim().toUpperCase() || "—";
+    }
+
+    function normalizeText(v){
+      return String(v || "").trim();
+    }
+
+    async function getMyRole(uid){
+      const snap = await getDoc(doc(db, "accountInfo", uid));
+      if (!snap.exists()) return "pending";
+      return normalizeText((snap.data() || {}).authRole).toLowerCase() || "pending";
+    }
+
+    async function loadPatrols(){
+      const qy = query(collection(db, "patrols"), orderBy("name"));
+      const snap = await getDocs(qy);
+
+      patrolsCache = [];
+      snap.forEach(d => {
+        const data = d.data() || {};
+        patrolsCache.push({
+          id: d.id,
+          name: data.name || "",
+          tag: data.tag || "",
+          createdAt: data.createdAt || null
+        });
+      });
+    }
+
+    async function loadScouts(){
+      const snap = await getDocs(collection(db, "accountInfo"));
+      scoutsCache = [];
+
+      snap.forEach(d => {
+        const data = d.data() || {};
+        const type = normalizeText(data.accountType).toLowerCase();
+        if (type !== "scout") return;
+
+        scoutsCache.push({
+          uid: d.id,
+          fullName: data.fullName || data.name || data.displayName || "Unnamed Scout",
+          email: data.email || "",
+          patrol: normalizeText(data.patrol),
+          accountType: data.accountType || "scout"
+        });
+      });
+
+      scoutsCache.sort((a, b) => (a.fullName || "").localeCompare(b.fullName || ""));
+    }
+
+    async function refreshAll(){
+      await loadPatrols();
+      await loadScouts();
+      renderSummary();
+      renderEditor();
+      renderBoard();
+    }
+
+    function renderSummary(){
+      patrolCount.textContent = fmt(patrolsCache.length);
+      const assigned = scoutsCache.filter(s => !!s.patrol).length;
+      const unassigned = scoutsCache.length - assigned;
+      assignedCount.textContent = fmt(assigned);
+      unassignedCount.textContent = fmt(unassigned);
+    }
+
+    function renderEditor(){
+      const selected = patrolsCache.find(p => p.id === selectedPatrolId) || null;
+
+      selectedPatrolPill.textContent = `Selected: ${selected ? selected.name : "None"}`;
+      saveBtn.disabled = !selected || busy;
+      deleteBtn.disabled = !selected || busy;
+
+      if (!selected){
+        patrolNameInput.value = "";
+        patrolTagInput.value = "";
+        editorMeta.innerHTML = `<div class="metaPill">Select a patrol to edit it.</div>`;
+        return;
+      }
+
+      patrolNameInput.value = selected.name || "";
+      patrolTagInput.value = selected.tag || "";
+
+      const count = scoutsCache.filter(s => (s.patrol || "") === selected.id).length;
+      editorMeta.innerHTML = `
+        <div class="metaPill">Patrol ID: ${escapeHtml(selected.id)}</div>
+        <div class="metaPill">Tag: ${escapeHtml((selected.tag || "—").toString().toUpperCase())}</div>
+        <div class="metaPill">Scouts Assigned: ${escapeHtml(String(count))}</div>
+      `;
+    }
+
+    function renderBoard(){
+      const q = normalizeText(searchInput.value).toLowerCase();
+
+      const byPatrol = new Map();
+      for (const s of scoutsCache){
+        const pid = s.patrol || "";
+        if (!byPatrol.has(pid)) byPatrol.set(pid, []);
+        byPatrol.get(pid).push(s);
+      }
+
+      const lanes = [];
+      for (const p of patrolsCache){
+        let scouts = byPatrol.get(p.id) || [];
+        if (q){
+          scouts = scouts.filter(s =>
+            `${s.fullName} ${s.email}`.toLowerCase().includes(q)
+          );
+        }
+
+        lanes.push(renderLane({
+          laneId: p.id,
+          title: p.name || "Untitled Patrol",
+          sub: `Tag: ${(p.tag || "—").toString().toUpperCase()}`,
+          scouts
+        }));
+      }
+
+      let unassigned = byPatrol.get("") || [];
+      if (q){
+        unassigned = unassigned.filter(s =>
+          `${s.fullName} ${s.email}`.toLowerCase().includes(q)
+        );
+      }
+
+      lanes.push(renderLane({
+        laneId: "",
+        title: "Unassigned",
+        sub: "Drop here to clear patrol",
+        scouts: unassigned
+      }));
+
+      patrolBoard.innerHTML = lanes.join("");
+
+      patrolBoard.querySelectorAll(".lane").forEach(lane => {
+        lane.addEventListener("click", () => {
+          const laneId = lane.dataset.laneId;
+          if (laneId && laneId !== "__unassigned__"){
+            selectedPatrolId = laneId;
+            renderEditor();
+            highlightSelectedLane();
+          }
+        });
+      });
+
+      patrolBoard.querySelectorAll(".scoutCard").forEach(card => {
+        card.addEventListener("pointerdown", onScoutPointerDown);
+      });
+
+      patrolBoard.querySelectorAll("[data-move-scout]").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const uid = btn.dataset.moveScout;
+          const scout = scoutsCache.find(s => s.uid === uid);
+          if (scout) openMoveModal(scout);
+        });
+      });
+
+      patrolBoard.querySelectorAll("[data-remove-scout]").forEach(btn => {
+        btn.addEventListener("click", async (e) => {
+          e.stopPropagation();
+          const uid = btn.dataset.removeScout;
+          const scout = scoutsCache.find(s => s.uid === uid);
+          if (!scout) return;
+          await moveScoutToPatrol(uid, "");
+        });
+      });
+
+      highlightSelectedLane();
+    }
+
+    function highlightSelectedLane(){
+      patrolBoard.querySelectorAll(".lane").forEach(el => {
+        const laneId = el.dataset.laneId;
+        const isSelected = laneId && laneId !== "__unassigned__" && laneId === selectedPatrolId;
+        el.style.borderColor = isSelected ? "rgba(96,165,250,.52)" : "rgba(255,255,255,.10)";
+        el.style.boxShadow = isSelected ? "0 0 0 1px rgba(96,165,250,.20)" : "none";
+      });
+    }
+
+    function renderLane({ laneId, title, sub, scouts }){
+      const displayLaneId = laneId || "__unassigned__";
+      const safeTitle = escapeHtml(title);
+      const safeSub = escapeHtml(sub);
+      const listHtml = scouts.length
+        ? scouts.map(renderScoutCard).join("")
+        : `<div class="emptyLane">No scouts here.</div>`;
+
+      return `
+        <section class="lane dropzone" data-lane-id="${escapeHtml(displayLaneId)}">
+          <div class="laneHead">
+            <div>
+              <div class="laneTitle">${safeTitle}</div>
+              <div class="laneSub">${safeSub}</div>
+            </div>
+            <div class="laneCount">${fmt(scouts.length)}</div>
+          </div>
+          <div class="laneBody">
+            ${listHtml}
+          </div>
+        </section>
+      `;
+    }
+
+    function renderScoutCard(s){
+      return `
+        <article class="scoutCard" data-scout-uid="${escapeHtml(s.uid)}">
+          <div class="scoutName">${escapeHtml(s.fullName || "Unnamed Scout")}</div>
+          <div class="scoutSub">${escapeHtml(s.email || "No email")}<br>Current: ${escapeHtml(patrolNameById(s.patrol))}</div>
+          <div class="scoutActions">
+            <button class="miniBtn" type="button" data-move-scout="${escapeHtml(s.uid)}">Move</button>
+            ${s.patrol ? `<button class="miniBtn" type="button" data-remove-scout="${escapeHtml(s.uid)}">Unassign</button>` : ``}
+          </div>
+        </article>
+      `;
+    }
+
+    async function createPatrol(){
+      if (busy) return;
+
+      const name = normalizeText(patrolNameInput.value);
+      const tag = normalizeText(patrolTagInput.value);
+
+      if (!name){
+        setStatus("Please enter a patrol name.");
+        return;
+      }
+      if (!tag){
+        setStatus("Please enter a patrol tag.");
+        return;
+      }
+
+      busy = true;
+      toggleBusy(true);
+      setStatus("Creating patrol…");
+
+      try{
+        const ref = await addDoc(collection(db, "patrols"), {
+          name,
+          tag,
+          createdAt: serverTimestamp()
+        });
+        selectedPatrolId = ref.id;
+        await refreshAll();
+        setStatus("Patrol created.");
+        showToast(`Created ${name}.`);
+      }catch(e){
+        console.error(e);
+        setStatus("Failed to create patrol.");
+        showToast("Could not create patrol.");
+      }finally{
+        busy = false;
+        toggleBusy(false);
+      }
+    }
+
+    async function savePatrol(){
+      if (busy || !selectedPatrolId) return;
+
+      const name = normalizeText(patrolNameInput.value);
+      const tag = normalizeText(patrolTagInput.value);
+
+      if (!name){
+        setStatus("Please enter a patrol name.");
+        return;
+      }
+      if (!tag){
+        setStatus("Please enter a patrol tag.");
+        return;
+      }
+
+      busy = true;
+      toggleBusy(true);
+      setStatus("Saving patrol…");
+
+      try{
+        await updateDoc(doc(db, "patrols", selectedPatrolId), { name, tag });
+        await refreshAll();
+        setStatus("Patrol updated.");
+        showToast(`Updated ${name}.`);
+      }catch(e){
+        console.error(e);
+        setStatus("Failed to update patrol.");
+        showToast("Could not update patrol.");
+      }finally{
+        busy = false;
+        toggleBusy(false);
+      }
+    }
+
+    async function deletePatrol(){
+      if (busy || !selectedPatrolId) return;
+
+      const patrol = patrolsCache.find(p => p.id === selectedPatrolId);
+      const patrolName = patrol?.name || "this patrol";
+
+      const first = confirm(`You are about to permanently delete ${patrolName}. Are you sure you would like to proceed?`);
+      if (!first) return;
+      const second = confirm("This is final. Proceed?");
+      if (!second) return;
+
+      busy = true;
+      toggleBusy(true);
+      setStatus("Deleting patrol and unassigning scouts…");
+
+      try{
+        const affectedScouts = scoutsCache.filter(s => s.patrol === selectedPatrolId);
+        const batch = writeBatch(db);
+
+        for (const s of affectedScouts){
+          batch.update(doc(db, "accountInfo", s.uid), { patrol: "" });
+        }
+        batch.delete(doc(db, "patrols", selectedPatrolId));
+
+        await batch.commit();
+        selectedPatrolId = "";
+        await refreshAll();
+        setStatus("Patrol deleted.");
+        showToast(`${patrolName} deleted.`);
+      }catch(e){
+        console.error(e);
+        setStatus("Failed to delete patrol.");
+        showToast("Could not delete patrol.");
+      }finally{
+        busy = false;
+        toggleBusy(false);
+      }
+    }
+
+    async function moveScoutToPatrol(uid, laneId){
+      if (busy) return;
+
+      const scout = scoutsCache.find(s => s.uid === uid);
+      if (!scout) return;
+
+      const nextPatrol = laneId === "__unassigned__" ? "" : (laneId || "");
+      if ((scout.patrol || "") === nextPatrol) return;
+
+      busy = true;
+      toggleBusy(true);
+      setStatus(`Moving ${scout.fullName}…`);
+
+      try{
+        await updateDoc(doc(db, "accountInfo", uid), { patrol: nextPatrol });
+        await refreshAll();
+        setStatus("Scout moved.");
+        showToast(`${scout.fullName} moved to ${patrolNameById(nextPatrol)}.`);
+      }catch(e){
+        console.error(e);
+        setStatus("Failed to move scout.");
+        showToast("Could not move scout.");
+      }finally{
+        busy = false;
+        toggleBusy(false);
+      }
+    }
+
+    function toggleBusy(disabled){
+      createBtn.disabled = disabled;
+      saveBtn.disabled = disabled || !selectedPatrolId;
+      deleteBtn.disabled = disabled || !selectedPatrolId;
+      clearSelectionBtn.disabled = disabled;
+      searchInput.disabled = disabled;
+      moveConfirmBtn.disabled = disabled;
+    }
+
+    function clearDragUI(){
+      document.querySelectorAll(".dropzone").forEach(z => z.classList.remove("dropActive"));
+      document.querySelectorAll(".scoutCard").forEach(c => c.classList.remove("draggingSource"));
+      dragGhost.style.transform = "translate(-9999px,-9999px)";
+      dragGhost.innerHTML = "";
+      currentDrag = null;
+      window.removeEventListener("pointermove", onGlobalPointerMove);
+      window.removeEventListener("pointerup", onGlobalPointerUp);
+      window.removeEventListener("pointercancel", onGlobalPointerUp);
+    }
+
+    function onScoutPointerDown(e){
+      if (busy) return;
+      if (e.button !== undefined && e.button !== 0) return;
+
+      const card = e.currentTarget;
+      if (e.target.closest("button")) return;
+
+      const uid = card.dataset.scoutUid;
+      const scout = scoutsCache.find(s => s.uid === uid);
+      if (!scout) return;
+
+      e.preventDefault();
+
+      const rect = card.getBoundingClientRect();
+      currentDrag = {
+        uid,
+        scout,
+        sourceEl: card,
+        offsetX: e.clientX - rect.left,
+        offsetY: e.clientY - rect.top,
+        activeLane: null
+      };
+
+      card.classList.add("draggingSource");
+      dragGhost.innerHTML = `
+        <div class="scoutName">${escapeHtml(scout.fullName)}</div>
+        <div class="scoutSub">${escapeHtml(scout.email || "No email")}<br>Drop into a patrol</div>
+      `;
+      positionGhost(e.clientX, e.clientY);
+      updateDropzoneUnder(e.clientX, e.clientY);
+
+      window.addEventListener("pointermove", onGlobalPointerMove, { passive: false });
+      window.addEventListener("pointerup", onGlobalPointerUp, { passive: false });
+      window.addEventListener("pointercancel", onGlobalPointerUp, { passive: false });
+    }
+
+    function positionGhost(x, y){
+      if (!currentDrag) return;
+      const left = x - currentDrag.offsetX + 14;
+      const top = y - currentDrag.offsetY + 14;
+      dragGhost.style.transform = `translate(${left}px, ${top}px)`;
+    }
+
+    function updateDropzoneUnder(x, y){
+      document.querySelectorAll(".dropzone").forEach(z => z.classList.remove("dropActive"));
+
+      const el = document.elementFromPoint(x, y);
+      const lane = el ? el.closest(".dropzone") : null;
+
+      if (lane){
+        lane.classList.add("dropActive");
+        if (currentDrag) currentDrag.activeLane = lane.dataset.laneId || "";
+      } else if (currentDrag){
+        currentDrag.activeLane = "";
+      }
+    }
+
+    function onGlobalPointerMove(e){
+      if (!currentDrag) return;
+      e.preventDefault();
+      positionGhost(e.clientX, e.clientY);
+      updateDropzoneUnder(e.clientX, e.clientY);
+    }
+
+    async function onGlobalPointerUp(e){
+      if (!currentDrag) return;
+      e.preventDefault();
+
+      const drag = currentDrag;
+      const targetLane = drag.activeLane;
+      clearDragUI();
+
+      if (!targetLane) return;
+      await moveScoutToPatrol(drag.uid, targetLane);
+    }
+
+    function openMoveModal(scout){
+      currentMoveScout = scout;
+      moveModalText.textContent = `Choose a new patrol for ${scout.fullName}.`;
+
+      const options = [
+        `<option value="__unassigned__">Unassigned</option>`,
+        ...patrolsCache.map(p => `<option value="${escapeHtml(p.id)}">${escapeHtml(p.name)} (${escapeHtml((p.tag || "—").toString().toUpperCase())})</option>`)
+      ];
+      moveTarget.innerHTML = options.join("");
+      moveTarget.value = scout.patrol || "__unassigned__";
+
+      moveModalWrap.classList.add("show");
+    }
+
+    function closeMoveModal(){
+      moveModalWrap.classList.remove("show");
+      currentMoveScout = null;
+    }
+
+    createBtn.addEventListener("click", createPatrol);
+    saveBtn.addEventListener("click", savePatrol);
+    deleteBtn.addEventListener("click", deletePatrol);
+
+    clearSelectionBtn.addEventListener("click", () => {
+      selectedPatrolId = "";
+      renderEditor();
+      highlightSelectedLane();
+    });
+
+    searchInput.addEventListener("input", renderBoard);
+
+    moveCancelBtn.addEventListener("click", closeMoveModal);
+    moveModalWrap.addEventListener("click", (e) => {
+      if (e.target === moveModalWrap) closeMoveModal();
+    });
+
+    moveConfirmBtn.addEventListener("click", async () => {
+      if (!currentMoveScout) return;
+      const laneId = moveTarget.value || "__unassigned__";
+      closeMoveModal();
+      await moveScoutToPatrol(currentMoveScout.uid, laneId);
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "/";
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user){
+        window.location.href = "/";
+        return;
+      }
+
+      authPill.textContent = `Signed in as ${user.email || "—"}`;
+
+      try{
+        const role = await getMyRole(user.uid);
+        if (role !== "admin"){
+          elBlocked.style.display = "block";
+          return;
+        }
+
+        elApp.style.display = "block";
+        await refreshAll();
+      }catch(e){
+        console.error(e);
+        elBlocked.style.display = "block";
+      }
+    });
+  </script>
+</body>
+</html>
