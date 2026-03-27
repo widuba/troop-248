@@ -1,0 +1,409 @@
+<!-- /admin/resources/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Resources — Troop 248</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="/bsafavicon.ico" />
+  <link rel="stylesheet" href="/modern-2026.css" />
+
+  <style>
+    :root{
+      --red:#b22222;
+      --blue:#1f4e79;
+      --white:#ffffff;
+      --radius-lg:16px;
+      --radius-pill:999px;
+      --shadow-soft:0 10px 25px rgba(0,0,0,.06);
+
+      --rx-blue-900:#0b1f3a;
+      --rx-line:rgba(255,255,255,.16);
+      --rx-text:#ecf3ff;
+      --rx-muted:rgba(236,243,255,.78);
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:
+        radial-gradient(900px 600px at 40% 20%, rgba(31,78,121,.18), transparent 55%),
+        radial-gradient(800px 520px at 70% 30%, rgba(178,34,34,.10), transparent 58%),
+        #cfc6b0;
+      min-height:100vh;
+      color:var(--rx-text);
+    }
+
+    header{
+      background:linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
+      color:var(--white);
+      padding:14px 24px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      position:sticky;
+      top:0;
+      z-index:20;
+      flex-wrap:wrap;
+    }
+
+    header h2{
+      margin:0;
+      font-size:19px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    header h2::before{
+      content:"★";
+      font-size:18px;
+    }
+
+    .troop-home-link{
+      text-decoration:none;
+      color:inherit;
+      display:inline-flex;
+      align-items:center;
+    }
+
+    .troop-home-link:hover h2{
+      opacity:.9;
+      text-decoration:underline;
+    }
+
+    #auth-bar{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      font-size:13px;
+      flex-wrap:wrap;
+    }
+
+    .topBtn,
+    #logout-btn{
+      padding:8px 12px;
+      border-radius:var(--radius-pill);
+      border:1px solid rgba(255,255,255,.7);
+      background:rgba(255,255,255,.10);
+      color:var(--white);
+      font-size:13px;
+      font-weight:800;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      cursor:pointer;
+    }
+
+    .topBtn:hover,
+    #logout-btn:hover{
+      background:rgba(255,255,255,.20);
+    }
+
+    .badgeTag{
+      font-size:11px;
+      padding:6px 10px;
+      border-radius:var(--radius-pill);
+      background:rgba(245,158,11,.18);
+      border:1px solid rgba(245,158,11,.42);
+      color:var(--rx-text);
+      text-transform:uppercase;
+      letter-spacing:.07em;
+      display:inline-block;
+      font-weight:900;
+    }
+
+    main{
+      max-width:1100px;
+      margin:0 auto;
+      padding:24px 16px 40px;
+    }
+
+    .heroCard,
+    .resourcesCard{
+      background:linear-gradient(180deg, rgba(15,42,82,.96), rgba(11,31,58,.96));
+      border-radius:var(--radius-lg);
+      border:1px solid var(--rx-line);
+      box-shadow:var(--shadow-soft);
+      color:var(--rx-text);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .heroCard::after,
+    .resourcesCard::after{
+      content:"";
+      position:absolute;
+      inset:-60px;
+      background:
+        radial-gradient(circle at 25% 20%, rgba(109,249,255,.12), transparent 45%),
+        radial-gradient(circle at 70% 35%, rgba(255,224,109,.10), transparent 45%),
+        radial-gradient(circle at 45% 75%, rgba(255,79,216,.08), transparent 45%);
+      pointer-events:none;
+      opacity:.65;
+    }
+
+    .heroCard > *,
+    .resourcesCard > *{
+      position:relative;
+      z-index:2;
+    }
+
+    .heroCard{
+      padding:18px;
+      margin-bottom:18px;
+    }
+
+    .heroTitle{
+      margin:0 0 6px;
+      font-size:24px;
+      line-height:1.08;
+    }
+
+    .heroSub{
+      margin:0;
+      color:var(--rx-muted);
+      font-size:14px;
+      line-height:1.6;
+      font-weight:700;
+      max-width:760px;
+    }
+
+    .heroActions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
+
+    .linkBtn{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.18);
+      background:linear-gradient(180deg, rgba(49,130,246,.98), rgba(30,64,175,.98));
+      color:#fff;
+      text-decoration:none;
+      font-weight:900;
+      font-size:13px;
+      box-shadow:0 10px 24px rgba(0,0,0,.18);
+    }
+
+    .linkBtn:hover{
+      filter:brightness(1.05);
+    }
+
+    .resourcesCard{
+      padding:18px;
+    }
+
+    .sectionTitle{
+      margin:0 0 6px;
+      font-size:18px;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+    }
+
+    .sectionSub{
+      margin:0 0 14px;
+      color:var(--rx-muted);
+      font-size:14px;
+      line-height:1.6;
+      font-weight:700;
+    }
+
+    .resourceGrid{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:12px;
+    }
+
+    @media (max-width: 760px){
+      .resourceGrid{ grid-template-columns:1fr; }
+      header{ flex-direction:column; align-items:flex-start; }
+    }
+
+    .resourceLink{
+      display:block;
+      text-decoration:none;
+      color:inherit;
+      border:1px solid rgba(255,255,255,.14);
+      background:linear-gradient(180deg, rgba(22,58,114,.48), rgba(11,31,58,.82));
+      border-radius:14px;
+      padding:14px;
+      transition:transform .14s ease, border-color .14s ease, filter .14s ease;
+    }
+
+    .resourceLink:hover{
+      transform:translateY(-2px);
+      border-color:rgba(255,255,255,.26);
+      filter:brightness(1.04);
+    }
+
+    .resourceName{
+      margin:0 0 6px;
+      font-size:15px;
+      font-weight:1000;
+      color:var(--rx-text);
+    }
+
+    .resourceDesc{
+      margin:0;
+      font-size:13px;
+      line-height:1.55;
+      color:var(--rx-muted);
+      font-weight:700;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <a href="/home" class="troop-home-link"><h2>Troop 248</h2></a>
+    </div>
+
+    <div id="auth-bar">
+      <a class="topBtn" href="/home">Home</a>
+      <div id="auth-info">Checking access…</div>
+      <span class="badgeTag">Admin Only</span>
+      <button id="logout-btn">Log Out</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="heroCard">
+      <h1 class="heroTitle">Admin Resources</h1>
+      <p class="heroSub">
+        Internal links for admin use. These are placeholder resources right now and all point to YouTube so you can replace them later.
+      </p>
+
+      <div class="heroActions">
+        <a class="linkBtn" href="/home">← Back to Home</a>
+      </div>
+    </div>
+
+    <section class="resourcesCard">
+      <h2 class="sectionTitle">Quick Links</h2>
+      <p class="sectionSub">Click any resource below. Change the names and URLs later.</p>
+
+      <div class="resourceGrid">
+        <a class="resourceLink" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">
+          <h3 class="resourceName">Falcon Vault</h3>
+          <p class="resourceDesc">Placeholder admin resource link.</p>
+        </a>
+
+        <a class="resourceLink" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">
+          <h3 class="resourceName">Blue Lantern Index</h3>
+          <p class="resourceDesc">Placeholder admin resource link.</p>
+        </a>
+
+        <a class="resourceLink" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">
+          <h3 class="resourceName">Summit Archive</h3>
+          <p class="resourceDesc">Placeholder admin resource link.</p>
+        </a>
+
+        <a class="resourceLink" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">
+          <h3 class="resourceName">North Ridge File</h3>
+          <p class="resourceDesc">Placeholder admin resource link.</p>
+        </a>
+
+        <a class="resourceLink" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">
+          <h3 class="resourceName">Signal Harbor</h3>
+          <p class="resourceDesc">Placeholder admin resource link.</p>
+        </a>
+
+        <a class="resourceLink" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">
+          <h3 class="resourceName">Maple Circuit</h3>
+          <p class="resourceDesc">Placeholder admin resource link.</p>
+        </a>
+
+        <a class="resourceLink" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">
+          <h3 class="resourceName">Echo Crate</h3>
+          <p class="resourceDesc">Placeholder admin resource link.</p>
+        </a>
+
+        <a class="resourceLink" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">
+          <h3 class="resourceName">Riverstone Hub</h3>
+          <p class="resourceDesc">Placeholder admin resource link.</p>
+        </a>
+
+        <a class="resourceLink" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">
+          <h3 class="resourceName">Pineframe Desk</h3>
+          <p class="resourceDesc">Placeholder admin resource link.</p>
+        </a>
+
+        <a class="resourceLink" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">
+          <h3 class="resourceName">Orbit Ledger</h3>
+          <p class="resourceDesc">Placeholder admin resource link.</p>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+      authDomain: "troop-248.firebaseapp.com",
+      projectId: "troop-248",
+      storageBucket: "troop-248.firebasestorage.app",
+      messagingSenderId: "925363875752",
+      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+      measurementId: "G-NY75GX5TBH"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const authInfoEl = document.getElementById("auth-info");
+    const logoutBtn = document.getElementById("logout-btn");
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "/";
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "/home";
+        return;
+      }
+
+      try {
+        const infoRef = doc(db, "accountInfo", user.uid);
+        const infoSnap = await getDoc(infoRef);
+
+        if (!infoSnap.exists()) {
+          window.location.href = "/home";
+          return;
+        }
+
+        const info = infoSnap.data() || {};
+        const role = String(info.authRole || "").trim();
+
+        if (role !== "admin") {
+          window.location.href = "/home";
+          return;
+        }
+
+        authInfoEl.textContent = `Signed in as ${user.email || "—"} • Admin`;
+      } catch (err) {
+        console.error("Admin check failed:", err);
+        window.location.href = "/home";
+      }
+    });
+  </script>
+</body>
+</html>
