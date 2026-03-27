@@ -3,297 +3,490 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>You Have No Privacy</title>
+  <title>What Websites Can See</title>
   <style>
-    :root{
-      --bg:#0b1020;
-      --panel:#121933;
-      --muted:#96a0c8;
-      --text:#edf1ff;
-      --accent:#7aa2ff;
-      --accent2:#8ef0c2;
-      --border:#24305f;
+    :root {
+      --bg: #050816;
+      --panel: #0f172a;
+      --panel2: #111827;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #60a5fa;
+      --danger: #f87171;
+      --border: #243041;
+      --glow: rgba(96,165,250,.18);
     }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      background:linear-gradient(180deg,#0b1020 0%,#111938 100%);
-      color:var(--text);
-      min-height:100vh;
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(96,165,250,0.12), transparent 30%),
+        linear-gradient(180deg, #030712 0%, #0b1120 100%);
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      padding: 24px;
     }
-    .wrap{
-      max-width:1100px;
-      margin:0 auto;
-      padding:32px 20px 80px;
+
+    .wrap {
+      width: 100%;
+      max-width: 900px;
     }
-    .card{
-      background:rgba(18,25,51,.9);
-      border:1px solid var(--border);
-      border-radius:20px;
-      padding:22px;
-      margin-bottom:20px;
-      box-shadow:0 20px 50px rgba(0,0,0,.25);
+
+    .card {
+      background: linear-gradient(180deg, rgba(15,23,42,.98), rgba(17,24,39,.98));
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.45);
+      overflow: hidden;
+      position: relative;
     }
-    h1,h2,h3{margin:0 0 12px}
-    h1{font-size:clamp(2rem,4vw,3.2rem);line-height:1.05}
-    p{color:#dbe2ff;line-height:1.6}
-    .muted{color:var(--muted)}
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:20px;
+
+    .pulse {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at center, rgba(248,113,113,.06), transparent 45%);
+      animation: pulse 2.4s ease-in-out infinite;
     }
-    .mini-grid{
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:12px;
+
+    @keyframes pulse {
+      0%,100% { opacity: .45; }
+      50% { opacity: 1; }
     }
-    .stat{
-      background:rgba(255,255,255,.03);
-      border:1px solid rgba(255,255,255,.06);
-      border-radius:14px;
-      padding:14px;
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(2rem, 5vw, 3.3rem);
+      line-height: 1.02;
+      letter-spacing: -.02em;
     }
-    .stat strong{
-      display:block;
-      margin-top:6px;
-      color:#fff;
-      font-size:1rem;
-      word-break:break-word;
+
+    .lead {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.6;
+      max-width: 700px;
     }
-    form{
-      display:grid;
-      gap:12px;
-      margin-top:8px;
+
+    .warning {
+      display: inline-block;
+      padding: 8px 12px;
+      background: rgba(248,113,113,.12);
+      border: 1px solid rgba(248,113,113,.3);
+      color: #fecaca;
+      border-radius: 999px;
+      font-size: .9rem;
+      margin-bottom: 18px;
     }
-    input{
-      width:100%;
-      padding:12px 14px;
-      border-radius:12px;
-      background:#0b1228;
-      border:1px solid var(--border);
-      color:var(--text);
-      outline:none;
+
+    .controls {
+      margin: 12px 0 24px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
     }
-    button{
-      background:var(--accent);
-      color:#08122f;
-      border:none;
-      border-radius:12px;
-      padding:12px 16px;
-      font-weight:700;
-      cursor:pointer;
-      transition:.2s ease;
-      margin-right:8px;
+
+    button {
+      appearance: none;
+      border: 0;
+      cursor: pointer;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: .2s ease;
     }
-    button.secondary{
-      background:transparent;
-      color:var(--text);
-      border:1px solid var(--border);
+
+    button:hover { transform: translateY(-1px); }
+
+    .primary {
+      background: var(--danger);
+      color: white;
     }
-    button:hover{transform:translateY(-1px)}
-    .event-log{
-      max-height:240px;
-      overflow:auto;
-      padding-right:6px;
+
+    .secondary {
+      background: #1d4ed8;
+      color: white;
     }
-    .log-item{
-      border-top:1px solid rgba(255,255,255,.08);
-      padding:10px 0;
-      font-size:.92rem;
-      color:#dce5ff;
+
+    .ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
     }
-    .privacy-list{
-      margin:0;
-      padding-left:18px;
-      color:#dbe2ff;
-      line-height:1.7;
+
+    .status {
+      margin: 14px 0 24px;
+      color: #fca5a5;
+      font-size: 1rem;
+      min-height: 24px;
+      font-weight: 700;
+      letter-spacing: .02em;
     }
-    .footer{
-      margin-top:24px;
-      font-size:.9rem;
-      color:var(--muted);
-      text-align:center;
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 16px;
     }
-    @media (max-width: 860px){
-      .grid,.mini-grid{
-        grid-template-columns:1fr;
+
+    .panel {
+      background: rgba(255,255,255,.025);
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 16px;
+      padding: 18px;
+      min-height: 180px;
+      box-shadow: 0 0 0 1px rgba(96,165,250,.03), 0 18px 40px rgba(0,0,0,.18);
+    }
+
+    .panel h2 {
+      margin: 0 0 14px;
+      font-size: 1.1rem;
+      color: #dbeafe;
+    }
+
+    .row {
+      padding: 10px 0;
+      border-top: 1px solid rgba(255,255,255,.06);
+    }
+
+    .row:first-of-type {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    .label {
+      display: block;
+      font-size: .86rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .value {
+      display: block;
+      font-size: 1.05rem;
+      color: var(--text);
+      word-break: break-word;
+    }
+
+    .highlight {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .revealed {
+      animation: reveal .55s ease;
+    }
+
+    @keyframes reveal {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: .95rem;
+    }
+
+    .big {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .dangerText {
+      color: #fca5a5;
+    }
+
+    @media (max-width: 760px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      .card {
+        padding: 22px;
       }
     }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <section class="card">
-      <h1>You Have No Privacy</h1>
-      <p>
-        This is a one-page website with no login and no account creation. It shows what a site can
-        see on the page itself in a matter of seconds.
-      </p>
-    </section>
+    <div class="card">
+      <div class="pulse"></div>
 
-    <section class="grid">
-      <div class="card">
-        <h2>Technical Data</h2>
-        <p class="muted">
-          This front-end demo can read browser details, language, screen size, and similar hints.
-        </p>
-        <div class="mini-grid" id="techStats"></div>
+      <div class="warning">Educational demo for classroom use</div>
+      <h1>How Much Can a Website See?</h1>
+      <p class="lead">
+        This page reveals information step by step to demonstrate how ordinary websites can identify and profile visitors.
+        The location shown is approximate and usually based on the public IP address.
+      </p>
+
+      <div class="controls">
+        <button class="primary" id="startBtn">Start Reveal</button>
+        <button class="secondary" id="instantBtn">Reveal Everything Now</button>
+        <button class="ghost" id="resetBtn">Reset</button>
       </div>
 
-      <div class="card">
-        <h2>Behavior Tracking</h2>
-        <p class="muted">
-          This demo records time on page, clicks, and searches entered here, which can be used to make a digital fingerprint after many uses.
-        </p>
+      <div class="status" id="status">Press “Start Reveal”.</div>
 
-        <form id="searchForm">
-          <input id="siteSearch" placeholder="Type a search and submit" />
-          <button type="submit">Record Search</button>
-        </form>
-
-        <div class="mini-grid" style="margin-top:14px">
-          <div class="stat"><span class="muted">Time on page</span><strong id="timeOnPage">0s</strong></div>
-          <div class="stat"><span class="muted">Clicks tracked</span><strong id="clickCount">0</strong></div>
-          <div class="stat"><span class="muted">Searches</span><strong id="searchCount">0</strong></div>
-          <div class="stat"><span class="muted">Cookie state</span><strong id="cookieQuick">None</strong></div>
+      <div class="grid">
+        <div class="panel hidden" id="panelLocation">
+          <h2>Network / Location</h2>
+          <div class="row">
+            <span class="label">Public IP Address</span>
+            <span class="value highlight" id="ip">Loading...</span>
+          </div>
+          <div class="row">
+            <span class="label">City</span>
+            <span class="value" id="city">Loading...</span>
+          </div>
+          <div class="row">
+            <span class="label">State / Region</span>
+            <span class="value" id="region">Loading...</span>
+          </div>
+          <div class="row">
+            <span class="label">Country</span>
+            <span class="value" id="country">Loading...</span>
+          </div>
+          <div class="row">
+            <span class="label">ISP / Organization</span>
+            <span class="value" id="org">Loading...</span>
+          </div>
         </div>
 
-        <h3 style="margin-top:16px">Event Log</h3>
-        <div class="event-log" id="eventLog"></div>
+        <div class="panel hidden" id="panelBrowser">
+          <h2>Browser / Device</h2>
+          <div class="row">
+            <span class="label">Browser</span>
+            <span class="value" id="browser">Detecting...</span>
+          </div>
+          <div class="row">
+            <span class="label">Operating System</span>
+            <span class="value" id="os">Detecting...</span>
+          </div>
+          <div class="row">
+            <span class="label">Platform</span>
+            <span class="value" id="platform">Detecting...</span>
+          </div>
+          <div class="row">
+            <span class="label">Language</span>
+            <span class="value" id="language">Detecting...</span>
+          </div>
+        </div>
+
+        <div class="panel hidden" id="panelScreen">
+          <h2>Screen / System Hints</h2>
+          <div class="row">
+            <span class="label">Screen Resolution</span>
+            <span class="value" id="screen">Detecting...</span>
+          </div>
+          <div class="row">
+            <span class="label">Timezone</span>
+            <span class="value" id="timezone">Detecting...</span>
+          </div>
+          <div class="row">
+            <span class="label">CPU Hint</span>
+            <span class="value" id="cpu">Detecting...</span>
+          </div>
+          <div class="row">
+            <span class="label">Memory Hint</span>
+            <span class="value" id="memory">Detecting...</span>
+          </div>
+          <div class="row">
+            <span class="label">Network Hint</span>
+            <span class="value" id="network">Detecting...</span>
+          </div>
+        </div>
+
+        <div class="panel hidden" id="panelSummary">
+          <h2>Why This Matters</h2>
+          <div class="row">
+            <span class="label">What was revealed</span>
+            <span class="value">
+              Your <span class="highlight">public IP</span>, approximate
+              <span class="highlight">city/state</span>, your
+              <span class="highlight">browser</span>, your
+              <span class="highlight">operating system</span>, and several device hints.
+            </span>
+          </div>
+          <div class="row">
+            <span class="label">What websites often do next</span>
+            <span class="value dangerText">
+              Use this information for analytics, advertising, geolocation, fraud checks, and visitor profiling.
+            </span>
+          </div>
+          <div class="row">
+            <span class="label">Important note</span>
+            <span class="value">
+              This demo shows approximate location, not exact street-level location.
+            </span>
+          </div>
+          <div class="row">
+            <span class="label">Classroom prompt</span>
+            <span class="value big">
+              Imagine what a site can do when this is combined with accounts, cookies, and long-term tracking.
+            </span>
+          </div>
+        </div>
       </div>
 
-      <div class="card">
-        <h2>Cookies Demo</h2>
-        <p>
-          This sets a simple first-party cookie. We have made it easy to clear, but I imagine you've never seen this button on any other website.
-        </p>
-        <button id="acceptCookies">Set Cookie</button>
-        <button class="secondary" id="clearCookies">Clear Cookie</button>
-        <p id="cookieState" style="margin-top:12px">Cookie status: none set</p>
+      <div class="footer-note">
+        Tip for class demos: try this once normally, then try again with a VPN, a different browser, or a phone on mobile data.
       </div>
-
-      <div class="card">
-        <h2>Despite none of the following features, we were still able to collect a lot about you.</h2>
-        <ul class="privacy-list">
-          <li>No login or signup.</li>
-          <li>No third-party cookies.</li>
-          <li>No hidden cross-site tracking.</li>
-          <li>No device fingerprint generation.</li>
-          <li>No installed font harvesting.</li>
-          <li>No IP collection in this front-end-only version.</li>
-        </ul>
-      </div>
-    </section>
+    </div>
   </div>
 
   <script>
-    const techStats = document.getElementById('techStats');
-    const eventLog = document.getElementById('eventLog');
-    const timeOnPageEl = document.getElementById('timeOnPage');
-    const clickCountEl = document.getElementById('clickCount');
-    const searchCountEl = document.getElementById('searchCount');
-    const cookieState = document.getElementById('cookieState');
-    const cookieQuick = document.getElementById('cookieQuick');
+    const statusEl = document.getElementById("status");
 
-    let clicks = 0;
-    let searches = 0;
-    const start = Date.now();
+    const panels = [
+      document.getElementById("panelLocation"),
+      document.getElementById("panelBrowser"),
+      document.getElementById("panelScreen"),
+      document.getElementById("panelSummary")
+    ];
 
-    function logEvent(text) {
-      const div = document.createElement('div');
-      div.className = 'log-item';
-      div.textContent = `[${new Date().toLocaleTimeString()}] ${text}`;
-      eventLog.prepend(div);
+    let revealTimers = [];
+
+    function setStatus(text) {
+      statusEl.textContent = text;
     }
 
-    function addStat(label, value) {
-      const div = document.createElement('div');
-      div.className = 'stat';
-      div.innerHTML = `<span class="muted">${label}</span><strong>${value}</strong>`;
-      techStats.appendChild(div);
+    function showPanel(panel, message) {
+      panel.classList.remove("hidden");
+      panel.classList.add("revealed");
+      if (message) setStatus(message);
+    }
+
+    function clearRevealTimers() {
+      revealTimers.forEach(t => clearTimeout(t));
+      revealTimers = [];
+    }
+
+    function resetPanels() {
+      clearRevealTimers();
+      panels.forEach(p => {
+        p.classList.add("hidden");
+        p.classList.remove("revealed");
+      });
+      setStatus('Press “Start Reveal”.');
+    }
+
+    function detectBrowser(ua) {
+      if (ua.includes("Edg/")) return "Microsoft Edge";
+      if (ua.includes("OPR/") || ua.includes("Opera")) return "Opera";
+      if (ua.includes("Chrome/") && !ua.includes("Edg/")) return "Google Chrome";
+      if (ua.includes("Firefox/")) return "Mozilla Firefox";
+      if (ua.includes("Safari/") && !ua.includes("Chrome/")) return "Safari";
+      return "Unknown Browser";
+    }
+
+    function detectOS(ua, platform) {
+      if (/Windows NT 10.0|Windows NT 11.0/.test(ua)) return "Windows";
+      if (/Mac OS X/.test(ua)) return "macOS";
+      if (/Android/.test(ua)) return "Android";
+      if (/iPhone|iPad|iPod/.test(ua)) return "iOS";
+      if (/Linux/.test(platform) || /Linux/.test(ua)) return "Linux";
+      return "Unknown OS";
     }
 
     function getConnectionInfo() {
       const c = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-      if (!c) return 'Unavailable';
-      return `${c.effectiveType || 'unknown'} / downlink ${c.downlink || '?'}Mb/s`;
+      if (!c) return "Unavailable";
+      const parts = [];
+      if (c.effectiveType) parts.push(c.effectiveType);
+      if (typeof c.downlink !== "undefined") parts.push(`downlink ${c.downlink} Mb/s`);
+      if (typeof c.rtt !== "undefined") parts.push(`rtt ${c.rtt} ms`);
+      return parts.join(" / ") || "Available";
     }
 
-    function renderTechData() {
-      techStats.innerHTML = '';
-      addStat('Browser', navigator.userAgent);
-      addStat('Language', navigator.language || 'Unavailable');
-      addStat('Platform', navigator.platform || 'Unavailable');
-      addStat('Screen', `${window.screen.width} × ${window.screen.height}`);
-      addStat('Timezone', Intl.DateTimeFormat().resolvedOptions().timeZone || 'Unavailable');
-      addStat('CPU hint', navigator.hardwareConcurrency || 'Unavailable');
-      addStat('Memory hint', navigator.deviceMemory ? `${navigator.deviceMemory} GB` : 'Unavailable');
-      addStat('Network hint', getConnectionInfo());
-      addStat('IP address', 'Not collected here');
-      addStat('Fingerprinting', 'Disabled by design');
+    function fillLocalData() {
+      const ua = navigator.userAgent;
+
+      document.getElementById("browser").textContent = detectBrowser(ua);
+      document.getElementById("os").textContent = detectOS(ua, navigator.platform || "");
+      document.getElementById("platform").textContent = navigator.platform || "Unavailable";
+      document.getElementById("language").textContent = navigator.language || "Unavailable";
+      document.getElementById("screen").textContent = `${screen.width} × ${screen.height}`;
+      document.getElementById("timezone").textContent = Intl.DateTimeFormat().resolvedOptions().timeZone || "Unavailable";
+      document.getElementById("cpu").textContent = navigator.hardwareConcurrency || "Unavailable";
+      document.getElementById("memory").textContent = navigator.deviceMemory ? `${navigator.deviceMemory} GB` : "Unavailable";
+      document.getElementById("network").textContent = getConnectionInfo();
     }
 
-    function setCookie(name, value, days=30) {
-      const expires = new Date(Date.now() + days * 864e5).toUTCString();
-      document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; SameSite=Lax`;
-    }
+    async function fillIPData() {
+      try {
+        const res = await fetch("https://ipapi.co/json/");
+        const data = await res.json();
 
-    function getCookie(name) {
-      return document.cookie.split('; ').reduce((r, v) => {
-        const parts = v.split('=');
-        return parts[0] === name ? decodeURIComponent(parts[1]) : r;
-      }, '');
-    }
-
-    function deleteCookie(name) {
-      document.cookie = `${name}=; Max-Age=0; path=/; SameSite=Lax`;
-    }
-
-    function refreshCookieState() {
-      const consent = getCookie('demoConsent');
-      cookieState.textContent = consent ? `Cookie status: demoConsent=${consent}` : 'Cookie status: none set';
-      cookieQuick.textContent = consent ? consent : 'None';
-    }
-
-    document.getElementById('searchForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const q = document.getElementById('siteSearch').value.trim();
-      if (!q) return;
-      searches++;
-      searchCountEl.textContent = searches;
-      logEvent(`Submitted search query: "${q}"`);
-      document.getElementById('siteSearch').value = '';
-    });
-
-    document.getElementById('acceptCookies').addEventListener('click', () => {
-      setCookie('demoConsent', 'accepted');
-      refreshCookieState();
-      logEvent('Set first-party demo cookie');
-    });
-
-    document.getElementById('clearCookies').addEventListener('click', () => {
-      deleteCookie('demoConsent');
-      refreshCookieState();
-      logEvent('Cleared first-party demo cookie');
-    });
-
-    document.addEventListener('click', (e) => {
-      if (e.target.tagName === 'BUTTON') {
-        clicks++;
-        clickCountEl.textContent = clicks;
+        document.getElementById("ip").textContent = data.ip || "Unavailable";
+        document.getElementById("city").textContent = data.city || "Unavailable";
+        document.getElementById("region").textContent = data.region || "Unavailable";
+        document.getElementById("country").textContent = data.country_name || "Unavailable";
+        document.getElementById("org").textContent = data.org || data.asn || "Unavailable";
+      } catch (e) {
+        document.getElementById("ip").textContent = "Unable to load";
+        document.getElementById("city").textContent = "Unable to load";
+        document.getElementById("region").textContent = "Unable to load";
+        document.getElementById("country").textContent = "Unable to load";
+        document.getElementById("org").textContent = "Unable to load";
       }
-    });
+    }
 
-    setInterval(() => {
-      const seconds = Math.floor((Date.now() - start) / 1000);
-      timeOnPageEl.textContent = `${seconds}s`;
-    }, 1000);
+    function startReveal() {
+      resetPanels();
+      setStatus("Collecting visible information...");
 
-    renderTechData();
-    refreshCookieState();
-    logEvent('Page initialized');
+      revealTimers.push(setTimeout(() => {
+        showPanel(document.getElementById("panelLocation"), "First: your network location.");
+      }, 900));
+
+      revealTimers.push(setTimeout(() => {
+        showPanel(document.getElementById("panelBrowser"), "Next: your browser and device.");
+      }, 2500));
+
+      revealTimers.push(setTimeout(() => {
+        showPanel(document.getElementById("panelScreen"), "Then: your system and connection hints.");
+      }, 4100));
+
+      revealTimers.push(setTimeout(() => {
+        showPanel(document.getElementById("panelSummary"), "This is why online privacy matters.");
+      }, 5900));
+    }
+
+    function revealAllNow() {
+      resetPanels();
+      panels.forEach(p => {
+        p.classList.remove("hidden");
+        p.classList.add("revealed");
+      });
+      setStatus("All visible information has been revealed.");
+    }
+
+    document.getElementById("startBtn").addEventListener("click", startReveal);
+    document.getElementById("instantBtn").addEventListener("click", revealAllNow);
+    document.getElementById("resetBtn").addEventListener("click", resetPanels);
+
+    fillLocalData();
+    fillIPData();
   </script>
 </body>
 </html>
