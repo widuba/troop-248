@@ -8,235 +8,225 @@
 
   <style>
     :root{
-      --red:#b22222;
-      --blue:#1f4e79;
-      --tan:#d2cab6;
-      --white:#ffffff;
-      --radius-lg:16px;
-      --radius-pill:999px;
-      --shadow-soft:0 10px 25px rgba(0,0,0,.06);
-
-      --rx-blue-900:#0b1f3a;
-      --rx-blue-800:#0f2a52;
-      --rx-line:rgba(255,255,255,.16);
-      --rx-text:#ecf3ff;
-      --rx-muted:rgba(236,243,255,.78);
+      --bg:#0b0f18;
+      --panel:#111827;
+      --panel2:#0f172a;
+      --line:rgba(255,255,255,.10);
+      --text:#e5e7eb;
+      --muted:rgba(229,231,235,.70);
+      --blue:#60a5fa;
+      --blue-2:#3b82f6;
+      --radius:14px;
+      --shadow:0 18px 55px rgba(0,0,0,.45);
+      --mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+      --sans:system-ui,-apple-system,Segoe UI,sans-serif;
     }
 
     *{ box-sizing:border-box; }
 
     body{
       margin:0;
-      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
       background:
-        radial-gradient(900px 600px at 40% 20%, rgba(31,78,121,.18), transparent 55%),
-        radial-gradient(800px 520px at 70% 30%, rgba(178,34,34,.10), transparent 58%),
-        #cfc6b0;
+        radial-gradient(900px 600px at 20% 10%, rgba(96,165,250,.10), transparent 55%),
+        radial-gradient(900px 600px at 80% 20%, rgba(34,197,94,.08), transparent 55%),
+        var(--bg);
+      color:var(--text);
+      font-family:var(--sans);
       min-height:100vh;
-      color:#1f2933;
     }
 
-    header{
-      background:linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
-      color:var(--white);
-      padding:14px 24px;
+    .wrap{
+      max-width:1120px;
+      margin:0 auto;
+      padding:20px 16px 40px;
+    }
+
+    .topbar{
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:12px;
+      padding:14px 16px;
+      border:1px solid var(--line);
+      background:rgba(17,24,39,.82);
+      backdrop-filter:blur(8px);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
       position:sticky;
-      top:0;
+      top:12px;
       z-index:20;
       flex-wrap:wrap;
     }
 
-    header h2{
-      margin:0;
-      font-size:19px;
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+      min-width:240px;
+    }
+
+    .brand .title{
+      font-weight:950;
       letter-spacing:.08em;
       text-transform:uppercase;
-      display:flex;
-      align-items:center;
-      gap:8px;
+      font-size:12px;
+      font-family:var(--mono);
+      color:rgba(229,231,235,.92);
     }
 
-    header h2::before{
-      content:"★";
-      font-size:18px;
+    .brand .sub{
+      font-size:12px;
+      color:var(--muted);
+      font-family:var(--mono);
     }
 
-    .troop-home-link{
-      text-decoration:none;
-      color:inherit;
-      display:inline-flex;
-      align-items:center;
-    }
-
-    .troop-home-link:hover h2{
-      opacity:.9;
-      text-decoration:underline;
-    }
-
-    .header-actions{
+    .top-actions{
       display:flex;
       gap:10px;
-      flex-wrap:wrap;
       align-items:center;
+      flex-wrap:wrap;
+      justify-content:flex-end;
     }
 
-    .topBtn{
-      padding:8px 12px;
-      border-radius:var(--radius-pill);
-      border:1px solid rgba(255,255,255,.7);
-      background:rgba(255,255,255,.10);
-      color:var(--white);
-      font-size:13px;
+    .pill{
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(15,23,42,.75);
+      color:rgba(229,231,235,.92);
+      font-family:var(--mono);
+      font-size:12px;
+      white-space:nowrap;
+    }
+
+    .btnBlue,
+    .btnGhost{
+      appearance:none;
+      border:1px solid var(--line);
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
       font-weight:800;
+      font-size:13px;
+      font-family:var(--mono);
       text-decoration:none;
       display:inline-flex;
       align-items:center;
+      justify-content:center;
       gap:8px;
     }
 
-    .topBtn:hover{
-      background:rgba(255,255,255,.20);
+    .btnBlue{
+      border-color:rgba(96,165,250,.28);
+      background:rgba(96,165,250,.12);
+      color:rgba(219,234,254,.96);
     }
 
-    main{
-      max-width:1040px;
-      margin:0 auto;
-      padding:24px 16px 40px;
+    .btnGhost{
+      border-color:rgba(255,255,255,.12);
+      background:rgba(255,255,255,.05);
+      color:var(--text);
+    }
+
+    .btnBlue:hover,
+    .btnGhost:hover{
+      filter:brightness(1.05);
     }
 
     .heroCard,
-    .contentCard,
+    .panel,
     .postCard{
-      background:linear-gradient(180deg, rgba(15,42,82,.96), rgba(11,31,58,.96));
-      border-radius:var(--radius-lg);
-      border:1px solid var(--rx-line);
-      box-shadow:var(--shadow-soft);
-      color:var(--rx-text);
-      position:relative;
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(17,24,39,.96), rgba(15,23,42,.96));
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
       overflow:hidden;
     }
 
-    .heroCard::after,
-    .contentCard::after,
-    .postCard::after{
-      content:"";
-      position:absolute;
-      inset:-60px;
-      background:
-        radial-gradient(circle at 25% 20%, rgba(109,249,255,.12), transparent 45%),
-        radial-gradient(circle at 70% 35%, rgba(255,224,109,.10), transparent 45%),
-        radial-gradient(circle at 45% 75%, rgba(255,79,216,.08), transparent 45%);
-      pointer-events:none;
-      opacity:.65;
-    }
-
-    .heroCard > *,
-    .contentCard > *,
-    .postCard > *{
-      position:relative;
-      z-index:2;
-    }
-
     .heroCard{
+      margin-top:16px;
       padding:18px;
-      margin-bottom:18px;
     }
 
     .heroTitle{
-      margin:0 0 6px;
-      font-size:24px;
+      margin:0 0 8px;
+      font-size:28px;
       line-height:1.08;
+      font-weight:1000;
     }
 
     .heroSub{
       margin:0;
-      color:var(--rx-muted);
+      color:var(--muted);
+      line-height:1.7;
       font-size:14px;
-      line-height:1.6;
-      font-weight:700;
-      max-width:760px;
+      font-family:var(--mono);
+      max-width:780px;
     }
 
     .searchWrap{
-      margin-top:14px;
       display:grid;
-      gap:8px;
+      gap:6px;
+      margin-top:14px;
     }
 
     .searchLabel{
       font-size:12px;
+      color:var(--muted);
+      font-family:var(--mono);
       text-transform:uppercase;
       letter-spacing:.06em;
-      color:rgba(236,243,255,.72);
       font-weight:900;
     }
 
     .searchInput{
       width:100%;
       border-radius:12px;
-      border:1px solid rgba(255,255,255,.16);
-      background:rgba(255,255,255,.08);
-      color:var(--rx-text);
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.05);
+      color:var(--text);
+      padding:12px 12px;
+      font:inherit;
       outline:none;
-      padding:12px 14px;
-      font-size:14px;
-      font-weight:700;
     }
 
     .searchInput::placeholder{
-      color:rgba(236,243,255,.48);
+      color:rgba(229,231,235,.40);
     }
 
     .resultsMeta{
-      margin-top:10px;
-      color:var(--rx-muted);
+      margin-top:8px;
       font-size:12px;
-      font-weight:800;
+      color:var(--muted);
+      font-family:var(--mono);
     }
 
-    .contentCard{
+    .content{
+      margin-top:16px;
+      display:grid;
+      gap:14px;
+    }
+
+    .panel{
       padding:18px;
-      margin-bottom:16px;
     }
 
     .backRow{
-      margin-bottom:14px;
       display:flex;
       gap:10px;
       flex-wrap:wrap;
-    }
-
-    .linkBtn{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 12px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.18);
-      background:linear-gradient(180deg, rgba(49,130,246,.98), rgba(30,64,175,.98));
-      color:#fff;
-      text-decoration:none;
-      font-weight:900;
-      font-size:13px;
-      box-shadow:0 10px 24px rgba(0,0,0,.18);
-    }
-
-    .linkBtn:hover{
-      filter:brightness(1.05);
+      margin-bottom:14px;
     }
 
     .postTitle{
-      margin:0 0 8px;
-      font-size:30px;
+      margin:0 0 10px;
+      font-size:32px;
       line-height:1.12;
       font-weight:1000;
+      overflow-wrap:anywhere;
     }
 
-    .postMeta{
+    .metaRow{
       display:flex;
       gap:8px;
       flex-wrap:wrap;
@@ -244,33 +234,54 @@
     }
 
     .metaPill{
-      padding:6px 10px;
+      padding:7px 10px;
       border-radius:999px;
-      border:1px solid rgba(255,255,255,.16);
-      background:rgba(255,255,255,.08);
-      color:rgba(236,243,255,.90);
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:rgba(229,231,235,.92);
       font-size:12px;
-      font-weight:800;
+      font-family:var(--mono);
+      white-space:nowrap;
     }
 
     .postBody{
-      color:var(--rx-text);
+      color:var(--text);
       font-size:15px;
-      line-height:1.8;
+      line-height:1.85;
       overflow-wrap:anywhere;
     }
 
-    .postBody b,
-    .postBody strong{
-      font-weight:900;
+    .postBody p{
+      margin:0 0 1.05em;
     }
 
-    .postBody i,
-    .postBody em{
-      font-style:italic;
+    .postBody h1,
+    .postBody h2,
+    .postBody h3{
+      margin:1.15em 0 .55em;
+      line-height:1.2;
     }
 
-    .listWrap{
+    .postBody ul,
+    .postBody ol{
+      padding-left:1.4em;
+      margin:.4em 0 1em;
+    }
+
+    .postBody blockquote{
+      margin:1em 0;
+      padding:.9em 1em;
+      border-left:4px solid rgba(96,165,250,.55);
+      background:rgba(96,165,250,.08);
+      border-radius:10px;
+      color:rgba(229,231,235,.95);
+    }
+
+    .postBody a{
+      color:#bfdbfe;
+    }
+
+    .postList{
       display:grid;
       gap:14px;
     }
@@ -281,21 +292,21 @@
 
     .postCardTitle{
       margin:0 0 8px;
-      font-size:18px;
+      font-size:19px;
       line-height:1.3;
       font-weight:950;
-      color:var(--rx-text);
+      color:var(--text);
+      overflow-wrap:anywhere;
     }
 
-    .postCardExcerpt{
+    .postExcerpt{
       margin:0;
-      color:var(--rx-muted);
+      color:var(--muted);
       font-size:14px;
-      line-height:1.65;
-      font-weight:700;
+      line-height:1.7;
     }
 
-    .postCardFooter{
+    .postFooter{
       margin-top:12px;
       display:flex;
       justify-content:space-between;
@@ -304,72 +315,73 @@
       flex-wrap:wrap;
     }
 
-    .emptyState{
-      text-align:center;
-      padding:24px 18px;
-      border:1px dashed rgba(255,255,255,.18);
+    .emptyState,
+    .loadingState,
+    .errorState{
+      border:1px dashed rgba(255,255,255,.12);
+      background:rgba(255,255,255,.03);
       border-radius:14px;
-      background:rgba(255,255,255,.06);
-      color:var(--rx-muted);
-      font-size:14px;
-      font-weight:800;
-      line-height:1.65;
-    }
-
-    .loadingState{
+      padding:18px;
       text-align:center;
-      padding:20px 18px;
-      color:#1f2933;
-      font-size:15px;
-      font-weight:900;
+      font-family:var(--mono);
+      font-size:12px;
+      line-height:1.7;
+      color:var(--muted);
     }
 
     .errorState{
-      text-align:center;
-      padding:20px 18px;
-      color:#7f1d1d;
-      font-size:15px;
-      font-weight:900;
+      color:#fecaca;
+      border-color:rgba(239,68,68,.22);
+      background:rgba(239,68,68,.06);
     }
 
-    @media (max-width: 640px){
-      header{
-        flex-direction:column;
+    @media (max-width: 720px){
+      .topbar{
         align-items:flex-start;
       }
+
       .postTitle{
+        font-size:26px;
+      }
+
+      .heroTitle{
         font-size:24px;
       }
     }
   </style>
 </head>
 <body>
-  <header>
-    <div>
-      <a href="/home" class="troop-home-link"><h2>Troop 248</h2></a>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="title">Troop 248 • SPL Blog</div>
+        <div class="sub">Published posts only • query view with ?p={id}</div>
+      </div>
+
+      <div class="top-actions">
+        <a class="btnGhost" href="/home">Home</a>
+        <a class="btnGhost" href="/spl">All Posts</a>
+        <div class="pill" id="modePill">Loading…</div>
+      </div>
     </div>
 
-    <div class="header-actions">
-      <a class="topBtn" href="/home">Home</a>
-    </div>
-  </header>
-
-  <main>
-    <div class="heroCard">
+    <section class="heroCard">
       <h1 class="heroTitle">SPL Blog</h1>
       <p class="heroSub">
-        Read the latest published SPL blog posts. Use the search box to find posts by title or content.
+        Read published SPL posts and search through the archive. Open a specific post directly with <span style="color:#bfdbfe;">?p=postid</span>.
       </p>
 
       <div id="searchSection" class="searchWrap">
         <label class="searchLabel" for="searchInput">Search Posts</label>
-        <input id="searchInput" class="searchInput" type="text" placeholder="Search SPL blog posts" />
+        <input id="searchInput" class="searchInput" type="text" placeholder="Search by title or content" />
         <div id="resultsMeta" class="resultsMeta"></div>
       </div>
-    </div>
+    </section>
 
-    <div id="state"></div>
-  </main>
+    <div id="content" class="content">
+      <div class="loadingState">Loading posts…</div>
+    </div>
+  </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
@@ -391,46 +403,48 @@
     const PAGE_TITLE = "SPL Blog";
     const PAGE_BASE = "/spl";
 
-    const state = document.getElementById("state");
+    const params = new URLSearchParams(window.location.search);
+    const publicId = params.get("p");
+
+    const content = document.getElementById("content");
     const searchInput = document.getElementById("searchInput");
     const searchSection = document.getElementById("searchSection");
     const resultsMeta = document.getElementById("resultsMeta");
-
-    const params = new URLSearchParams(window.location.search);
-    const publicId = params.get("p");
+    const modePill = document.getElementById("modePill");
 
     let publishedPosts = [];
 
     init();
 
     async function init(){
-      state.innerHTML = `<div class="loadingState">Loading posts…</div>`;
-
       try{
         await loadPublishedPosts();
 
         if (publicId){
-          renderSinglePost(publicId);
+          modePill.textContent = "Single Post";
           searchSection.style.display = "none";
+          renderSinglePost(publicId);
         } else {
+          modePill.textContent = "Post List";
           renderList();
           searchInput.addEventListener("input", renderList);
         }
       } catch (e){
         console.error(e);
-        state.innerHTML = `<div class="errorState">Error loading posts.</div>`;
+        content.innerHTML = `<div class="errorState">Error loading posts.</div>`;
+        modePill.textContent = "Error";
       }
     }
 
     async function loadPublishedPosts(){
       const snap = await getDocs(collection(db, COLLECTION));
-      const posts = [];
+      const rows = [];
 
       snap.forEach(docSnap => {
         const d = docSnap.data() || {};
         if ((d.status || "") !== "published") return;
 
-        posts.push({
+        rows.push({
           docId: docSnap.id,
           id: d.id || "",
           title: d.title || "Untitled",
@@ -441,31 +455,32 @@
         });
       });
 
-      posts.sort((a, b) => toMillis(b.publishedAt) - toMillis(a.publishedAt));
-      publishedPosts = posts;
+      rows.sort((a, b) => toMillis(b.publishedAt) - toMillis(a.publishedAt));
+      publishedPosts = rows;
     }
 
     function renderSinglePost(id){
       const post = publishedPosts.find(p => p.id === id);
 
       if (!post){
-        state.innerHTML = `<div class="errorState">Post not found.</div>`;
+        content.innerHTML = `<div class="errorState">Post not found.</div>`;
         return;
       }
 
       document.title = `${post.title} — ${PAGE_TITLE} — Troop 248`;
 
-      state.innerHTML = `
-        <section class="contentCard">
+      content.innerHTML = `
+        <section class="panel">
           <div class="backRow">
-            <a class="linkBtn" href="${PAGE_BASE}">← Back to all posts</a>
+            <a class="btnBlue" href="${PAGE_BASE}">← Back to all posts</a>
           </div>
 
           <h1 class="postTitle">${escapeHtml(post.title)}</h1>
 
-          <div class="postMeta">
+          <div class="metaRow">
             <div class="metaPill">Posted by ${escapeHtml(post.authorFullName)}</div>
             <div class="metaPill">${escapeHtml(formatDate(post.publishedAt))}</div>
+            <div class="metaPill">ID: ${escapeHtml(post.id || "—")}</div>
           </div>
 
           <div class="postBody">${post.content || ""}</div>
@@ -487,32 +502,28 @@
       resultsMeta.textContent = `${list.length} post${list.length === 1 ? "" : "s"} found`;
 
       if (!list.length){
-        state.innerHTML = `
-          <div class="emptyState">
-            No published posts matched your search.
-          </div>
-        `;
+        content.innerHTML = `<div class="emptyState">No published posts matched your search.</div>`;
         return;
       }
 
-      state.innerHTML = `
-        <div class="listWrap">
+      content.innerHTML = `
+        <div class="postList">
           ${list.map(post => {
-            const excerpt = makeExcerpt(stripHtml(post.content), 180);
+            const excerpt = makeExcerpt(stripHtml(post.content), 220);
             return `
               <article class="postCard">
                 <h2 class="postCardTitle">${escapeHtml(post.title)}</h2>
 
-                <div class="postMeta">
+                <div class="metaRow">
                   <div class="metaPill">Posted by ${escapeHtml(post.authorFullName)}</div>
                   <div class="metaPill">${escapeHtml(formatDate(post.publishedAt))}</div>
                 </div>
 
-                <p class="postCardExcerpt">${escapeHtml(excerpt)}</p>
+                <p class="postExcerpt">${escapeHtml(excerpt)}</p>
 
-                <div class="postCardFooter">
-                  <div></div>
-                  <a class="linkBtn" href="${PAGE_BASE}?p=${encodeURIComponent(post.id)}">Read Post</a>
+                <div class="postFooter">
+                  <div class="pill">Post ID: ${escapeHtml(post.id || "—")}</div>
+                  <a class="btnBlue" href="${PAGE_BASE}?p=${encodeURIComponent(post.id)}">Read Post</a>
                 </div>
               </article>
             `;
