@@ -1,0 +1,1679 @@
+<!-- /admin/spl-blog/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SPL Blog Admin — Troop 248</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="/bsafavicon.ico" />
+
+  <style>
+    :root{
+      --bg:#0b0f18;
+      --panel:#111827;
+      --panel2:#0f172a;
+      --line:rgba(255,255,255,.10);
+      --text:#e5e7eb;
+      --muted:rgba(229,231,235,.70);
+      --accent:#22c55e;
+      --accent2:#16a34a;
+      --blue:#60a5fa;
+      --amber:#f59e0b;
+      --danger:#ef4444;
+      --danger2:#dc2626;
+      --radius:14px;
+      --shadow:0 18px 55px rgba(0,0,0,.45);
+      --mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+      --sans:system-ui,-apple-system,Segoe UI,sans-serif;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family:var(--sans);
+      background:
+        radial-gradient(900px 600px at 20% 10%, rgba(96,165,250,.10), transparent 55%),
+        radial-gradient(900px 600px at 80% 20%, rgba(34,197,94,.10), transparent 55%),
+        var(--bg);
+      color:var(--text);
+      min-height:100vh;
+    }
+
+    .wrap{
+      max-width:1420px;
+      margin:0 auto;
+      padding:20px 16px 40px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:14px 16px;
+      border:1px solid var(--line);
+      background:rgba(17,24,39,.82);
+      backdrop-filter:blur(8px);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:12px;
+      z-index:20;
+      flex-wrap:wrap;
+    }
+
+    .brand{ display:flex; flex-direction:column; gap:2px; min-width:240px; }
+    .brand .title{
+      font-weight:950;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size:12px;
+      font-family:var(--mono);
+      color:rgba(229,231,235,.92);
+    }
+    .brand .sub{
+      font-size:12px;
+      color:var(--muted);
+      font-family:var(--mono);
+    }
+
+    .top-actions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .pill{
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(15,23,42,.75);
+      color:rgba(229,231,235,.92);
+      font-family:var(--mono);
+      font-size:12px;
+      white-space:nowrap;
+    }
+
+    .btn, .btnGhost, .btnDanger, .btnBlue{
+      appearance:none;
+      border:1px solid var(--line);
+      background:rgba(15,23,42,.85);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:800;
+      font-size:13px;
+      font-family:var(--mono);
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+    }
+    .btn:hover, .btnGhost:hover, .btnDanger:hover, .btnBlue:hover{ filter:brightness(1.05); }
+    .btn:disabled, .btnGhost:disabled, .btnDanger:disabled, .btnBlue:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+      filter:none;
+    }
+
+    .btn{
+      border-color:rgba(34,197,94,.28);
+      background:rgba(34,197,94,.15);
+      color:rgba(236,253,245,.96);
+    }
+    .btnBlue{
+      border-color:rgba(96,165,250,.28);
+      background:rgba(96,165,250,.12);
+      color:rgba(219,234,254,.96);
+    }
+    .btnGhost{
+      border-color:rgba(255,255,255,.12);
+      background:rgba(255,255,255,.05);
+      color:var(--text);
+    }
+    .btnDanger{
+      border-color:rgba(239,68,68,.28);
+      background:rgba(239,68,68,.14);
+      color:rgba(254,226,226,.96);
+    }
+
+    .summaryGrid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:16px;
+      margin-top:16px;
+    }
+    @media (max-width: 900px){
+      .summaryGrid{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+    }
+    @media (max-width: 620px){
+      .summaryGrid{ grid-template-columns:1fr; }
+    }
+
+    .summaryCard, .panel{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(17,24,39,.96), rgba(15,23,42,.96));
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .summaryCard{
+      padding:14px;
+    }
+    .summaryCard .k{
+      font-size:11px;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.07em;
+      font-family:var(--mono);
+    }
+    .summaryCard .v{
+      margin-top:6px;
+      font-size:26px;
+      font-weight:950;
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns:330px minmax(0,1fr);
+      gap:16px;
+      margin-top:16px;
+      align-items:start;
+    }
+    @media (max-width: 1120px){
+      .layout{ grid-template-columns:1fr; }
+    }
+
+    .panelHead{
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .panelTitle{
+      font-weight:950;
+      font-size:15px;
+      letter-spacing:.03em;
+    }
+    .panelSub{
+      margin-top:4px;
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.5;
+      font-family:var(--mono);
+    }
+
+    .panelBody{ padding:14px 16px 16px; }
+
+    .tabStack{
+      display:grid;
+      gap:10px;
+    }
+    .tabBtn{
+      width:100%;
+      text-align:left;
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      cursor:pointer;
+      font-weight:900;
+      font-family:var(--mono);
+      font-size:13px;
+    }
+    .tabBtn.active{
+      border-color:rgba(96,165,250,.42);
+      background:rgba(96,165,250,.14);
+      box-shadow:0 0 0 1px rgba(96,165,250,.16);
+    }
+
+    .sideActions{
+      display:grid;
+      gap:10px;
+      margin-top:14px;
+    }
+
+    .toolbar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:14px;
+    }
+
+    .searchInput, .textInput, .datetimeInput, .sortSelect{
+      width:100%;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.05);
+      color:var(--text);
+      padding:12px 12px;
+      font:inherit;
+      outline:none;
+    }
+    .textInput::placeholder, .searchInput::placeholder{
+      color:rgba(229,231,235,.40);
+    }
+
+    .field{
+      display:grid;
+      gap:6px;
+    }
+    .field label{
+      font-size:12px;
+      color:var(--muted);
+      font-family:var(--mono);
+    }
+
+    .editorGrid{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 360px;
+      gap:16px;
+    }
+    @media (max-width: 1100px){
+      .editorGrid{ grid-template-columns:1fr; }
+    }
+
+    .card{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      border-radius:14px;
+      padding:14px;
+    }
+
+    .editorToolbar{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+    .miniBtn{
+      appearance:none;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      padding:8px 10px;
+      border-radius:10px;
+      cursor:pointer;
+      font-family:var(--mono);
+      font-size:12px;
+      font-weight:900;
+    }
+    .miniBtn:hover{ filter:brightness(1.05); }
+
+    .titleInput{
+      font-size:20px;
+      font-weight:950;
+    }
+
+    .editorArea{
+      min-height:320px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:14px;
+      background:rgba(255,255,255,.05);
+      outline:none;
+      line-height:1.7;
+      font-size:15px;
+    }
+    .editorArea:empty::before{
+      content:attr(data-placeholder);
+      color:rgba(229,231,235,.35);
+      pointer-events:none;
+    }
+    .editorArea b, .editorArea strong{ font-weight:900; }
+    .editorArea i, .editorArea em{ font-style:italic; }
+
+    .previewBox{
+      min-height:220px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:14px;
+      background:rgba(255,255,255,.03);
+    }
+    .previewTitle{
+      margin:0 0 10px;
+      font-size:24px;
+      line-height:1.15;
+      font-weight:950;
+    }
+    .previewBody{
+      line-height:1.8;
+      font-size:15px;
+      color:rgba(229,231,235,.92);
+      overflow-wrap:anywhere;
+    }
+    .previewBody b, .previewBody strong{ font-weight:900; }
+    .previewBody i, .previewBody em{ font-style:italic; }
+
+    .toggleRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      border-radius:12px;
+      padding:12px;
+    }
+    .toggleText{
+      display:grid;
+      gap:4px;
+    }
+    .toggleText .main{
+      font-weight:900;
+      font-size:14px;
+    }
+    .toggleText .sub{
+      color:var(--muted);
+      font-size:12px;
+      font-family:var(--mono);
+    }
+
+    .switch{
+      position:relative;
+      width:52px;
+      height:30px;
+      flex:0 0 auto;
+    }
+    .switch input{ display:none; }
+    .slider{
+      position:absolute;
+      inset:0;
+      border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transition:.18s ease;
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .slider::before{
+      content:"";
+      position:absolute;
+      width:22px;
+      height:22px;
+      left:3px;
+      top:3px;
+      border-radius:50%;
+      background:white;
+      transition:.18s ease;
+    }
+    .switch input:checked + .slider{
+      background:rgba(34,197,94,.45);
+    }
+    .switch input:checked + .slider::before{
+      transform:translateX(22px);
+    }
+
+    .actionsRow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
+
+    .postList{
+      display:grid;
+      gap:12px;
+    }
+
+    .sectionBlock{
+      display:grid;
+      gap:12px;
+    }
+
+    .sectionTitle{
+      font-size:13px;
+      text-transform:uppercase;
+      letter-spacing:.07em;
+      color:var(--muted);
+      font-family:var(--mono);
+      font-weight:900;
+    }
+
+    .postCard{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      border-radius:14px;
+      padding:14px;
+      display:grid;
+      gap:10px;
+    }
+
+    .postTop{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:flex-start;
+      flex-wrap:wrap;
+    }
+
+    .postTitle{
+      font-size:16px;
+      font-weight:950;
+      line-height:1.35;
+    }
+
+    .statusPill{
+      padding:6px 9px;
+      border-radius:999px;
+      font-size:11px;
+      font-family:var(--mono);
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      border:1px solid var(--line);
+      white-space:nowrap;
+      font-weight:900;
+    }
+    .status-draft{ background:rgba(255,255,255,.06); }
+    .status-completed{ background:rgba(245,158,11,.16); border-color:rgba(245,158,11,.28); }
+    .status-published{ background:rgba(34,197,94,.14); border-color:rgba(34,197,94,.26); }
+
+    .postMeta{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .metaPill{
+      padding:6px 9px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      font-size:11px;
+      color:var(--muted);
+      font-family:var(--mono);
+      white-space:nowrap;
+    }
+
+    .postExcerpt{
+      color:var(--muted);
+      line-height:1.6;
+      font-size:13px;
+    }
+
+    .postActions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .emptyState{
+      border:1px dashed rgba(255,255,255,.12);
+      background:rgba(255,255,255,.03);
+      border-radius:14px;
+      padding:18px;
+      text-align:center;
+      color:var(--muted);
+      font-family:var(--mono);
+      font-size:12px;
+      line-height:1.7;
+    }
+
+    .statusLine{
+      margin-top:12px;
+      min-height:20px;
+      font-size:12px;
+      color:var(--muted);
+      font-family:var(--mono);
+    }
+
+    .modalWrap{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.55);
+      backdrop-filter:blur(6px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:100;
+      padding:16px;
+    }
+    .modalWrap.show{ display:flex; }
+
+    .modal{
+      width:min(720px, 96vw);
+      max-height:min(86vh, 900px);
+      overflow:auto;
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(17,24,39,.98), rgba(15,23,42,.98));
+      border-radius:16px;
+      box-shadow:var(--shadow);
+      padding:16px;
+    }
+
+    .modal h3{
+      margin:0 0 8px;
+      font-size:18px;
+    }
+    .modal p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.6;
+      font-size:13px;
+      font-family:var(--mono);
+    }
+
+    .recipientToolbar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-top:14px;
+      margin-bottom:12px;
+    }
+
+    .recipientList{
+      display:grid;
+      gap:10px;
+      margin-top:10px;
+      max-height:360px;
+      overflow:auto;
+      padding-right:2px;
+    }
+
+    .recipientRow{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      border-radius:12px;
+      padding:10px 12px;
+    }
+
+    .recipientRow input{
+      margin-top:3px;
+      transform:scale(1.15);
+    }
+
+    .recipientInfo{
+      display:grid;
+      gap:4px;
+      min-width:0;
+    }
+
+    .recipientName{
+      font-weight:900;
+      line-height:1.35;
+    }
+
+    .recipientMeta{
+      color:var(--muted);
+      font-size:12px;
+      font-family:var(--mono);
+      overflow-wrap:anywhere;
+      line-height:1.55;
+    }
+
+    .modalActions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      margin-top:14px;
+    }
+
+    .toast{
+      position:fixed;
+      bottom:18px;
+      left:50%;
+      transform:translateX(-50%);
+      z-index:120;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(15,23,42,.96);
+      color:var(--text);
+      box-shadow:var(--shadow);
+      font-size:12px;
+      font-family:var(--mono);
+      display:none;
+      max-width:min(92vw, 860px);
+      text-align:center;
+    }
+    .toast.show{ display:block; }
+
+    .hidden{ display:none !important; }
+  </style>
+</head>
+<body>
+  <div class="wrap" id="app" style="display:none;">
+    <div class="topbar">
+      <div class="brand">
+        <div class="title">Troop 248 • SPL Blog Admin</div>
+        <div class="sub">Collection: splPosts • draft / completed / published workflow</div>
+      </div>
+
+      <div class="top-actions">
+        <a class="btnGhost" href="/home">Home</a>
+        <a class="btnGhost" href="/spl">View SPL Blog</a>
+        <div class="pill" id="authPill">Signed in as —</div>
+        <button class="btnGhost" id="logoutBtn" type="button">Log Out</button>
+      </div>
+    </div>
+
+    <div class="summaryGrid">
+      <div class="summaryCard">
+        <div class="k">Draft Posts</div>
+        <div class="v" id="draftCount">0</div>
+      </div>
+      <div class="summaryCard">
+        <div class="k">Completed Posts</div>
+        <div class="v" id="completedCount">0</div>
+      </div>
+      <div class="summaryCard">
+        <div class="k">Recent Posts</div>
+        <div class="v" id="recentCount">0</div>
+      </div>
+      <div class="summaryCard">
+        <div class="k">Old Posts</div>
+        <div class="v" id="oldCount">0</div>
+      </div>
+    </div>
+
+    <div class="layout">
+      <section class="panel">
+        <div class="panelHead">
+          <div>
+            <div class="panelTitle">Navigation</div>
+            <div class="panelSub">Manage unpublished posts, browse recent posts, and sort older posts.</div>
+          </div>
+        </div>
+
+        <div class="panelBody">
+          <div class="tabStack">
+            <button class="tabBtn active" data-tab="upcoming">Upcoming Posts</button>
+            <button class="tabBtn" data-tab="recent">Recent Posts</button>
+            <button class="tabBtn" data-tab="old">Old Posts</button>
+          </div>
+
+          <div class="sideActions">
+            <button class="btnBlue" id="newPostBtn" type="button">New Post</button>
+            <button class="btnGhost" id="clearEditorBtn" type="button">Clear Editor</button>
+          </div>
+
+          <div class="statusLine" id="statusLine">Ready.</div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panelHead">
+          <div>
+            <div class="panelTitle" id="mainPanelTitle">Upcoming Posts</div>
+            <div class="panelSub" id="mainPanelSub">Drafts and completed posts that are not published yet.</div>
+          </div>
+        </div>
+
+        <div class="panelBody">
+          <div id="tab-upcoming">
+            <div class="editorGrid">
+              <div class="card">
+                <div class="field">
+                  <label for="titleInput">Post Title</label>
+                  <input id="titleInput" class="textInput titleInput" maxlength="160" placeholder="Enter post title" />
+                </div>
+
+                <div style="margin-top:12px;">
+                  <div class="field">
+                    <label>Main Text</label>
+                  </div>
+
+                  <div class="editorToolbar">
+                    <button class="miniBtn" type="button" data-cmd="bold"><b>B</b></button>
+                    <button class="miniBtn" type="button" data-cmd="italic"><i>I</i></button>
+                    <button class="miniBtn" type="button" data-cmd="underline"><u>U</u></button>
+                    <button class="miniBtn" type="button" data-cmd="insertUnorderedList">• List</button>
+                    <button class="miniBtn" type="button" data-cmd="insertOrderedList">1. List</button>
+                    <button class="miniBtn" type="button" data-cmd="formatBlock" data-value="blockquote">Quote</button>
+                    <button class="miniBtn" type="button" id="linkBtn">Link</button>
+                  </div>
+
+                  <div id="editorArea" class="editorArea" contenteditable="true" data-placeholder="Write the post here..."></div>
+                </div>
+
+                <div style="margin-top:12px;">
+                  <div class="toggleRow">
+                    <div class="toggleText">
+                      <div class="main">Send Email Notification</div>
+                      <div class="sub">When posting now, ask for recipients if this is enabled.</div>
+                    </div>
+                    <label class="switch">
+                      <input id="sendEmailToggle" type="checkbox" checked />
+                      <span class="slider"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="actionsRow">
+                  <button class="btnGhost" id="saveDraftBtn" type="button">Save Draft</button>
+                  <button class="btnBlue" id="markCompletedBtn" type="button">Mark Completed</button>
+                  <button class="btn" id="postNowBtn" type="button">Post Now</button>
+                  <button class="btnDanger" id="deleteBtn" type="button" disabled>Delete</button>
+                </div>
+
+                <div class="statusLine" id="editorStatus">No post selected.</div>
+              </div>
+
+              <div class="card">
+                <div class="field">
+                  <label>Preview</label>
+                </div>
+
+                <div class="previewBox">
+                  <h1 class="previewTitle" id="previewTitle">Post title preview</h1>
+                  <div class="previewBody" id="previewBody">Body preview will appear here.</div>
+                </div>
+
+                <div style="margin-top:14px;" class="field">
+                  <label>Current Editing Post</label>
+                </div>
+                <div class="postMeta" id="editingMeta">
+                  <div class="metaPill">No post selected</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top:16px;" class="toolbar">
+              <div class="field" style="min-width:260px; max-width:400px; width:100%;">
+                <label for="upcomingSearch">Search Upcoming</label>
+                <input id="upcomingSearch" class="searchInput" placeholder="Search draft and completed posts" />
+              </div>
+            </div>
+
+            <div class="postList">
+              <div class="sectionBlock">
+                <div class="sectionTitle">Completed / Ready to Post</div>
+                <div id="completedList"></div>
+              </div>
+
+              <div class="sectionBlock">
+                <div class="sectionTitle">Drafts</div>
+                <div id="draftList"></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="tab-recent" class="hidden">
+            <div class="toolbar">
+              <div class="field" style="min-width:260px; max-width:400px; width:100%;">
+                <label for="recentSearch">Search Recent Posts</label>
+                <input id="recentSearch" class="searchInput" placeholder="Search posts from the last 4 weeks" />
+              </div>
+            </div>
+            <div id="recentList"></div>
+          </div>
+
+          <div id="tab-old" class="hidden">
+            <div class="toolbar">
+              <div class="field" style="min-width:260px; max-width:400px; width:100%;">
+                <label for="oldSearch">Search Old Posts</label>
+                <input id="oldSearch" class="searchInput" placeholder="Search old posts" />
+              </div>
+
+              <div class="field" style="min-width:220px;">
+                <label for="oldSort">Sort</label>
+                <select id="oldSort" class="sortSelect">
+                  <option value="recent_desc">Most Recent → Oldest</option>
+                  <option value="recent_asc">Oldest → Newest</option>
+                  <option value="title_asc">Title A → Z</option>
+                  <option value="title_desc">Title Z → A</option>
+                </select>
+              </div>
+            </div>
+            <div id="oldList"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="wrap" id="blocked" style="display:none;">
+    <section class="panel">
+      <div class="panelBody">
+        <div class="emptyState">Blocked — Admins only.</div>
+      </div>
+    </section>
+  </div>
+
+  <div class="modalWrap" id="recipientModalWrap">
+    <div class="modal">
+      <h3>Choose Recipients</h3>
+      <p>Only approved users are shown. Select who should receive the email notification for this published post.</p>
+
+      <div class="recipientToolbar">
+        <div class="field" style="min-width:260px; flex:1 1 320px;">
+          <label for="recipientSearch">Search Recipients</label>
+          <input id="recipientSearch" class="searchInput" placeholder="Search by full name or email" />
+        </div>
+        <button class="btnGhost" id="selectAllRecipientsBtn" type="button">Select All</button>
+        <button class="btnGhost" id="clearRecipientsBtn" type="button">Clear All</button>
+      </div>
+
+      <div class="pill" id="recipientCountPill">0 selected</div>
+      <div class="recipientList" id="recipientList"></div>
+
+      <div class="modalActions">
+        <button class="btnGhost" id="recipientCancelBtn" type="button">Cancel</button>
+        <button class="btn" id="recipientPublishBtn" type="button">Publish</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modalWrap" id="confirmModalWrap">
+    <div class="modal" style="width:min(560px, 96vw);">
+      <h3 id="confirmTitle">Confirm</h3>
+      <p id="confirmText">...</p>
+
+      <div class="modalActions">
+        <button class="btnGhost" id="confirmCancelBtn" type="button">Cancel</button>
+        <button class="btn" id="confirmProceedBtn" type="button">Proceed</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import {
+      getFirestore, doc, getDoc, collection, getDocs, addDoc, updateDoc, deleteDoc,
+      serverTimestamp, query, orderBy
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
+      authDomain: "troop-248.firebaseapp.com",
+      projectId: "troop-248",
+      storageBucket: "troop-248.firebasestorage.app",
+      messagingSenderId: "925363875752",
+      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+      measurementId: "G-NY75GX5TBH"
+    };
+
+    const BLOG_LABEL = "SPL Blog";
+    const BLOG_COLLECTION = "splPosts";
+    const VIEW_URL_BASE = "https://troop-248.com/spl?p=";
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const appEl = document.getElementById("app");
+    const blockedEl = document.getElementById("blocked");
+    const authPill = document.getElementById("authPill");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    const draftCountEl = document.getElementById("draftCount");
+    const completedCountEl = document.getElementById("completedCount");
+    const recentCountEl = document.getElementById("recentCount");
+    const oldCountEl = document.getElementById("oldCount");
+
+    const titleInput = document.getElementById("titleInput");
+    const editorArea = document.getElementById("editorArea");
+    const sendEmailToggle = document.getElementById("sendEmailToggle");
+    const previewTitle = document.getElementById("previewTitle");
+    const previewBody = document.getElementById("previewBody");
+    const editingMeta = document.getElementById("editingMeta");
+    const editorStatus = document.getElementById("editorStatus");
+    const statusLine = document.getElementById("statusLine");
+
+    const newPostBtn = document.getElementById("newPostBtn");
+    const clearEditorBtn = document.getElementById("clearEditorBtn");
+    const saveDraftBtn = document.getElementById("saveDraftBtn");
+    const markCompletedBtn = document.getElementById("markCompletedBtn");
+    const postNowBtn = document.getElementById("postNowBtn");
+    const deleteBtn = document.getElementById("deleteBtn");
+
+    const upcomingSearch = document.getElementById("upcomingSearch");
+    const recentSearch = document.getElementById("recentSearch");
+    const oldSearch = document.getElementById("oldSearch");
+    const oldSort = document.getElementById("oldSort");
+
+    const draftList = document.getElementById("draftList");
+    const completedList = document.getElementById("completedList");
+    const recentList = document.getElementById("recentList");
+    const oldList = document.getElementById("oldList");
+
+    const recipientModalWrap = document.getElementById("recipientModalWrap");
+    const recipientSearch = document.getElementById("recipientSearch");
+    const recipientList = document.getElementById("recipientList");
+    const recipientCountPill = document.getElementById("recipientCountPill");
+    const selectAllRecipientsBtn = document.getElementById("selectAllRecipientsBtn");
+    const clearRecipientsBtn = document.getElementById("clearRecipientsBtn");
+    const recipientCancelBtn = document.getElementById("recipientCancelBtn");
+    const recipientPublishBtn = document.getElementById("recipientPublishBtn");
+
+    const confirmModalWrap = document.getElementById("confirmModalWrap");
+    const confirmTitle = document.getElementById("confirmTitle");
+    const confirmText = document.getElementById("confirmText");
+    const confirmCancelBtn = document.getElementById("confirmCancelBtn");
+    const confirmProceedBtn = document.getElementById("confirmProceedBtn");
+
+    const toast = document.getElementById("toast");
+
+    let myUser = null;
+    let myProfile = null;
+    let posts = [];
+    let approvedRecipients = [];
+    let currentTab = "upcoming";
+    let editingDocId = "";
+    let editingPost = null;
+    let busy = false;
+    let pendingPublishPayload = null;
+    let confirmResolver = null;
+
+    function normalizeText(v){ return String(v || "").trim(); }
+    function escapeHtml(s){
+      return String(s ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+    function formatDate(v){
+      if (!v) return "—";
+      try{
+        if (typeof v.toDate === "function") return v.toDate().toLocaleString("en-US");
+        if (v.seconds) return new Date(v.seconds * 1000).toLocaleString("en-US");
+        const d = new Date(v);
+        if (!Number.isNaN(d.getTime())) return d.toLocaleString("en-US");
+      }catch(_){}
+      return "—";
+    }
+    function toMillis(v){
+      if (!v) return 0;
+      try{
+        if (typeof v.toDate === "function") return v.toDate().getTime();
+        if (v.seconds) return v.seconds * 1000;
+        const d = new Date(v);
+        if (!Number.isNaN(d.getTime())) return d.getTime();
+      }catch(_){}
+      return 0;
+    }
+    function postAgeWeeks(post){
+      const pub = toMillis(post.publishedAt);
+      if (!pub) return Infinity;
+      return (Date.now() - pub) / (1000 * 60 * 60 * 24 * 7);
+    }
+    function excerptFromHtml(html){
+      const temp = document.createElement("div");
+      temp.innerHTML = html || "";
+      const text = normalizeText(temp.textContent || "");
+      return text.length > 170 ? text.slice(0, 170) + "..." : text || "No excerpt yet.";
+    }
+    function showToast(msg){
+      toast.textContent = msg;
+      toast.classList.add("show");
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => toast.classList.remove("show"), 2600);
+    }
+    function setStatus(msg){ statusLine.textContent = msg; }
+    function setEditorStatus(msg){ editorStatus.textContent = msg; }
+
+    function generatePublicId(length = 10){
+      const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+      let out = "";
+      for (let i = 0; i < length; i++) {
+        out += chars[Math.floor(Math.random() * chars.length)];
+      }
+      return out;
+    }
+
+    async function generateUniquePublicId(){
+      for (let i = 0; i < 20; i++){
+        const candidate = generatePublicId(10);
+        const exists = posts.some(p => p.id === candidate);
+        if (!exists) return candidate;
+      }
+      return generatePublicId(14);
+    }
+
+    function syncPreview(){
+      const title = normalizeText(titleInput.value);
+      previewTitle.textContent = title || "Post title preview";
+      previewBody.innerHTML = normalizeText(editorArea.innerHTML) ? editorArea.innerHTML : "Body preview will appear here.";
+    }
+
+    function updateEditingMeta(){
+      if (!editingPost){
+        editingMeta.innerHTML = `<div class="metaPill">No post selected</div>`;
+        deleteBtn.disabled = true;
+        return;
+      }
+
+      deleteBtn.disabled = false;
+      editingMeta.innerHTML = `
+        <div class="metaPill">Public ID: ${escapeHtml(editingPost.id || "—")}</div>
+        <div class="metaPill">Status: ${escapeHtml(editingPost.status || "draft")}</div>
+        <div class="metaPill">Created: ${escapeHtml(formatDate(editingPost.createdAt))}</div>
+        <div class="metaPill">Updated: ${escapeHtml(formatDate(editingPost.updatedAt))}</div>
+        <div class="metaPill">Published: ${escapeHtml(formatDate(editingPost.publishedAt))}</div>
+      `;
+    }
+
+    function clearEditor(){
+      editingDocId = "";
+      editingPost = null;
+      titleInput.value = "";
+      editorArea.innerHTML = "";
+      sendEmailToggle.checked = true;
+      syncPreview();
+      updateEditingMeta();
+      setEditorStatus("Creating a new post.");
+    }
+
+    function loadPostIntoEditor(post){
+      editingDocId = post.docId;
+      editingPost = post;
+      titleInput.value = post.title || "";
+      editorArea.innerHTML = post.content || "";
+      sendEmailToggle.checked = post.sendEmailOnPublish !== false;
+      syncPreview();
+      updateEditingMeta();
+      setEditorStatus(`Editing ${post.title || "Untitled Post"}.`);
+      currentTab = "upcoming";
+      switchTab("upcoming");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function getEditorPayload(){
+      return {
+        title: normalizeText(titleInput.value),
+        content: normalizeText(editorArea.innerHTML) ? editorArea.innerHTML : "",
+        sendEmailOnPublish: !!sendEmailToggle.checked
+      };
+    }
+
+    function validateEditor(payload){
+      if (!payload.title) return "Please enter a title.";
+      if (!normalizeText(payload.content.replace(/<[^>]*>/g, " "))) return "Please enter the main text.";
+      return "";
+    }
+
+    async function savePostWithStatus(status){
+      if (busy) return;
+      const payload = getEditorPayload();
+      const err = validateEditor(payload);
+      if (err){
+        setEditorStatus(err);
+        return;
+      }
+
+      busy = true;
+      setEditorStatus(status === "draft" ? "Saving draft…" : "Saving completed post…");
+
+      try{
+        if (!editingDocId){
+          const publicId = await generateUniquePublicId();
+          const ref = await addDoc(collection(db, BLOG_COLLECTION), {
+            id: publicId,
+            title: payload.title,
+            content: payload.content,
+            status,
+            sendEmailOnPublish: payload.sendEmailOnPublish,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
+            publishedAt: null,
+            authorUid: myUser.uid,
+            authorFullName: myProfile.fullName || myUser.email || "Admin"
+          });
+          editingDocId = ref.id;
+        } else {
+          await updateDoc(doc(db, BLOG_COLLECTION, editingDocId), {
+            title: payload.title,
+            content: payload.content,
+            status,
+            sendEmailOnPublish: payload.sendEmailOnPublish,
+            updatedAt: serverTimestamp()
+          });
+        }
+
+        await loadPosts();
+        editingPost = posts.find(p => p.docId === editingDocId) || null;
+        updateEditingMeta();
+        setEditorStatus(status === "draft" ? "Draft saved." : "Marked completed.");
+        showToast(status === "draft" ? "Draft saved." : "Post marked completed.");
+      } catch (e){
+        console.error(e);
+        setEditorStatus("Could not save post.");
+        showToast("Could not save post.");
+      } finally {
+        busy = false;
+      }
+    }
+
+    async function deleteCurrentPost(){
+      if (!editingDocId || busy) return;
+      const ok1 = await askConfirm("Delete Post", "You are about to permanently delete this post. Are you sure you would like to proceed?");
+      if (!ok1) return;
+      const ok2 = await askConfirm("Final Confirmation", "This is final. Proceed?");
+      if (!ok2) return;
+
+      busy = true;
+      setEditorStatus("Deleting post…");
+
+      try{
+        await deleteDoc(doc(db, BLOG_COLLECTION, editingDocId));
+        await loadPosts();
+        clearEditor();
+        setEditorStatus("Post deleted.");
+        showToast("Post deleted.");
+      } catch (e){
+        console.error(e);
+        setEditorStatus("Could not delete post.");
+        showToast("Could not delete post.");
+      } finally {
+        busy = false;
+      }
+    }
+
+    async function postNowFlow(){
+      if (busy) return;
+      const payload = getEditorPayload();
+      const err = validateEditor(payload);
+      if (err){
+        setEditorStatus(err);
+        return;
+      }
+
+      pendingPublishPayload = payload;
+
+      if (payload.sendEmailOnPublish){
+        openRecipientModal();
+      } else {
+        const ok1 = await askConfirm("Publish Post", "You are about to publish this post. Are you sure you would like to proceed?");
+        if (!ok1) return;
+        const ok2 = await askConfirm("Final Confirmation", "This is final. Proceed?");
+        if (!ok2) return;
+        await publishPost([]);
+      }
+    }
+
+    async function publishPost(selectedRecipients){
+      if (busy || !pendingPublishPayload) return;
+      busy = true;
+      setEditorStatus("Publishing post…");
+
+      try{
+        let publicId = editingPost?.id || "";
+        if (!editingDocId){
+          publicId = await generateUniquePublicId();
+          const ref = await addDoc(collection(db, BLOG_COLLECTION), {
+            id: publicId,
+            title: pendingPublishPayload.title,
+            content: pendingPublishPayload.content,
+            status: "published",
+            sendEmailOnPublish: pendingPublishPayload.sendEmailOnPublish,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
+            publishedAt: serverTimestamp(),
+            authorUid: myUser.uid,
+            authorFullName: myProfile.fullName || myUser.email || "Admin"
+          });
+          editingDocId = ref.id;
+        } else {
+          publicId = editingPost?.id || publicId || await generateUniquePublicId();
+          await updateDoc(doc(db, BLOG_COLLECTION, editingDocId), {
+            id: publicId,
+            title: pendingPublishPayload.title,
+            content: pendingPublishPayload.content,
+            status: "published",
+            sendEmailOnPublish: pendingPublishPayload.sendEmailOnPublish,
+            updatedAt: serverTimestamp(),
+            publishedAt: serverTimestamp()
+          });
+        }
+
+        if (pendingPublishPayload.sendEmailOnPublish && selectedRecipients.length){
+          await sendEmailNotifications({
+            recipients: selectedRecipients,
+            postId: publicId,
+            posterName: myProfile.fullName || myUser.email || "Admin"
+          });
+        }
+
+        await loadPosts();
+        editingPost = posts.find(p => p.docId === editingDocId) || null;
+        updateEditingMeta();
+        setEditorStatus("Post published.");
+        showToast("Post published.");
+      } catch (e){
+        console.error(e);
+        setEditorStatus("Could not publish post.");
+        showToast("Could not publish post.");
+      } finally {
+        pendingPublishPayload = null;
+        busy = false;
+      }
+    }
+
+    async function sendEmailNotifications({ recipients, postId, posterName }){
+      // Replace this block with your existing SMTP/backend mail route.
+      // Example endpoint shape:
+      // await fetch("/api/send-spl-blog-email", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({
+      //     recipients,
+      //     subject: "New SPL Blog Post",
+      //     bodyText: `${posterName} posted a post in ${BLOG_LABEL}, you can view it here: ${VIEW_URL_BASE}${postId}`
+      //   })
+      // });
+
+      console.log("SMTP placeholder", {
+        recipients,
+        subject: "New SPL Blog Post",
+        bodyText: `${posterName} posted a post in ${BLOG_LABEL}, you can view it here: ${VIEW_URL_BASE}${postId}`
+      });
+    }
+
+    async function loadPosts(){
+      const qy = query(collection(db, BLOG_COLLECTION), orderBy("createdAt", "desc"));
+      const snap = await getDocs(qy);
+
+      posts = [];
+      snap.forEach(d => {
+        const data = d.data() || {};
+        posts.push({
+          docId: d.id,
+          id: data.id || "",
+          title: data.title || "",
+          content: data.content || "",
+          status: data.status || "draft",
+          sendEmailOnPublish: data.sendEmailOnPublish !== false,
+          createdAt: data.createdAt || null,
+          updatedAt: data.updatedAt || null,
+          publishedAt: data.publishedAt || null,
+          authorUid: data.authorUid || "",
+          authorFullName: data.authorFullName || ""
+        });
+      });
+
+      renderCounts();
+      renderAllLists();
+    }
+
+    async function loadApprovedRecipients(){
+      const snap = await getDocs(collection(db, "accountInfo"));
+      approvedRecipients = [];
+
+      snap.forEach(d => {
+        const data = d.data() || {};
+        const role = normalizeText(data.authRole).toLowerCase();
+        if (role !== "admin" && role !== "viewer") return;
+        const email = normalizeText(data.email);
+        if (!email) return;
+
+        approvedRecipients.push({
+          uid: d.id,
+          fullName: normalizeText(data.fullName || data.name || data.displayName || "Unnamed User"),
+          email,
+          accountType: normalizeText(data.accountType || "Unknown"),
+          authRole: role
+        });
+      });
+
+      approvedRecipients.sort((a, b) => a.fullName.localeCompare(b.fullName));
+    }
+
+    function renderCounts(){
+      const drafts = posts.filter(p => p.status === "draft").length;
+      const completed = posts.filter(p => p.status === "completed").length;
+      const recent = posts.filter(p => p.status === "published" && postAgeWeeks(p) <= 4).length;
+      const old = posts.filter(p => p.status === "published" && postAgeWeeks(p) > 4).length;
+
+      draftCountEl.textContent = String(drafts);
+      completedCountEl.textContent = String(completed);
+      recentCountEl.textContent = String(recent);
+      oldCountEl.textContent = String(old);
+    }
+
+    function renderAllLists(){
+      renderUpcoming();
+      renderRecent();
+      renderOld();
+    }
+
+    function filterByText(arr, q){
+      const queryText = normalizeText(q).toLowerCase();
+      if (!queryText) return [...arr];
+      return arr.filter(p => {
+        const text = `${p.title} ${excerptFromHtml(p.content)} ${p.id}`.toLowerCase();
+        return text.includes(queryText);
+      });
+    }
+
+    function renderPostCards(list, container, options = {}){
+      if (!list.length){
+        container.innerHTML = `<div class="emptyState">No posts here.</div>`;
+        return;
+      }
+
+      container.innerHTML = list.map(post => {
+        const excerpt = excerptFromHtml(post.content);
+        const canEdit = post.status !== "published" || options.allowPublishedEdit;
+        const viewUrl = `${VIEW_URL_BASE}${encodeURIComponent(post.id || "")}`;
+
+        return `
+          <article class="postCard">
+            <div class="postTop">
+              <div class="postTitle">${escapeHtml(post.title || "Untitled Post")}</div>
+              <div class="statusPill status-${escapeHtml(post.status)}">${escapeHtml(post.status)}</div>
+            </div>
+
+            <div class="postMeta">
+              <div class="metaPill">ID: ${escapeHtml(post.id || "—")}</div>
+              <div class="metaPill">Created: ${escapeHtml(formatDate(post.createdAt))}</div>
+              <div class="metaPill">Updated: ${escapeHtml(formatDate(post.updatedAt))}</div>
+              <div class="metaPill">Published: ${escapeHtml(formatDate(post.publishedAt))}</div>
+              <div class="metaPill">Email: ${post.sendEmailOnPublish ? "On" : "Off"}</div>
+            </div>
+
+            <div class="postExcerpt">${escapeHtml(excerpt)}</div>
+
+            <div class="postActions">
+              ${canEdit ? `<button class="btnGhost" type="button" data-edit="${escapeHtml(post.docId)}">Edit</button>` : ``}
+              ${post.status === "completed" ? `<button class="btn" type="button" data-ready-post="${escapeHtml(post.docId)}">Post Now</button>` : ``}
+              ${post.status === "completed" ? `<button class="btnGhost" type="button" data-back-draft="${escapeHtml(post.docId)}">Move to Draft</button>` : ``}
+              ${post.status === "published" ? `<a class="btnBlue" href="${escapeHtml(viewUrl)}" target="_blank" rel="noopener noreferrer">Open</a>` : ``}
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      container.querySelectorAll("[data-edit]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const post = posts.find(p => p.docId === btn.dataset.edit);
+          if (post) loadPostIntoEditor(post);
+        });
+      });
+
+      container.querySelectorAll("[data-ready-post]").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          const post = posts.find(p => p.docId === btn.dataset.readyPost);
+          if (!post) return;
+          loadPostIntoEditor(post);
+          await postNowFlow();
+        });
+      });
+
+      container.querySelectorAll("[data-back-draft]").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          const post = posts.find(p => p.docId === btn.dataset.backDraft);
+          if (!post) return;
+          await updateDoc(doc(db, BLOG_COLLECTION, post.docId), {
+            status: "draft",
+            updatedAt: serverTimestamp()
+          });
+          await loadPosts();
+          showToast("Moved back to draft.");
+        });
+      });
+    }
+
+    function renderUpcoming(){
+      const q = upcomingSearch.value;
+      const completed = filterByText(posts.filter(p => p.status === "completed"), q)
+        .sort((a, b) => toMillis(b.updatedAt) - toMillis(a.updatedAt));
+      const drafts = filterByText(posts.filter(p => p.status === "draft"), q)
+        .sort((a, b) => toMillis(b.updatedAt) - toMillis(a.updatedAt));
+
+      renderPostCards(completed, completedList);
+      renderPostCards(drafts, draftList);
+    }
+
+    function renderRecent(){
+      const q = recentSearch.value;
+      const recent = filterByText(
+        posts.filter(p => p.status === "published" && postAgeWeeks(p) <= 4),
+        q
+      ).sort((a, b) => toMillis(b.publishedAt) - toMillis(a.publishedAt));
+
+      renderPostCards(recent, recentList);
+    }
+
+    function renderOld(){
+      const q = oldSearch.value;
+      const sort = oldSort.value;
+      let old = filterByText(
+        posts.filter(p => p.status === "published" && postAgeWeeks(p) > 4),
+        q
+      );
+
+      if (sort === "recent_desc") old.sort((a,b) => toMillis(b.publishedAt) - toMillis(a.publishedAt));
+      if (sort === "recent_asc") old.sort((a,b) => toMillis(a.publishedAt) - toMillis(b.publishedAt));
+      if (sort === "title_asc") old.sort((a,b) => (a.title || "").localeCompare(b.title || ""));
+      if (sort === "title_desc") old.sort((a,b) => (b.title || "").localeCompare(a.title || ""));
+
+      renderPostCards(old, oldList);
+    }
+
+    function switchTab(tab){
+      currentTab = tab;
+      document.querySelectorAll(".tabBtn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.tab === tab);
+      });
+
+      document.getElementById("tab-upcoming").classList.toggle("hidden", tab !== "upcoming");
+      document.getElementById("tab-recent").classList.toggle("hidden", tab !== "recent");
+      document.getElementById("tab-old").classList.toggle("hidden", tab !== "old");
+
+      const titleMap = {
+        upcoming: ["Upcoming Posts", "Drafts and completed posts that are not published yet."],
+        recent: ["Recent Posts", "Published posts from the last 4 weeks, newest first."],
+        old: ["Old Posts", "Published posts older than 4 weeks with sorting options."]
+      };
+      document.getElementById("mainPanelTitle").textContent = titleMap[tab][0];
+      document.getElementById("mainPanelSub").textContent = titleMap[tab][1];
+    }
+
+    function openRecipientModal(){
+      recipientSearch.value = "";
+      renderRecipientList();
+      recipientModalWrap.classList.add("show");
+    }
+
+    function closeRecipientModal(){
+      recipientModalWrap.classList.remove("show");
+    }
+
+    function renderRecipientList(){
+      const q = normalizeText(recipientSearch.value).toLowerCase();
+      const list = approvedRecipients.filter(r => {
+        const hay = `${r.fullName} ${r.email} ${r.accountType}`.toLowerCase();
+        return hay.includes(q);
+      });
+
+      if (!list.length){
+        recipientList.innerHTML = `<div class="emptyState">No approved recipients found.</div>`;
+        recipientCountPill.textContent = "0 selected";
+        return;
+      }
+
+      recipientList.innerHTML = list.map(r => `
+        <label class="recipientRow">
+          <input type="checkbox" data-recipient="${escapeHtml(r.uid)}" />
+          <div class="recipientInfo">
+            <div class="recipientName">${escapeHtml(r.fullName || "Unnamed User")}</div>
+            <div class="recipientMeta">${escapeHtml(r.email)} • ${escapeHtml(r.accountType)} • ${escapeHtml(r.authRole)}</div>
+          </div>
+        </label>
+      `).join("");
+
+      updateRecipientCount();
+      recipientList.querySelectorAll("[data-recipient]").forEach(cb => {
+        cb.addEventListener("change", updateRecipientCount);
+      });
+    }
+
+    function updateRecipientCount(){
+      const count = recipientList.querySelectorAll("[data-recipient]:checked").length;
+      recipientCountPill.textContent = `${count} selected`;
+      recipientPublishBtn.textContent = count ? "Publish and Send Email" : "Publish";
+    }
+
+    function getSelectedRecipients(){
+      const ids = Array.from(recipientList.querySelectorAll("[data-recipient]:checked")).map(el => el.dataset.recipient);
+      return approvedRecipients.filter(r => ids.includes(r.uid));
+    }
+
+    function openConfirm(title, text){
+      confirmTitle.textContent = title;
+      confirmText.textContent = text;
+      confirmModalWrap.classList.add("show");
+      return new Promise(resolve => { confirmResolver = resolve; });
+    }
+
+    function closeConfirm(result){
+      confirmModalWrap.classList.remove("show");
+      if (confirmResolver){
+        confirmResolver(result);
+        confirmResolver = null;
+      }
+    }
+
+    async function askConfirm(title, text){
+      return await openConfirm(title, text);
+    }
+
+    document.querySelectorAll("[data-cmd]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        editorArea.focus();
+        const cmd = btn.dataset.cmd;
+        const value = btn.dataset.value || null;
+        document.execCommand(cmd, false, value);
+        syncPreview();
+      });
+    });
+
+    document.getElementById("linkBtn").addEventListener("click", () => {
+      const url = prompt("Enter link URL");
+      if (!url) return;
+      editorArea.focus();
+      document.execCommand("createLink", false, url);
+      syncPreview();
+    });
+
+    titleInput.addEventListener("input", syncPreview);
+    editorArea.addEventListener("input", syncPreview);
+
+    newPostBtn.addEventListener("click", () => {
+      clearEditor();
+      switchTab("upcoming");
+    });
+
+    clearEditorBtn.addEventListener("click", clearEditor);
+    saveDraftBtn.addEventListener("click", () => savePostWithStatus("draft"));
+    markCompletedBtn.addEventListener("click", () => savePostWithStatus("completed"));
+    postNowBtn.addEventListener("click", postNowFlow);
+    deleteBtn.addEventListener("click", deleteCurrentPost);
+
+    upcomingSearch.addEventListener("input", renderUpcoming);
+    recentSearch.addEventListener("input", renderRecent);
+    oldSearch.addEventListener("input", renderOld);
+    oldSort.addEventListener("change", renderOld);
+
+    document.querySelectorAll(".tabBtn").forEach(btn => {
+      btn.addEventListener("click", () => switchTab(btn.dataset.tab));
+    });
+
+    recipientSearch.addEventListener("input", renderRecipientList);
+
+    selectAllRecipientsBtn.addEventListener("click", () => {
+      recipientList.querySelectorAll("[data-recipient]").forEach(cb => cb.checked = true);
+      updateRecipientCount();
+    });
+
+    clearRecipientsBtn.addEventListener("click", () => {
+      recipientList.querySelectorAll("[data-recipient]").forEach(cb => cb.checked = false);
+      updateRecipientCount();
+    });
+
+    recipientCancelBtn.addEventListener("click", () => {
+      closeRecipientModal();
+      pendingPublishPayload = null;
+    });
+
+    recipientPublishBtn.addEventListener("click", async () => {
+      const selectedRecipients = getSelectedRecipients();
+      const ok1 = await askConfirm(
+        "Publish Post",
+        `You are about to publish this post and send an email notification to ${selectedRecipients.length} recipients. Are you sure you would like to proceed?`
+      );
+      if (!ok1) return;
+      const ok2 = await askConfirm("Final Confirmation", "This is final. Proceed?");
+      if (!ok2) return;
+
+      closeRecipientModal();
+      await publishPost(selectedRecipients);
+    });
+
+    confirmCancelBtn.addEventListener("click", () => closeConfirm(false));
+    confirmProceedBtn.addEventListener("click", () => closeConfirm(true));
+    confirmModalWrap.addEventListener("click", (e) => {
+      if (e.target === confirmModalWrap) closeConfirm(false);
+    });
+
+    recipientModalWrap.addEventListener("click", (e) => {
+      if (e.target === recipientModalWrap) {
+        closeRecipientModal();
+        pendingPublishPayload = null;
+      }
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "/";
+    });
+
+    async function loadMyProfile(uid){
+      const snap = await getDoc(doc(db, "accountInfo", uid));
+      if (!snap.exists()) return null;
+      return snap.data() || {};
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user){
+        window.location.href = "/home";
+        return;
+      }
+
+      try{
+        myUser = user;
+        myProfile = await loadMyProfile(user.uid);
+        const role = normalizeText(myProfile?.authRole).toLowerCase();
+
+        if (role !== "admin"){
+          blockedEl.style.display = "block";
+          return;
+        }
+
+        authPill.textContent = `Signed in as ${user.email || "—"} • Admin`;
+        appEl.style.display = "block";
+
+        await Promise.all([
+          loadPosts(),
+          loadApprovedRecipients()
+        ]);
+
+        clearEditor();
+        switchTab("upcoming");
+        setStatus("Ready.");
+      }catch(e){
+        console.error(e);
+        blockedEl.style.display = "block";
+      }
+    });
+  </script>
+</body>
+</html>
