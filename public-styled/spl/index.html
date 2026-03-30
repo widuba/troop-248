@@ -4,388 +4,375 @@
   <meta charset="UTF-8" />
   <title>SPL Blog — Troop 248</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="icon" type="image/png" href="/bsafavicon.ico" />
-
+  <link rel="icon" type="image/png" href="/bsafavicon.ico">
   <style>
-    :root{
-      --bg:#0b0f18;
-      --panel:#111827;
-      --panel2:#0f172a;
-      --line:rgba(255,255,255,.10);
-      --text:#e5e7eb;
-      --muted:rgba(229,231,235,.70);
-      --blue:#60a5fa;
-      --blue-2:#3b82f6;
-      --radius:14px;
-      --shadow:0 18px 55px rgba(0,0,0,.45);
-      --mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
-      --sans:system-ui,-apple-system,Segoe UI,sans-serif;
+    :root {
+      --red: #b22222;
+      --blue: #1f4e79;
+      --tan: #f4eee3;
+      --white: #ffffff;
+      --text-main: #1f2933;
+      --text-muted: #6b7280;
+      --radius-lg: 16px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
     }
-
-    *{ box-sizing:border-box; }
-
-    body{
-      margin:0;
-      background:
-        radial-gradient(900px 600px at 20% 10%, rgba(96,165,250,.10), transparent 55%),
-        radial-gradient(900px 600px at 80% 20%, rgba(34,197,94,.08), transparent 55%),
-        var(--bg);
-      color:var(--text);
-      font-family:var(--sans);
-      min-height:100vh;
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: #d2cab6;
+      color: var(--text-main);
+      min-height: 100vh;
     }
+    /* Dark theme body */
+body.dark-theme {
+  background: #111827;
+  color: #e5e7eb;
+}
 
-    .wrap{
-      max-width:1120px;
-      margin:0 auto;
-      padding:20px 16px 40px;
+/* Main cards / sections */
+body.dark-theme .welcome-card,
+body.dark-theme section {
+  background: #1f2937;
+  border-color: rgba(55,65,81,.9);
+}
+
+/* Feature cards */
+body.dark-theme .feature-card {
+  background: #111827;
+  border-color: rgba(75,85,99,.9);
+}
+
+/* Text + small labels */
+body.dark-theme .feature-text,
+body.dark-theme .quick-note {
+  color: #d1d5db;
+}
+
+body.dark-theme .badge {
+  background: rgba(55,65,81,.8);
+  color: #e5e7eb;
+}
+    header {
+      background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
+      color: var(--white);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
-
-    .topbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:14px 16px;
-      border:1px solid var(--line);
-      background:rgba(17,24,39,.82);
-      backdrop-filter:blur(8px);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      position:sticky;
-      top:12px;
-      z-index:20;
-      flex-wrap:wrap;
+    header h2 {
+      margin: 0;
+      font-size: 19px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-
-    .brand{
-      display:flex;
-      flex-direction:column;
-      gap:2px;
-      min-width:240px;
+    header h2::before {
+      content: "★";
+      font-size: 18px;
     }
-
-    .brand .title{
-      font-weight:950;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      font-size:12px;
-      font-family:var(--mono);
-      color:rgba(229,231,235,.92);
+    .troop-home-link {
+      text-decoration: none;
+      color: inherit;
+      display: inline-flex;
+      align-items: center;
     }
-
-    .brand .sub{
-      font-size:12px;
-      color:var(--muted);
-      font-family:var(--mono);
+    .troop-home-link:hover h2 {
+      opacity: 0.9;
+      text-decoration: underline;
     }
-
-    .top-actions{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      flex-wrap:wrap;
-      justify-content:flex-end;
+    nav {
+      display: flex;
+      gap: 12px;
+      font-size: 13px;
+      text-transform: uppercase;
     }
-
-    .pill{
-      padding:8px 10px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background:rgba(15,23,42,.75);
-      color:rgba(229,231,235,.92);
-      font-family:var(--mono);
-      font-size:12px;
-      white-space:nowrap;
+    nav a {
+      color: #1f4e79;
+      font-weight: bold;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(4px);
+      opacity: 0.9;
     }
-
-    .btnBlue,
-    .btnGhost{
-      appearance:none;
-      border:1px solid var(--line);
-      padding:10px 12px;
-      border-radius:12px;
-      cursor:pointer;
-      font-weight:800;
-      font-size:13px;
-      font-family:var(--mono);
-      text-decoration:none;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
+    nav a:hover {
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.12);
     }
-
-    .btnBlue{
-      border-color:rgba(96,165,250,.28);
-      background:rgba(96,165,250,.12);
-      color:rgba(219,234,254,.96);
+    #auth-bar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      font-size: 13px;
     }
-
-    .btnGhost{
-      border-color:rgba(255,255,255,.12);
-      background:rgba(255,255,255,.05);
-      color:var(--text);
+    #logout-btn {
+      padding: 5px 12px;
+      font-size: 13px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--white);
+      cursor: pointer;
     }
-
-    .btnBlue:hover,
-    .btnGhost:hover{
-      filter:brightness(1.05);
+    #logout-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
     }
-
-    .heroCard,
-    .panel,
-    .postCard{
-      border:1px solid var(--line);
-      background:linear-gradient(180deg, rgba(17,24,39,.96), rgba(15,23,42,.96));
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      overflow:hidden;
+    main {
+      padding: 24px 16px 40px;
+      max-width: 900px;
+      margin: 0 auto;
     }
-
-    .heroCard{
-      margin-top:16px;
-      padding:18px;
+    .welcome-card {
+      background: rgba(255, 255, 255, 0.97);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 10px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
     }
-
-    .heroTitle{
-      margin:0 0 8px;
-      font-size:28px;
-      line-height:1.08;
-      font-weight:1000;
+    .welcome-card h3 {
+      margin: 0 0 4px;
+      font-size: 18px;
     }
-
-    .heroSub{
-      margin:0;
-      color:var(--muted);
-      line-height:1.7;
-      font-size:14px;
-      font-family:var(--mono);
-      max-width:780px;
+    .welcome-card p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--text-muted);
     }
-
-    .searchWrap{
-      display:grid;
-      gap:6px;
-      margin-top:14px;
+    .badge {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(148, 163, 184, 0.2);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
     }
-
-    .searchLabel{
-      font-size:12px;
-      color:var(--muted);
-      font-family:var(--mono);
-      text-transform:uppercase;
-      letter-spacing:.06em;
-      font-weight:900;
+    .badge.admin {
+      background: rgba(240, 180, 41, 0.16);
+      color: #92400e;
+      border: 1px solid rgba(245, 158, 11, 0.6);
     }
-
-    .searchInput{
-      width:100%;
-      border-radius:12px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.05);
-      color:var(--text);
-      padding:12px 12px;
-      font:inherit;
-      outline:none;
+    section {
+      background: rgba(255, 255, 255, 0.97);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 14px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.4);
     }
-
-    .searchInput::placeholder{
-      color:rgba(229,231,235,.40);
+    section h2 {
+      margin-top: 0;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-
-    .resultsMeta{
-      margin-top:8px;
-      font-size:12px;
-      color:var(--muted);
-      font-family:var(--mono);
+    section h2::before {
+      content: "▸";
+      font-size: 14px;
+      color: var(--blue);
     }
-
-    .content{
-      margin-top:16px;
-      display:grid;
-      gap:14px;
+    .admin-only { display: none; }
+    .small-help {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
     }
-
-    .panel{
-      padding:18px;
+    form {
+      margin-bottom: 10px;
+      padding: 10px 10px 8px;
+      background: #f9fafb;
+      border-radius: 12px;
+      border: 1px dashed rgba(148, 163, 184, 0.8);
     }
-
-    .backRow{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-bottom:14px;
+    form h3 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      color: var(--blue);
     }
-
-    .postTitle{
-      margin:0 0 10px;
-      font-size:32px;
-      line-height:1.12;
-      font-weight:1000;
-      overflow-wrap:anywhere;
+    .field {
+      margin-bottom: 8px;
     }
-
-    .metaRow{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-bottom:14px;
+    .field label {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 3px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
     }
-
-    .metaPill{
-      padding:7px 10px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.04);
-      color:rgba(229,231,235,.92);
-      font-size:12px;
-      font-family:var(--mono);
-      white-space:nowrap;
+    .field input,
+    .field textarea {
+      width: 100%;
+      padding: 7px 8px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      font-size: 14px;
+      background: #ffffff;
     }
-
-    .postBody{
-      color:var(--text);
-      font-size:15px;
-      line-height:1.85;
-      overflow-wrap:anywhere;
+    .field textarea {
+      resize: vertical;
+      min-height: 120px;
     }
-
-    .postBody p{
-      margin:0 0 1.05em;
+    .field input:focus,
+    .field textarea:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 2px rgba(31,78,121,.12);
     }
-
-    .postBody h1,
-    .postBody h2,
-    .postBody h3{
-      margin:1.15em 0 .55em;
-      line-height:1.2;
+    form button {
+      padding: 7px 14px;
+      border-radius: var(--radius-pill);
+      border: none;
+      background: var(--blue);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
     }
+    form button:hover { opacity: 0.96; }
 
-    .postBody ul,
-    .postBody ol{
-      padding-left:1.4em;
-      margin:.4em 0 1em;
+    .post-list {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
     }
-
-    .postBody blockquote{
-      margin:1em 0;
-      padding:.9em 1em;
-      border-left:4px solid rgba(96,165,250,.55);
-      background:rgba(96,165,250,.08);
-      border-radius:10px;
-      color:rgba(229,231,235,.95);
+    .post-item {
+      border-bottom: 1px solid rgba(229,231,235,.9);
+      padding: 10px 0;
     }
-
-    .postBody a{
-      color:#bfdbfe;
+    .post-item:last-child {
+      border-bottom: none;
     }
-
-    .postList{
-      display:grid;
-      gap:14px;
+    .post-link {
+      text-decoration: none;
+      color: inherit;
+      display: block;
     }
-
-    .postCard{
-      padding:16px;
+    .post-title {
+      font-size: 16px;
+      font-weight: 600;
     }
-
-    .postCardTitle{
-      margin:0 0 8px;
-      font-size:19px;
-      line-height:1.3;
-      font-weight:950;
-      color:var(--text);
-      overflow-wrap:anywhere;
+    .post-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
     }
-
-    .postExcerpt{
-      margin:0;
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.7;
+    .post-excerpt {
+  font-size: 14px;
+  margin-top: 4px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+    .empty-text {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 4px;
     }
-
-    .postFooter{
-      margin-top:12px;
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      align-items:center;
-      flex-wrap:wrap;
-    }
-
-    .emptyState,
-    .loadingState,
-    .errorState{
-      border:1px dashed rgba(255,255,255,.12);
-      background:rgba(255,255,255,.03);
-      border-radius:14px;
-      padding:18px;
-      text-align:center;
-      font-family:var(--mono);
-      font-size:12px;
-      line-height:1.7;
-      color:var(--muted);
-    }
-
-    .errorState{
-      color:#fecaca;
-      border-color:rgba(239,68,68,.22);
-      background:rgba(239,68,68,.06);
-    }
-
-    @media (max-width: 720px){
-      .topbar{
-        align-items:flex-start;
-      }
-
-      .postTitle{
-        font-size:26px;
-      }
-
-      .heroTitle{
-        font-size:24px;
-      }
+    #status {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
     }
   </style>
+  <link rel="stylesheet" href="/modern-2026.css" />
 </head>
 <body>
-  <div class="wrap">
-    <div class="topbar">
-      <div class="brand">
-        <div class="title">Troop 248 • SPL Blog</div>
-        <div class="sub">Published posts only • query view with ?p={id}</div>
-      </div>
+  <header>
+    <div>
+      <a href="/home" class="troop-home-link">
+        <h2>Troop 248</h2>
+      </a>
+    </div>
+    <nav>
+      <a href="/home">Home</a>
+      <a href="/calendar">Calendar</a>
+      <a href="/documents">Documents</a>
+      <a href="/scoutmaster">SM Blog</a>
+      <a href="/spl">SPL Blog</a>
+      <a href="/useful-links">Useful Links</a>
+      <a href="/events">Events</a>
+      <a href="/mail">Mail</a>
+    </nav>
+    <div id="auth-bar">
+      <div id="auth-info">Signed in as …</div>
+      <button id="logout-btn">Log Out</button>
+    </div>
+  </header>
 
-      <div class="top-actions">
-        <a class="btnGhost" href="/home">Home</a>
-        <a class="btnGhost" href="/spl">All Posts</a>
-        <div class="pill" id="modePill">Loading…</div>
+  <main>
+    <div class="welcome-card">
+      <div>
+        <h3>SPL Blog</h3>
+        <p>Updates and announcements from the Senior Patrol Leader.</p>
+      </div>
+      <div id="role-badge-container">
+        <span class="badge">Viewer</span>
       </div>
     </div>
 
-    <section class="heroCard">
-      <h1 class="heroTitle">SPL Blog</h1>
-      <p class="heroSub">
-        Read published SPL posts and search through the archive. Open a specific post directly with <span style="color:#bfdbfe;">?p=postid</span>.
-      </p>
-
-      <div id="searchSection" class="searchWrap">
-        <label class="searchLabel" for="searchInput">Search Posts</label>
-        <input id="searchInput" class="searchInput" type="text" placeholder="Search by title or content" />
-        <div id="resultsMeta" class="resultsMeta"></div>
-      </div>
+    <!-- Admin-only create post -->
+    <section class="admin-only">
+      <h2>New Post (Admin)</h2>
+      <form id="new-post-form">
+        <div class="field">
+          <label for="post-title-input">Title</label>
+          <input id="post-title-input" type="text" required />
+        </div>
+        <div class="field">
+          <label for="post-body-input">Post Body</label>
+          <textarea id="post-body-input" required></textarea>
+        </div>
+        <button type="submit">Publish Post</button>
+        <div class="small-help">
+          Posts will appear below in newest-first order and can be opened on their own page.
+        </div>
+      </form>
     </section>
 
-    <div id="content" class="content">
-      <div class="loadingState">Loading posts…</div>
-    </div>
-  </div>
+    <!-- Posts list -->
+    <section>
+      <h2>Recent Posts</h2>
+      <ul id="posts-list" class="post-list"></ul>
+      <div id="posts-empty" class="empty-text">No posts yet.</div>
+      <div id="status"></div>
+    </section>
+  </main>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      collection,
+      addDoc,
+      onSnapshot,
+      orderBy,
+      query,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyD5qUHa2JuQ3iI7U3DrX7JDyhx76PGzhxM",
@@ -393,191 +380,231 @@
       projectId: "troop-248",
       storageBucket: "troop-248.firebasestorage.app",
       messagingSenderId: "925363875752",
-      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d"
+      appId: "1:925363875752:web:0b001c1a7a09fb8232f79d",
+      measurementId: "G-NY75GX5TBH"
     };
 
     const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
     const db = getFirestore(app);
 
-    const COLLECTION = "splPosts";
-    const PAGE_TITLE = "SPL Blog";
-    const PAGE_BASE = "/spl";
+    const authInfoEl = document.getElementById("auth-info");
+    const logoutBtn = document.getElementById("logout-btn");
+    const roleBadgeContainer = document.getElementById("role-badge-container");
 
-    const params = new URLSearchParams(window.location.search);
-    const publicId = params.get("p");
+    const adminOnlyEls = document.getElementsByClassName("admin-only");
 
-    const content = document.getElementById("content");
-    const searchInput = document.getElementById("searchInput");
-    const searchSection = document.getElementById("searchSection");
-    const resultsMeta = document.getElementById("resultsMeta");
-    const modePill = document.getElementById("modePill");
+    const newPostForm = document.getElementById("new-post-form");
+    const postTitleInput = document.getElementById("post-title-input");
+    const postBodyInput = document.getElementById("post-body-input");
 
-    let publishedPosts = [];
+    const postsListEl = document.getElementById("posts-list");
+    const postsEmptyEl = document.getElementById("posts-empty");
+    const statusEl = document.getElementById("status");
 
-    init();
+    let currentUser = null;
+    let currentIsAdmin = false;
+    let unsubscribePosts = null;
 
-    async function init(){
-      try{
-        await loadPublishedPosts();
+    function setStatus(text, color = "#6b7280") {
+      statusEl.textContent = text;
+      statusEl.style.color = color;
+      console.log("SPL STATUS:", text);
+    }
 
-        if (publicId){
-          modePill.textContent = "Single Post";
-          searchSection.style.display = "none";
-          renderSinglePost(publicId);
-        } else {
-          modePill.textContent = "Post List";
-          renderList();
-          searchInput.addEventListener("input", renderList);
-        }
-      } catch (e){
-        console.error(e);
-        content.innerHTML = `<div class="errorState">Error loading posts.</div>`;
-        modePill.textContent = "Error";
+    function showAdminUI() {
+      for (let i = 0; i < adminOnlyEls.length; i++) {
+        adminOnlyEls[i].style.display = currentIsAdmin ? "block" : "none";
+      }
+      if (currentUser) {
+        authInfoEl.textContent = "Signed in as " + (currentUser.email || currentUser.uid);
+        roleBadgeContainer.innerHTML = `
+          <span class="badge ${currentIsAdmin ? "admin" : ""}">
+            ${currentIsAdmin ? "Admin" : "Viewer"}
+          </span>`;
       }
     }
 
-    async function loadPublishedPosts(){
-      const snap = await getDocs(collection(db, COLLECTION));
-      const rows = [];
+    async function handleAuth(user) {
+      if (!user) {
+        window.location.href = "/";
+        return;
+      }
+      currentUser = user;
+      authInfoEl.textContent = "Signed in as " + (user.email || user.uid);
 
-      snap.forEach(docSnap => {
-        const d = docSnap.data() || {};
-        if ((d.status || "") !== "published") return;
+      const infoRef = doc(db, "accountInfo", user.uid);
+      const infoSnap = await getDoc(infoRef);
 
-        rows.push({
-          docId: docSnap.id,
-          id: d.id || "",
-          title: d.title || "Untitled",
-          content: d.content || "",
-          publishedAt: d.publishedAt || d.createdAt || null,
-          createdAt: d.createdAt || null,
-          authorFullName: d.authorFullName || d.fullName || "Unknown"
-        });
+      if (!infoSnap.exists()) {
+        window.location.href = "/under-review/";
+        return;
+      }
+
+      const info = infoSnap.data();
+      const role = info.authRole;
+
+      if (role !== "admin" && role !== "viewer") {
+        window.location.href = "/under-review/";
+        return;
+      }
+
+      currentIsAdmin = role === "admin";
+      showAdminUI();
+      initPostsListener();
+    }
+
+    onAuthStateChanged(auth, handleAuth);
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "/";
+    });
+
+    function renderPosts(docs) {
+      postsListEl.innerHTML = "";
+      if (docs.length === 0) {
+        postsEmptyEl.style.display = "block";
+        return;
+      }
+      postsEmptyEl.style.display = "none";
+
+      docs.forEach((snap) => {
+        const data = snap.data();
+        const li = document.createElement("li");
+        li.className = "post-item";
+
+        const id = snap.id;
+        const title = data.title || "Untitled Post";
+        const body = data.body || "";
+        const author = data.authorName || "Unknown author";
+        const createdAt = data.createdAt
+          ? data.createdAt.toDate().toLocaleString()
+          : "";
+
+        const preview = body.length > 115 ? body.slice(0, 115) + "..." : body;
+
+        li.innerHTML = `
+  <a href="/spl/post?id=${encodeURIComponent(id)}" class="post-link">
+    <div class="post-title">${title}</div>
+    <div class="post-meta">
+      By ${author}${createdAt ? " • " + createdAt : ""}
+    </div>
+    <div class="post-excerpt">${preview}</div>
+  </a>
+`;
+
+        postsListEl.appendChild(li);
       });
-
-      rows.sort((a, b) => toMillis(b.publishedAt) - toMillis(a.publishedAt));
-      publishedPosts = rows;
     }
 
-    function renderSinglePost(id){
-      const post = publishedPosts.find(p => p.id === id);
-
-      if (!post){
-        content.innerHTML = `<div class="errorState">Post not found.</div>`;
-        return;
+    function initPostsListener() {
+      if (unsubscribePosts) {
+        unsubscribePosts();
       }
-
-      document.title = `${post.title} — ${PAGE_TITLE} — Troop 248`;
-
-      content.innerHTML = `
-        <section class="panel">
-          <div class="backRow">
-            <a class="btnBlue" href="${PAGE_BASE}">← Back to all posts</a>
-          </div>
-
-          <h1 class="postTitle">${escapeHtml(post.title)}</h1>
-
-          <div class="metaRow">
-            <div class="metaPill">Posted by ${escapeHtml(post.authorFullName)}</div>
-            <div class="metaPill">${escapeHtml(formatDate(post.publishedAt))}</div>
-            <div class="metaPill">ID: ${escapeHtml(post.id || "—")}</div>
-          </div>
-
-          <div class="postBody">${post.content || ""}</div>
-        </section>
-      `;
+      const qPosts = query(
+        collection(db, "splPosts"),  // CHANGE NAME HERE IF NEEDED
+        orderBy("createdAt", "desc")
+      );
+      unsubscribePosts = onSnapshot(
+        qPosts,
+        (snapshot) => {
+          renderPosts(snapshot.docs);
+          setStatus("Posts loaded.");
+        },
+        (error) => {
+          console.error("Error listening to posts:", error);
+          setStatus("Error loading posts: " + error.message, "#b91c1c");
+        }
+      );
     }
 
-    function renderList(){
-      const q = normalizeText(searchInput.value).toLowerCase();
+    if (newPostForm) {
+      newPostForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (!currentIsAdmin) {
+          alert("Only admins can create posts.");
+          return;
+        }
+        const title = postTitleInput.value.trim();
+        const body = postBodyInput.value.trim();
+        if (!title || !body) {
+          alert("Please fill in both title and body.");
+          return;
+        }
 
-      let list = publishedPosts;
-      if (q){
-        list = publishedPosts.filter(post => {
-          const hay = `${post.title} ${stripHtml(post.content)}`.toLowerCase();
-          return hay.includes(q);
-        });
-      }
+        try {
+          setStatus("Publishing post...");
+          // Try to grab author name from accountInfo (fallback to email)
+let authorName = currentUser.email || currentUser.uid;
 
-      resultsMeta.textContent = `${list.length} post${list.length === 1 ? "" : "s"} found`;
+try {
+  const infoRef = doc(db, "accountInfo", currentUser.uid);
+  const infoSnap = await getDoc(infoRef);
 
-      if (!list.length){
-        content.innerHTML = `<div class="emptyState">No published posts matched your search.</div>`;
-        return;
-      }
+  if (infoSnap.exists()) {
+    const info = infoSnap.data();
 
-      content.innerHTML = `
-        <div class="postList">
-          ${list.map(post => {
-            const excerpt = makeExcerpt(stripHtml(post.content), 220);
-            return `
-              <article class="postCard">
-                <h2 class="postCardTitle">${escapeHtml(post.title)}</h2>
+    // ✅ Prefer new fullName field
+    if (info.fullName && String(info.fullName).trim()) {
+      authorName = String(info.fullName).trim();
 
-                <div class="metaRow">
-                  <div class="metaPill">Posted by ${escapeHtml(post.authorFullName)}</div>
-                  <div class="metaPill">${escapeHtml(formatDate(post.publishedAt))}</div>
-                </div>
-
-                <p class="postExcerpt">${escapeHtml(excerpt)}</p>
-
-                <div class="postFooter">
-                  <div class="pill">Post ID: ${escapeHtml(post.id || "—")}</div>
-                  <a class="btnBlue" href="${PAGE_BASE}?p=${encodeURIComponent(post.id)}">Read Post</a>
-                </div>
-              </article>
-            `;
-          }).join("")}
-        </div>
-      `;
+    // 🔁 Fallback for older accounts
+    } else if (info.firstName || info.lastName) {
+      authorName =
+        `${info.firstName || ""} ${info.lastName || ""}`.trim() || authorName;
     }
+  }
+} catch (err) {
+  console.warn("Could not resolve authorName from accountInfo:", err);
+}
 
-    function normalizeText(v){
-      return String(v || "").trim();
-    }
+          await addDoc(collection(db, "splPosts"), {
+            title,
+            body,
+            authorName,
+            authorUid: currentUser.uid,
+            createdAt: serverTimestamp()
+          });
 
-    function stripHtml(html){
-      const temp = document.createElement("div");
-      temp.innerHTML = html || "";
-      return normalizeText(temp.textContent || "");
-    }
-
-    function makeExcerpt(text, max){
-      if (!text) return "No excerpt available.";
-      if (text.length <= max) return text;
-      return text.slice(0, max).trim() + "...";
-    }
-
-    function toMillis(v){
-      if (!v) return 0;
-      try{
-        if (typeof v.toDate === "function") return v.toDate().getTime();
-        if (v.seconds) return v.seconds * 1000;
-        const d = new Date(v);
-        if (!Number.isNaN(d.getTime())) return d.getTime();
-      } catch (_) {}
-      return 0;
-    }
-
-    function formatDate(v){
-      try{
-        if (typeof v?.toDate === "function") return v.toDate().toLocaleString("en-US");
-        if (v?.seconds) return new Date(v.seconds * 1000).toLocaleString("en-US");
-        const d = new Date(v);
-        if (!Number.isNaN(d.getTime())) return d.toLocaleString("en-US");
-      } catch (_) {}
-      return "Unknown date";
-    }
-
-    function escapeHtml(str){
-      return String(str ?? "").replace(/[&<>"']/g, m => ({
-        "&":"&amp;",
-        "<":"&lt;",
-        ">":"&gt;",
-        "\"":"&quot;",
-        "'":"&#039;"
-      })[m]);
+          postTitleInput.value = "";
+          postBodyInput.value = "";
+          setStatus("Post published.", "#166534");
+        } catch (err) {
+          console.error("Error publishing post:", err);
+          setStatus("Error publishing post: " + err.message, "#b91c1c");
+        }
+      });
     }
   </script>
+  <script>
+  (function () {
+    const STORAGE_KEY = "troop248-theme";
+    const body = document.body;
+    const toggleBtn = document.getElementById("theme-toggle");
+
+    if (!toggleBtn) return;
+
+    function applyTheme(theme) {
+      const isDark = theme === "dark";
+      body.classList.toggle("dark-theme", isDark);
+      toggleBtn.textContent = isDark ? "🌙 Dark mode" : "🌞 Light mode";
+    }
+
+    const saved = localStorage.getItem(STORAGE_KEY);
+    const prefersDark = window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const initial = saved || (prefersDark ? "dark" : "light");
+
+    applyTheme(initial);
+    localStorage.setItem(STORAGE_KEY, initial);
+
+    toggleBtn.addEventListener("click", function () {
+      const newTheme = body.classList.contains("dark-theme") ? "light" : "dark";
+      applyTheme(newTheme);
+      localStorage.setItem(STORAGE_KEY, newTheme);
+    });
+  })();
+</script>
 </body>
 </html>
