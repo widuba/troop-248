@@ -7,43 +7,59 @@
   <link rel="icon" type="image/png" href="/bsafavicon.ico">
   <style>
     :root {
-      --red: #b22222;
-      --blue: #1f4e79;
-      --tan: #f4eee3;
-      --white: #ffffff;
-      --text-main: #1f2933;
-      --text-muted: #6b7280;
-      --radius-lg: 16px;
+      --radius-lg: 20px;
       --radius-pill: 999px;
-      --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
+      --text-main: #e6eef9;
+      --text-muted: #a8b3c7;
+      --panel-bg: rgba(13, 22, 38, 0.75);
+      --panel-border: rgba(148, 163, 184, 0.22);
+      --card-bg: rgba(21, 34, 57, 0.88);
+      --card-hover: rgba(31, 50, 81, 0.95);
+      --shadow-soft: 0 20px 50px rgba(2, 6, 23, 0.35);
+      --accent: #5ac8fa;
+      --accent-2: #7c3aed;
+      --danger: #ff4f65;
     }
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #d2cab6;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--text-main);
       min-height: 100vh;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(90, 200, 250, 0.2), transparent 40%),
+        radial-gradient(circle at 85% 20%, rgba(124, 58, 237, 0.22), transparent 42%),
+        linear-gradient(160deg, #04070f 0%, #0c1528 52%, #101d35 100%);
     }
 
-    /* Dark theme styles */
-    body.dark-theme { background: #111827; color: #e5e7eb; }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 32px 32px;
+      mask-image: radial-gradient(circle at center, black 25%, transparent 82%);
+      z-index: -1;
+    }
+
+    body.dark-theme { color: var(--text-main); }
     body.dark-theme .welcome-card,
-    body.dark-theme section { background: #1f2937; border-color: rgba(55, 65, 81, 0.9); }
-    body.dark-theme .feature-card { background: #111827; border-color: rgba(75, 85, 99, 0.9); }
-    body.dark-theme .feature-text,
-    body.dark-theme .quick-note { color: #d1d5db; }
-    body.dark-theme .badge { background: rgba(55, 65, 81, 0.8); color: #e5e7eb; }
+    body.dark-theme section,
+    body.dark-theme .feature-card { background: var(--card-bg); }
 
     header {
-      background: linear-gradient(120deg, #b22222, #ffffff, #1f4e79);
-      color: var(--white);
-      padding: 14px 24px;
+      backdrop-filter: blur(14px);
+      background: rgba(5, 10, 20, 0.72);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+      padding: 14px clamp(14px, 3vw, 28px);
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 14px;
       position: sticky;
       top: 0;
       z-index: 10;
@@ -51,14 +67,19 @@
 
     header h2 {
       margin: 0;
-      font-size: 19px;
-      letter-spacing: 0.08em;
+      font-size: 18px;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       display: flex;
       align-items: center;
       gap: 8px;
     }
-    header h2::before { content: "★"; font-size: 18px; }
+
+    header h2::before {
+      content: "⬢";
+      font-size: 15px;
+      color: var(--accent);
+    }
 
     .troop-home-link {
       text-decoration: none;
@@ -66,216 +87,207 @@
       display: inline-flex;
       align-items: center;
     }
-    .troop-home-link:hover h2 { opacity: 0.9; text-decoration: underline; }
 
     nav {
       display: flex;
-      gap: 12px;
-      font-size: 13px;
+      gap: 10px;
+      font-size: 12px;
       text-transform: uppercase;
+      letter-spacing: 0.06em;
     }
 
     nav a {
-      color: #1f4e79;
-      font-weight: bold;
+      color: #c6d3e9;
+      font-weight: 700;
       text-decoration: none;
-      padding: 6px 10px;
+      padding: 7px 11px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      backdrop-filter: blur(4px);
-      opacity: 0.9;
-      background: rgba(255, 255, 255, 0.4);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      background: rgba(15, 23, 42, 0.65);
+      transition: all 0.15s ease;
+      white-space: nowrap;
     }
 
-    nav a:hover { opacity: 1; background: rgba(255, 255, 255, 0.7); }
+    nav a:hover {
+      border-color: rgba(90, 200, 250, 0.65);
+      color: #e8f7ff;
+      transform: translateY(-1px);
+    }
 
     #auth-bar {
       display: flex;
       gap: 10px;
       align-items: center;
       font-size: 13px;
+      color: var(--text-muted);
+      min-width: fit-content;
     }
 
     #logout-btn {
-      padding: 5px 12px;
-      font-size: 13px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(255, 255, 255, 0.7);
-      background: rgba(255, 255, 255, 0.1);
-      color: var(--white);
+      border: 1px solid rgba(255, 79, 101, 0.75);
+      background: rgba(255, 79, 101, 0.12);
+      color: #ffd0d7;
       cursor: pointer;
     }
-    #logout-btn:hover { background: rgba(255, 255, 255, 0.2); }
-
-    /* Dark mode toggle button in header */
-    #theme-toggle {
-      padding: 5px 10px;
-      font-size: 13px;
-      border-radius: var(--radius-pill);
-      border: 1px solid rgba(255, 255, 255, 0.8);
-      background: rgba(255, 255, 255, 0.2);
-      color: #1f2933;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-    #theme-toggle:hover { background: rgba(255, 255, 255, 0.35); }
 
     main {
-      padding: 24px 16px 40px;
-      max-width: 960px;
+      padding: 30px 18px 50px;
+      max-width: 1140px;
       margin: 0 auto;
     }
 
-    .welcome-card {
-      background: rgba(255, 255, 255, 0.95);
+    .welcome-card,
+    section {
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
       border-radius: var(--radius-lg);
-      padding: 20px 18px 12px;
-      margin-bottom: 20px;
       box-shadow: var(--shadow-soft);
+    }
+
+    .welcome-card {
+      padding: clamp(20px, 3vw, 28px);
+      margin-bottom: 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
     }
 
-    .welcome-card h3 { margin: 0 0 6px; font-size: 20px; }
-    .welcome-card p { margin: 0; font-size: 14px; color: var(--text-muted); }
+    .welcome-card h3 {
+      margin: 0 0 8px;
+      font-size: clamp(22px, 2.2vw, 30px);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+
+    .welcome-card p { margin: 0; font-size: 14px; color: var(--text-muted); max-width: 70ch; }
 
     .badge {
       font-size: 11px;
-      padding: 4px 8px;
+      padding: 6px 10px;
       border-radius: var(--radius-pill);
-      background: rgba(148, 163, 184, 0.2);
-      color: var(--text-muted);
+      background: rgba(90, 200, 250, 0.16);
+      border: 1px solid rgba(90, 200, 250, 0.45);
+      color: #b5ebff;
       text-transform: uppercase;
-      letter-spacing: 0.07em;
+      letter-spacing: 0.09em;
+      font-weight: 700;
     }
 
     .badge.admin {
-      background: rgba(240, 180, 41, 0.16);
-      color: #92400e;
-      border: 1px solid rgba(245, 158, 11, 0.6);
+      background: rgba(253, 186, 116, 0.14);
+      color: #ffd8aa;
+      border-color: rgba(251, 146, 60, 0.6);
     }
 
     section {
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: var(--radius-lg);
-      padding: 18px 18px 16px;
-      margin-bottom: 18px;
-      box-shadow: var(--shadow-soft);
-      border: 1px solid rgba(148, 163, 184, 0.4);
+      padding: 20px;
+      margin-bottom: 20px;
     }
 
     section h2 {
       margin-top: 0;
-      font-size: 18px;
+      font-size: 20px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
-    section h2::before { content: "▸"; font-size: 14px; color: var(--blue); }
+
+    section h2::before {
+      content: "◉";
+      font-size: 13px;
+      color: var(--accent);
+    }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 14px;
-      margin-top: 8px;
-    }
-
-    @media (max-width: 720px) {
-      .grid { grid-template-columns: minmax(0, 1fr); }
+      margin-top: 10px;
     }
 
     .feature-card-link { text-decoration: none; color: inherit; }
 
     .feature-card {
-      border-radius: 14px;
-      padding: 12px 12px 10px;
-      border: 1px solid rgba(209,213,219,.9);
-      background: #f9fafb;
-      box-shadow: 0 4px 12px rgba(0,0,0,.04);
-      transition: transform .1s ease, box-shadow .1s ease, border-color .1s ease;
+      border-radius: 16px;
+      padding: 14px 14px 12px;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      background: var(--card-bg);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 8px 24px rgba(3, 8, 20, 0.35);
+      transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease, border-color 0.16s ease;
+      height: 100%;
     }
 
     .feature-card:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 8px 20px rgba(0,0,0,.06);
-      border-color: rgba(148,163,184,.9);
+      transform: translateY(-3px);
+      background: var(--card-hover);
+      border-color: rgba(90, 200, 250, 0.45);
+      box-shadow: 0 18px 34px rgba(2, 6, 23, 0.52);
     }
 
-    .feature-title { font-size: 15px; font-weight: 600; margin: 0 0 4px; }
+    .feature-title { font-size: 15px; font-weight: 650; margin: 0 0 4px; }
+
     .feature-badge {
       display: inline-block;
-      font-size: 11px;
-      padding: 3px 8px;
+      font-size: 10px;
+      padding: 4px 8px;
       border-radius: var(--radius-pill);
-      background: rgba(31,78,121,.08);
-      color: var(--blue);
+      background: linear-gradient(120deg, rgba(90, 200, 250, 0.25), rgba(124, 58, 237, 0.2));
+      color: #d7eeff;
       text-transform: uppercase;
       letter-spacing: .07em;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
+      border: 1px solid rgba(148, 163, 184, 0.26);
     }
+
     .feature-text { font-size: 13px; color: var(--text-muted); margin: 0; }
-    .quick-note { font-size: 12px; color: var(--text-muted); margin-top: 8px; }
+    .quick-note { font-size: 12px; color: var(--text-muted); margin-top: 10px; }
 
-   @media (max-width: 640px) {
-  header {
-    flex-direction: row;        /* keep one line */
-    align-items: center;
-    gap: 10px;
-    padding: 10px 12px;
-    flex-wrap: nowrap;          /* do NOT wrap to new lines */
-  }
-
-  header > div:first-child {
-    flex: 0 0 auto;             /* Troop 248 stays compact */
-  }
-
-  nav {
-    flex: 1 1 auto;             /* nav takes remaining space */
-    flex-wrap: nowrap;          /* keep nav in one row */
-    overflow-x: auto;           /* allow swipe */
-    -webkit-overflow-scrolling: touch;
-    gap: 8px;
-    padding: 4px 0;
-    scrollbar-width: none;      /* Firefox hide scrollbar */
-  }
-  nav::-webkit-scrollbar { display: none; } /* Chrome/Safari hide scrollbar */
-
-  nav a {
-    white-space: nowrap;        /* prevent link wrapping */
-    padding: 6px 8px;
-    font-size: 12px;
-  }
-
-  #auth-bar {
-    flex: 0 0 auto;
-    white-space: nowrap;
-    gap: 8px;
-  }
-
-  #auth-info {
-    display: none;              /* optional: keeps header tighter */
-  }
-}
     .big-login-btn {
-  display: inline-block;
-  background: #b22222;
-  color: white;
-  padding: 8px 17px;
-  border-radius: 500px;
-  font-size: 13px;
-  font-weight: 800;
-  text-decoration: none;
-  box-shadow: 0 8px 18px rgba(0,0,0,0.2);
-}
+      display: inline-block;
+      background: linear-gradient(125deg, var(--accent-2), #2563eb 55%, var(--accent));
+      color: white;
+      padding: 10px 18px;
+      border-radius: 500px;
+      font-size: 13px;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.35);
+      letter-spacing: 0.03em;
+    }
 
-.big-login-btn:hover {
-  opacity: 0.9;
-}
+    .big-login-btn:hover { filter: brightness(1.08); }
+
+    @media (max-width: 768px) {
+      header {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      nav {
+        flex: 1 1 100%;
+        justify-content: flex-start;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+
+      nav::-webkit-scrollbar { display: none; }
+
+      #auth-info { display: none; }
+
+      .welcome-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
 
   </style>
+  <link rel="stylesheet" href="/modern-2026.css" />
 </head>
 
 <body>
